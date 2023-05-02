@@ -97,7 +97,7 @@ na.backgrounds = {
             url = hits[Math.floor(Math.random() * Math.floor(hits.length))];
         };
         //debugger;
-        na.m.log (20, fncn+' : url='+url, true);
+        //na.m.log (20, fncn+' : url='+url, true);
 
         na.backgrounds.settings.div = div;
 
@@ -197,7 +197,7 @@ na.backgrounds = {
                 }*/
                 if (saveTheme) na.site.saveTheme();
 
-                na.analytics.logMetaEvent ('background set to '+url, false);
+                if (!url.match(/cracked-surface/)) na.analytics.logMetaEvent ('background set to '+url, false);
                 
             },
             error : function (xhr, textStatus, errorThrown) {

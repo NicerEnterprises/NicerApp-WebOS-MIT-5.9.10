@@ -94,7 +94,7 @@ class naVividButton {
                     if ($('a',t.el).length>0) {
                         var label = $('a', t.el)[0].innerText;
                         var thm = t.doTextHeightMeasurement(label);
-                        console.log('t2:',label,thm);
+                        //console.log('t2:',label,thm);
                         $(t.el).add($('a span', t.el)).css({height:thm.h,fontSize:thm.fontSize}).attr('customHeight', thm.h);
                     } else if (
                         $el.length > 0
@@ -784,14 +784,12 @@ class naVividButton_icon_svg {
                             // NOT TO BE USED BY THE BROWSER (CACHING ISSUES).
                             //url : l.src, // PRODUCTION ONLY. USE AT YOUR OWN RISK!
                             success : function (data, ts, xhr) {
-                                debugger;
                                 $('.'+circleIconLayerID, t.p.el).html(xhr.responseText);
                             },
                             error : function (xhr, ajaxOptions, thrownError) {
                                 //na.site.fail ('"'+l.src+'" : '+thrownError.message+'<br/>'+xhr.responseText);
                                 console.log ('t.redraw()::circleIcon_svg::WARNING : '+ajaxOptions+' in "'+l.src+'"');
                                 console.log (thrownError);
-                                debugger;
                                 $('.'+circleIconLayerID, t.p.el).html(xhr.responseText);
                             }
                         });

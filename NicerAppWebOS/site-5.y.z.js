@@ -1747,11 +1747,14 @@ debugger;
 
         var c = na.site.settings.current;
         if (!c.divsInitializing) c.divsInitializing = [];
-        c.startingScripts = false;
-        c.startingApps = true;
+
+        // DON'T : messes up first page loads for /world-news and other pages!
+        //c.startingScripts = false;
+        //c.startingApps = true;
 
         na.m.waitForCondition (fncn+' : are the apps loaded, and their scripts fully loaded into the page\'s <HEAD>? na.m.HTMLidle()?', function () {
             var r = na.m.HTMLidle();//na.m.WebOSidle===too restrictive,
+               // debugger;
             //if (!na.site.settings.current.startingApps) debugger;
             return r;
         }, function () { //[1]
