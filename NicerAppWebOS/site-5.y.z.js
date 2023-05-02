@@ -2,7 +2,7 @@ var NicerApp_WebOS = na = {};
 na.site = {
     about : {
         firstCreated : '10 January 2002',
-        copyright : '<table style="height:100%;"><tr><td>Copyright (c) 2002-2023 by Rene A.J.M. Veerman &lt;<a href="mailto:rene.veerman.netherlands@gmail.com" style="color:green">rene.veerman.netherlands@gmail.com</a>&gt;<br/><b>Nicer Enterprises is currently a one-man company. Do not trust emails coming from any address other than the one listed here.</b></td><td style="width:40px;"><div class="vividButton" theme="dark" style="position:relative;color:white;height:20px;width:40px;" onclick="na.site.dismissCopyrightMessage();">Ok</div></td></table>'
+        copyright : '<table style="height:100%;"><tr><td>Copyright (C) and All Rights Reserved (R) 2002-2023 by<br/><a href="mailto:rene.veerman.netherlands@gmail.com" class ="contentSectionTitle3_a"><span class="contentSectionTitle3_span">Rene A.J.M. Veerman</span></a><br/></td><td style="width:40px;"><div class="vividButton" theme="dark" style="position:relative;color:white;height:20px;width:40px;" onclick="na.site.dismissCopyrightMessage();">Ok</div></td></table>'
     },
     
     errors : {
@@ -31,7 +31,7 @@ na.site = {
             $.cookie('agreedToPolicies')!=='true'
             ? '<table style="width:99%;"><tr><td><a href="/" style="padding:0;text-shadow:0px 0px 5px rgba(0,0,0,0.8);">nicer.app</a> only uses cookies for remembering user settings.<br/>'
                 + 'Analytics data including your account details on this site, your approximate location based on IP address, and your approximate activity records are also gathered (for purposes of market analysis and debugging of the Software only), but are visible only for site operators, and are never voluntarily shared with anyone or any thing from any of my sites.</td><td style="width:66px;"><div class="vividButton" theme="dark" style="position:relative;color:white;width:40px;height:20px;" onclick="na.site.dismissCookieWarning();">Ok</div></td></table>'
-            : '<table style="width:100%;height:100%;"><tr><td>Copyright (c) 2002-2023 by Rene A.J.M. Veerman &lt;<a href="mailto:rene.veerman.netherlands@gmail.com">rene.veerman.netherlands@gmail.com</a>&gt;<br/><b>Nicer Enterprises is currently a one-man company. Do not trust emails coming from any address other than the one listed here.</b></td><td style="width:66px;"><div class="vividButton" theme="dark" style="position:relative;color:white;width:40px;height:20px;" onclick="na.site.dismissCopyrightMessage();">Ok</div></td></table>'
+            : '<table style="height:100%;"><tr><td>Copyright (C) and All Rights Reserved (R) 2002-2023 by<br/><a href="mailto:rene.veerman.netherlands@gmail.com" class ="contentSectionTitle3_a"><span class="contentSectionTitle3_span">Rene A.J.M. Veerman</span></a><br/></td><td style="width:40px;"><div class="vividButton" theme="dark" style="position:relative;color:white;height:20px;width:40px;" onclick="na.site.dismissCopyrightMessage();">Ok</div></td></table>'
         ),
         dialogs : {},
         buttons : {},
@@ -1694,7 +1694,6 @@ onclick_btnFullResetOfAllThemes : function (event) {
                                         c.scriptsLoaded++;
                                         if (c.scriptsLoaded === c.scriptsToLoadTotal) {
                                             c.scriptsLoaded = true;
-                                            c.loadingApps = false;
                                             c.startingApps = false;
                                             f.completed = true;
                                             f.runningNow = false;
@@ -1709,7 +1708,6 @@ onclick_btnFullResetOfAllThemes : function (event) {
                         } else {
                             f.completed = true;
                             f.fnc.completed = true;
-                            c.loadingApps = false;
                             c.scriptsLoaded = true;
                         }
                     }
@@ -1718,16 +1716,6 @@ onclick_btnFullResetOfAllThemes : function (event) {
 
             };
         };
-        /*
-        setTimeout (function() {
-            if (c.scriptsToLoad===0) {
-                c.scriptsLoaded = true;
-                c.loadingApps = false;
-                f.completed = true;
-                f.fnc.completed = true;
-            }
-        }, 800);
-        */
 
         return false;
     },
@@ -1858,7 +1846,10 @@ onclick_btnFullResetOfAllThemes : function (event) {
         }            
         
         na.m.waitForCondition (fncn+' : na.m.HTMLidle()?', function() {
-            var r = na.m.HTMLidle();
+            var r =
+                na.m.HTMLidle()
+                //&& !na.site.settings.current.startingApps // DON'T! messes up initial-page loads.
+                && !na.site.settings.current.loadingApps;
 
             if (r)
             for (var appID in na.apps.loaded) {
