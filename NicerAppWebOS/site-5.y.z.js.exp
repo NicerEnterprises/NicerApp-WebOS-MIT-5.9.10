@@ -443,10 +443,10 @@ na.site = {
                         na.m.waitForCondition(fncn+'->na.site.settings.current.startupErrorsOccurred?', function() {
                             return na.site.settings.current.startupErrorsOccurred === false;
                         }, function() {
-                            startLogo('saCompanyLogo', 'countryOfOriginColors');
+                            startLogo('neCompanyLogo', 'countryOfOriginColors');
                         }, 50);
                         */
-                        startLogo('saCompanyLogo', 'countryOfOriginColors');
+                        startLogo('neCompanyLogo', 'countryOfOriginColors');
                         na.site.bindTodoListAnimations (
                             '.todoList > li, '
                             +'.todoList > li > div, '
@@ -481,10 +481,10 @@ na.site = {
                     na.m.waitForCondition(fncn+'->na.site.settings.current.startupErrorsOccurred?', function() {
                         return na.site.settings.current.startupErrorsOccurred === false;
                     }, function() {
-                        startLogo('saCompanyLogo', 'countryOfOriginColors');
+                        startLogo('neCompanyLogo', 'countryOfOriginColors');
                     }, 50);
                     */
-                    startLogo('saCompanyLogo', 'countryOfOriginColors');
+                    startLogo('neCompanyLogo', 'countryOfOriginColors');
                     na.site.bindTodoListAnimations (
                         '.todoList > li, '
                         +'.todoList > li > div, '
@@ -2209,7 +2209,7 @@ debugger;
     
     onresize_doContent : function (settings) {
         //debugger;
-        startLogo('saCompanyLogo', 'countryOfOriginColors');
+        startLogo('neCompanyLogo', 'countryOfOriginColors');
         return false;
         /*
         if ($(window).width() < na.site.globals.reallySmallDeviceWidth) {
@@ -2219,14 +2219,14 @@ debugger;
             $('#siteStatusbar').css({height:'5.5rem'});
             $('#siteStatusbar .vividButton').css({width : 40});
             $('#siteStatusbar td:nth-child(2)').css({width:55});
-            $('#tdFor_saCompanyLogo').css ({ width : 80, height : 80 });
-            $('#tableFor_saCompanyLogo').css ({ width : 80, height : 80 });
-            $('#divFor_saCompanyLogo').css ({ width : 70, height : 70, marginLeft : 0 });
+            $('#tdFor_neCompanyLogo').css ({ width : 80, height : 80 });
+            $('#tableFor_neCompanyLogo').css ({ width : 80, height : 80 });
+            $('#divFor_neCompanyLogo').css ({ width : 70, height : 70, marginLeft : 0 });
             $('#mainCSS').html('.vividMenu_item td { font-size : 11px; }; #siteStatus td { font-weight : bold };');
             $('html, body, p, span, ul, ol, li, div').not('.vt, .vividButton, .vividMenu_item, .subMenu, .contentMenu').css({fontSize:'0.7rem'});
             na.site.settings.current.menuFontSize = '11px';
             //$('.vividMenu .vividButton').css({ width : 100, height : 10 });
-            $('#saCompanyLogo').attr('width',70).attr('height',70);
+            $('#neCompanyLogo').attr('width',70).attr('height',70);
             $('.td_spacer').css ({ height : 100 });
             if ($('#headerSite').length===1) {
                 $('#headerSite').css ({ height:100, padding : 5, paddingLeft : 5 });
@@ -2249,11 +2249,11 @@ debugger;
             $('#mainCSS').html('.vividMenu_item td { font-size : 14px; }; #siteStatus td { font-weight : bold };');
             na.site.settings.current.menuFontSize = '14px';
             //$('.vividMenu .vividButton').css({ width : 135, height : 14 });
-            $('#tdFor_saCompanyLogo').css ({ width : 200, height : 200 });
-            $('#tableFor_saCompanyLogo').css ({ width : 200, height : 200 });
-            $('#divFor_saCompanyLogo').css ({ width : 200, height : 200});
+            $('#tdFor_neCompanyLogo').css ({ width : 200, height : 200 });
+            $('#tableFor_neCompanyLogo').css ({ width : 200, height : 200 });
+            $('#divFor_neCompanyLogo').css ({ width : 200, height : 200});
             $('#datetime').css({marginLeft:40,marginTop:20});
-            $('#saCompanyLogo').attr('width',200).attr('height',200);
+            $('#neCompanyLogo').attr('width',200).attr('height',200);
             $('html, body, p, span, ul, ol, li, div').not('.vt, .vividButton, .vividMenu_item, .subMenu, .contentMenu').css({fontSize:'0.85rem'});
             $('.td_spacer').css ({ height : 100 });
             if ($('#headerSite').length===1) {
@@ -2278,11 +2278,11 @@ debugger;
             $('#mainCSS').html('.vividMenu_item td { font-size : 14px; }; #siteStatus td { font-weight : bold };');
             na.site.settings.current.menuFontSize = '14px';
             //$('.vividMenu .vividButton').css({ width : 220, height : 20 });
-            $('#tdFor_saCompanyLogo').css ({ width : 200, height : 200 });
-            $('#tableFor_saCompanyLogo').css ({ width : 200, height : 200 });
-            $('#divFor_saCompanyLogo').css ({ width : 200, height : 200 });
+            $('#tdFor_neCompanyLogo').css ({ width : 200, height : 200 });
+            $('#tableFor_neCompanyLogo').css ({ width : 200, height : 200 });
+            $('#divFor_neCompanyLogo').css ({ width : 200, height : 200 });
             $('#datetime').css({marginLeft:40,marginTop:20});
-            $('#saCompanyLogo').attr('width',200).attr('height',200);
+            $('#neCompanyLogo').attr('width',200).attr('height',200);
             $('html, body, p, span, ul, ol, li, div').not('.vt, .vividButton, .vividMenu_item, .subMenu, .contentMenu').css({fontSize:'1rem'});
             $('.td_spacer').css ({ height : 100 });
             if ($('#headerSite').length===1) {
@@ -2298,7 +2298,7 @@ debugger;
             $('#newsApp_title, #newsApp_info, #newsApp_timer').css({fontSize:'1rem'});
         };
 
-        startLogo('saCompanyLogo', 'countryOfOriginColors');
+        startLogo('neCompanyLogo', 'countryOfOriginColors');
         */
     },
     

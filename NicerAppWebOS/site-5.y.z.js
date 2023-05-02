@@ -53,8 +53,8 @@ na.site = {
             numAppsResized : 0,
             
             scriptsLoaded : true,
-            startingApps : true,
-            loadingApps : true
+            startingApps : false,
+            loadingApps : false
         }
     },
     
@@ -274,7 +274,7 @@ na.site = {
         
         $('#siteContent').css({display:'block'});
 
-        $('.vividButton, .vividButton_icon_50x50_siteTop, .vividButton_icon_50x50').each(function(idx,el){
+        $('.vividButton4, .vividButton, .vividButton_icon_50x50_siteTop, .vividButton_icon_50x50').each(function(idx,el){
             if (!na.site.settings.buttons['#'+el.id]) na.site.settings.buttons['#'+el.id] = new naVividButton(el);
         });
         if (na.m.userDevice.isPhone) $('#btnOptions, #btnLoginLogout, #btnChangeBackground').css({opacity:1})
@@ -443,10 +443,10 @@ na.site = {
                         na.m.waitForCondition(fncn+'->na.site.settings.current.startupErrorsOccurred?', function() {
                             return na.site.settings.current.startupErrorsOccurred === false;
                         }, function() {
-                            startLogo('saCompanyLogo', 'countryOfOriginColors');
+                            startLogo('neCompanyLogo', 'countryOfOriginColors');
                         }, 50);
                         */
-                        startLogo('saCompanyLogo', 'countryOfOriginColors');
+                        startLogo('neCompanyLogo', 'countryOfOriginColors');
                         na.site.bindTodoListAnimations (
                             '.todoList > li, '
                             +'.todoList > li > div, '
@@ -481,10 +481,10 @@ na.site = {
                     na.m.waitForCondition(fncn+'->na.site.settings.current.startupErrorsOccurred?', function() {
                         return na.site.settings.current.startupErrorsOccurred === false;
                     }, function() {
-                        startLogo('saCompanyLogo', 'countryOfOriginColors');
+                        startLogo('neCompanyLogo', 'countryOfOriginColors');
                     }, 50);
                     */
-                    startLogo('saCompanyLogo', 'countryOfOriginColors');
+                    startLogo('neCompanyLogo', 'countryOfOriginColors');
                     na.site.bindTodoListAnimations (
                         '.todoList > li, '
                         +'.todoList > li > div, '
@@ -924,8 +924,13 @@ na.site = {
                 width:
                     $(this).parent().parent().width()
                     - $('.btnOptions_menu__label__specificity_dropdown, .btnOptions_menu__label__themes_dropdown',
-                        $(this).parent().parent())
-                        .width()
+                        $(this).parent().parent()
+                    ).width()
+                    - (
+                        $('.vividButton4', $(this).parent().parent() )[0]
+                        ? $('.vividButton4', $(this).parent().parent() ).width()
+                        : 0
+                    )
                     - 20,
                 height : 'auto'
             });
@@ -1683,7 +1688,7 @@ onclick_btnFullResetOfAllThemes : function (event) {
                         scriptIdx = 0;
 
                         console.log (divID2, scripts);
-
+debugger;
                         if (scripts) {
                             while (scriptIdx < scripts.length) {
                                 var src = scripts[scriptIdx].replace(/"/g,'');
@@ -1706,9 +1711,11 @@ onclick_btnFullResetOfAllThemes : function (event) {
                                 } else scriptIdx++;
                             };
                         } else {
+                            debugger;
                             f.completed = true;
                             f.fnc.completed = true;
                             c.scriptsLoaded = true;
+                            c.startingApps = false;
                         }
                     }
 
@@ -2199,7 +2206,7 @@ onclick_btnFullResetOfAllThemes : function (event) {
     
     onresize_doContent : function (settings) {
         //debugger;
-        startLogo('saCompanyLogo', 'countryOfOriginColors');
+        startLogo('neCompanyLogo', 'countryOfOriginColors');
         return false;
         /*
         if ($(window).width() < na.site.globals.reallySmallDeviceWidth) {
@@ -2209,14 +2216,14 @@ onclick_btnFullResetOfAllThemes : function (event) {
             $('#siteStatusbar').css({height:'5.5rem'});
             $('#siteStatusbar .vividButton').css({width : 40});
             $('#siteStatusbar td:nth-child(2)').css({width:55});
-            $('#tdFor_saCompanyLogo').css ({ width : 80, height : 80 });
-            $('#tableFor_saCompanyLogo').css ({ width : 80, height : 80 });
-            $('#divFor_saCompanyLogo').css ({ width : 70, height : 70, marginLeft : 0 });
+            $('#tdFor_neCompanyLogo').css ({ width : 80, height : 80 });
+            $('#tableFor_neCompanyLogo').css ({ width : 80, height : 80 });
+            $('#divFor_neCompanyLogo').css ({ width : 70, height : 70, marginLeft : 0 });
             $('#mainCSS').html('.vividMenu_item td { font-size : 11px; }; #siteStatus td { font-weight : bold };');
             $('html, body, p, span, ul, ol, li, div').not('.vt, .vividButton, .vividMenu_item, .subMenu, .contentMenu').css({fontSize:'0.7rem'});
             na.site.settings.current.menuFontSize = '11px';
             //$('.vividMenu .vividButton').css({ width : 100, height : 10 });
-            $('#saCompanyLogo').attr('width',70).attr('height',70);
+            $('#neCompanyLogo').attr('width',70).attr('height',70);
             $('.td_spacer').css ({ height : 100 });
             if ($('#headerSite').length===1) {
                 $('#headerSite').css ({ height:100, padding : 5, paddingLeft : 5 });
@@ -2239,11 +2246,11 @@ onclick_btnFullResetOfAllThemes : function (event) {
             $('#mainCSS').html('.vividMenu_item td { font-size : 14px; }; #siteStatus td { font-weight : bold };');
             na.site.settings.current.menuFontSize = '14px';
             //$('.vividMenu .vividButton').css({ width : 135, height : 14 });
-            $('#tdFor_saCompanyLogo').css ({ width : 200, height : 200 });
-            $('#tableFor_saCompanyLogo').css ({ width : 200, height : 200 });
-            $('#divFor_saCompanyLogo').css ({ width : 200, height : 200});
+            $('#tdFor_neCompanyLogo').css ({ width : 200, height : 200 });
+            $('#tableFor_neCompanyLogo').css ({ width : 200, height : 200 });
+            $('#divFor_neCompanyLogo').css ({ width : 200, height : 200});
             $('#datetime').css({marginLeft:40,marginTop:20});
-            $('#saCompanyLogo').attr('width',200).attr('height',200);
+            $('#neCompanyLogo').attr('width',200).attr('height',200);
             $('html, body, p, span, ul, ol, li, div').not('.vt, .vividButton, .vividMenu_item, .subMenu, .contentMenu').css({fontSize:'0.85rem'});
             $('.td_spacer').css ({ height : 100 });
             if ($('#headerSite').length===1) {
@@ -2268,11 +2275,11 @@ onclick_btnFullResetOfAllThemes : function (event) {
             $('#mainCSS').html('.vividMenu_item td { font-size : 14px; }; #siteStatus td { font-weight : bold };');
             na.site.settings.current.menuFontSize = '14px';
             //$('.vividMenu .vividButton').css({ width : 220, height : 20 });
-            $('#tdFor_saCompanyLogo').css ({ width : 200, height : 200 });
-            $('#tableFor_saCompanyLogo').css ({ width : 200, height : 200 });
-            $('#divFor_saCompanyLogo').css ({ width : 200, height : 200 });
+            $('#tdFor_neCompanyLogo').css ({ width : 200, height : 200 });
+            $('#tableFor_neCompanyLogo').css ({ width : 200, height : 200 });
+            $('#divFor_neCompanyLogo').css ({ width : 200, height : 200 });
             $('#datetime').css({marginLeft:40,marginTop:20});
-            $('#saCompanyLogo').attr('width',200).attr('height',200);
+            $('#neCompanyLogo').attr('width',200).attr('height',200);
             $('html, body, p, span, ul, ol, li, div').not('.vt, .vividButton, .vividMenu_item, .subMenu, .contentMenu').css({fontSize:'1rem'});
             $('.td_spacer').css ({ height : 100 });
             if ($('#headerSite').length===1) {
@@ -2288,7 +2295,7 @@ onclick_btnFullResetOfAllThemes : function (event) {
             $('#newsApp_title, #newsApp_info, #newsApp_timer').css({fontSize:'1rem'});
         };
 
-        startLogo('saCompanyLogo', 'countryOfOriginColors');
+        startLogo('neCompanyLogo', 'countryOfOriginColors');
         */
     },
     

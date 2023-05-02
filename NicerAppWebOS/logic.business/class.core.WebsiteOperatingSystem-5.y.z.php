@@ -1068,7 +1068,8 @@ class NicerAppWebOS {
 
 
                 $r .= '$(document).ready(function() {'.PHP_EOL;
-                $r .= "\tna.m.waitForCondition('HTML BODY : document.ready -> na.site.setSpecificity', na.m.HTMLidle, na.site.setSpecificity, 50);";
+                //$r .= "\tna.m.waitForCondition('HTML BODY : document.ready -> na.site.setSpecificity', na.m.HTMLidle, na.site.setSpecificity, 50);".PHP_EOL;
+                $r .= "\tna.site.setSpecificity();".PHP_EOL;
                 $r .= "});".PHP_EOL;
                 /*
                 $r .= '$(document).ready(function() {'.PHP_EOL;
@@ -1096,7 +1097,7 @@ class NicerAppWebOS {
                 $r .= 'h1::before, h2::before, h3::before {'."\r\n".PHP_EOL;
                     $r .= "\t".'content : \'\''."\r\n".PHP_EOL;
                 $r .= '}'."\r\n".PHP_EOL;
-                $r .= '#divFor_saCompanyLogo, #headerSiteDiv, li span, .backdropped, p, h1::before, h2::before, h3::before {'."\r\n".PHP_EOL;
+                $r .= '#divFor_neCompanyLogo, #headerSiteDiv, li span, .backdropped, p, h1::before, h2::before, h3::before {'."\r\n".PHP_EOL;
                     $r .= "\t".'background : rgba(0,0,0,'.$theme['textBackgroundOpacity'].');'."\r\n".PHP_EOL;
                     $r .= "\t".'border-radius : 10px !important;'."\r\n".PHP_EOL;
                 $r .= '}'."\r\n".PHP_EOL;
