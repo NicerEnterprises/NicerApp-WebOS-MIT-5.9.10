@@ -956,6 +956,7 @@ na.site = {
                 $(divEl).addClass('selected');
                 //$('.na_themes_dropdown__specificity > .vividDropDownBox_selected').html (na.site.globals.specificityName);
                 na.site.globals.themeDBkeys = na.site.globals.themesDBkeys[i];
+                na.site.loadTheme_applySettings (na.site.globals.themes[na.site.globals.themeName]);
                 $('.na_themes_dropdown__specificity > .vividDropDownBox_selected').html (na.site.globals.themeDBkeys.specificityName);
                 na.te.settings.current.specificity = na.site.globals.themeDBkeys;
             };
@@ -3059,7 +3060,34 @@ debugger;
             success : function (data, ts, xhr) {
                 //debugger;
                 // reload #cssPageSpecific and #jsPageSpecific
-                na.site.loadTheme_applySettings (data, callback);
+
+                if (data=='status : Failed.') {
+                    na.m.log (10, 'na.site.loadTheme() : FAILED (HTTP SUCCESS, but no theme was found)');
+                    return false;
+                } else if (data==='') {
+                    na.m.log (10, 'na.site.loadTheme() : FAILED (HTTP SUCCESS, but no data returned at all)');
+                    return false;
+                }
+                try {
+                    var themes = JSON.parse(data);
+                } catch (error) {
+                    na.m.log (10, 'na.site.loadTheme() : FAILED (could not decode JSON data - '+error.message+')+');
+
+                    // only significantly slows down startup for new viewers :
+                    //na.site.fail (fncn+' : AJAX decode error in data returned for url='+url+', error='+error.message+', in data='+data, xhr, function () {
+                    //    na.site.error (data);
+                    //});
+                    return false;
+                }
+
+                na.site.globals.themes = themes;
+                for (var themeName in themes) {
+                    var dat = themes[themeName];
+                    na.site.settings.current.theme = dat;
+                    break;
+                };
+
+                na.site.loadTheme_applySettings (dat, callback);
             },
             error : function (xhr, textStatus, errorThrown) {
                 //only significantly slows down startup for new viewers :
@@ -3069,34 +3097,7 @@ debugger;
         $.ajax(ac);
     },
 
-    loadTheme_applySettings : function (data, callback) {
-        if (data=='status : Failed.') {
-            na.m.log (10, 'na.site.loadTheme() : FAILED (HTTP SUCCESS, but no theme was found)');
-            return false;
-        } else if (data==='') {
-            na.m.log (10, 'na.site.loadTheme() : FAILED (HTTP SUCCESS, but no data returned at all)');
-            return false;
-        }
-        try {
-            var themes = JSON.parse(data);
-        } catch (error) {
-            na.m.log (10, 'na.site.loadTheme() : FAILED (could not decode JSON data - '+error.message+')+');
-
-            // only significantly slows down startup for new viewers :
-            //na.site.fail (fncn+' : AJAX decode error in data returned for url='+url+', error='+error.message+', in data='+data, xhr, function () {
-            //    na.site.error (data);
-            //});
-            return false;
-        }
-
-        na.site.globals.themes = themes;
-        for (var themeName in themes) {
-            var dat = themes[themeName];
-            na.site.settings.current.theme = dat;
-            break;
-
-        };
-
+    loadTheme_applySettings : function (dat, callback) {
         //if (dat.specificityName) {
             $('.na_themes_dropdown__specificity > .vividDropDownBox_selector > div')
                 .removeClass('selected')
@@ -3274,10 +3275,14 @@ debugger;
             if (app) themeData.app = app;
             if (s.specificityName) themeData.specificityName = s.specificityName;
                 
+            /*
             for (var i=0; i<na.desktop.globals.divs.length; i++) {
                 var selector = na.desktop.globals.divs[i];
                 themeData.dialogs = $.extend (themeData.dialogs, na.site.fetchTheme (selector));
-            }
+            }*/
+            for (var divSel in na.site.settings.dialogs) {
+                themeData.dialogs = $.extend (themeData.dialogs, na.site.fetchTheme(divSel));
+            };
             
             themeData.dialogs = JSON.stringify(themeData.dialogs);
             themeData.apps = JSON.stringify(Object.assign({},themeData.apps));

@@ -1757,7 +1757,7 @@ class NicerAppWebOS {
 
             $findCommand = array (
                 'selector' => $sel,//array( 'url'=>$selector['url'], 'role'=>$selector['role'] ),//$selector,
-                'fields' => array( '_id', 'user', 'view', 'role', 'lastUsed', 'theme', 'url', 'dialogs', 'apps', 'background', 'backgroundSearchKey', 'textBackgroundOpacity' ),
+                'fields' => array( '_id', 'user', 'view', 'role', 'lastUsed', 'theme', 'url', 'dialogs', 'apps', 'background', 'backgroundSearchKey', 'textBackgroundOpacity', 'changeBackgroundsAutomatically', 'backgroundChange_hours', 'backgroundChange_minutes' ),
                 'sort' => [['lastUsed'=>'asc']]
             );
             try {
@@ -1780,22 +1780,28 @@ class NicerAppWebOS {
                     $hasRecord = true;
                     if ($debug) { echo '$d='; var_dump ($d); }
                     $ret = [
-                        ( isset($d->theme) ? $d->theme : '[default]' ) => [
+                        ( isset($d->theme) ? $d->theme : 'default' ) => [
                             'dbID' => $d->_id,
                             'dialogs' => json_decode(json_encode($d->dialogs), true),
                             'apps' => json_decode(json_encode((property_exists($d,'apps')?$d->apps:[])), true),
                             'background' => ( isset($d->background) ? $d->background : '' ),
                             'backgroundSearchKey' => ( isset($d->backgroundSearchKey) ? $d->backgroundSearchKey : '' ),
                             'textBackgroundOpacity' => ( isset($d->textBackgroundOpacity) ? $d->textBackgroundOpacity : ''),
+                            'changeBackgroundsAutomatically' => ( isset($d->changeBackgroundsAutomatically)
+                                ? ($d->changeBackgroundsAutomatically ? 'true' : 'false')
+                                : 'false'
+                            ),
+                            'backgroundChange_hours' => ( isset($d->backgroundChange_hours) ? $d->backgroundChange_hours : ''),
+                            'backgroundChange_minutes' => ( isset($d->backgroundChange_minutes) ? $d->backgroundChange_minutes : ''),
                             'theme' => ( isset($d->theme) ? $d->theme : '[default]' )
                         ]
                     ];
-                    if (isset($d->user)) $ret[( isset($d->theme) ? $d->theme : '[default]' )]['user'] = json_decode(json_encode($d->user),true);
-                    if (isset($d->role)) $ret[( isset($d->theme) ? $d->theme : '[default]' )]['role'] = json_decode(json_encode($d->role),true);
-                    if (isset($d->url)) $ret[( isset($d->theme) ? $d->theme : '[default]' )]['url'] = json_decode(json_encode($d->url),true);
-                    if (isset($d->view)) $ret[( isset($d->theme) ? $d->theme : '[default]' )]['view'] = json_decode(json_encode($d->view),true);
-                    if (isset($d->specificityName)) $ret[( isset($d->theme) ? $d->theme : '[default]' )]['specificityName'] = json_decode(json_encode($d->specificityName),true);
-                    if (isset($d->theme)) $ret[$d->theme]['theme'] = $d->theme;
+                    if (isset($d->user)) $ret[( isset($d->theme) ? $d->theme : 'default' )]['user'] = json_decode(json_encode($d->user),true);
+                    if (isset($d->role)) $ret[( isset($d->theme) ? $d->theme : 'default' )]['role'] = json_decode(json_encode($d->role),true);
+                    if (isset($d->url)) $ret[( isset($d->theme) ? $d->theme : 'default' )]['url'] = json_decode(json_encode($d->url),true);
+                    if (isset($d->view)) $ret[( isset($d->theme) ? $d->theme : 'default' )]['view'] = json_decode(json_encode($d->view),true);
+                    if (isset($d->specificityName)) $ret[( isset($d->theme) ? $d->theme : 'default' )]['specificityName'] = json_decode(json_encode($d->specificityName),true);
+                    //if (isset($d->theme)) $ret[$d->theme]['theme'] = $d->theme;
 
                     if ($debug) echo '</pre>';
 

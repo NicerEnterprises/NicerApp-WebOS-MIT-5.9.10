@@ -18,9 +18,9 @@ class naVividDialog {
         if (!$(t.el).find('.vdBackground')[0]) html += '<div class="vdBackground"></div>';
         
         var idx = false;
-        if (na.site.globals.themeSpecificityNames)
-        for (var i=0; i<na.site.globals.themeSpecificityNames.length; i++) {
-            if (na.site.globals.themeSpecificityNames[i] == na.site.globals.themeSpecificityName) idx = i;
+        if (na.site.globals.themesDBkeys)
+        for (var i in na.site.globals.themesDBkeys) {
+            if (na.site.globals.themesDBkeys[i].specificityName == na.site.globals.specificityName) idx = i;
         }
         //debugger;
         if (idx!==false && na.site.globals.themesDBkeys[idx].display) {
@@ -29,12 +29,10 @@ class naVividDialog {
                     +'<img class="btnSettings" src="/NicerAppWebOS/siteMedia/btnPickColor.png" onclick="na.site.settings.activeDivs = [\'#siteToolbarThemeEditor\']; var d = na.site.settings.dialogs[\'#'+this.el.id+'\']; d.displaySettingsDialog(d, \''+t.el.id+'\')"/>'
                     +'<input type="range" min="1" max="100" value="50" class="sliderOpacityRange" onchange="na.te.opacityChange(event);"/>'
                 +'</div>';
-        /*
             if (
                 t.el.id!=='#siteToolbarThemeEditor' 
                 && !$('.vdSettings',t.el)[0]
             ) $(t.el).prepend(html);
-          */  
         } else $(t.el).find('.vdSettings').remove();
         
         $(t.el).prepend(html);

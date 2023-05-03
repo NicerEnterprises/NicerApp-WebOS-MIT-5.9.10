@@ -173,7 +173,7 @@ $spacer = "\n\t\t\t\t";
 		</div>
 	</div>
 
-	<div id="playlist_wrapper" class="vividDialog" theme="dark" style="text-align:center;opacity:0.001;overflow-y:auto;overflow-x:hidden;position:absolute; width:300px;height:300px;">
+	<div id="playlist_wrapper" class="vividDialog" theme="dark" style="text-align:center;opacity:0.001;overflow:visible;position:absolute; width:300px;height:300px;">
         <h2 style="padding:0px !important; margin:20px !important;display:flex;justify-content:center;align-items:center;width:auto;height:50px;font-size:10px;background:rgba(0,0,255,0.25);color:white;border-radius:10px;box-shadow:2px 2px 3px 2px rgba(0,0,0,0.7);">Playlist<br/>(drag and drop items onto this window)</h2>
 		<ul id="playlist" class="vividScrollpane" style="width:100%;height:calc(100% - 50px);"></ul>
 	</div>
