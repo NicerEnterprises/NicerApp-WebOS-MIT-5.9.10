@@ -232,52 +232,60 @@ class NicerAppWebOS {
             }
             $this->view = $view;
         } elseif (array_key_exists('seoValue',$_GET)) {
-            $db = $this->dbs->findConnection('couchdb');
-            $cdb = $db->cdb;
-            $dataSetName = $db->dataSetName('viewsIDs'); // i know, couchdb calls a 'table' a 'database'. and that sux.
+                $decoded = json_decode(base64_decode_url($_GET['seoValue']), true);
+                //var_dump (json_last_error());
+                if (json_last_error()!==0) {
+                    // $view must be looked up in the database :
 
-            $cdb->setDatabase ($dataSetName, false);
-            $findCommand = [
-                'selector' => [ 'seo_value' => $_GET['seoValue'] ],
-                'use_index' => 'primaryIndex',
-                'fields' => ['_id', 'viewID']
-            ];
-            try {
-                $call = $cdb->find ($findCommand);
-            } catch (Exception $e) {
-                $msg = $fncn.' FAILED while trying to find in \''.$dataSetName.'\' : '.$e->getMessage();
-                trigger_error ($msg, E_USER_NOTICE);
-                echo $msg;
-                return false;
-            }
-    //echo '<pre style="color:blue">'; var_dump ($findCommand); var_dump ($call); echo '</pre>';
-            if (
-                is_object($call)
-                && is_object($call->body)
-                && is_array($call->body->docs)
-            ) {
-                if (count($call->body->docs)===1) {
-                    $cdb->setDatabase ($db->dataSetName('views'));
+                    $db = $this->dbs->findConnection('couchdb');
+                    $cdb = $db->cdb;
+                    $dataSetName = $db->dataSetName('viewsIDs'); // i know, couchdb calls a 'table' a 'database'. and that sux.
+
+                    $cdb->setDatabase ($dataSetName, false);
+                    $findCommand = [
+                        'selector' => [ 'seo_value' => $_GET['seoValue'] ],
+                        'use_index' => 'primaryIndex',
+                        'fields' => ['_id', 'viewID']
+                    ];
                     try {
-                        $call = $cdb->get ($call->body->docs[0]->viewID);
+                        $call = $cdb->find ($findCommand);
                     } catch (Exception $e) {
-                        $msg = $fncn.' FAILED while trying to find in \''.$db->dataSetName('views').'\' : '.$e->getMessage();
+                        $msg = $fncn.' FAILED while trying to find in \''.$dataSetName.'\' : '.$e->getMessage();
                         trigger_error ($msg, E_USER_NOTICE);
                         echo $msg;
                         return false;
                     }
-                    //echo '<pre>'; var_dump($call);die();
+            //echo '<pre style="color:blue">'; var_dump ($findCommand); var_dump ($call); echo '</pre>';
+                    if (
+                        is_object($call)
+                        && is_object($call->body)
+                        && is_array($call->body->docs)
+                    ) {
+                        if (count($call->body->docs)===1) {
+                            $cdb->setDatabase ($db->dataSetName('views'));
+                            try {
+                                $call = $cdb->get ($call->body->docs[0]->viewID);
+                            } catch (Exception $e) {
+                                $msg = $fncn.' FAILED while trying to find in \''.$db->dataSetName('views').'\' : '.$e->getMessage();
+                                trigger_error ($msg, E_USER_NOTICE);
+                                echo $msg;
+                                return false;
+                            }
+                            //echo '<pre>'; var_dump($call);die();
 
-                    $view = json_decode(json_encode($call->body->view), true);
+                            $view = json_decode(json_encode($call->body->view), true);
+                        } else {
+                            $msg = $fncn.' : views count inconsistent for seoValue='.$_GET['seoValue'].'.<br/>'."\n".'<pre>$call->headers->_HTTP->status='.$call->headers->_HTTP->status.', $call->body='.json_encode($call->body,JSON_PRETTY_PRINT).'</pre>';
+                            trigger_error($msg, E_USER_WARNING);
+                            error_log($msg);
+                            //echo $msg;
+
+                        }
+                    }
+                    $this->view = $view;
                 } else {
-                    $msg = $fncn.' : views count inconsistent for seoValue='.$_GET['seoValue'].'.<br/>'."\n".'<pre>$call->headers->_HTTP->status='.$call->headers->_HTTP->status.', $call->body='.json_encode($call->body,JSON_PRETTY_PRINT).'</pre>';
-                    trigger_error($msg, E_USER_WARNING);
-                    error_log($msg);
-                    //echo $msg;
-
+                    $this->view = $decoded;
                 }
-            }
-            $this->view = $view;
         }
         return is_array($this->view);
     }
@@ -519,6 +527,7 @@ class NicerAppWebOS {
                 // request view settings from database
                 $view = (array)$this->view;
                 //echo '<pre>'; var_dump($view);die();
+                $ret = [ 'siteContent' => '<pre>'.json_encode($view,JSON_PRETTY_PRINT).'</pre>'];
                 if (is_array($view)) {
                     if (array_key_exists('misc', $view)) {
                         $fsid = $view['misc']['folder'];
@@ -537,7 +546,6 @@ class NicerAppWebOS {
                         //if ($debug) { var_dump ($rootPath.'/'.$viewsFolder); echo '<pre style="color:yellow;background:red;">'; var_dump ($files); echo '</pre>'.PHP_EOL.PHP_EOL;  }; die();
 
                         $titleFile = $this->basePath.'/'.$viewsFolder.'/app.title.site.php';
-                        $ret = [];
                         foreach ($files as $idx3 => $contentFile) {
                             if (strpos($contentFile, 'app.dialog.')!==false) {
                                 $divID = str_replace('app.dialog.', '', basename($contentFile));
