@@ -1861,6 +1861,7 @@ debugger;
                 na.m.HTMLidle()
                 //&& !na.site.settings.current.startingApps // DON'T! messes up initial-page loads.
                 && !na.site.settings.current.loadingApps;
+            debugger;
 
             if (r)
             for (var appID in na.apps.loaded) {

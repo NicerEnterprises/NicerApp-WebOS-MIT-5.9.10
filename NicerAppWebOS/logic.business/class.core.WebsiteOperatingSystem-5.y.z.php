@@ -158,7 +158,7 @@ class NicerAppWebOS {
 
     public function initializeGlobals() {
         $fncn = $this->cn.'->initializeGlobals()';
-        $view = $fncn.' : FATAL ERROR : Could not look up view settings in database.'; // assume the worst
+        $view = $fncn.' : FATAL ERROR : Could not look up view settings in database.<p style="color:blue;background:rgba(255,255,255,0.65);">$_GET='.json_encode($_GET,JSON_PRETTY_PRINT).'</p>'; // assume the worst
 
         $this->ownerLoginName = 'Rene AJM Veerman';
 
@@ -193,18 +193,30 @@ class NicerAppWebOS {
 
                     $cdb->setDatabase ($dataSetName, false);
                     $findCommand = [
-                        'selector' => [ 'seo_value' => substr($_GET['viewID'],1) ],
+                        'selector' => [
+                            'seo_value' => substr($_GET['viewID'],0,1)=='/'
+                                ? substr($_GET['viewID'],1)
+                                : $_GET['viewID']
+                        ],
                         'use_index' => 'primaryIndex',
-                        'fields' => ['_id']
+                        'fields' => ['_id', 'viewID' ]
                     ];
-
+                     $this->view = [
+                        'findCommand' => $findCommand,
+                    ];
                     try {
                         $call = $cdb->find ($findCommand);
                     } catch (Exception $e) {
                         $msg = $fncn.' FAILED while trying to find in \''.$dataSetName.'\' : $e->getMessage()='.$e->getMessage().', $findCommand='.$findCommand;
+                        $this->view = $msg;
                         trigger_error ($msg, E_USER_NOTICE);
+                        return false;
                     }
-                    //echo '<pre>'; var_dump ($findCommand); var_dump ($call); echo '</pre>'; die();
+                     $this->view = [
+                        'findCommand' => $findCommand,
+                        'call' => $call
+                    ];//'<pre style="color:blue">$findCommand='.json_encode($findCommand, JSON_PRETTY_PRINT).'</pre><pre style="color:green">$call='.json_encode($call, JSON_PRETTY_PRINT).'</pre>';
+                    //return true;
 
                     if (
                         is_object($call)
@@ -212,14 +224,25 @@ class NicerAppWebOS {
                         && is_array($call->body->docs)
                     ) {
                         if (count($call->body->docs)===1) {
-                            $call = $cdb->get ($call->body->docs[0]->_id);
+                            $cdb->setDatabase ($db->dataSetName('views'));
+                            try {
+                                $call = $cdb->get ($call->body->docs[0]->viewID);
+                            } catch (Exception $e) {
+                                $msg = $fncn.' FAILED while trying to find view settings in \''.$db->dataSetName('views').'\' : '.$e->getMessage();
+                                trigger_error ($msg, E_USER_NOTICE);
+                                echo $msg;
+                                $this->view = $msg;
+                                return false;
+                            }
+                            //echo '<pre>'; var_dump($call);die();
+
                             $view = json_decode(json_encode($call->body->view), true);
                         } else {
-                            $msg = $fncn.' : views count inconsistent for viewID='.$_GET['viewID'].'.<br/>'."\n".'<pre>$call='.json_encode($call,JSON_PRETTY_PRINT).'</pre>';
+                            $msg = $fncn.' : views count inconsistent for seoValue='.$_GET['seoValue'].'.<br/>'."\n".'<pre>$call->headers->_HTTP->status='.$call->headers->_HTTP->status.', $call->body='.json_encode($call->body,JSON_PRETTY_PRINT).'</pre>';
                             trigger_error($msg, E_USER_WARNING);
                             error_log($msg);
-                            //echo $msg;
-
+                            $this->view = $msg;
+                            return false;
                         }
                     }
 
@@ -233,7 +256,7 @@ class NicerAppWebOS {
             $this->view = $view;
         } elseif (array_key_exists('seoValue',$_GET)) {
                 $decoded = json_decode(base64_decode_url($_GET['seoValue']), true);
-                //var_dump (json_last_error());
+                //var_dump (json_last_error()); die();
                 if (json_last_error()!==0) {
                     // $view must be looked up in the database :
 
@@ -253,9 +276,11 @@ class NicerAppWebOS {
                         $msg = $fncn.' FAILED while trying to find in \''.$dataSetName.'\' : '.$e->getMessage();
                         trigger_error ($msg, E_USER_NOTICE);
                         echo $msg;
+                        $this->view = $msg;
                         return false;
                     }
-            //echo '<pre style="color:blue">'; var_dump ($findCommand); var_dump ($call); echo '</pre>';
+
+                    $view = '<pre style="color:blue">$findCommand='.json_encode($findCommand, JSON_PRETTY_PRINT).'</pre><pre style="color:green">$call='.json_encode($call, JSON_PRETTY_PRINT).'</pre>';
                     if (
                         is_object($call)
                         && is_object($call->body)
@@ -266,9 +291,10 @@ class NicerAppWebOS {
                             try {
                                 $call = $cdb->get ($call->body->docs[0]->viewID);
                             } catch (Exception $e) {
-                                $msg = $fncn.' FAILED while trying to find in \''.$db->dataSetName('views').'\' : '.$e->getMessage();
+                                $msg = $fncn.' FAILED while trying to find view settings in \''.$db->dataSetName('views').'\' : '.$e->getMessage();
                                 trigger_error ($msg, E_USER_NOTICE);
                                 echo $msg;
+                                $this->view = $msg;
                                 return false;
                             }
                             //echo '<pre>'; var_dump($call);die();
@@ -278,8 +304,8 @@ class NicerAppWebOS {
                             $msg = $fncn.' : views count inconsistent for seoValue='.$_GET['seoValue'].'.<br/>'."\n".'<pre>$call->headers->_HTTP->status='.$call->headers->_HTTP->status.', $call->body='.json_encode($call->body,JSON_PRETTY_PRINT).'</pre>';
                             trigger_error($msg, E_USER_WARNING);
                             error_log($msg);
-                            //echo $msg;
-
+                            $this->view = $msg;
+                            return false;
                         }
                     }
                     $this->view = $view;

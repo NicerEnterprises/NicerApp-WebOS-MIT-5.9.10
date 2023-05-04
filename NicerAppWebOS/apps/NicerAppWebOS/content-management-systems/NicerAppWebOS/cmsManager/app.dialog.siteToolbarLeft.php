@@ -152,11 +152,15 @@ $ip = (array_key_exists('X-Forwarded-For',apache_request_headers())?apache_reque
 <div id="jsTree"></div>
 <script type="text/javascript">
     $(document).ready(function() {
-    setTimeout (function () {
+    //setTimeout (function () {
         na.desktop.settings.visibleDivs.push('#siteToolbarLeft');
+        $('#siteToolbarLeft .vividButton4, #siteToolbarLeft .vividButton, #siteToolbarLeft .vividButton_icon_50x50').each(function(idx,el){
+            na.site.settings.buttons['#'+el.id] = new naVividButton(el);
+        });
+
         //na.site.onresize();
         //na.cms.onload();
-    }, 250);
+    //}, 250);
     });
 </script>
 

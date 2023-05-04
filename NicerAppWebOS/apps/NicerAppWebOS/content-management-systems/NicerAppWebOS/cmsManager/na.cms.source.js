@@ -13,7 +13,7 @@ na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/Nic
 				},
 
 				onload : function (settings) {
-                    na.m.waitForCondition ('applications/content-management-systems/NicerAppWebOS/cmsManager start', na.m.HTMLidle, function () {
+                    //na.m.waitForCondition ('applications/content-management-systems/NicerAppWebOS/cmsManager start', na.m.HTMLidle, /function () {
                         var
                         na1 = na.cms, g = na1.globals, s = na1.settings, c = s.current, db = c.db,
                         loadedIn = s.loadedIn['#siteContent'];
@@ -57,14 +57,13 @@ na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/Nic
                             na.cms.settings.loadedIn['#siteContent'].settings.initialized = true;
                             na.cms.settings.loadedIn['#siteContent'].settings.ready = true;
                             document.addEventListener ('keyup', na.cms.onkeyup);
-
                             na.cms.onload(settings);
                             //na.analytics.logMetaEvent ('applications/content-management-systems/NicerAppWebOS/cmsManager (version '+na.cms.about.version+' is starting.');
 
                             settings.onHold = false; // signals a wait for na.site.loadTheme() has ended
                             //});
                         //}, 30);
-                    }, 30);
+                    //}, 30);
 				},
                 ondestroy : function (settings) {
                     var
@@ -323,8 +322,16 @@ na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/Nic
         };
         $.ajax(ac);
         na.desktop.settings.visibleDivs.push ('#siteToolbarLeft');
+        debugger;
+        //setTimeout(function() {
+        na.desktop.resize(na.cms.onresize);
+            na.site.settings.current.loadingApps = false;
+            na.site.settings.current.startingApps = false;
+        //na.cms.onresize();
+        //}, 1500);
+
         //$(window).resize(na.cms.onresize)
-        //na.desktop.resize();
+        //debugger;
     },
 
     onchange_selectedNode : function (settings, data,rec, callback) {

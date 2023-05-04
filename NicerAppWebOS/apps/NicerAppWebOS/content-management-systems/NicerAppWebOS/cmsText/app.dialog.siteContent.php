@@ -51,3 +51,7 @@ foreach ($matches[0] as $idx => $match) {
 echo $doc;
 
 ?>
+<script type="text/javascript">
+        na.site.settings.current.loadingApps = false;
+        na.site.settings.current.startingApps = false;
+</script>

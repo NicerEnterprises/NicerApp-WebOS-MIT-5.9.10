@@ -266,8 +266,11 @@ a, p, span, h1, h2, h3 {
     width : fit-content;
     /*display : content;*/
     display : inline-block;
-    /*background : rgba(0,0,0,0.55);
-    border-radius : 10px;*/
+}
+h1:not(#pageTitle), h2, h3 {
+    background : rgba(0,0,0,0.55);
+    border-radius : 10px;
+    display : block;
 }
 li > div > div:not(.jstree-wholerow), li > div:not(.jstree-wholerow, .contentSectionTitle1, .contentSectionTitle2, .contentSectionTitle3), li > span:not(.vt), .backdropped {
     margin-block-start : 0;
@@ -378,6 +381,7 @@ ul.index > li {
     white-space: nowrap;
     overflow : hidden;
     color : white;
+    display : inline;
     font-weight : bold;
     font-size : 1rem;
     z-index : 30000;

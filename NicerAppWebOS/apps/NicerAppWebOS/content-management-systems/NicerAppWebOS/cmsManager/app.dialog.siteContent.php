@@ -36,7 +36,7 @@ $ip = (array_key_exists('X-Forwarded-For',apache_request_headers())?apache_reque
                 <!--<label id="url1_label" for="documentTitle">SEO-1, URL-1</label>-->
         </div>
         <div class="navbar_section">
-                <span id="url0" class="vividTheme_input_urls" style="width:auto;"></span>
+                <span id="url0" class="vividTheme_input_urls" style="width:auto;display:block;"></span>
                 <select id="url1_select" class="select themeEditor mainBar_forThemeEditor" onchange="na.cms.onchange_documentHeaders(event);" style="order:2;display:none;">
                     <option id="url1_select__in" name="url1_select__in" value="in">in</option>
                     <option id="url1_select__on" name="url1_select__on" value="on">on</option>
@@ -85,7 +85,7 @@ $ip = (array_key_exists('X-Forwarded-For',apache_request_headers())?apache_reque
                         <option id="nb_url1_select__on" name="url1_select__on" value="on">on</option>
                         <option id="nb_url1_select__during" name="url1_select__during" value="during">during</option>
                     </select>
-                    <div id="nb_url1_dropdown" class="vividDropDownBox" style="display:inline-block;width:auto;vertical-align:top;"></div>
+                    <div id="nb_url1_dropdown" class="vividDropDownBox" style="display:inline-block;width:auto;"></div>
                     <!--<label id="url2_label" for="documentTitle">SEO-2, URL-2</label>-->
                     <span id="nb_url1-2" class="vividTheme_input_urls" style="padding-left:10px !important;padding-right:10px !important;">/</span>
                     <input id="nb_url2_value" type="text" onchange="na.cms.onchange_documentHeaders(event);"></input>
