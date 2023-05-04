@@ -393,6 +393,10 @@ body, a, p, span, div, li, td {
 .vividMenu_item a span {
     font-size: clamp(0.4375rem, 0.4004rem + 0.1854vw, 0.875rem);
 }
+.vividDropDownBox_selected, .vividDropDownBox_selector {
+    font-size: clamp(0.4375rem, 0.4004rem + 0.1854vw, 0.875rem);
+}
+
 #siteStatusbar .vividDialogContent td {
     vertical-align: middle;
 }
@@ -1436,11 +1440,14 @@ select[multiple] {
   justify-content: space-between;
   align-items : center;
   padding : 5px;
-  margin : 10px;
+  margin : 4px;
   background : rgba(0,0,0,0.55);
   border-radius : 10px;
   box-shadow : inset 1px 1px 2px 1px rgba(0,0,0,0.8);
   
+}
+#themeEditor_photoAlbum_specs {
+  margin : 4px;
 }
 label.specificityCB {
     width : auto;
@@ -1463,7 +1470,7 @@ input.specificityCB {
     border-radius : 10px;
     box-shadow : 2px 2px 3px 2px rgba(0,0,0,0.5) inset;
     padding : 5px;
-    margin : 10px;
+    margin : 4px;
 }
 .sds_dialogTitle .vividButton_icon_50x50_sdsdt {
     display : inline-block;

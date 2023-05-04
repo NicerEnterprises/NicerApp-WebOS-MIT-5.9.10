@@ -355,8 +355,8 @@ na.te = na.themeEditor = {
         t = this,
         display = $('#themeEditor_photoAlbum').css('display'),
         doc = $('#themeEditor_photoAlbum')[0].contentWindow.document;
-        $('.vividScrollpane div', doc).css({width:110,height:130});
-        $('.vividScrollpane div img', doc).css({width:100,height:100}).each(function(idx,el){
+        $('.vividScrollpane div', doc).css({width:100,height:130});
+        $('.vividScrollpane div img', doc).css({width:90,height:100}).each(function(idx,el){
             el.onclick = function () { na.te.imageSelected(el); };
         });
         /*$('#themeEditor_photoOpacity')[0].oninput = function () {
@@ -597,6 +597,7 @@ na.te = na.themeEditor = {
                 $('#theme_'+i).html (na.te.s.c.selectedThemeName);
                 
                 na.site.setSiteLoginLogout();
+                setTimeout (na.site.setSpecificity,250);
             },
             error : function (xhr, textStatus, errorThrown) {
                 na.site.ajaxFail(fncn, url, xhr, textStatus, errorThrown);
@@ -1238,22 +1239,22 @@ na.te = na.themeEditor = {
                 $('#label_themeEditor_photoOpacity').css ({ top : 4, position : 'absolute' });
                 $('#themeEditor_photoOpacity').css({
                     display : 'block',
-                    width : $('#siteToolbarThemeEditor').width() - 180,
-                    left : 150
+                    width:$('#siteToolbarThemeEditor .vividDialogContent').width() - 70 - 20,
+                    left : 70
                 });
 
                 $('#label_themeEditor_photoScaleX').css ({ top : 37, position : 'absolute' });
                 $('#themeEditor_photoScaleX').css({
                     display : 'block',
-                    width:$('#siteToolbarThemeEditor').width() - 180,
-                    left : 150
+                    width:$('#siteToolbarThemeEditor .vividDialogContent').width() - 70 - 20,
+                    left : 70
                 }).val(na.te.s.c.scaleX).fadeIn('fast');
                 
                 $('#label_themeEditor_photoScaleY').css ({ top : 66, position : 'absolute' });
                 $('#themeEditor_photoScaleY').css({
                     display : 'block',
-                    width:$('#siteToolbarThemeEditor').width() - 180,
-                    left : 150
+                    width:$('#siteToolbarThemeEditor .vividDialogContent').width() - 70 - 20,
+                    left : 70
                 }).val(na.te.s.c.scaleX).fadeIn('fast');
                 
                 setTimeout(na.te.onresize,100);

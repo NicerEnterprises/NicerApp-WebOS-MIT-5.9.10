@@ -920,18 +920,21 @@ na.site = {
     setSpecificity : function() {
         $('.na_themes_dropdown').html('<div class="vividDropDownBox_selected vividScrollpane" style="white-space:normal;"></div><div class="vividDropDownBox_selector vividScrollpane"></div>').delay(50);
         $('.vividDropDownBox_selected, .vividDropDownBox_selector').each(function(idx,el) {
-            $(this).css({
-                width:
-                    $(this).parent().parent().width()
-                    - $('.btnOptions_menu__label__specificity_dropdown, .btnOptions_menu__label__themes_dropdown',
+            var w = 0;
+            $('.vividButton4, .vividButton, .vividButton_icon_50x50', $(el).parent().parent() ).each(function(idx2, el2) {
+                w += $(el2).width();
+                $(el2).css ({display : 'inline-block', position:'relative'});
+            });
+            var w3 = $(this).parent().parent().width();
+            var w2 = w3
+                    - $('.siteToolbarThemeEditor__label__specificity, .siteToolbarThemeEditor__label__themes, .btnOptions_menu__label__specificity_dropdown, .btnOptions_menu__label__themes_dropdown',
                         $(this).parent().parent()
                     ).width()
-                    - (
-                        $('.vividButton4', $(this).parent().parent() )[0]
-                        ? $('.vividButton4', $(this).parent().parent() ).width()
-                        : 0
-                    )
-                    - 20,
+                    - w
+                    - 20;
+
+            $(this).css({
+                width: w2,
                 height : 'auto'
             });
 

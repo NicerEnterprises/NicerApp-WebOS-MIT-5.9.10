@@ -13,7 +13,7 @@ na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/Nic
 				},
 
 				onload : function (settings) {
-                    //na.m.waitForCondition ('applications/content-management-systems/NicerAppWebOS/cmsManager start', na.m.HTMLidle, /function () {
+                    na.m.waitForCondition ('applications/content-management-systems/NicerAppWebOS/cmsManager start', na.m.HTMLidle, function () {
                         var
                         na1 = na.cms, g = na1.globals, s = na1.settings, c = s.current, db = c.db,
                         loadedIn = s.loadedIn['#siteContent'];
@@ -63,7 +63,7 @@ na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/Nic
                             settings.onHold = false; // signals a wait for na.site.loadTheme() has ended
                             //});
                         //}, 30);
-                    //}, 30);
+                    }, 30);
 				},
                 ondestroy : function (settings) {
                     var

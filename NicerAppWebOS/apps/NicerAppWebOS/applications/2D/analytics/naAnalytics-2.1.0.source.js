@@ -332,21 +332,30 @@ na.an = na.analytics = {
             success : function (data, ts) {
                 var 
                 evt = na.analytics.settings.evt,
-                html = '<div class="geoIP" style="display:none;position:absolute;top:'+evt.layerY+'px;left:'+(evt.layerX+30)+'px;background:rgba(0,0,0,0.8);border:3px ridge white;border-radius:5px;z-index:1200;">'+data+'</div>';
+                html = '<div class="geoIP" style="display:none;position:absolute;top:'+evt.layerY+'px;left:'+(evt.layerX+50)+'px;background:rgba(0,0,0,0.8);border:3px ridge white;border-radius:5px;z-index:1200;">'+data+'</div>';
                 //var div = $.parseHTML(html);
-                jQuery('#siteContent').prepend(html);
+                jQuery('#siteContent').append(html);
                 $('.geoIP').fadeIn('normal');
+                na.an.s.c.recentlyAdded_geoIP = true;
+                setTimeout(function() {
+                    na.an.s.c.recentlyAdded_geoIP = false;
+                }, 1000);
                 //debugger;
             }
         };
-        na.analytics.settings.evt = evt;
-        jQuery.ajax (ajaxCmd);
+        if (!$('.geoIP')[0]) {
+            na.analytics.settings.evt = evt;
+            $.ajax (ajaxCmd);
+        }
     },
     
     geoIP_mouseout : function (evt) {
-        $('.geoIP').fadeOut('fast', function() {
-            $('.geoIP').remove();
-        });
+        setTimeout (function() {
+            if (!na.an.s.c.recentlyAdded_geoIP)
+            $('.geoIP').fadeOut('fast', function() {
+                $('.geoIP').remove();
+            });
+        }, 1500);
     }
 };
 na.an.s = na.an.settings;

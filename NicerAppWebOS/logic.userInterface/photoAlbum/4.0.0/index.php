@@ -64,7 +64,7 @@
         
         $onclick = 'onclick="window.top.na.blog.onclick_mediaThumbnail(event, \''.$_GET['basePath'].'\', \''.$fileName.'\')"';
         
-        echo '<center><img src="'.$thumbURL.'" class="mediaThumb" style="width:200px" '.$onclick.'/><br/><span class="filename">'.$fileName.'</span></center></div>';        
+        echo '<center><img src="'.$thumbURL.'" class="mediaThumb" style="width:200px" '.$onclick.'/><br/><span class="filename">'.$fileName.'</span></center></div>';
     }
 ?>
 </div>
