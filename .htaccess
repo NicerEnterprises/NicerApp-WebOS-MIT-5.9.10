@@ -174,7 +174,7 @@ Options +FollowSymLinks
             ##RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_URI} !^/NicerAppWebOS/apps/NicerAppWCS/applications/2D/musicPlayer/music/.*$
     RewriteCond %{HTTP:X-Requested-With} XMLHttpRequest
-    RewriteRule ^view-content/(.*)$ NicerAppWebOS/logic.AJAX/ajax_get_content.php?seoValue=$1 [L]
+    RewriteRule ^view-content/(.*)$ NicerAppWebOS/logic.AJAX/ajax_get_content.php?viewID=$1 [L]
 
     # all pages that got requested via a bookmark or as links elsewhere on the web
     # (requiring the full NicerApp WebOS HTML, CSS and JS to be sent along with the content)
@@ -182,7 +182,7 @@ Options +FollowSymLinks
             ##RewriteCond %{REQUEST_FILENAME} !-f
             ##RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_URI} !^/NicerAppWebOS/apps/NicerAppWCS/applications/2D/musicPlayer/music/.*$
-    RewriteRule ^view/(.*)$ NicerAppWebOS/index.php?seoValue=$1 [L]
+    RewriteRule ^view/(.*)$ NicerAppWebOS/index.php?viewID=$1 [L]
 
     RewriteCond %{REQUEST_URI} !^/NicerAppWebOS/apps/NicerAppWCS/applications/2D/musicPlayer/music/.*$
     RewriteCond %{HTTP:X-Requested-With} XMLHttpRequest

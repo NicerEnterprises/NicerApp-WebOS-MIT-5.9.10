@@ -79,6 +79,7 @@ require_once (realpath(dirname(__FILE__).'/../../../../../../../..').'/NicerAppW
 					na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/cardgame.tarot'].settings.reading = <?php echo json_encode($reading); ?>;
 					//na.apps.loaded['app.2D.cardgame.tarot'].settings.ready = true;
 					na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/cardgame.tarot'].settings.loadedIn['#siteContent'].settings.ready = true;
+					na.site.settings.current.startingApps = false;
 				},
 				100
 			);
