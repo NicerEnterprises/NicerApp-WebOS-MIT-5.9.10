@@ -25,7 +25,9 @@
     </p>
 
     <p>
-    Should I unexpectedly die for some strange reason, i want the copyright of my software NicerApp WebOS[1] donated to kubuntu.com, and the rest of my belongings to the Amsterdam.NL stedelijk museum.<br/>
+    Should I unexpectedly die for some strange reason, i want the Copyright (C) and All Rights Reserved (R) of my software NicerApp WebOS[1] donated to kubuntu.com *and* apache.org where the license will be decided by kubuntu.com who may or may not include advice from apache.org into their considerations.<br/>
+    The rest of my belongings i donate to the Amsterdam.NL stedelijk museum, who may do with it all as they please.<br/>
+    <br/>
     [1] <a href="https://github.com/NicerEnterprises/NicerApp-WebOS" class="noPushState" target="ghp1">https://github.com/NicerEnterprises/NicerApp-WebOS</a>.
     </p>
 

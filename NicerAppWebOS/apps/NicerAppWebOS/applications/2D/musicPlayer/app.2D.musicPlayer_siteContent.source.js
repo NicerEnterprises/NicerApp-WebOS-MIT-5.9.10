@@ -35,6 +35,32 @@ na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/musicPlayer'] 
                     na.site.settings.current.app = '/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/musicPlayer';
                     na.analytics.logMetaEvent ("na.mp.onload() called.");
 
+            /*na.m.waitForCondition ('DOM ready', function() {
+                return na && na.apps && typeof na.mediaPlayer =='object' && $.ui && $.ui.draggable && $('#mp3s')[0] && $('#player')[0];
+            }, function() {*/
+
+                jQuery('#horizontalMover').draggable ({
+                    containment : '#horizontalMover__containmentBox1',
+                    axis : 'x',
+                    drag : function () {
+                        na.musicPlayer.settings.masterLeftOffset = jQuery('#horizontalMover')[0].offsetLeft;
+                        debugger;
+                        na.musicPlayer.onWindowResize();
+                    }
+                });
+                $('#titlebar .vividDialogContent').fadeIn('fast');
+                na.desktop.globals.divs.push ('#titlebar');
+                na.desktop.globals.divs.push ('#mp3s');
+                na.desktop.globals.divs.push ('#player');
+                na.desktop.globals.divs.push ('#playlist_wrapper');
+                na.desktop.globals.divs.push ('#infoWindow_mp3desc');
+                //na.musicPlayer.settings.loadedIn['#siteContent'].onload( {} );
+                na.desktop.resize();
+                na.site.settings.current.loadingApps = false;
+                na.site.settings.current.startingApps = false;
+            //}, 100);
+
+
                     var w = $('#mp3s').width()-25;
                     na.m.waitForCondition (
                         'na.site.settings.current.HTMLidle for resizing of playlist .vividButton elements (not in a .vividMenu btw)',

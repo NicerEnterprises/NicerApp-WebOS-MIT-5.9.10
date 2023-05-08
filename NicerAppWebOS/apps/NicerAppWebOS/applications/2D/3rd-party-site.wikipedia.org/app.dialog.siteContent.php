@@ -1,0 +1,1 @@
+<iframe src="/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/3rd-party-site.wikipedia.org/app.content_fullService.php?app-wikipedia.org=<?php echo $_GET['app-wikipedia_org'];?>" style="width:calc(100% - 5px);height:calc(100% - 10px);"></iframe>

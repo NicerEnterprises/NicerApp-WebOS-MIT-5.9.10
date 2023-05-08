@@ -1,6 +1,6 @@
 na.desktop = {
     globals : {
-        animationSpeed : 'fast',
+        animationSpeed : 'slow',
         divs : [ '#siteDateTime', '#siteErrors', '#btnOptions', '#btnLoginLogout', '#btnChangeBackground', '#siteContent', '#siteVideo', '#siteVideoSearch', '#siteComments', '#siteStatusbar', '#siteToolbarThemeEditor', '#siteToolbarLeft', '#siteToolbarRight', '#siteToolbarTop' ],
         visibleDivs : [ '#siteDateTime', '#btnOptions', '#btnLoginLogout', '#btnChangeBackground', '#siteContent', '#siteStatusbar' ],
         configs : {
@@ -228,11 +228,12 @@ na.desktop = {
         if (reset === undefined) reset = true;
         var anims = na.d.calculateWhichTopIconsToShow();
         if (animate===null) animate = anims;
+        na.m.log (100, 'called : na.desktop.resize (callback, animate, reset); - animationSpeed='+na.d.g.animationSpeed, false);
         na.d.goto(na.d.s.visibleDivs,callback, animate, reset);
     },
     
     goto : function (visibleDivs, callback, animate, reset) {
-
+        var fncn = 'na.desktop.goto (visibleDivs, callback, animate, reset)';
         if ($(window).width() > $(window).height()) {
             if (na.site.settings.current.orientation!=='landscape') {
                 na.site.settings.current.orientation = 'landscape';
@@ -279,6 +280,7 @@ na.desktop = {
         
 
         na.d.s.visibleDivs = visibleDivs;
+        na.m.log (10010, fncn+' : calculated visibleDivs', false);
 
 
         na.d.g.defaultPos = {
@@ -352,7 +354,8 @@ na.desktop = {
             }
         };
         //debugger;
-        
+        na.m.log (10010, fncn+' : set defaultPos', false);
+
         var calculationResults = {
             'calculationResults_visible' : na.m.negotiateOptions( // TODO : clean up, reduce number of evaluations
                 (
@@ -741,6 +744,7 @@ na.desktop = {
                 )
             ) // calculationResults_visible
         };
+        na.m.log (10010, fncn+' : calculated calculationResults_visible', false);
 
         var 
         w = $(window).width(),
@@ -871,6 +875,7 @@ na.desktop = {
                 if (section[divID].xMinWidth) divs[divID].width -= section[divID].xMinWidth;
                 if (section[divID].yMinHeight) divs[divID].height -= section[divID].yMinHeight;
 //debugger;
+                na.m.log (10010, fncn+' : calculated sections', false);
 
                 switch (divID) {
                     case '#siteMenu':
@@ -937,6 +942,7 @@ na.desktop = {
                         break;
                 }
             }
+                na.m.log (10010, fncn+' : calculated divs', false);
 
 
                 
@@ -977,6 +983,7 @@ na.desktop = {
             });*/
 
             for (var masterCallbackIdx=0; masterCallbackIdx<section.order.length; masterCallbackIdx++) {
+                na.m.log (10010, fncn+' : issuing animation calls for masterCallbackIdx='+masterCallbackIdx, false);
                 let divID = section.order[masterCallbackIdx];
                 var haveFiredAnimationsForDivAlready = false;
                 for (var i=0; i < divsDone.length; i++) if (divsDone[i]==divID) haveFiredAnimationsForDivAlready = true;
@@ -1028,7 +1035,7 @@ na.desktop = {
                             if (!shown /*|| !visibleDivs.includes(divID)*/) {
                                 var options = {
                                         queue : false,
-                                        duration : 'normal',
+                                        duration : na.d.g.animationSpeed,
                                         easing : 'swing',
                                         complete : function() {
                                             na.d.s.animatingDivs[divID] = false;

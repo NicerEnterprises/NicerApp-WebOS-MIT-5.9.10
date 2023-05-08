@@ -25,14 +25,15 @@ class naVividDialog {
         //debugger;
         if (idx!==false && na.site.globals.themesDBkeys[idx].display) {
             html += 
-                '<div class="vdSettings" style="z-index:10000;">'
+                '<div class="vdSettings" style="z-index:10000;display:none;">'
                     +'<img class="btnSettings" src="/NicerAppWebOS/siteMedia/btnPickColor.png" onclick="na.site.settings.activeDivs = [\'#siteToolbarThemeEditor\']; var d = na.site.settings.dialogs[\'#'+this.el.id+'\']; d.displaySettingsDialog(d, \''+t.el.id+'\')"/>'
                     +'<input type="range" min="1" max="100" value="50" class="sliderOpacityRange" onchange="na.te.opacityChange(event);"/>'
                 +'</div>';
             if (
                 t.el.id!=='#siteToolbarThemeEditor' 
                 && !$('.vdSettings',t.el)[0]
-            ) $(t.el).prepend(html);
+            ) $(t.el).prepend(html).delay(20);
+            $('.vdSettings', t.el).fadeIn('slow');
         } else $(t.el).find('.vdSettings').remove();
         
         $(t.el).prepend(html);
@@ -67,11 +68,13 @@ class naVividDialog {
                                       
         }, function() {
             //if ( !$(el).is(':animated') ) 
-                $(this).stop(true,true).animate({ opacity : 0.0001 }, 'fast');
+                $(this).stop(true,true).animate({ opacity : (na.m.userDevice.isPhone?0.25:0.0001) }, 'fast');
         });
         
         $('.vdSettings', t.el).click (function() {
-            $(this).stop(true,true).css({opacity:0.0001});
+            $(this).stop(true,true).css({opacity:(na.m.userDevice.isPhone?0.25:0.0001)});
+        }).each(function(idx,el) {
+            $(this).stop(true,true).css({opacity:(na.m.userDevice.isPhone?0.25:0.0001)});
         });
         
         $('.vividDialogContent', t.el).css({display:'block'});

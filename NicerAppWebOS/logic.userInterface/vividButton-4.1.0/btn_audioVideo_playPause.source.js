@@ -3,7 +3,7 @@ na.ui.vividButton.buttonTypes['btn_audioVideo_playPause'] = {
     buttonType : 'btn_audioVideo_playPause',
     startupState : 'paused',
     selectedState : 'playing',
-    startupCircumstance : 'normal',    
+    startupCircumstance : 'normal',
     circumstances : {
         normal : {
             layers : {
@@ -56,7 +56,7 @@ na.ui.vividButton.buttonTypes['btn_audioVideo_playPause'] = {
                         }
                     }
                 } else {
-                    /*
+/*
                     if (
                         $('#btnPlayPause').is('.paused')
                     ) {
@@ -64,7 +64,8 @@ na.ui.vividButton.buttonTypes['btn_audioVideo_playPause'] = {
                             $('#from_play_to_pause')[0].beginElement(); 
                             $('#line2').addClass('atPlay');
                         }
-                    }*/
+                    }
+*/
                 }
             },
             onmouseover : function () {

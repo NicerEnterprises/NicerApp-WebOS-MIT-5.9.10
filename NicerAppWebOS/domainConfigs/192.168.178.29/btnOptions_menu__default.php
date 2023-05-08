@@ -5,8 +5,9 @@
 ?>
 <div id="btnOptions_menu__background" class="vividDialogPopup_background"></div>
 
-<div id="btnOptions_menu__specificity__containerDiv" style="display:flex;align-items:center;height:44px;">
+<div id="btnOptions_menu__specificity__containerDiv" style="display:flex;align-items:center;height:auto;">
     <!--<span class="label_specificityOrThemeChange">Specificity</span><select id="specificityChange_specificityName" type="text"></select>-->
+    <div id="btnLockSpecificity" class="vividButton4" buttonType="btn_lock" onclick="na.site.settings.current.lockSpecificity = !na.site.settings.current.lockSpecificity;"></div>
     <span class="btnOptions_menu__label__specificity_dropdown">Specificity</span>
     <div id="btnOptions_menu__specificity_dropdown" class="na_themes_dropdown na_themes_dropdown__specificity"></div>
 </div>
@@ -109,6 +110,30 @@
         'grouped btnDelete themes',
         ''
     );
+    echo $naWebOS->html_vividButton (
+        0, 'align-items:center;justify-content:center;margin-right:10px;margin-left:10px;',
+
+        'btnDeleteAllOfMyThemes',
+        'vividButton_icon_50x50 grouped btnDelete forum', '_50x50', 'grouped',
+        '',
+        'na.site.onclick_btnDeleteAllOfMyThemes(event)',
+        '',
+        '',
+
+        202, 'Delete all of my client-specific themes.',
+
+
+        'btnCssVividButton_outerBorder.png',
+        'btnCssVividButton.blue1b.png',
+        null,//'btnCssVividButton_iconBackground.png',
+        'btnTrashcan_red.png',
+
+        '',
+
+        'Delete only my own themes.',
+        'grouped btnDelete themes',
+        ''
+    );
 ?>
 <?php
     echo $naWebOS->html_vividButton (
@@ -121,7 +146,7 @@
         '',
         '',
 
-        203, 'View PHP errors.',
+        204, 'View PHP errors.',
 
         'btnCssVividButton_outerBorder.png',
         'btnCssVividButton.yellow1a.png',

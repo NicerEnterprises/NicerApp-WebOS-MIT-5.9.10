@@ -29,8 +29,10 @@ na.an = na.analytics = {
         dip = na.an.s.c.loadedDaysIntoPast;
         if (dip < na.an.globals.loadDaysIntoPast) {
             if (dip > 0) date.setDate (date.getDate() - dip);            
-            var dateStr = date.toISOString().slice(0, 10);
-            $('.startupMsg').html('Now loading '+dateStr+' ('+dip+' of '+na.an.globals.loadDaysIntoPast+')');
+            var
+            dateStr = date.toISOString().slice(0, 10),
+            msg = 'Now loading '+dateStr+' ('+dip+' of '+na.an.globals.loadDaysIntoPast+')';
+            $('.startupMsg').html(msg);
             na.an.load_date (dateStr);
         } else {
             na.an.visualizeLoadedData();
@@ -94,20 +96,20 @@ na.an = na.analytics = {
                 var d2 = d[ip];
                 if (d2.isBot) {
                     for (var i=0; i<d2.length; i++) {
-                        /*var d3 = d2[i];
+                        var d3 = d2[i];
                         html += 
                             '<tr class="naan_rec naan_bot">'
-                            +'<td class="naan_datetimeStr">'+d3.datetimeStr+'</td>'
-                            +'<td class="naan_ip">'+d3.ip+'</td>'
-                            +'<td class="naan_msg">'+d3.msg+'</td>'
-                            +'</tr>'*/
+                            +'<td class="naan_datetimeStr"><p>'+(d3.timeStr?d3.timeStr:d3.datetimeStr)+'</p></td>'
+                            +'<td class="naan_ip"><p>'+d3.ip+'</p></td>'
+                            +'<td class="naan_msg"><p>'+d3.msg+'</p></td>'
+                            +'</tr>';
                     }
                 } else {
                     for (var i=d2.length-1; i>0; i--) {
                         var d3 = d2[i];
                         html += 
                             '<tr class="naan_rec">'
-                            +'<td class="naan_datetimeStr"><p>'+d3.datetimeStr+'</p></td>'
+                            +'<td class="naan_datetimeStr"><p>'+(d3.timeStr?d3.timeStr:d3.datetimeStr)+'</p></td>'
                             +'<td class="naan_ip" onmouseover="na.an.geoIP(event, \''+d3.ip+'\')" onmouseout="na.an.geoIP_mouseout(event)"><p>'+d3.ip+'</p></td>'
                             +'<td class="naan_msg"><p>'+d3.msg+'</p></td>'
                             +'</tr>'
@@ -211,6 +213,13 @@ na.an = na.analytics = {
     logEvent : function (evt) {
         if (!na.site.globals.naLAN) {
             var
+            date = new Date(),
+            timeInMilliseconds = date.getTime(),
+            appRunTime = timeInMilliseconds - na.m.settings.siteStartTime,
+
+            timeString_runningPage = na.m.secondsToTimeString (appRunTime / 1000),
+            timeString_now = na.m.dateObj_toDateString (date),
+            timeString = timeString_now+' (@'+timeString_runningPage+' now)',
             s = na.analytics.settings,
             myip = na.site.globals.myip.replace(/_/g,'.'),
             datetime = new Date(),
@@ -221,6 +230,7 @@ na.an = na.analytics = {
                 jsSessionID : s.jsSessionID,
                 datetime : datetime.getTime(),
                 datetimeStr : datetimeStr,
+                timeStr : timeString,
                 date : dateStr,
                 tzOffset : datetime.getTimezoneOffset(),
                 userAgent : navigator.userAgent,
@@ -262,12 +272,19 @@ na.an = na.analytics = {
     
     logMetaEvent : function (msg, stacktrace) {
         if (typeof stacktrace=='undefined') stacktrace = false;
-
         //na.analytics.pouchdb.logMetaEvent (msg);
         if (!na.site.globals.naLAN) {
             var
+            date = new Date(),
+            timeInMilliseconds = date.getTime(),
+            appRunTime = timeInMilliseconds - na.m.settings.siteStartTime,
+
+            timeString_runningPage = na.m.secondsToTimeString (appRunTime / 1000),
+            timeString_now = na.m.dateObj_toDateString (date),
+            timeString = timeString_now+' (@'+timeString_runningPage+' now)',
             s = na.analytics.settings,
-            myip = na.site.globals.myip.replace(/_/g,'.'),
+            myip = na.site.globals.myip.replace(/_/g,'.');
+            var
             datetime = new Date(),
             datetimeStr = na.analytics.dt2str (datetime),
             dateStr = na.analytics.date2str (datetime),
@@ -277,13 +294,14 @@ na.an = na.analytics = {
                 datetime : datetime.getTime(),
                 datetimeStr : datetimeStr,
                 date : dateStr,
+                timeStr : timeString,
                 tzOffset : datetime.getTimezoneOffset(),
                 userAgent : navigator.userAgent,
                 ip : myip,
                 htmlID : '[NULL]',
                 eventType : '[META]',
                 msg : msg
-            },
+            };
             ac = {
                 type : 'POST',
                 url : '/NicerAppWebOS/logEvent.php',

@@ -272,7 +272,7 @@ h1:not(#pageTitle), h2, h3 {
     border-radius : 10px;
     display : block;
 }
-li > div > div:not(.jstree-wholerow), li > div:not(.jstree-wholerow, .contentSectionTitle1, .contentSectionTitle2, .contentSectionTitle3), li > span:not(.vt), .backdropped {
+li > div > div:not(.jstree-wholerow), li > div:not(.jstree-wholerow), .contentSectionTitle1, .contentSectionTitle2, .contentSectionTitle3), li > span:not(.vt), .backdropped {
     margin-block-start : 0;
     margin-block-end : 0;
     margin : 8px;
@@ -751,8 +751,7 @@ h2 {
   background-clip: text;
   -webkit-background-clip: text;
   animation: move-bg 8s infinite cubic-bezier(0.11, 0, 0.5, 0);
-  text-shadow : 2px 2px 3px rgba(0,0,0,0.4), inset 1px 1px 1px rgba(255,255,255,0.65);
-  font-size : 110%;
+  text-shadow : 3px 3px 3px rgba(0,0,0,0.4), inset 1px 1px 1px rgba(255,255,255,0.65);
   font-weight : bold;
   position : relative;
 }
@@ -986,3 +985,23 @@ h2 {
             mask-image: url("/NicerAppWebOS/siteMedia/vividDialog_borderMask_300x500.png");
         }
     }
+
+
+.naan_rec p, .naan_bot p {
+    font-weight : bold;
+}
+.naan_datetimeStr p {
+    color : skyblue;
+}
+.naan_ip p {
+    color : lime;
+}
+.naan_msg p {
+    color : lightgreen;
+}
+.naan_bot .naan_ip p {
+    color : grey;
+}
+.naan_bot .naan_msg p {
+    color : grey;
+}

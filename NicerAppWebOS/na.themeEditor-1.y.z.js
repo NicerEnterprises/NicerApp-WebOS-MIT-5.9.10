@@ -299,12 +299,12 @@ na.te = na.themeEditor = {
             $('#textShadow_0').css({ textShadow : $(div).css('textShadow') });
         }
         setTimeout (function() {
-            var x = $('#'+forDialogID+' .vdBackground').css('background');
+            var x = $('#'+forDialogID+' > .vdBackground').css('background');
             //na.m.log (300, 'x='+x);
             $('.mediaThumb', $('#themeEditor_photoAlbum')[0].contentWindow.document).each(function(idx,el) {
                 //na.m.log (300, 'el.src='+el.src.replace('thumbs/', ''));
                 if (x && x.indexOf(el.src.replace('thumbs/', ''))!==-1) {
-                    var scale = $('#'+forDialogID+' .vdBackground').css('backgroundSize').match(/\d+/);
+                    var scale = $('#'+forDialogID+' > .vdBackground').css('backgroundSize').match(/\d+/);
                     if (scale) na.te.s.c.scale = scale[0];
                     na.te.s.c.selectedImage = el;
                     na.m.log (300, 'na.te.s.c.selectedImage = '+el.src);
@@ -597,7 +597,7 @@ na.te = na.themeEditor = {
                 $('#theme_'+i).html (na.te.s.c.selectedThemeName);
                 
                 na.site.setSiteLoginLogout();
-                setTimeout (na.site.setSpecificity,250);
+                //setTimeout (na.site.setSpecificity,250);
             },
             error : function (xhr, textStatus, errorThrown) {
                 na.site.ajaxFail(fncn, url, xhr, textStatus, errorThrown);
@@ -947,7 +947,7 @@ na.te = na.themeEditor = {
         //$(bg).css({ border : newBorder, borderRadius : newBorderRadius });
         //$('#'+na.te.s.c.forDialogID).css({borderRadius : Math.round((newBorderRadius/4)*3) });
         //$('.boxShadow', bg).css({ border : newBorder, borderRadius : newBorderRadius });
-        $('.vdBackground', bg).css({ border:newBorder, borderRadius : newBorderRadius });
+        $('#'+na.te.s.c.forDialogID+' > .vdBackground').css({ border:newBorder, borderRadius : newBorderRadius });
         $(bg).css({borderRadius:newBorderRadius});
         /*if (na.te.s.c.fireSaveTheme) */na.site.saveTheme();
     },
@@ -969,7 +969,7 @@ na.te = na.themeEditor = {
         $('#boxShadowSettings').css({display:'inline-block',height:h1}).fadeIn('fast', 'swing', function () {
             var
             div = $('#'+na.te.s.c.forDialogID),
-            bg = $('#'+na.te.s.c.forDialogID+' .vdBackground'),
+            bg = $('#'+na.te.s.c.forDialogID+' > .vdBackground'),
             bg1 = $(bg).css('background').replace(/"/g, '\''),
             bs = $(div).css('boxShadow').split(', rgb');
             opacity = bg1.indexOf('url(')!==-1 ? bg.css('opacity') : 1,
@@ -1134,7 +1134,7 @@ na.te = na.themeEditor = {
 
         var
         div = $('#'+na.te.s.c.forDialogID),
-        bg =  $('#'+na.te.s.c.forDialogID+' .vdBackground'),
+        bg =  $('#'+na.te.s.c.forDialogID+' > .vdBackground'),
         bg1 = bg.css('background').replace(/\'/g, '\\\'').replace(/"/g, '\''),
         opacity = bg1.indexOf('url(')!==-1 ? bg.css('opacity') : 1,
         border = div.css('border'),
@@ -1188,7 +1188,7 @@ na.te = na.themeEditor = {
                 $('#themeEditor_backgroundColor').css({top:8,opacity:1}).fadeIn('fast', function() {
                     $('#themeEditor_backgroundColor .sp-container').fadeIn('slow', 'swing', function() {
                         var 
-                        bg =  $('#'+na.te.s.c.forDialogID+' .vdBackground'),
+                        bg =  $('#'+na.te.s.c.forDialogID+' > .vdBackground'),
                         bg1 = bg.css('backgroundColor');
                         if (bg1)
                             if ($('#themeEditor_backgroundColor  .sp-container').length > 0)
@@ -1290,7 +1290,7 @@ na.te = na.themeEditor = {
     imageSelected : function (el) {
         na.te.s.c.selectedImage = el;
         let 
-        bg = $('.vdBackground', $('#'+na.te.s.c.forDialogID)[0]),
+        bg = $('#'+na.te.s.c.forDialogID+' > .vdBackground'),
         src = el.src.replace('thumbs/','');
 
         /*var bgSrc = $(bg).css('backgroundImage');
@@ -1365,7 +1365,7 @@ na.te = na.themeEditor = {
                 $('#textShadowSettings').fadeIn('fast', 'swing', function() {
                     var
                     div = $('#'+na.te.s.c.forDialogID),
-                    bg =  $('#'+na.te.s.c.forDialogID+' .vdBackground'),
+                    bg =  $('#'+na.te.s.c.forDialogID+' > .vdBackground'),
                     bg1 = bg.css('background').replace(/\'/g, '\\\'').replace(/"/g, '\''),
                     opacity = bg1.indexOf('url(') !== -1 ? bg.css('opacity') : 1,
                     border = div.css('border'),
@@ -1406,7 +1406,7 @@ na.te = na.themeEditor = {
     updateTextSettingsControls : function () {
         var
         el = $('#'+na.te.s.c.forDialogID),
-        el2 = $('#'+na.te.s.c.forDialogID+' .vividDialogContent'),
+        el2 = $('#'+na.te.s.c.forDialogID+' > .vividDialogContent'),
         el3 = $('#'+na.te.s.c.forDialogID+' td'),
         ts = $(el).css('textShadow').split(', rgb');
         for (var i=1; i<ts.length; i++) {
@@ -1506,7 +1506,7 @@ na.te = na.themeEditor = {
         
         var
         div = $('#'+na.te.s.c.forDialogID),
-        bg =  $('#'+na.te.s.c.forDialogID+' .vdBackground'),
+        bg =  $('#'+na.te.s.c.forDialogID+' > .vdBackground'),
         bg1 = bg.css('background').replace(/\'/g, '\\\'').replace(/"/g, '\''),
         opacity = bg1.match(/url\(/) ? bg.css('opacity') : 1,
         border = div.css('border'),
@@ -1568,7 +1568,7 @@ na.te = na.themeEditor = {
 //debugger;
         var
         el = $('#'+na.te.s.c.forDialogID),
-        el2 = $('#'+na.te.s.c.forDialogID+' .vividDialogContent'),
+        el2 = $('#'+na.te.s.c.forDialogID+' > .vividDialogContent'),
         el3 = $('#'+na.te.s.c.forDialogID+' td'),
         newTextShadow =
             $('#textShadowXoffset').val()+'px '
@@ -1611,7 +1611,7 @@ na.te = na.themeEditor = {
     textSettingsSelected_updateDialog : function () {
         var
         el = $('#'+na.te.s.c.forDialogID),
-        el2 = $('#'+na.te.s.c.forDialogID+' .vividDialogContent, #'+na.te.s.c.forDialogID+' td'),
+        el2 = $('#'+na.te.s.c.forDialogID+' > .vividDialogContent, #'+na.te.s.c.forDialogID+' td'),
         newFontSize = $('#textSize').val(),
         newFontWeight = parseInt($('#textWeight').val()) * 100,
         newFontFamily = na.te.s.c.selectedFontFamily,//$('#textFontFamily').val(),//.replace(/ /g, '+'),
@@ -1635,7 +1635,7 @@ na.te = na.themeEditor = {
         if (typeof color=='object') color = 'rgba('+color._r+', '+color._g+', '+color._b+', '+color._a+')'; // firefox bugfix
         var
         el = $('#'+na.te.s.c.forDialogID),
-        el2 = $('#'+na.te.s.c.forDialogID+' .vividDialogContent'),
+        el2 = $('#'+na.te.s.c.forDialogID+' > .vividDialogContent'),
         el3 = $('#'+na.te.s.c.forDialogID+' td');
         $(el).add(el2).add(el3).css ({ color : color });
         /*if (na.te.s.c.fireSaveTheme) */na.site.saveTheme();

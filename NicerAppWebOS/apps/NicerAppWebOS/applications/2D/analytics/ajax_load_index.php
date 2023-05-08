@@ -61,7 +61,11 @@ $findCommand = array (
     'selector' => array(
         'date' => $_GET['date']
     ),
-    'fields' => array( '_id' )
+    'fields' => array( '_id', 'datetime' ),
+    'sort' => [
+        ['datetime' => 'asc']
+    ],
+    'use_index' => 'primaryIndex'
 );
 if (array_key_exists('role',$_GET) && !is_null($_GET['role'])) $findCommand['selector']['role'] = $_GET['role'];
 if (array_key_exists('user',$_GET) && !is_null($_GET['user'])) $findCommand['selector']['user'] = $_GET['user'];

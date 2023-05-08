@@ -161,7 +161,7 @@ class newsApp3_class {
         
         $data = [];
         
-        $dbName = $this->cdb->dataSetName('app__app.2D.news__rss_items');
+        $dbName = $this->db->dataSetName('app__app.2D.news__rss_items');
         $this->cdb->setDatabase($dbName, false);
         
         $dateBeginStr = str_replace('.','0',urldecode($_GET['dateBegin']));
@@ -248,15 +248,16 @@ class newsApp3_class {
         while (!$done) {
             $go = true;
             try {
-                $dbName = $naWebOS->dbs->findConnection('couchdb')->dataSetName('app__app_2d_news__rss_items');
-                $naWebOS->dbs->findConnection('couchdb')->cdb->setDatabase ($dbName, false);
+                $dbName = $this->db->dataSetName('app_2d_news__rss_items');
+                $this->db->cdb->setDatabase ($dbName, false);
                 if (!is_null($bookmark)) {
                     $findCommand['bookmark'] = $bookmark;
-                    unset ($findCommand['selector']);
+                    //unset ($findCommand['selector']); // MESSES UP BOOKMARKED 2ND-PAGE LOADING
                 }
-                $call = $naWebOS->dbs->findConnection('couchdb')->cdb->find ($findCommand);
+                $call = $this->db->cdb->find ($findCommand);
                 if ($debug) { echo '$findCommand='.json_encode($findCommand, JSON_PRETTY_PRINT).PHP_EOL.'$call='.json_encode($call,JSON_PRETTY_PRINT).PHP_EOL.PHP_EOL; }
             } catch (Exception $e) {
+                //echo '$findCommand='.json_encode($findCommand, JSON_PRETTY_PRINT);
                 //echo '$findCommand : Exception->getMessage()='.$e->getMessage().PHP_EOL;
                 $go = false;
                 $done = true;

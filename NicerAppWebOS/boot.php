@@ -56,7 +56,7 @@ NicerApp WCS (Website Control System) from Nicer Enterprises
         $naIP = 'OS commandline probably';
     }
 
-    $naDebugAll = true;
+    $naDebugAll = false;
     global $naDebugAll;
     if ($naDebugAll) {
         ini_set('display_errors', 1); // 0 == false, 1 == true

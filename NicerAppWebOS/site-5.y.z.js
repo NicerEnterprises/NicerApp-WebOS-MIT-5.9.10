@@ -29,8 +29,8 @@ na.site = {
     settings : {
         defaultStatusMsg : (
             $.cookie('agreedToPolicies')!=='true'
-            ? '<table style="width:99%;"><tr><td><a href="/" style="padding:0;text-shadow:0px 0px 5px rgba(0,0,0,0.8);">nicer.app</a> only uses cookies for remembering user settings.<br/>'
-                + 'Analytics data including your account details on this site, your approximate location based on IP address, and your approximate activity records are also gathered (for purposes of market analysis and debugging of the Software only), but are visible only for site operators, and are never voluntarily shared with anyone or any thing from any of my sites.</td><td style="width:66px;"><div class="vividButton" theme="dark" style="position:relative;color:white;width:40px;height:20px;" onclick="na.site.dismissCookieWarning();">Ok</div></td></table>'
+            ? '<table style="width:99%;"><tr><td><a href="/" style="padding:0;text-shadow:0px 0px 5px rgba(0,0,0,0.8);">nicer.app</a> only uses cookies for remembering user settings.</td>'
+                + '<td style="width:66px;"><div class="vividButton" theme="dark" style="position:relative;color:white;width:40px;height:20px;" onclick="na.site.dismissCookieWarning();">Ok</div></td></table>'
             : '<table style="height:100%;"><tr><td>Copyright (C) and All Rights Reserved (R) 2002-2023 by<br/><a href="mailto:rene.veerman.netherlands@gmail.com" class ="contentSectionTitle3_a"><span class="contentSectionTitle3_span">Rene A.J.M. Veerman</span></a><br/></td><td style="width:40px;"><div class="vividButton" theme="dark" style="position:relative;color:white;height:20px;width:40px;" onclick="na.site.dismissCopyrightMessage();">Ok</div></td></table>'
         ),
         dialogs : {},
@@ -78,20 +78,20 @@ na.site = {
         na.m.settings.startTime = startTime.getTime();
         na.apps.mustHaveAtLeast_number = 0;
 
-        if ($('#siteToolbarTop > .vividDialogContent').html().trim()==='{$div_siteToolbarTop}') {
+        /*if ($('#siteToolbarTop > .vividDialogContent').html().trim()==='{$div_siteToolbarTop}') {
             na.d.s.visibleDivs.remove('#siteToolbarTop'); $.cookie('visible_siteToolbarTop','', na.m.cookieOptions());
         } else {
             na.d.s.visibleDivs.push('#siteToolbarTop'); $.cookie('visible_siteToolbarTop','true', na.m.cookieOptions());
-        }
-        if ($('#siteToolbarLeft > .vividDialogContent').html().trim()==='{$div_siteToolbarLeft}') {
-            na.d.s.visibleDivs.remove('#siteToolbarLeft'); $.cookie('visible_siteToolbarLeft','');
-        } else {
-            na.d.s.visibleDivs.push('#siteToolbarLeft'); $.cookie('visible_siteToolbarLeft','true', na.m.cookieOptions());
         }
         if ($('#siteToolbarRight > .vividDialogContent').html().trim()==='{$div_siteToolbarRight}') {
             na.d.s.visibleDivs.remove('#siteToolbarRight'); $.cookie('visible_siteToolbarRight','');
         } else {
             na.d.s.visibleDivs.push('#siteToolbarRight'); $.cookie('visible_siteToolbarRight','true', na.m.cookieOptions());
+        }*/
+        if ($('#siteToolbarLeft > .vividDialogContent').html().trim()==='{$div_siteToolbarLeft}') {
+            na.d.s.visibleDivs.remove('#siteToolbarLeft'); $.cookie('visible_siteToolbarLeft','');
+        } else {
+            na.d.s.visibleDivs.push('#siteToolbarLeft'); $.cookie('visible_siteToolbarLeft','true', na.m.cookieOptions());
         }
         if ($.cookie('visible_siteStatusbar')!=='true') {
             na.d.s.visibleDivs.remove('#siteStatusbar');
@@ -103,7 +103,7 @@ na.site = {
             //debugger;
             $('#siteLoginSuccessful, #siteLoginFailed, #siteRegistration, #siteLogin').css ({ width : $(window).width() - 75, left : 20 });
         }
-        
+        /*
         document.addEventListener('gesturestart', function(e) {
             e.preventDefault();
             // special hack to prevent zoom-to-tabs gesture in safari
@@ -120,7 +120,7 @@ na.site = {
             e.preventDefault();
             // special hack to prevent zoom-to-tabs gesture in safari
             document.body.style.zoom = 0.99;
-        });        
+        });    */
 
         document.addEventListener ('keyup', function (e) {
             e.preventDefault();
@@ -136,20 +136,6 @@ na.site = {
         $('.vividDialogContent').css({opacity:1,display:'block'});
         $('#siteDateTime .vividDialogContent').css({display:'flex'});
 
-        $('.vividDialog').each(function(idx,el){
-            na.site.settings.dialogs['#'+el.id] = new naVividDialog(el);
-            if (el.id=='siteDateTime') $('#'+el.id+' .vividDialogContent').removeClass('vividScrollpane').css({
-                overflow : 'hidden',
-                margin : 5,
-                display : 'flex',
-                alignItems : 'center',
-                justifyContent : 'center',
-                verticalAlign : 'middle',
-                height : $('#siteDateTime').height() - 10,
-                width : $('#siteDateTime').width() - 10
-            });
-        });
-    
         na.desktop.init();
 
         if (na.m.userDevice.isPhone) {
@@ -164,6 +150,21 @@ na.site = {
         }
         
         if ($.cookie('agreedToPolicies')!=='true') $.cookie('showStatusbar', 'true', na.m.cookieOptions());
+
+        $('.vividDialog').each(function(idx,el){
+            na.site.settings.dialogs['#'+el.id] = new naVividDialog(el);
+            if (el.id=='siteDateTime') $('#'+el.id+' .vividDialogContent').removeClass('vividScrollpane').css({
+                overflow : 'hidden',
+                margin : 5,
+                display : 'flex',
+                alignItems : 'center',
+                justifyContent : 'center',
+                verticalAlign : 'middle',
+                height : $('#siteDateTime').height() - 10,
+                width : $('#siteDateTime').width() - 10
+            });
+        });
+
 
         //na.site.setStatusMsg(na.site.settings.defaultStatusMsg, false); // calls na.desktop.resize() as well
         $('#siteStatusbar .vividDialogContent').html(na.site.settings.defaultStatusMsg);
@@ -192,7 +193,7 @@ na.site = {
                 width : $(window).width(),
                 height : $(window).height()
             });
-            
+            debugger;
             na.desktop.resize(na.site.delayedReloadMenu);
 
         };
@@ -272,7 +273,9 @@ na.site = {
         */
         
         
-        $('#siteContent').css({display:'block'});
+        $('#siteContent').css({display:'none',opacity:1}).fadeIn('slow');//css({display:'block'});
+        na.m.log (1, 'calling na.desktop.resize(na.site.onload_phase2, true);', false);
+        na.desktop.resize(na.site.onload_phase2, true);
 
         $('.vividButton4, .vividButton, .vividButton_icon_50x50_siteTop, .vividButton_icon_50x50').each(function(idx,el){
             if (!na.site.settings.buttons['#'+el.id]) na.site.settings.buttons['#'+el.id] = new naVividButton(el);
@@ -358,7 +361,7 @@ na.site = {
                     },
                     error : function (xhr, textStatus, errorThrown) {
                         na.site.ajaxFail(fncn, url2, xhr, textStatus, errorThrown);
-                        na.desktop.resize(na.site.onload_phase2, true);
+                        //na.desktop.resize(na.site.onload_phase2, true);
                     }
                 };
                 $.ajax(ac);
@@ -367,22 +370,12 @@ na.site = {
             },
             error : function (xhr, textStatus, errorThrown) {
                 na.site.ajaxFail(fncn, url1, xhr, textStatus, errorThrown);
-                na.desktop.resize(na.site.onload_phase2, true);
+                //na.desktop.resize(na.site.onload_phase2, true);
             }                
         };
         $.ajax(ac);
 
-        na.desktop.resize(na.site.onload_phase2, true);
 
-        na.analytics.logMetaEvent ('startup : html and js fully loaded, browserWidth='+$(window).width()+', browserHeight='+$(window).height()+', referer='+na.site.globals.referer+', userAgent='+navigator.userAgent+', isPhone='+(na.m.userDevice.isPhone?'true':'false'));
-
-        var url = document.location.href.replace(document.location.origin,'');
-        if (url.match(/\/view/)) {
-            na.analytics.logMetaEvent ('startup : app='+na.m.base64_decode_url(document.location.href.replace(document.location.origin,'').replace('/view/','')));
-        } else {    
-            na.analytics.logMetaEvent ('startup : url='+url);
-        }
-        
         setInterval (na.site.updateDateTime, 1000); // 1000 milliseconds (1 second).
 
         na.site.transformLinks ($('#siteContent')[0]);
@@ -392,7 +385,7 @@ na.site = {
     onload_phase2 : function (div, calculationResults, sectionIdx, section, divOrderIdx) {
         var fncn = 'na.site.onload_phase2()';
         na.site.settings.current.siteResized = true;
-        //debugger;
+       // debugger;
         if (!na.site.settings.current.onload_phase2__alreadyCalled) na.site.settings.current.onload_phase2__alreadyCalled = true; else return false;
 
         na.site.onresize_doContent();
@@ -435,7 +428,7 @@ na.site = {
                             }
                         );
 
-                        //na.site.loadTheme(undefined, undefined, false);
+                        na.site.loadTheme(undefined, undefined, false);
 
                         na.site.settings.current.startupErrorsOccurred = 'maybe';
                         //na.site.seeIfAnyStartupErrorsOccurred();
@@ -473,7 +466,7 @@ na.site = {
                         }
                     );
 
-                    //na.site.loadTheme(undefined, undefined, false);
+                    na.site.loadTheme(undefined, undefined, false);
 
                     na.site.settings.current.startupErrorsOccurred = 'maybe';
                     //na.site.seeIfAnyStartupErrorsOccurred();
@@ -496,12 +489,18 @@ na.site = {
                         +'.todoList_l2 > li > div, '
                         +'.todoList_l2 > li > pre '
                     );
-                }
-
                     na.site.initializeApps(null, null, null, null, na.site.resizeApps);
-
+                }
             }, 50);
         //debugger;
+        var url = document.location.href.replace(document.location.origin,'');
+        if (url.match(/\/view/)) {
+            var app = 'app='+na.m.base64_decode_url(document.location.href.replace(document.location.origin,'').replace('/view/',''));
+        } else {
+            var app = 'url='+url;
+        }
+        na.analytics.logMetaEvent ('startup : html and js fully loaded, '+app+', browserWidth='+$(window).width()+', browserHeight='+$(window).height()+', referer='+na.site.globals.referer+', userAgent='+navigator.userAgent+', isPhone='+(na.m.userDevice.isPhone?'true':'false'));
+
 
         $(window).on('mousemove', function(event) {
             clearTimeout (na.site.settings.current.timeout_windowMouseMove);
@@ -528,6 +527,10 @@ na.site = {
                 }
             }, 50);
         });
+
+        setTimeout(function() {
+            if (!na.m.userDevice.isPhone) $('.vdSettings').animate({opacity:0.0001}, 'slow');
+        }, 1000);
 
         this.completed = true;
     },
@@ -674,7 +677,7 @@ na.site = {
             width : 330,
             zIndex : 5000
         }).fadeIn('slow');
-        setTimeout (na.site.setSpecificity, 500);
+        setTimeout (na.site.setSpecificity, 200);
         //debugger;
         //na.site.setSpecificity();
     },
@@ -959,7 +962,7 @@ na.site = {
                 $(divEl).addClass('selected');
                 //$('.na_themes_dropdown__specificity > .vividDropDownBox_selected').html (na.site.globals.specificityName);
                 na.site.globals.themeDBkeys = na.site.globals.themesDBkeys[i];
-                na.site.loadTheme_applySettings (na.site.globals.themes[na.site.globals.themeName]);
+                //na.site.loadTheme_applySettings (na.site.globals.themes[na.site.globals.themeName]);
                 $('.na_themes_dropdown__specificity > .vividDropDownBox_selected').html (na.site.globals.themeDBkeys.specificityName);
                 na.te.settings.current.specificity = na.site.globals.themeDBkeys;
             };
@@ -1692,7 +1695,6 @@ onclick_btnFullResetOfAllThemes : function (event) {
                         scriptIdx = 0;
 
                         console.log (divID2, scripts);
-debugger;
                         if (scripts) {
                             while (scriptIdx < scripts.length) {
                                 var src = scripts[scriptIdx].replace(/"/g,'');
@@ -1715,7 +1717,6 @@ debugger;
                                 } else scriptIdx++;
                             };
                         } else {
-                            debugger;
                             f.completed = true;
                             f.fnc.completed = true;
                             c.scriptsLoaded = true;
@@ -1864,7 +1865,6 @@ debugger;
                 na.m.HTMLidle()
                 //&& !na.site.settings.current.startingApps // DON'T! messes up initial-page loads.
                 && !na.site.settings.current.loadingApps;
-            debugger;
 
             if (r)
             for (var appID in na.apps.loaded) {
@@ -3197,9 +3197,9 @@ debugger;
                 //$(el).css({background:na.m.adjustColorOpacity(el, dat.textBackgroundOpacity)});
             });
         }
-        if (dat.dialogs && dat.dialogs['.vividDialog .vdBackground']) {
+        if (dat.dialogs && dat.dialogs['.vividDialog']) {
             $('.vividDialog').css(dat.dialogs['.vividDialog']);
-            $('.vividDialog .vdBackground').css(dat.dialogs['.vividDialog .vdBackground']);
+            $('.vividDialog > .vdBackground').css(dat.dialogs['.vividDialog > .vdBackground']);
         }
         if (dat.dialogs)
         for (var dID in dat.dialogs) {
@@ -3229,7 +3229,7 @@ debugger;
             }
         };
 
-        na.m.log (10, 'na.site.loadTheme() : FINISHED.');
+        na.m.log (10, 'na.site.loadTheme() : FINISHED.', false);
         if (typeof callback=='function') callback(true);
     },
     
@@ -3311,6 +3311,7 @@ debugger;
                     } else {
                         //na.site.globals.specificityName = na.site.globals.specificityName_revert;
                         //na.site.setSpecificity();
+                        na.site.loadTheme(null, null, false);
 
                         na.m.log (10, 'na.site.saveTheme() : FINISHED.', false);
                         if (typeof callback=='function') callback (themeData, data);

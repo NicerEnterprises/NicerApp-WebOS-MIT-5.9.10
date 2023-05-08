@@ -124,7 +124,7 @@ $(document).ready(function() {
     <div id="siteLoginLogout" class="vividDialogPopup">
         <div id="siteLoginLogout_background" class="vividDialogPopup_background"></div>
     </div>
-
+<!--
     <div id="siteVideo" class="vividDialog" style="display:none;justify-content:center;align-items:center;text-align:center;">
         {$div_siteVideo}
     </div>
@@ -143,19 +143,19 @@ $(document).ready(function() {
         {$div_siteToolbarTop}
     </div>
     </div>
-
+-->
     <div id="siteToolbarLeft" class="vdToolbar vividDialog">
     <div class="vividDialogContent vividScrollpane">
         {$div_siteToolbarLeft}
     </div>
     </div>
-    
+<!--
     <div id="siteToolbarRight" class="vdToolbar vividDialog">
     <div class="vividDialogContent vividScrollpane">
         {$div_siteToolbarRight}
     </div>
     </div>
-
+-->
     
     
     <div id="siteRegistration" class="vividDialogPopup vividScrollpane">

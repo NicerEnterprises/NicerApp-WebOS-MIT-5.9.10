@@ -60,33 +60,6 @@ $spacer = "\n\t\t\t\t";
 	<link type="text/css" rel="StyleSheet" media="screen" href="/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/musicPlayer/index.css?changed=<?php echo date('Ymd-His', filectime(dirname(__FILE__).'/index.css'));?>"/>
 	<link type="text/css" rel="StyleSheet" media="screen" href="/NicerAppWebOS/3rd-party/jQuery/jPlayer-2.9.1/jplayer.vivid.css"/>
 
-	<script type="text/javascript">
-        
-        //na.desktop.registerCallback ('na.mediaPlayer', function () {
-            na.m.waitForCondition ('DOM ready', function() {
-                return na && na.apps && typeof na.mediaPlayer =='object' && $.ui && $.ui.draggable && $('#mp3s')[0] && $('#player')[0];
-            }, function() {
-
-                jQuery('#horizontalMover').draggable ({
-                    containment : '#horizontalMover__containmentBox1',
-                    axis : 'x',
-                    drag : function () {
-                        na.musicPlayer.settings.masterLeftOffset = jQuery('#horizontalMover')[0].offsetLeft;
-                        na.musicPlayer.onWindowResize();
-                    }
-                });
-                $('#titlebar .vividDialogContent').fadeIn('fast');
-                na.desktop.globals.divs.push ('#titlebar');
-                na.desktop.globals.divs.push ('#mp3s');
-                na.desktop.globals.divs.push ('#player');
-                na.desktop.globals.divs.push ('#playlist_wrapper');
-                na.desktop.globals.divs.push ('#infoWindow_mp3desc');
-                na.musicPlayer.settings.loadedIn['#siteContent'].onload( {} );
-                na.desktop.resize();
-            }, 100);
-        //});
-	</script>
-	
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
     <script src="/NicerAppWebOS/3rd-party/jQuery/jquery-ui-1.12.1/jquery-ui.js"></script>
 	<script type="text/javascript" src="/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/musicPlayer/app.2D.musicPlayer_siteContent.source.js?changed=<?php echo date('Ymd-His', filemtime(dirname(__FILE__).'/app.2D.musicPlayer_siteContent.source.js'));?>"></script>

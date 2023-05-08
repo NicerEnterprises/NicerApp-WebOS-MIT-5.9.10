@@ -170,19 +170,20 @@ na.backgrounds = {
                     };
                     $.ajax(ac);
 
-                } else {        
+                } else {
                     bgl.onload=function(){
                         jQuery(bgDiv).add('#siteBackground_iframe').fadeOut('slow', function(){
                             //$(bgDiv).tubeplayer('destroy');
                         });
-                        jQuery(bgl).css({display:'none',opacity:1}).fadeIn('slow', function(){
+
+                        jQuery(bgl).fadeIn('slow', function(){
                             bgf.src = bgl.src;
                             $(bgf).css ({ display : 'block', opacity : 1 });
                             $(bgl).hide();
                             if (typeof callback == 'function') callback();
                         });
                     };
-                    $(bgl).css({position:'absolute'}).hide();
+                    $(bgl).css({position:'absolute',display:'none',opacity:1}).hide();
                     bgl.src = url;
                 };
                 

@@ -335,7 +335,10 @@ class NicerAppWebOS {
                     $titleFile = realpath(dirname(__FILE__).'/../..').'/'.$viewFolder.'/app.title.site.php';
                 }
             }
-        } else {    
+        } elseif (array_key_exists('app-wikipedia_org', $_GET)) {
+            $viewFolder = realpath(dirname(__FILE__).'/../..').'/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/3rd-party-site.wikipedia.org';
+            $titleFile = $viewFolder.'/app.title.site.php';
+        } else {
             $titleFile = $rp_domain.'/index.title.php';
         }
         if (!isset($view) && !file_exists($titleFile)) {
@@ -495,6 +498,9 @@ class NicerAppWebOS {
                 && $this->nonEmptyStringField('dataID',$_GET)
             ) return $this->getContent__data_by_users ($_GET['username'], $_GET['url1'], $_GET['dataID']);
 
+            elseif ($this->nonEmptyStringField('app-wikipedia_org', $_GET))
+                return $this->getContent__view_wikipedia ($_GET['app-wikipedia.org']);
+
             elseif ( $this->nonEmptyStringField('viewID',$_GET) )
                 return $this->getContent__view ($_GET['viewID']); // this handles the front page of a website too.
 
@@ -521,8 +527,38 @@ class NicerAppWebOS {
         return $ret;
     }
 
+    public function getContent__view_wikipedia ($wiki_params=null) {
+        $fncn = $this->cn.'::getContent__view_wikipedia()';
+        global $naWebOS;
+        // output frontpage.dialog.*.php
+        $folder = $this->basePath.'/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/3rd-party-site.wikipedia.org/';
+        $files = getFilePathList($folder, false, '/app.dialog.*\.php/', null, array('file'), 1);
+        //{ echo $folder.'<br/>'.PHP_EOL; echo json_encode($files); echo PHP_EOL.PHP_EOL; };
+        $ret = [];
+        foreach ($files as $idx2 => $filepath) {
+            $fileRoot = $folder;
+            $filename = str_replace ($fileRoot, '', $filepath);
+            $dialogID = str_replace ('app.dialog.', '', $filename);
+            $dialogID = str_replace ('.php', '', $dialogID);
+            $arr = array ( $dialogID => execPHP($filepath) );
+            //var_dump (file_exists($filepath)); echo PHP_EOL;
+            //var_dump ($dialogID); echo PHP_EOL;
+            //$arr = array ( $dialogID => $filepath );
+            $ret = array_merge ($ret, $arr);
+        }
+
+        if (
+            strpos($_SERVER['SCRIPT_NAME'], '/index.php')!==false
+            || strpos($_SERVER['SCRIPT_NAME'], '/ajax_get_content.php')!==false
+        ) $ret = array_merge ($ret, [
+            'head' => $this->getPageCSS()
+        ]);
+//echo '<pre>'; var_dump ($ret); die();
+        return $ret;
+    }
+
     public function getContent__view ($viewID=null) {
-        $fncn = $this->cn.'::getContent_view()';
+        $fncn = $this->cn.'::getContent__view()';
         global $naWebOS;
 
         $ret = [];

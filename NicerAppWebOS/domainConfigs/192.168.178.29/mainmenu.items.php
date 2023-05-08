@@ -134,7 +134,23 @@
                 ]
             ]
         ],
-        
+
+        "wikipedia.org" => [
+            'apps-current' => [
+                'NicerApp-WebOS__pageSettings' => [
+                    "misc" => [
+                       'folder' => '/NicerAppWebOS/apps/NicerAppWebOS/applications/2D'
+                    ],
+                    "apps" => [
+                        '3rd-party-site.wikipedia.org' => [
+                            'page' => 'index',
+                            'SEO_value' => [ 'wiki', 'wikipedia', 'wikipedia.org' ]
+                        ]
+                     ]
+                ]
+            ]
+        ],
+
         "tarot" => [
             'apps-current' => [
                 'NicerApp-WebOS__pageSettings' => [

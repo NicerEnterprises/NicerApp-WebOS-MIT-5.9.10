@@ -209,6 +209,7 @@ class class_NicerAppWebOS_log {
         $key = date(DATE_ATOM);
         if (php_sapi_name()!=='cli') {
             if (!array_key_exists($sk, $_SESSION)) $_SESSION[$sk] = [];
+            if (!is_array($_SESSION[$sk])) $_SESSION[$sk] = [];
             $_SESSION[$sk] = array_merge_recursive ($_SESSION[$sk], [ $key => $val ]);
         } else {
             //

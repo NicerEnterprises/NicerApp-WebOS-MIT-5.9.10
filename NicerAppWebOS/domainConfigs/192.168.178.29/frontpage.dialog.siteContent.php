@@ -1,6 +1,6 @@
 <?php
     global $naWebOS;
-    require_once ($naWebOS->basePath.'/NicerAppWebOS/documentation/pageHeader.php');
+    require_once ($naWebOS->basePath.'/NicerAppWebOS/domainConfigs/'.$naWebOS->domain.'/pageHeader.php');
 ?>
     <script type="text/javascript">
         delete na.site.settings.current.app;

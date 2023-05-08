@@ -283,13 +283,28 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
     
     public function createDataSet_analytics() {
         $dataSetName = $this->dataSetName('analytics');
-        try { $this->cdb->deleteDatabase ($dataSetName); } catch (Exception $e) { };
+        //try { $this->cdb->deleteDatabase ($dataSetName); } catch (Exception $e) { };
         $this->cdb->setDatabase($dataSetName,true);
+
         try { 
             $call = $this->cdb->setSecurity ($this->security_guest);
         } catch (Exception $e) {
             echo '<pre style="color:red">'; var_dump ($e); echo '</pre>'; exit();
         }
+
+        $rec = [
+            'index' => [
+                'fields' => [ [ 'date' => 'asc' ], [ 'datetime' => 'asc' ] ]
+            ],
+            'name' => 'primaryIndex',
+            'type' => 'json'
+        ];
+        try {
+            $this->cdb->setIndex ($rec);
+        } catch (Exception $e) {
+            if ($this->debug) { echo '<pre style="color:red">'; var_dump ($e); echo '</pre>'; exit(); }
+        }
+
         echo 'Created database '.$dataSetName.'<br/>';
     }
     

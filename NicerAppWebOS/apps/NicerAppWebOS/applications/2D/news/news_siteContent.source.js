@@ -205,7 +205,7 @@ na.m.preventScreenLock();
             if (c.displayCounts!=='') c.displayCounts +=', ';
             c.displayCounts += dc[ks[k]];
         };
-        c.displayCountInt = parseInt(c.displayCounts)- g.numItemsThatFitScreen;
+        c.displayCountInt = parseInt(c.displayCounts);//- g.numItemsThatFitScreen;
         c.displayCounts = '<span class="newsApp__header__displayCounts">' + c.displayCountInt + '</span>';
         $('#newsApp_timer').html(
             '<span class="newsApp__header__dateRange" style="padding:0px !important">'+na1.formatDateForHeader()+'</span>'
@@ -338,7 +338,6 @@ na.m.preventScreenLock();
                     // they're in the same folder as ajax_get_items.php and this file.
                     delete s.loading;
 
-                    na.analytics.logMetaEvent ('newsApp : loadNews_searchResults() data fetched sucessfully for itemsLoadedCount='+itemsLoadedCount+' and url='+url);
                     na.m.extend (na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/news'].settings.current.db, data);
 
                     $('.loader, .loaderAfter').remove();
@@ -360,6 +359,7 @@ na.m.preventScreenLock();
                     var idxStart = c.idx;
                     na.m.walkArray (data, data, undefined, na1.loadNews_get_forDateTimeRange_walkValue);
                     var itemsLoadedCount = c.idx - idxStart;
+                    na.analytics.logMetaEvent ('newsApp : loadNews_searchResults() data fetched sucessfully for itemsLoadedCount='+itemsLoadedCount+' and url='+url);
 
                     na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/news'].settings.current.db = na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/news'].settings.current.db.concat(data);
 
@@ -383,7 +383,7 @@ na.m.preventScreenLock();
                     };
 
 
-                    if (data.trim() === '') {
+                    if (data.trim && data.trim() === '') {
                         na1.loadNews_searchResults_loop (c.dtCurrent, c.dtEnd, settings);
                     } else {
                         clearInterval (c.intervalMailLogCountdown);
@@ -412,10 +412,18 @@ na.m.preventScreenLock();
                             if (c.displayCounts!=='') c.displayCounts +=', ';
                             c.displayCounts += dc[ks[k]];
                         };
-                        c.displayCountInt = parseInt(c.displayCounts)- g.numItemsThatFitScreen;
+                        c.displayCountInt = parseInt(c.displayCounts);//- g.numItemsThatFitScreen;
                         $('.newsApp__header__dateRange').html(na1.formatDateForHeader());
                         $('.newsApp__header__displayCounts').html (c.displayCountInt);
                         //$('.newsApp__header__timer').html(c.countDownStr);
+                        if (c.displayCountInt > 2) {
+                            c.tries = 0;
+                            s.loading = false;
+                            na.m.settings.locked_displayNewNewsItems = false;
+                            na1.displayNewNewsItems();
+                            na1.countDown();
+                            na1.onresize();
+                        }
 
                         clearTimeout (c.timerDisplayNews_loop);
                         clearTimeout (c.timerLoadNews_read_loop);
@@ -553,54 +561,26 @@ na.m.preventScreenLock();
             if (!c.dtCurrent) c.dtCurrent = new Date();
             c.dtEnd = c.dtCurrent;
             c.dtCurrent = new Date(c.dtEnd.getTime() - (1000 * 60 * 60 * 2));//c.read_loop_minutesIntoPast));
-            setTimeout (function() {
-                na1.loadNews_get_forDateTimeRange (c.dtCurrent, c.dtEnd, settings);
-            }, 200);
-        }
-        if (unread < 100) {
             c.firstRun = false;
             setTimeout (function() {
                 na1.loadNews_get_forDateTimeRange (c.dtCurrent, c.dtEnd, settings);
-            }, 200);
-            return false;
-            /*
-            $('#newsApp_content').html('').delay(50);
-            if (c.timeout_loadNews) clearTimeout(c.timeout_loadNews);
-            c.timeout_loadNews = setTimeout(function() {
+            }, 20);
+        }
+        if (unread > 2) {
+            //$('#newsApp_content').html('').delay(50);
+                c.tries = 0;
                 na1.displayNewNewsItems();
                 na1.countDown();
                 na1.onresize();
-            }, 400);
             return false;
-            */
-        } else {
 
-            // get older news items when needed
-            if (c.firstRun) {
-                c.firstRun = false;
-                c.failedLoads = 0;
-                na1.loadNews_get_forDateTimeRange(c.dtCurrent, c.dtEnd, settings);
-            } else {
-                clearInterval (c.intervalMailLogCountdown);
-                clearTimeout (c.timerDisplayNews_loop);
-
-                $('#newsAppDebug').animate({opacity:0.001});
-
-                //if ($('#newsApp_content .newsApp__item__outer').length===0) c.timerDisplayNews_loop = setTimeout (na1.displayNews_loop, 250);
-                if ($('#newsApp_content .newsApp__item__outer').length===0) {
-                    c.tries = 0;
-                    $('#newsApp_content').html('').delay(50);
-                    setTimeout(function() {
-                        na1.displayNewNewsItems();
-                    }, 250);
-                }
-            }
         }
 
-        if (unread > 10) {
-            c.tries = 0;
-//debugger;
-            na1.displayNewNewsItems();
+        // get older news items when needed
+        if (c.firstRun) {
+            c.firstRun = false;
+            c.failedLoads = 0;
+            na1.loadNews_get_forDateTimeRange(c.dtCurrent, c.dtEnd, settings);
         }
 
         // get newest news items
@@ -646,7 +626,7 @@ na.m.preventScreenLock();
         fncn = 'na.apps.loaded["applications/2D/news"].loadNews_get_forDateTimeRange(dtBegin,dtEnd,settings)',
         na1 = na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/news'], g = na1.globals, s = na1.settings, c = s.current, db = c.db;
         c.loads++;
-        
+        debugger;
         na.m.waitForCondition ('has the news app finished loading?', function () {
             var r = !s.loading;
             return r;
@@ -657,7 +637,7 @@ na.m.preventScreenLock();
             dtBeginURL = na1.formatDateForLoading(dtBegin),//('' + dtBegin).replace('+', '%2B'),
             dtEndURL = na1.formatDateForLoading(dtEnd),//('' + dtEnd).replace('+', '%2B'),
             url = '/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/news/ajax_get_items.php';//?loads='+c.loads+'&section='+settings.section.replace(/-/g,'/').replace(/ /g, '_')+'&dateBegin='+dtBeginURL+'&dateEnd='+dtEndURL;
-
+debugger;
 
             s.url = settings.section;
 
@@ -711,7 +691,6 @@ na.m.preventScreenLock();
                     var dat = JSON.parse(data,null,4);
                     dat.fncn = fncn;
                     na.m.log (2, dat);
-
                     setTimeout (function() {
                         try {
                             dataText = data;
@@ -809,7 +788,7 @@ na.m.preventScreenLock();
                             if (c.displayCounts!=='') c.displayCounts +=', ';
                             c.displayCounts += dc[ks[k]];
                         };
-                        c.displayCountInt = parseInt(c.displayCounts)- g.numItemsThatFitScreen;
+                        c.displayCountInt = parseInt(c.displayCounts);//- g.numItemsThatFitScreen;
 
                         $('.newsApp__header__dateRange').html(na1.formatDateForHeader());
                         $('.newsApp__header__displayCounts').html (c.displayCountInt);
@@ -837,7 +816,7 @@ na.m.preventScreenLock();
                 }
             };
         //na.m.log (20, url);
-    //debugger;
+    debugger;
         $.ajax (ajaxCommand);
         }, 100);
     },
@@ -1017,7 +996,7 @@ na.m.preventScreenLock();
             if (c.displayCounts!=='') c.displayCounts +=', ';
             c.displayCounts += dc[ks[k]];
         };
-        c.displayCountInt = parseInt(c.displayCounts)- g.numItemsThatFitScreen;
+        c.displayCountInt = parseInt(c.displayCounts);//- g.numItemsThatFitScreen;
         /*
         c.displayCounts = '<span class="newsApp__header__displayCounts">' + c.displayCountInt + '</span>';
         $('#newsApp_timer').html(
@@ -1826,7 +1805,7 @@ na.m.preventScreenLock();
 	getURLparameters : function () {
         var 
         prefix = '/NicerAppWebOS/apps/NicerAppWebOS/';
-        x = na.site.globals.app[prefix+'/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/news'];
+        x = na.site.globals.app['/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/news'];
         //debugger;
         return [
             x // just use this instead
