@@ -15,6 +15,7 @@ NicerApp WCS (Website Control System) from Nicer Enterprises
     define ("FILE_FORMATS_mp3s", "/^(.*\.mp3)$/");
     define ("FILE_FORMATS_texts", "/^(.*\.txt)$/");
     define ("FILE_FORMATS_photos_texts", "/^(.*\.png)|(.*\.gif)|(.*\.jpg)|(.*\.jpeg)|(.*\.txt)$/");
+    define ("FILE_FORMATS_NO_thumbs", '/(?!.*thumbs).*/');
 
     $rootPath_na = realpath(dirname(__FILE__).'/..');
     require_once($rootPath_na.'/NicerAppWebOS/lib_duration.php');
@@ -56,7 +57,7 @@ NicerApp WCS (Website Control System) from Nicer Enterprises
         $naIP = 'OS commandline probably';
     }
 
-    $naDebugAll = false;
+    $naDebugAll = true;
     global $naDebugAll;
     if ($naDebugAll) {
         ini_set('display_errors', 1); // 0 == false, 1 == true
@@ -108,17 +109,17 @@ NicerApp WCS (Website Control System) from Nicer Enterprises
         }
     }
     
-    global $filePerms_ownerUser;
-    global $filePerms_ownerGroup;
-    global $filePerms_perms_publicWriteableExecutable;
-    global $filePerms_perms_readonly;
-    global $filePerms_perms_readWrite;
-
     $filePerms_ownerUser = 'reneajmveerman';
     $filePerms_ownerGroup = 'www-data'; 
     $filePerms_perms_readonly = 0640;
     $filePerms_perms_readWrite = 0640;
     $filePerms_perms_publicWriteableExecutable = 0770; // note : these are the file permissions for PUBLICLY ACCESSIBLE FILES only!
+
+    global $filePerms_ownerUser;
+    global $filePerms_ownerGroup;
+    global $filePerms_perms_publicWriteableExecutable;
+    global $filePerms_perms_readonly;
+    global $filePerms_perms_readWrite;
 
     global $naWebOS;
     $naWebOS = new NicerAppWebOS();

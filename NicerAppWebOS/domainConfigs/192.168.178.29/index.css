@@ -10,6 +10,11 @@ body {
     overflow : hidden;
 }
 
+h1, h2, h3, h4, h5 {
+    margin-block-start : 0px;
+    margin-block-end : 0px;
+}
+
 .vividButton {
     width:150px;
 }
@@ -182,11 +187,6 @@ li.todoList > div, li.todoList > span {
 #btnOptions_menu__specificity__containerDiv span, #btnFullResetOfAllThemes, #btnFullResetOfAllMenuLayoutData, #btnOptions_menu__backgroundTimeSettingsChanged_save__containerDiv span {
     margin-left : 10px;
 }*/
-
-#logoAndSiteTitle h1:before, #logoAndSiteTitle:before h2, #logoAndSiteTitle h3:before {
-    content : %20%20;
-}
-
 
 #pageTitle::before {
     content : '';
@@ -369,11 +369,14 @@ img.bg_last {
     text-shadow : 3px 3px 2px rgba(0,0,0,0.7);
 }
 body, a, p, span, div, li, td {
-    font-size: clamp(0.625rem, 0.5932rem + 0.1589vw, 1rem);
-
+    font-size: clamp(0.5625rem, 0.4609rem + 0.4065vw, 1.5rem);
 }
+#siteDateTime > div > div {
+    font-size: clamp(0.625rem, -4.875rem + 40vw, 0.875rem);
+}
+
+
 .vividMenu_item a span {
-    font-size: clamp(0.4375rem, 0.4004rem + 0.1854vw, 0.875rem);
 }
 .vividDropDownBox_selected, .vividDropDownBox_selector {
     font-size: clamp(0.4375rem, 0.4004rem + 0.1854vw, 0.875rem);
@@ -464,9 +467,6 @@ body, a, p, span, div, li, td {
     position : absolute;
     opacity : 0.0001;
     z-index : 500;
-}
-#titlebar {
-font-size: clamp(1rem, -105rem + 320vw, 3rem);
 }
 #btnChangeBackground {
     position : absolute;
@@ -580,7 +580,9 @@ font-size: clamp(1rem, -105rem + 320vw, 3rem);
 }
 
 
-
+.vividMenu_subMenuPanel {
+    position : absolute;
+}
 
 .vividButton_container_50x50 {
     height : 50px;

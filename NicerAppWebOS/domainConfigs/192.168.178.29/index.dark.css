@@ -2,6 +2,20 @@ html, body, table, td {
     color : white;
 }
 
+h1 {
+    font-size : 1em;
+}
+h2 {
+    font-size : 1em;
+}
+
+.naNavBar_darkenedBG {
+    background : rgba(0,0,0,0.5);
+    border-radius : 5px;
+    margin : 4px;
+    padding : 3px;
+}
+
 #pageTitle, #tagline1 {
     display : flex;
     justify-content : center;
@@ -29,7 +43,7 @@ html, body, table, td {
 }
 
 /* musicPlayer */
-#player::before, #infoWindow_mp3desc::before, #playlist_wrapper::before {
+#player::before, #app__musicPlayer__description::before, #app__musicPlayer__playlist::before {
     -webkit-mask-image: url(/NicerAppWebOS/siteMedia/vividDialog_borderMask_300x500.png);
     mask-image: url(/NicerAppWebOS/siteMedia/vividDialog_borderMask_300x500.png);
 }
@@ -149,16 +163,12 @@ html, body, table, td {
     background : rgba(0,0,0,0.5);
     font-weight : bold;
 }
-#siteLoginLogout .vdBackground {
+#siteLoginLogout > .vdBackground {
     content : "";
     background-image:url(/NicerAppWebOS/siteMedia/backgrounds/tiled/blue/scratched-texture.jpg);
     opacity : 0.85;
     z-index : -1;
     position: absolute;
-    top: 0px;
-    right: 0px;
-    bottom: 0px;
-    left: 0px;
     border-radius : 15px;
     box-shadow : inset 2px 2px 1px 1px rgba(255,255,255,0.5), 2px 2px 2px 2px rgba(0,0,0,0.7);
 }
@@ -167,35 +177,10 @@ html, body, table, td {
     color : white;
     background : none;
 }
-#siteVideo .vdBackground {
-    content : "";
-    /*background : url('/NicerAppWebOS/siteMedia/backgrounds/tiled/red/318801228_12f7b6a8a2.jpg') repeat;
-    border-radius : 15px;
-    opacity : 0.7;*/
-    z-index : -1;
-    position: absolute;
-    top: 0px;
-    right: 0px;
-    bottom: 0px;
-    left: 0px;
-}
-
 
 #siteVideoSearch {
     color : white;
     background : none;
-}
-#siteVideoSearch .vdBackground {
-    content : "";
-    /*background : url('/NicerAppWebOS/siteMedia/backgrounds/tiled/red/318801228_12f7b6a8a2.jpg') repeat;
-    border-radius : 15px;
-    opacity : 0.7;*/
-    z-index : -1;
-    position: absolute;
-    top: 0px;
-    right: 0px;
-    bottom: 0px;
-    left: 0px;
 }
 
 
@@ -203,35 +188,11 @@ html, body, table, td {
     color : white;
     background : none;
 }
-#siteComments .vdBackground {
-    content : "";
-    /*background : url('/NicerAppWebOS/siteMedia/backgrounds/tiled/blue/seamless-texture-blue-watercolor.jpg') repeat;
-    border-radius : 15px;
-    opacity : 0.7;*/
-    z-index : -1;
-    position: absolute;
-    top: 0px;
-    right: 0px;
-    bottom: 0px;
-    left: 0px;
-}
 
 #siteToolbarRight {
     color : white;
     background : none;
     text-shadow : 2px 2px 2px rgba(0,0,0,0.45);
-}
-#siteToolbarRight .vdBackground {
-    content : "";
-    /*background : url('/NicerAppWebOS/siteMedia/backgrounds/tiled/blue/seamless-texture-blue-watercolor.jpg') repeat;
-    border-radius : 15px;
-    opacity : 0.7;*/
-    z-index : -1;
-    position: absolute;
-    top: 0px;
-    right: 0px;
-    bottom: 0px;
-    left: 0px;
 }
 
 
@@ -256,23 +217,27 @@ a:hover {
     color : rgba(150,255,150,1);
 }
 
-h1, h2, h3 {
-    padding-top : 5px;
-    padding-bottom : 5px;
-    margin-top : 20px;
-    margin-bottom : 20px;
+h1.pageTitle {
+    margin-block-start : 0px;
+    margin-block-end : 0px;
+    margin-inline-start : 0px;
+    margin-inline-end : 0px;
+}
+.pageTitle span, .pageTitle a {
+    font-size: clamp(0.5625rem, -16.625rem + 50vw, 1.5rem);
+}
+h1:not(.pageTitle), h2, h3 {
+    padding : 5px;
+    background : rgba(0,0,0,0.55);
+    border-radius : 10px;
+    display : block;
 }
 a, p, span, h1, h2, h3 {
     width : fit-content;
     /*display : content;*/
     display : inline-block;
 }
-h1:not(#pageTitle), h2, h3 {
-    background : rgba(0,0,0,0.55);
-    border-radius : 10px;
-    display : block;
-}
-li > div > div:not(.jstree-wholerow), li > div:not(.jstree-wholerow, .contentSectionTitle1, .contentSectionTitle2, .contentSectionTitle3), li > span:not(.vt), .backdropped {
+li > div > div:not(.jstree-wholerow), li > div:not(.jstree-wholerow), .contentSectionTitle1, .contentSectionTitle2, .contentSectionTitle3), li > span:not(.vt), .backdropped {
     margin-block-start : 0;
     margin-block-end : 0;
     margin : 8px;
@@ -286,28 +251,16 @@ li > div > div:not(.jstree-wholerow), li > div:not(.jstree-wholerow, .contentSec
     box-shadow : none;
     margin : 0px;
 }
-.newsApp__item__outer a {
+.vividButton, .vividButton a, .vividButton span,
+.vividButtonSelected, .vividButtonSelected a, .vividButtonSelected span,
+.vividMenu_item, .vividMenu_item a, .vividMenu_item span {
+    font-size: 0.625rem;
+font-size: clamp(0.625rem, -3.90625rem + 50vw, 0.9375rem);
+    height : auto;
+    padding : 4px;
+}
+.newsApp__item__outer a, .vividMenu_item a, .vividMenu_item span {
     padding : 0px;
-}
-p, a, h1, h2, h3 {
-    padding-top : 7px;
-    padding-bottom : 7px;
-    padding-left : 14px;
-    padding-right : 14px;
-    /*box-shadow : 0px 0px 4px 2px rgba(0,0,0, 0.50), inset 0px 0px 6px 3px rgba(0,0,0,0.7);*/
-}
-span:before, h1:before, h2:before, h3:before {
-    content : %20%20;
-    word-spacing : initial;
-}
-span:after, h1:after, h2:after, h3:after {
-    display : block;
-    content : %20%20;
-    word-spacing : initial;
-}
-span {
-    padding-top : 5px;
-    padding-bottom : 5px;
 }
 span.mce-txt {
     padding : 0px !important;
@@ -729,12 +682,6 @@ ul.index > li {
   }
 }
 
-h1 {
-    font-size : 1.3rem;
-}
-h2 {
-    font-size : 1.1rem;
-}
 
 
 #pageTitle, .contentSectionTitle1_span, .animatedText-orangeYellow {
@@ -790,12 +737,12 @@ h2 {
   position : relative;
 }
 
-
-.contentSectionTitle1_a, .contentSectionTitle2_a, .contentSectionTitle3_a {
+.contentSectionTitle1_a, .contentSectionTitle2_a, .contentSectionTitle3_a,
+.contentSectionTitle1_span, .contentSectionTitle2_span, .contentSectionTitle3_span {
     z-index : 500000;
 }
 .contentSectionTitle1, .contentSectionTitle2 {
-    background : rgba(0,0,0,0.5);
+    background : rgba(0,0,0,0.44);
     border-radius : 15px;
 }
 
@@ -805,25 +752,20 @@ h2 {
     margin-top : 25px;
     margin-bottom : 15px;
     width : fit-content;
-    box-shadow : inset 0px 0px 8px 5px rgba(0,0,0, 0.8), 0px 0px 4px 2px rgba(200,255,200,0.7), 4px 4px 8px 4px rgba(0,0,0,0.7);
+    box-shadow : inset 0px 0px 8px 5px rgba(0,0,0, 0.8), 0px 0px 4px 2px rgba(200,255,200,0.7), 2px 2px 4px 2px rgba(0,0,0,0.7);
 }
 .contentSectionTitle2, .contentSectionTitle3 {
-    padding : 10px;
+    padding : 5px;
     margin : 10px;
     width : fit-content;
-    box-shadow : inset 0px 0px 8px 5px rgba(0,0,0, 0.8), 4px 4px 8px 4px rgba(0,0,0,0.7);
+    box-shadow : inset 0px 0px 8px 5px rgba(0,0,0, 0.8), 2px 2px 4px 2px rgba(0,0,0,0.7);
 }
 
 .contentSectionTitle3 {
     background : rgba(0,0,0,0.35);
-    box-shadow : inset 0px 0px 4px 2px rgba(0, 0, 0, 0.7), 2px 2px 2px 2px rgba(0,0,0,0.7);
     border-radius : 8px;
-    box-shadow : inset 0px 0px 8px 5px rgba(0,0,0, 0.8), 4px 4px 8px 4px rgba(0,0,0,0.7);
+    box-shadow : inset 0px 0px 8px 5px rgba(0,0,0, 0.8), 2px 2px 4px 2px rgba(0,0,0,0.7);
 }
-
-
-
-
 
 
     .vividDialog {
@@ -927,7 +869,7 @@ h2 {
         -webkit-mask-image: url(/NicerAppWebOS/siteMedia/vividDialog_borderMask_3840x100.png);
         mask-image: url(/NicerAppWebOS/siteMedia/vividDialog_borderMask_3840x100.png);
     }
-    #siteToolbarLeft::before, #siteToolbarRight::before {
+    #siteToolbarLeft::before, #siteToolbarRight::before, #siteToolbarThemeEditor::before {
         -webkit-mask-image: url("/NicerAppWebOS/siteMedia/vividDialog_borderMask_320x1500.png");
         mask-image: url("/NicerAppWebOS/siteMedia/vividDialog_borderMask_320x1500.png");
     }
@@ -944,18 +886,18 @@ h2 {
     #player .vdBackground {
     }
 
-    #infoWindow_mp3desc::before {
+    #app__musicPlayer__description::before {
         -webkit-mask-image: url("/NicerAppWebOS/siteMedia/vividDialog_borderMask_300x500.png");
         mask-image: url("/NicerAppWebOS/siteMedia/vividDialog_borderMask_500x1000.png");
     }
-    #infoWindow_mp3desc .vdBackground {
+    #app__musicPlayer__description .vdBackground {
     }
 
-    #playlist_wrapper::before {
+    #app__musicPlayer__playlist::before {
         -webkit-mask-image: url("/NicerAppWebOS/siteMedia/vividDialog_borderMask_300x500.png");
         mask-image: url("/NicerAppWebOS/siteMedia/vividDialog_borderMask_500x1000.png");
     }
-    #playlist_wrapper .vdBackground {
+    #app__musicPlayer__playlist .vdBackground {
 
     }
 

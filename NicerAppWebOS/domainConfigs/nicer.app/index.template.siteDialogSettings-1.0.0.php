@@ -224,7 +224,7 @@ na.site.globals = $.extend(na.site.globals, {
             
         </div>
         <input id="colorpicker" class="themeEditorComponent themeEditor_colorPicker" style="position:absolute;top:auto;"></input>
-        <div id="themeEditor_jsTree" class="themeEditorComponent vividScrollpane" style="position:absolute;top:auto;display:none;"></div>
+        <div id="themeEditor_jsTree_backgrounds" class="themeEditorComponent vividScrollpane" style="position:absolute;top:auto;display:none;"></div>
         <div id="themeEditor_photoAlbum_specs" class="themeEditorComponent vividScrollpane" style="flex-flow: wrap row;position:absolute;top:auto;display:none;">
             <label id="label_themeEditor_photoOpacity" class="labelthemeEditor" for="themeEditor_photoOpacity">Opacity :</label>
             <input id="themeEditor_photoOpacity" type="range" min="1" max="100" value="50" class="sliderOpacityRangethemeEditor" oninput="if (na.te.settings.current.selectedImage) na.te.imageSelected(na.te.settings.current.selectedImage);"/>

@@ -92,7 +92,14 @@ function processBackgroundFile_value ($cd) {
     $path2 = $cd['path'].'/'.$cd['k'];
     $path2 = substr($path2,1);
     $ref = &chaseToPath ($cd['params']['a'], $path2);
-    $ref = $td;
+    $xec = 'identify "'.$file.'"';
+    exec ($xec, $output, $result);
+    if ($result===0) {
+        $regex = '/\s(\d+)x(\d+)\s/';
+        preg_match_all ($regex, $output[0], $m);
+        $wt = $m[1][0].'x'.$m[2][0];
+        $ref = [ $td => $wt ];
+    }
 }
 
 
@@ -420,6 +427,55 @@ function require_return ($file, $flush=false) {
     ob_end_clean();
     ob_start();
     return $c;
+}
+
+function cssArray_seperate ($id, $regExps, $arr) {
+    $ret = [ $id => [] ];
+    $debug = false;
+    if ($debug) { echo '<pre style="color:green">$arr='; var_dump ($arr); echo '</pre>';die(); }
+    foreach ($regExps as $rIdx => $regex) {
+        foreach ($arr as $key => $value) {
+            if (is_array($value)) {
+                preg_match_all ($regex, $key, $m, PREG_PATTERN_ORDER);
+
+                if ($debug) {
+                    echo '<pre style="color:blue">$key='; var_dump ($key); echo "\n\$m="; var_dump($m);
+                    echo "\npreg_last_error_msg()=".preg_last_error_msg();
+                    echo '</pre>';
+                }
+
+                $pass = false;
+                if (array_key_exists(1,$m) && count($m[1])===1) { $k = $m[1][0]; $pass = true; }
+                if (array_key_exists(2,$m) &&count($m[2])===1) { $k = $m[2][0];  $pass = true; }
+                if ($pass) {
+                    $k = strtoupper(substr($k,0,1)).substr($k,1);
+                    if (!array_key_exists($k,$ret[$id])) $ret[$id][$k] = [];
+                    $ret[$id][$k] = array_merge_recursive($ret[$id][$k], [ 'css' => [ $key => $value ]]);
+                }
+            }
+        }
+    }
+    if ($debug) {
+        echo '<pre style="color:green">$ret='; var_dump($ret); echo '</pre>';
+        //exit();
+    };
+    return $ret;
+}
+function css_array_to_css2($rules, $indent = 0) {
+    $css = '';
+    $prefix = str_repeat('  ', $indent);
+
+    //echo '<pre style="color:blue">'; var_dump ($rules); echo '</pre>';
+    foreach ($rules as $key => $value) {
+        //echo '<pre style="color:green">'; var_dump ($key); echo '</pre>';
+        if (is_array($value) && $key=='css') {
+            $css .= $prefix . css_array_to_css($value, $indent + 1);
+        } else {
+            $css .= $prefix . css_array_to_css2 ($value, $indent);
+        }
+    }
+
+    return $css;
 }
 
 function css_array_to_css($rules, $indent = 0) {
@@ -967,6 +1023,7 @@ $debug = false;
     $filepath = strtr (trim($filepath), "\\", "/");
     if ($filepath[strlen($filepath)-1]!="/") $filepath.="/";
     if ($filepath[0]!="/") $filepath="/".$filepath;
+    if ($debug) { echo '<pre class="debug_createDirectoryStructure">'; };
     if ($debug) { echo $fncn.'()'.PHP_EOL; echo '$filepath='; var_dump ($filepath); echo PHP_EOL.PHP_EOL; }
 
     if (($filepath[1]!=':') && ($filepath[0]!='/')) trigger_error ("$fncn: $filepath is not from the root. results would be unstable. gimme a filepath with / as first character.", E_USER_ERROR);
@@ -1013,6 +1070,7 @@ $debug = false;
             }
         }
     }
+    if ($debug) echo '</pre>';
     return true;
 }
 

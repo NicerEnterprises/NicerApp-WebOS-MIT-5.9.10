@@ -36,6 +36,7 @@
     if ($theme === '{$theme}') $theme = 'dark';
 ?>
     <script type="text/javascript" id="naWebOS__js_app_3D_fileExplorer__data">
+    /*
         na.m.waitForCondition('/NicerAppWebOS/apps/NicerAppWebOS/applications/3D/app.3D.fileExplorer/main.js loaded?', function() {
             var r = typeof na.site.settings.na3D['#app_3D_fileExplorer'] === 'object';
             return r;
@@ -44,9 +45,10 @@
 
                 <?php echo json_encode($view, JSON_PRETTY_PRINT); ?>;
         }, 100);
+        */
     </script>
     <div id="site3D_backgroundsBrowser" class="na3D" theme="<?php echo $theme;?>">
     </div>
     <div id="site3D_label" class="vividDialog vividScrollpane" theme="<?php echo $theme;?>"></div>
-    <script type="module" src="/NicerAppWebOS/3rd-party/3D/libs/three.js/build/three.js"></script>
+    <script type="module" src="/NicerAppWebOS/3rd-party/3D/libs/three.js/build/three.module.js"></script>
     <script type="module" src="/NicerAppWebOS/apps/NicerAppWebOS/applications/3D/app.3D.fileExplorer/main.js"></script>

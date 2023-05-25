@@ -1,6 +1,6 @@
 na.desktop = {
     globals : {
-        animationSpeed : 'slow',
+        animationSpeed : 300,//'slow',
         divs : [ '#siteDateTime', '#siteErrors', '#btnOptions', '#btnLoginLogout', '#btnChangeBackground', '#siteContent', '#siteVideo', '#siteVideoSearch', '#siteComments', '#siteStatusbar', '#siteToolbarThemeEditor', '#siteToolbarLeft', '#siteToolbarRight', '#siteToolbarTop' ],
         visibleDivs : [ '#siteDateTime', '#btnOptions', '#btnLoginLogout', '#btnChangeBackground', '#siteContent', '#siteStatusbar' ],
         configs : {
@@ -86,9 +86,10 @@ na.desktop = {
                 opacity : 0.0001
             }
         },                
-        margin : 15
+        margin : 8
     },
     settings : {
+        animate : na.m.userDevice.isPhone,
         animating : true,
         showVideoBackgroundControls : false,
         visibleDivs : [ '#btnOptions' ],
@@ -170,6 +171,7 @@ na.desktop = {
     
     registerProgress : function (name, func) {
         var entry = { name : name, callback : func };
+        na.d.deleteProgress(name);
         na.d.s.callbacksProgress.push (entry); // na.d.s = na.desktop.settings
     },
     
@@ -809,33 +811,33 @@ na.desktop = {
                     offsetY = section[divID].offsetY ? section[divID].offsetY : 0,
                     offsetX = section[divID].offsetX ? section[divID].offsetX : 0;
                     //if (divID=='#btnOptions' || divID=='#siteMenu') debugger;
-                    //if (divID=='#siteContent') debugger;
+                   // if (divID=='#siteContent' || divID=='#siteToolbarThemeEditor') debugger;
                     switch (sn.edge) {
                         case 'top':
-                            if (sn.element==='body') divs[divID].top = na.d.g.margin + offsetY; else divs[divID].top = divs[sn.element].top + na.d.g.margin + offsetY;
+                            if (sn.element==='body') divs[divID].top = na.d.g.margin; else divs[divID].top = divs[sn.element].top + na.d.g.margin;
                             break;
                         case 'bottom':
                             if (sn.element==='body') {
-                                divs[divID].top = $(window).height() - $(divID).outerHeight() + offsetY;
+                                divs[divID].top = $(window).height() - $(divID).height();
                             } else {
-                                if (divs[sn.element]) divs[divID].top = divs[sn.element].top + $(sn.element).outerHeight() + offsetY + na.d.g.margin;
+                                if (divs[sn.element]) divs[divID].top = divs[sn.element].top + $(sn.element).height() + na.d.g.margin;
                             }
                             break;
                         case 'left':
                             if (sn.element==='body') divs[divID].left = na.d.g.margin; 
-                            else divs[divID].left = divs[sn.element].left + $(sn.element).outerWidth() + na.d.g.margin;
+                            else divs[divID].left = divs[sn.element].left + $(sn.element).width() + na.d.g.margin;
                             break;
                         case 'right':
                             if (sn.element=='body') {
-                                divs[divID].left = $(window).width() - $(divID).outerWidth() - na.d.g.margin+ offsetX;
+                                divs[divID].left = $(window).width() - $(divID).width() - na.d.g.margin+ offsetX;
                             } else {
                                 if (!divs[sn.element]) debugger;
-                                divs[divID].left = divs[sn.element].left + $(sn.element).outerWidth() + offsetX;
+                                divs[divID].left = divs[sn.element].left + $(sn.element).width() + na.d.g.margin + offsetX;
                             }
                             break;
                         case 'rightNegative':
                             if (!divs[sn.element]) debugger;
-                            divs[divID].left = divs[sn.element].left - $(divID).outerWidth() - na.d.g.margin + offsetX;
+                            divs[divID].left = divs[sn.element].left - $(divID).width() - na.d.g.margin + offsetX;
                             break;
                     }
                 }
@@ -851,11 +853,11 @@ na.desktop = {
                         break;
                     case 'maxY':
                         if ($(window).width() < na.site.globals.reallySmallDeviceWidth)
-                            divs[divID].width = $(window).width() - (3 * na.d.g.margin)
+                            divs[divID].width = $(window).width() - (2 * na.d.g.margin)
                         else 
                             divs[divID].width = $(divID).width();
                         
-                        divs[divID].height = $(window).height() - divs[divID].top - (2 * na.d.g.margin);
+                        divs[divID].height = $(window).height() - divs[divID].top;
                         break;
                 }
 
@@ -912,8 +914,8 @@ na.desktop = {
                         break;
                     case '#siteToolbarLeft':
                     case '#siteToolbarThemeEditor':
-                        divs[divID].top += na.d.g.margin;
-                        divs[divID].height -= na.d.g.margin;
+                        divs[divID].top -= (na.d.g.margin);
+                        divs[divID].height -= (3*na.d.g.margin);
                         break;
                     case '#siteVideoSearch':
                     case '#siteToolbarRight':
@@ -1028,8 +1030,8 @@ na.desktop = {
                                     }
                                 }
                             }
-                            //if (divID=='#siteContent') debugger;
 
+                            //if (divID!=='#siteContent') debugger;
 
 
                             if (!shown /*|| !visibleDivs.includes(divID)*/) {
@@ -1187,7 +1189,7 @@ na.desktop = {
         }
         
         var allCompleted = true;
-        for (var did in na.d.s.animatingDivs) {
+        for (var did in na.d.s.visibleDivs) {
             var ds = na.d.s.animatingDivs[did];
             if (ds) allCompleted = false;
         }

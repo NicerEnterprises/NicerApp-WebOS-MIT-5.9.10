@@ -74,6 +74,7 @@ class NicerAppWebOS {
         if (function_exists('apache_request_headers')) {
             $this->ip = (array_key_exists('X-Forwarded-For',apache_request_headers())?apache_request_headers()['X-Forwarded-For'] : $_SERVER['REMOTE_ADDR']);
         }
+
     }
 
     public function getDataID ($dataSetName, $fieldName, $value=null) {
@@ -328,16 +329,24 @@ class NicerAppWebOS {
                 $titleFile = $rp_domain.'/index.title.php';
             } else {
                 $view = $naWebOS->view;//json_decode (base64_decode_url($_GET['vi']), true);
-                $this->view = $view;
+                //$this->view = $view;
                 //echo '<pre>';var_dump($_GET);var_dump ($this->view);exit();
                 
                 foreach ($this->view as $viewFolder => $viewSettings) {
                     $titleFile = realpath(dirname(__FILE__).'/../..').'/'.$viewFolder.'/app.title.site.php';
                 }
             }
+        } elseif (array_key_exists('seoValue', $_GET)) {
+            $view = $naWebOS->view;//json_decode (base64_decode_url($_GET['vi']), true);
+            //$this->view = $view;
+            //echo '<pre>';var_dump($_GET);var_dump ($this->view);exit();
+
+            foreach ($view as $viewFolder => $viewSettings) {
+                $titleFile = realpath(dirname(__FILE__).'/../..').'/'.$viewFolder.'/app.title.site.php';
+            }
         } elseif (array_key_exists('app-wikipedia_org', $_GET)) {
-            $viewFolder = realpath(dirname(__FILE__).'/../..').'/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/3rd-party-site.wikipedia.org';
-            $titleFile = $viewFolder.'/app.title.site.php';
+            $viewFolder = '/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/3rd-party-site.wikipedia.org';
+            $titleFile = realpath(dirname(__FILE__).'/../..').'/'.$viewFolder.'/app.title.site.php';
         } else {
             $titleFile = $rp_domain.'/index.title.php';
         }
@@ -1162,11 +1171,12 @@ class NicerAppWebOS {
                 //$r .= "\t});".PHP_EOL;
                 //$r .= '</script>'.PHP_EOL;
                 $r = '<style id="cssPageSpecific" type="text/css" theme="'.$theme['theme'].'" sel=\''.(json_encode($css['sel'])).'\' csn="'.$selector['specificityName'].'" dbID="'.$theme['dbID'].'">'.PHP_EOL;
-                //echo '<pre style="color:green">'; var_dump ($theme['dialogs']); echo '</pre>'; die();
-                $r .= css_array_to_css($theme['dialogs']).PHP_EOL;
-                $r .= 'h1::before, h2::before, h3::before {'."\r\n".PHP_EOL;
-                    $r .= "\t".'content : \'\''."\r\n".PHP_EOL;
-                $r .= '}'."\r\n".PHP_EOL;
+                //echo '<pre style="color:green">'; var_dump ($theme); echo '</pre>'; die();
+                $r .= css_array_to_css2($theme['themeSettings']).PHP_EOL;
+                $this->theme = $theme;
+                //$r .= 'h1::before, h2::before, h3::before {'."\r\n".PHP_EOL;
+                    //$r .= "\t".'content : \'\''."\r\n".PHP_EOL;
+                //$r .= '}'."\r\n".PHP_EOL;
                 $r .= '#divFor_neCompanyLogo, #headerSiteDiv, li span, .backdropped, p, h1::before, h2::before, h3::before {'."\r\n".PHP_EOL;
                     $r .= "\t".'background : rgba(0,0,0,'.$theme['textBackgroundOpacity'].');'."\r\n".PHP_EOL;
                     $r .= "\t".'border-radius : 10px !important;'."\r\n".PHP_EOL;
@@ -1311,7 +1321,21 @@ class NicerAppWebOS {
         };
         if ($debug) { echo '$ret='; var_dump(htmlentities($ret)); echo '</pre>'.PHP_EOL.PHP_EOL; exit(); };
         return $ret;
-        
+    }
+
+    public function themeSettings_UL_list ($theme, $root=true) {
+        if ($root) $css .= '<ul class="vividMenu_mainUL" style="display:none;" itemsLevel1="1" menuStructure="vertical">'; else $css .= '<ul>';
+        foreach ($theme as $key => $value) {
+            if ($key=='css') continue;
+
+            $css .= '<li><a href="#" class="nomod noPushState">'.$key.'</a>';
+            if (is_array($value)) {
+                $css .= $this->themeSettings_UL_list ($value, false);
+            }
+            $css .= '</li>';
+        }
+        $css .= '</ul>';
+        return $css;
     }
 
     public function getPageCSS_permissionsList($js=true) {
@@ -1824,11 +1848,12 @@ class NicerAppWebOS {
                 '&gt' => 0
             ];
             if ($debug) { echo '<pre style="color:blue">$sel = '; var_dump ($sel); echo '</pre>';};
-
+//array( 'url'=>$selector['url'], 'role'=>$selector['role'] ),//$selector,
             $findCommand = array (
-                'selector' => $sel,//array( 'url'=>$selector['url'], 'role'=>$selector['role'] ),//$selector,
-                'fields' => array( '_id', 'user', 'view', 'role', 'lastUsed', 'theme', 'url', 'dialogs', 'apps', 'background', 'backgroundSearchKey', 'textBackgroundOpacity', 'changeBackgroundsAutomatically', 'backgroundChange_hours', 'backgroundChange_minutes' ),
-                'sort' => [['lastUsed'=>'asc']]
+                'selector' => $sel,
+                'fields' => [ '_id', 'user', 'view', 'role', 'lastUsed', 'theme', 'url', 'themeSettings', 'apps', 'background', 'backgroundSearchKey', 'textBackgroundOpacity', 'changeBackgroundsAutomatically', 'backgroundChange_hours', 'backgroundChange_minutes' ],
+                'sort' => [['lastUsed'=>'asc']],
+                'use_index' => 'sortIndex'
             );
             try {
                 $call = $this->dbs->findConnection('couchdb')->cdb->find ($findCommand);
@@ -1852,7 +1877,7 @@ class NicerAppWebOS {
                     $ret = [
                         ( isset($d->theme) ? $d->theme : 'default' ) => [
                             'dbID' => $d->_id,
-                            'dialogs' => json_decode(json_encode($d->dialogs), true),
+                            'themeSettings' => json_decode(json_encode($d->themeSettings), true),
                             'apps' => json_decode(json_encode((property_exists($d,'apps')?$d->apps:[])), true),
                             'background' => ( isset($d->background) ? $d->background : '' ),
                             'backgroundSearchKey' => ( isset($d->backgroundSearchKey) ? $d->backgroundSearchKey : '' ),

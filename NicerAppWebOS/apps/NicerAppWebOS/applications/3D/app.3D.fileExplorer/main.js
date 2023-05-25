@@ -1,4 +1,4 @@
-import {
+/*import {
   AmbientLight,
   AnimationMixer,
   AxesHelper,
@@ -21,7 +21,8 @@ import {
   WebGLRenderer,
   sRGBEncoding
 
-} from '/NicerAppWebOS/3rd-party/3D/libs/three.js/build/three.module.js';
+}from '/NicerAppWebOS/3rd-party/3D/libs/three.js/build/three.module.js';*/
+import * as THREE from '/NicerAppWebOS/3rd-party/3D/libs/three.js/build/three.module.js';
 import { Stats } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/libs/stats.module.js';
 import { GLTFLoader } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/loaders/GLTFLoader.js';
 import { KTX2Loader } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/loaders/KTX2Loader.js';
@@ -34,6 +35,7 @@ import { DragControls } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples
 		from '/NicerAppWebOS/logic.userInterface/na3D.source.js';
 		
     //$(document).ready(function() {
+        setTimeout (function() {
         na.m.waitForCondition ('app.3D.fileExplorer : Filesystem index loaded?',
             function () { 
 				var r =
@@ -94,5 +96,5 @@ import { DragControls } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples
                 
             }, 100
         );
-    //});
+    }, 3999);
  

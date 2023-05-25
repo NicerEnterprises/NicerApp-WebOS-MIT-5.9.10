@@ -83,7 +83,7 @@ if (!$call->headers->_HTTP->status===200) {
 $rec2 = array (
     'theme' => $_POST['theme'],
     'textBackgroundOpacity' => floatval($_POST['textBackgroundOpacity']),
-    'dialogs' => json_decode($_POST['dialogs'], true),
+    'themeSettings' => json_decode($_POST['themeSettings'], true),
     'apps' => json_decode($_POST['apps'], true),
     'backgroundSearchKey' => $_POST['backgroundSearchKey'],
     'background' => $_POST['background'],

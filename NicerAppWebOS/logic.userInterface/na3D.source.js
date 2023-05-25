@@ -19,8 +19,10 @@ import {
   UnsignedByteType,
   Vector3,
   WebGLRenderer,
-  sRGBEncoding,
+  sRGBEncoding
 } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/build/three.module.js';
+
+import * as THREE from '/NicerAppWebOS/3rd-party/3D/libs/three.js/build/three.module.js';
 import { Stats } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/libs/stats.module.js';
 import { GLTFLoader } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/loaders/GLTFLoader.js';
 import { KTX2Loader } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/loaders/KTX2Loader.js';
@@ -29,7 +31,38 @@ import { OrbitControls } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/example
 import { RGBELoader } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/loaders/RGBELoader.js';
 import { DragControls } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/controls/DragControls.js';
 //import { GLTFLoader } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/loaders/GLTFLoader.js';
-
+/*import {
+  AmbientLight,
+  AnimationMixer,
+  AxesHelper,
+  Box3,
+  Cache,
+  CubeTextureLoader,
+  DirectionalLight,
+  GridHelper,
+  HemisphereLight,
+  LinearEncoding,
+  LoaderUtils,
+  LoadingManager,
+  PMREMGenerator,
+  PerspectiveCamera,
+  RGBAFormat,
+  Scene,
+  SkeletonHelper,
+  UnsignedByteType,
+  Vector3,
+  WebGLRenderer,
+  sRGBEncoding,
+} from 'three';
+import { Stats } from 'three/addons';
+import { GLTFLoader } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/loaders/GLTFLoader.js';
+import { KTX2Loader } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/loaders/KTX2Loader.js';
+import { DRACOLoader } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/loaders/DRACOLoader.js';
+import { OrbitControls } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/controls/OrbitControls.js';
+import { RGBELoader } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/loaders/RGBELoader.js';
+import { DragControls } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/controls/DragControls.js';
+//import { GLTFLoader } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/loaders/GLTFLoader.js';
+*/
 
 export class na3D_portraitFrame {
     
@@ -100,6 +133,7 @@ export class na3D_fileBrowser {
 
         this.renderer = new THREE.WebGLRenderer({alpha:true, antialias : true});
         this.renderer.physicallyCorrectLights = true;
+        debugger;
         this.renderer.outputEncoding = sRGBEncoding;
         this.renderer.setPixelRatio (window.devicePixelRatio);
         this.renderer.setSize( $(el).width()-20, $(el).height()-20 );
@@ -1862,19 +1896,20 @@ export class na3D_demo_models {
     }
     
     updateEnvironment (t) {
-        /*
+
         const environment = {
             id: 'venice-sunset',
             name: 'Venice Sunset',
             path: '/NicerAppWebOS/3rd-party/3D/assets/environment/venice_sunset_1k.hdr',
             format: '.hdr'
-        };*/
+        };
+        /*
         const environment = {
             id: 'footprint-court',
             name: 'Footprint Court (HDR Labs)',
             path: '/NicerAppWebOS/3rd-party/3D/assets/environment/footprint_court_2k.hdr',
             format: '.hdr'
-        }
+        }*/
 
         t.getCubeMapTexture( environment ).then(( { envMap } ) => {
 
@@ -1901,7 +1936,7 @@ export class na3D_demo_models {
 
         return new Promise( ( resolve, reject ) => {
             new RGBELoader()
-                .setDataType( UnsignedByteType )
+                //.setDataType( UnsignedByteType )
                 .load( path, ( texture ) => {
 
                     const envMap = this.pmremGenerator.fromEquirectangular( texture ).texture;

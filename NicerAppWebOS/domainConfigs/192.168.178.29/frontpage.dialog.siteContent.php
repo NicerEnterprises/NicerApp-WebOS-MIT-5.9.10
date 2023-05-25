@@ -21,6 +21,8 @@
         <li><div class="contentSectionTitle3"><a href="<?php echo $naURLs['newsHeadlines_arabic'];?>" class="contentSectionTitle3_a"><span class="contentSectionTitle3_span">Arabic Business News (in English)</span></a></div></li>
     </ul>
     
+    <a href="/wiki/frontpage" class="contentSectionTitle3_a"><h3 class="contentSectionTitle3"><span class="contentSectionTitle3_span">Wikipedia.org view</span></h3></a><br/>
+
     <a href="<?php echo $naURLs['tarot'];?>" class="contentSectionTitle3_a"><h3 class="contentSectionTitle3"><span class="contentSectionTitle3_span">Tarot cardgame</span></h3></a><br/>
 
     <a href="https://said.by" class="contentSectionTitle3_a" target="saidBy"><h3 class="contentSectionTitle3"><span class="contentSectionTitle3_span">Blogging features (on https://said.by)</span></h3></a><br/>
@@ -51,5 +53,5 @@
     <p>
     Bids can be sent in by unencrypted email to <a href="maillto:rene.veerman.netherlands@gmail.com">rene.veerman.netherlands @gmail.com</a>, via which we can exchange WhatsApp contact details for encrypted communications.<br/>
     I find all potential buyers to be legitimate buyers (meaning : i do not discriminate), and the
-    <b>starting price is 50 million euro</b>, which is offered as a <b>total buy-out offer</b> or a <b>total buy-out offer with offer for me to become a member of the buyer's workforce</b>.<br/>
+    <b>starting price is 50 million euro</b>, which is offered as a <b>total buy-out offer</b> with optionally me becoming part of the buyer's workforce.<br/>
     </p>

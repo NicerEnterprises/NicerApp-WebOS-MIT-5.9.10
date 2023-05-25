@@ -625,6 +625,7 @@ class naVividMenu__behavior_rainbowPanels {
             top += $(t.el).outerHeight() + na.d.g.margin;
         }
 
+            if (t.el.id=='siteToolbarThemeEditor__selector') debugger;
         if (t.useFading) {
             $(it.b.el).css ({
                 position : position,

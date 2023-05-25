@@ -41,7 +41,7 @@
     <li class="todoList releaseDate"><div>(DONE) (2023 May 4th) Release <a href="https://github.com/NicerEnterprises/NicerApp-WebOS" class="nomod noPushState noVividText contentSectionTitle2_a" target="ghNA"><span class="contentSectionTitle2_span">version 5.2.8</span></a> : Fixes for the remaining blogging feature bugs, smartphone bugs, the page switching bugs and many other bugs. Improved user-interface as well.
     </div></li>
 
-    <li class="todoList"><div>Build a view port into <a href="https://wikipedia.org" target="wikipedia">https://wikipedia.org</a> data, whose content one may re-use without legal consequences, and which is *great*. :D</li>
+    <li class="todoList"><div>(CURRENT) (2023 May) Build a <a href="/wiki/frontpage">view port</a> into <a href="https://wikipedia.org" target="wikipedia">https://wikipedia.org</a> data, whose content one may re-use without legal consequences, and which is *great*. :D</li>
 
     <li class="todoList"><div>
         <ol class="todoList_l1">
@@ -51,32 +51,38 @@
             <li class="todoList_l1"><div>(DONE) (2023 May) Rework the 'vividButton' user-interface components of NicerApp WebOS.
             </div></li>
 
+            <li class="todoList_l1"><div>(DONE) (2023 May) Allow users (and Guests) to specify which theme a new end-user should initially see for a page managed by them on a NicerApp website.</div></li>
+
             <li class="todoList_l1"><div>(STALLED UNTIL COMPLETION OF <a href="https://github.com/apache/couchdb/pull/4139" class="nomod noPushState contentSectionTitle2_a" target="_new"><span class="contentSectionTitle2_span">THIS</span></a>) (2023) Establish a proper permissions system and add users and groups editing capabilities to <a href="/cms" class="nomod noPushState contentSectionTitle3_a" target="_new"><span class="contentSectionTitle3_span">/cms</span></a>.<br/>
             The last thing you wanna do in software development is replicate other people's work that you can work with (or soon can).</div></li>
 
-            <li class="todoList_l1"><div>(STALLED) (2023) Upgrade the theme editor to allow users to specify which theme a new end-user should initially see for a page managed by them on a NicerApp domain.</div></li>
 
-            <li class="todoList_l1"><div>(DONE) (2023 May) Enable 'vividButton' components to be put in 'vividMenu' components, with options for onclick and onmouseover (show a 'vividDialog' for instance).
+            <li class="todoList_l1"><div>(2023) write 'vividRangeFinder' (a percentage bar with 2 percentage stops)</div></li>
+
+            <li class="todoList_l1"><div>(2023) Enable 'vividButton' components to be put in 'vividMenu' components, with options for onclick and onmouseover (show a 'vividDialog' for instance).
             </div></li>
-
 
 
             <!--<li class="todoList_l1"><div>Show a small error window for a short time when a page can't load.</div></li>-->
         </ol>
     </div></li>
 
-    <li class="todoList"><div>Restore the automatic retrieval of new backgrounds download routines for nicerapp via free to use methods of delivery at Google image search and (TODO :)Bing image search.</div></li>
-
-    <li class="todoList"><div>Transform the Theme Editor (that's currently restricted to NicerApp vividDialogs) into a Universal Web Theme Editor.<br/>
-    Tie specific HTML classes -that you can edit without technical knowledge using the UWTE- to specific HTML&amp;CSS selectors.<br/>
+    <li class="todoList"><div>(CURRENT) (2023 May-June) Transform the Theme Editor (that's currently restricted to NicerApp vividDialogs) into a Universal Web Theme Editor.<br/>
+    In the existing Theme Editor, add 1 vividMenu component beneath the 'Theme' menu at the top of the dialog containing a tiered list of categories and menu-items that can optionally lead to a JSON object that lists 1 HTML selector and all the CSS, canvas, webgl and js settings that can 'belong' to that category or menu-item.<br/>
+    Build a button (50x50) next to that vividMenu (on the right side of it), and make it so that when one clicks on that button and then any HTML element on the page, it lists that element's ID and class names as part of a vividDialogPopup, as a float:left list of vividButtons.<br/>
+    From this list inside the popup dialog, an item can be dragged into the theme settings vividMenu and dropped on a specific parent for (future) editing.<br/>
     Add more tab-pages to specify even more different HTML styles to HTML selectors.
     </div></li>
 
-    <li class="todoList"><div>Start work on a custom HTML WYSIWYG rich-text editor component of my own, that ties into the UWTE.<br/>
+    <li class="todoList"><div>(2023 June-Aug) Start work on a custom HTML WYSIWYG rich-text editor component of my own, that ties into the UWTE.<br/>
         <ol class="todoList_l1">
             <li class="todoList_l1"><div>supply data from a HTML+CSS form into <a href="https://github.com/NicerEnterprises/NicerApp-WebOS-dev/blob/main/NicerAppWebOS/logic.business/class.core.WebsiteOperatingSystem-5.y.z.php#L1088" class="noPushState" target="naGH_wos1088">css_keyframes_to_array() and css_animation_template_to_animation()</a>.</div></li>
         </ol>
     </li>
+
+    <li class="todoList"><div>Build an extension of the Sag library that i'm using for communication between PHP and couchdb that allows one to log events and calls into and from the Sag library to /var/logs/apache2/error.PORT.log and a seperate database in PHP.</div></li>
+
+    <li class="todoList"><div>Restore the automatic retrieval of new backgrounds download routines for nicerapp via free to use methods of delivery at Google image search and (TODO :)Bing image search.</div></li>
 
     <li class="todoList">
 <div><pre class="todoList">

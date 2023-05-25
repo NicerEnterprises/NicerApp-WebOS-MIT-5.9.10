@@ -274,6 +274,7 @@ na.site = {
         
         
         $('#siteContent').css({display:'none',opacity:1}).fadeIn('slow');//css({display:'block'});
+
         na.m.log (1, 'calling na.desktop.resize(na.site.onload_phase2, true);', false);
         na.desktop.resize(na.site.onload_phase2, true);
 
@@ -370,7 +371,6 @@ na.site = {
             },
             error : function (xhr, textStatus, errorThrown) {
                 na.site.ajaxFail(fncn, url1, xhr, textStatus, errorThrown);
-                //na.desktop.resize(na.site.onload_phase2, true);
             }                
         };
         $.ajax(ac);
@@ -385,6 +385,7 @@ na.site = {
     onload_phase2 : function (div, calculationResults, sectionIdx, section, divOrderIdx) {
         var fncn = 'na.site.onload_phase2()';
         na.site.settings.current.siteResized = true;
+        //na.desktop.setConfig ('content');
        // debugger;
         if (!na.site.settings.current.onload_phase2__alreadyCalled) na.site.settings.current.onload_phase2__alreadyCalled = true; else return false;
 
@@ -399,8 +400,8 @@ na.site = {
                 na.m.log (10, fncn+' : STARTS.', false);
             
                 $('.vividDialogPopup').not('#siteLoginLogout, #btnOptions_menu, #siteErrors,  #siteLogin, #siteLoginSuccessful, #siteLoginFailed, #siteRegistration, #siteRegistrationError, #document_headers').css({opacity:1,display:'none'}).fadeIn('slow');
-                $('body > .lds-facebook').fadeOut('normal');                
-                
+                $('body > .lds-facebook').fadeOut('normal');//css({display:'none'});
+
                 na.site.renderAllCustomHeadingsAndLinks();
 
                 $('#siteContent .vividDialogContent.vividScrollpane')[0].focus();
@@ -1017,7 +1018,7 @@ na.site = {
             na.te.specificitySelected(evt);
         });
 
-        $('#siteToolbarThemeEditor .vividScrollpane').not('.vividDropDownBox_selected').css({ overflow : 'visible' });
+        //$('#siteToolbarThemeEditor .vividScrollpane').not('.vividDropDownBox_selected').css({ overflow : 'visible' });
 
         //if (!na.m.desktopIdle()) {
             na.te.s.c.selectedThemeName = na.site.globals.themeName;
@@ -1214,6 +1215,8 @@ onclick_btnFullResetOfAllThemes : function (event) {
         na.site.settings.current.url = url;
         //if (na.site.globals.debug['na.site.loadContent']) alert (url);
         
+        na.desktop.setConfig ('content');
+
         var 
         dateObj = new Date(),
         timeInMilliseconds = dateObj.getTime(),
@@ -1403,7 +1406,6 @@ onclick_btnFullResetOfAllThemes : function (event) {
                 : fncn+':: url2='+url2
         ),
         loadContent_getContent_do = function () {
-
             $('.lds-facebook').fadeIn('normal');
 
             var
@@ -2323,7 +2325,10 @@ onclick_btnFullResetOfAllThemes : function (event) {
                 var topLevelItemCount = $('.vividMenu_mainUL > li', menu).length;
                 //debugger;
                 $('#siteMenu').attr('fontSize', na.site.settings.current.menuFontSize);
-                
+
+
+
+
                 if (settings) settings.naVividMenu_menuInitialized = menu;
                 /*setTimeout (function() {
                     na.site.renderAllCustomHeadingsAndLinks();
@@ -3197,16 +3202,16 @@ onclick_btnFullResetOfAllThemes : function (event) {
                 //$(el).css({background:na.m.adjustColorOpacity(el, dat.textBackgroundOpacity)});
             });
         }
-        if (dat.dialogs && dat.dialogs['.vividDialog']) {
-            $('.vividDialog').css(dat.dialogs['.vividDialog']);
-            $('.vividDialog > .vdBackground').css(dat.dialogs['.vividDialog > .vdBackground']);
+        if (dat.themeSettings && dat.themeSettings['.vividDialog']) {
+            $('.vividDialog').css(dat.themeSettings['.vividDialog']);
+            $('.vividDialog > .vdBackground').css(dat.themeSettings['.vividDialog > .vdBackground']);
         }
-        if (dat.dialogs)
-        for (var dID in dat.dialogs) {
-            if (dID=='.vividDialog' || dID=='.vividDialog .vdBackground') continue;
-            var dit = dat.dialogs[dID];
+        if (dat.themeSettings)
+        for (var dID in dat.themeSettings) {
+            if (dID=='.vividDialog' || dID=='.vividDialog > .vdBackground') continue;
+            var dit = dat.themeSettings[dID];
             $(dID).css (dit);
-            if (dit.background && dID == '#'+na.te.settings.current.forDialogID+' .vdBackground') {
+            if (dit.background && dID == '#'+na.te.settings.current.forDialogID+' > .vdBackground') {
                 var
                 del = $(dID)[0],
                 rgbaRegEx = /rgba\(\d{1,3}\,\s*\d{1,3}\,\s*\d{1,3}\,\s*([\d.]+)\).*/,
@@ -3285,10 +3290,13 @@ onclick_btnFullResetOfAllThemes : function (event) {
                 themeData.dialogs = $.extend (themeData.dialogs, na.site.fetchTheme (selector));
             }*/
             for (var divSel in na.site.settings.dialogs) {
-                themeData.dialogs = $.extend (themeData.dialogs, na.site.fetchTheme(divSel));
+                var divName = divSel.match(/#site(.*)[\s\w\.\#\d\>]*/)[1];
+                if (!themeData.themeSettings) themeData.themeSettings = { Dialogs : {} };
+                if (!themeData.themeSettings['Dialogs'][divName]) themeData.themeSettings['Dialogs'][divName] = { css : {} };
+                themeData.themeSettings['Dialogs'][divName]['css'] = $.extend (themeData.themeSettings['Dialogs'][divName]['css'], na.site.fetchTheme(divSel));
             };
             
-            themeData.dialogs = JSON.stringify(themeData.dialogs);
+            themeData.themeSettings = JSON.stringify(themeData.themeSettings);
             themeData.apps = JSON.stringify(Object.assign({},themeData.apps));
             //if (themeData.dialogs.indexOf('+')!==-1) themeData.dialogs = themeData.dialogs.replace(/\+/g, ' ');
             //if (themeData.dialogs.indexOf('\\')!==-1) themeData.dialogs = themeData.dialogs.replace(/\\/g, '');

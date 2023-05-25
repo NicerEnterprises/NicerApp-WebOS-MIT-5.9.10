@@ -561,15 +561,11 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
             'menusUseRainbowPanels'=> true,
             'textBackgroundOpacity' => 0.38,
             'lastUsed' => time(),
-            'dialogs' => array_merge_recursive(
-                            css_to_array (file_get_contents(
+            'themeSettings' => array_merge_recursive(
+                            cssArray_seperate('Dialogs', [ '/\.vivid([\w]+)[\s\.\>\#\w]*/' , '/#site([\w]+)[\s\.\>\#\w]*/' ], css_to_array (file_get_contents(
                                 realpath(dirname(__FILE__).'/../../../..')
                                 .'/NicerAppWebOS/themes/nicerapp_default_siteContent-almost-transparent.css'
-                            )),
-                            css_to_array (file_get_contents(
-                                realpath(dirname(__FILE__).'/../../../..')
-                                .'/NicerAppWebOS/themes/nicerapp_app.2D.musicPlayer.css'
-                            ))
+                            )))
             )
 /*
             'dialogs' => css_to_array (file_get_contents(
@@ -578,7 +574,7 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
             ))
 */
         );
-        if ($this->debug) { echo '<pre style="color:blue">'; var_dump ($rec); var_dump ($cdb); echo '</pre>'; }
+        if ($this->debug) { echo '<pre style="color:yellow;background:navy">'; var_dump ($rec);/* var_dump ($this->cdb);*/ echo '</pre>'; die(); }
         try {
             $this->cdb->post($rec);
         } catch (Exception $e) {
@@ -595,15 +591,11 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
             'menusUseRainbowPanels'=> true,
             'textBackgroundOpacity' => 0.38,
             'lastUsed' => time(),
-            'dialogs' => array_merge_recursive(
-                            css_to_array (file_get_contents(
+            'themeSettings' => array_merge_recursive(
+                            cssArray_seperate('Dialogs', [ '/\.vivid([\w]+)[\s\.\>\#\w]*/' , '/#site([\w]+)[\s\.\>\#\w]*/' ], css_to_array (file_get_contents(
                                 realpath(dirname(__FILE__).'/../../../..')
                                 .'/NicerAppWebOS/themes/nicerapp_default_siteContent-almost-transparent.css'
-                            )),
-                            css_to_array (file_get_contents(
-                                realpath(dirname(__FILE__).'/../../../..')
-                                .'/NicerAppWebOS/themes/nicerapp_app.2D.musicPlayer.css'
-                            ))
+                            )))
             )
 /*
             'dialogs' => css_to_array (file_get_contents(
@@ -630,15 +622,16 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
             'menusFadingSpeed' => 400,
             'menusUseRainbowPanels' => true,
             'textBackgroundOpacity' => 0.38,
-            'dialogs' => array_merge_recursive(
-                            css_to_array (file_get_contents(
+            'themeSettings' => array_merge_recursive(
+                            cssArray_seperate('Dialogs', [ '/\.vivid([\w]+)[\s\.\>\#\w]*/' , '/#site([\w]+)[\s\.\>\#\w]*/' ], css_to_array (file_get_contents(
                                 realpath(dirname(__FILE__).'/../../../..')
                                 .'/NicerAppWebOS/themes/nicerapp_default_siteContent-almost-transparent.css'
-                            )),
-                            css_to_array (file_get_contents(
-                                realpath(dirname(__FILE__).'/../../../..')
-                                .'/NicerAppWebOS/themes/nicerapp_app.2D.musicPlayer.css'
-                            ))
+                            ))),
+                            cssArray_seperate('App', [ '/\.vivid([\w]+)[\s\.\>\#\w]*/' , '/#app__musicPlayer__([\w]+)[\s\.\>\#\w]*/' ],
+                                css_to_array (file_get_contents(
+                                    realpath(dirname(__FILE__).'/../../../..').'/NicerAppWebOS/themes/nicerapp_app.2D.musicPlayer-v2.css'
+                                ))
+                            )
             )
         );
         if ($this->debug) { echo '<pre style="color:blue">'; var_dump ($rec); var_dump ($cdb); echo '</pre>'; }
@@ -657,15 +650,16 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
             'menusFadingSpeed' => 400,
             'menusUseRainbowPanels' => true,
             'textBackgroundOpacity' => 0.38,
-            'dialogs' => array_merge_recursive(
-                            css_to_array (file_get_contents(
+            'themeSettings' => array_merge_recursive(
+                            cssArray_seperate('Dialogs', [ '/\.vivid([\w]+)[\s\.\>\#\w]*/' , '/#site([\w]+)[\s\.\>\#\w]*/' ], css_to_array (file_get_contents(
                                 realpath(dirname(__FILE__).'/../../../..')
                                 .'/NicerAppWebOS/themes/nicerapp_default_siteContent-almost-transparent.css'
-                            )),
-                            css_to_array (file_get_contents(
-                                realpath(dirname(__FILE__).'/../../../..')
-                                .'/NicerAppWebOS/themes/nicerapp_app.2D.musicPlayer.css'
-                            ))
+                            ))),
+                            cssArray_seperate('App', [ '/\.vivid([\w]+)[\s\.\>\#\w]*/' , '/#app__musicPlayer__([\w]+)[\s\.\>\#\w]*/' ],
+                                css_to_array (file_get_contents(
+                                    realpath(dirname(__FILE__).'/../../../..').'/NicerAppWebOS/themes/nicerapp_app.2D.musicPlayer-v2.css'
+                                ))
+                            )
             )
         );
         if ($this->debug) { echo '<pre style="color:blue">'; var_dump ($rec); var_dump ($cdb); echo '</pre>'; }
@@ -677,7 +671,7 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
 
         $rec = [
             'index' => [
-                'fields' => [ 'theme', 'view', 'url', 'role', 'user', 'ip', 'ua' ]
+                'fields' => [ 'theme', 'lastUsed', 'view', 'url', 'role', 'user', 'ip', 'ua' ]
             ],
             'name' => 'primaryIndex',
             'type' => 'json'
@@ -825,7 +819,7 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
 
         $rec = [
             'index' => [
-                'fields' => [ 'lastUsed' ]
+                'fields' => [ ['lastUsed'] ]
             ],
             'name' => 'sortIndex',
             'type' => 'json'

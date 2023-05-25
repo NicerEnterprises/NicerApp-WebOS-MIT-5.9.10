@@ -247,11 +247,11 @@ $htmlTitleMeta = file_get_contents ($setPath.'/index.title_meta.html');
 		</table>
 	</div>
 
-	<div id="playlist_wrapper" class="vividDialog vividTheme__dialog_black_simple_square vividScrollpane__hidden" style="overflow:visible; visibility:hidden; position:absolute; width:300px;height:300px;">
+	<div id="app__musicPlayer__playlist" class="vividDialog vividTheme__dialog_black_simple_square vividScrollpane__hidden" style="overflow:visible; visibility:hidden; position:absolute; width:300px;height:300px;">
 		<ul id="playlist" style="padding:10px;padding-left:50px;width:100%;"></ul>
 	</div>
 	
-	<div id="infoWindow_mp3desc" class="vividDialog vividScrollpane__scroll_black vividTheme__dialog_black_simple_square" style="overflow:visible;visibility:hidden; position:absolute;width:320px;height:300px;">
+	<div id="app__musicPlayer__desc" class="vividDialog vividScrollpane__scroll_black vividTheme__dialog_black_simple_square" style="overflow:visible;visibility:hidden; position:absolute;width:320px;height:300px;">
 		<div id="mp3descText"></div>
 		<div id="siteIntroText" style="visibility:hidden;">
 			<?php echo $htmlIntro?>

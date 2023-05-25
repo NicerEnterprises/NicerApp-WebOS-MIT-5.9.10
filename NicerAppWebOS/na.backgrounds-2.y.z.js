@@ -74,25 +74,38 @@ na.backgrounds = {
                     bg = bgs[collectionIdx].files[i],
                     hit = true;
 
+                    for (var bgk in bg) break;
+                    var
+                    bgSize = bg[bgk].split('x'),
+                    w = parseInt(bgSize[0]),
+                    h = parseInt(bgSize[1]);
+
                     for (var j=0; j<sk.length; j++) {
                         if (sk[j].substr(0,1)==='-') {
-                            if (bg.match(sk[j])) hit = false;
+                            if (bgk.match(sk[j])) hit = false;
                         } else {
-                            if (!bg.match(sk[j])) hit = false;
+                            if (!bgk.match(sk[j])) hit = false;
                         }
+                    }
+
+                    if (
+                        $(window).width() > w
+                        || $(window).height() > h
+                    ) {
+                        hit = false;
                     }
 
                     if (hit) {
                         if (useRoot)
-                            hits[hits.length] = bgs[collectionIdx].root+bg;
+                            hits[hits.length] = bgs[collectionIdx].root+bgk;
                         else
-                            hits[hits.length] = bg;
+                            hits[hits.length] = bgk;
                     }
                 };
             }
             
             if (hits.length===0) return false;
-
+ //debugger;
             var
             url = hits[Math.floor(Math.random() * Math.floor(hits.length))];
         };

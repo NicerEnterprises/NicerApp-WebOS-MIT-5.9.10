@@ -34,10 +34,11 @@ class naVividDialog {
                 && !$('.vdSettings',t.el)[0]
             ) $(t.el).prepend(html).delay(20);
             $('.vdSettings', t.el).fadeIn('slow');
-        } else $(t.el).find('.vdSettings').remove();
-        
-        $(t.el).prepend(html);
-        
+        } else {
+            $(t.el).find('.vdSettings').remove();
+            $(t.el).prepend(html);
+        }
+
 
         var
         bg = t.el,
@@ -116,8 +117,8 @@ class naVividDialog {
         if (!na.desktop.settings.visibleDivs.includes('#siteToolbarThemeEditor')) na.desktop.settings.visibleDivs.push('#siteToolbarThemeEditor');
         var did = na.site.settings.dialogs['#siteToolbarThemeEditor'].settings.current.dialogID;
         
-        $('#themeEditor_photoSpecificity_dialog').val(did);
-        $('#themeEditor_photoSpecificity_dialog').parent().html('#'+did+$('#themeEditor_photoSpecificity_dialog')[0].outerHTML);
+        //$('#themeEditor_photoSpecificity_dialog').val(did);
+        //$('#themeEditor_photoSpecificity_dialog').parent().html('#'+did+$('#themeEditor_photoSpecificity_dialog')[0].outerHTML);
         
         var el = $('#siteToolbarThemeEditor')[0];
         $('img[srcPreload]',el).each(function(idx,el2) {

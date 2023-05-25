@@ -69,9 +69,11 @@ $spacer = "\n\t\t\t\t";
 	<div id="horizontalMover" class="draggable ui-widget-content" style="display:none;position:absolute;top:4px;height:10px;width:730px;border-radius:4px;background:navy;border : 1px solid white;opacity:0.7"></div>
 	
 	<div id="titlebar" class="vividDialog" style="opacity:0.0001;position:absolute;display:flex;background:rgba(0,0,0,0.4);border:1px solid white;border-radius:15px;font-weight:bold;justify-content:center;vertical-align:middle;align-content: center;align-items : center;padding:5px;margin-bottom:10px;">
-        <div class="vividDialogContent" style="text-align:center;margin:2px;">
-        <span class="contentSectionTitle1_span" id="folderName"><?php echo str_replace('_', ' ', $view['set']) ?></span>&nbsp;
-        on&nbsp;<a href="/music"><span class="contentSectionTitle3_span">https://nicer.app/music</span></a>.
+        <div class="vividDialogContent" style="text-align:center;margin:2px;width:100%;">
+        <h1 class="pageTitle">
+            <span class="contentSectionTitle1_span" id="folderName"><?php echo str_replace('_', ' ', $view['set']) ?></span>&nbsp;
+            on&nbsp;<a href="/music"><span class="contentSectionTitle3_span">https://nicer.app/music</span></a>.
+        </h1>
         </div>
     </div>
 
@@ -109,7 +111,7 @@ $spacer = "\n\t\t\t\t";
 ?> 
 	</div>
 		
-	<div id="player" class="vividDialog" style="overflow:visible;position:absolute;width:320px;height:120px;">
+	<div id="app__musicPlayer__player" class="vividDialog" style="overflow:visible;position:absolute;width:320px;height:120px;">
         <audio id="audioTag">
             <?php 
             foreach ($filez as $idx=>$fn) {
@@ -146,12 +148,12 @@ $spacer = "\n\t\t\t\t";
 		</div>
 	</div>
 
-	<div id="playlist_wrapper" class="vividDialog" theme="dark" style="text-align:center;opacity:0.001;overflow:visible;position:absolute; width:300px;height:300px;">
+	<div id="app__musicPlayer__playlist" class="vividDialog" theme="dark" style="text-align:center;opacity:0.001;overflow:visible;position:absolute; width:300px;height:300px;">
         <h2 style="padding:0px !important; margin:20px !important;display:flex;justify-content:center;align-items:center;width:auto;height:50px;font-size:10px;background:rgba(0,0,255,0.25);color:white;border-radius:10px;box-shadow:2px 2px 3px 2px rgba(0,0,0,0.7);">Playlist<br/>(drag and drop items onto this window)</h2>
 		<ul id="playlist" class="vividScrollpane" style="width:100%;height:calc(100% - 50px);"></ul>
 	</div>
 	
-	<div id="infoWindow_mp3desc" class="vividDialog" theme="dark" style="opacity:0.001;overflow:visible;position:absolute;width:320px;height:300px;">
+	<div id="app__musicPlayer__description" class="vividDialog" theme="dark" style="opacity:0.001;overflow:visible;position:absolute;width:320px;height:300px;">
         <div class="vividDialogContent">
             <div id="mp3descText"></div>
             <div id="siteIntroText">

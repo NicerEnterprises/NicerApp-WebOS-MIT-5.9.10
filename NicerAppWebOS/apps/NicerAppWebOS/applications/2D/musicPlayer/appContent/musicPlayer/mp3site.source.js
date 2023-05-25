@@ -216,11 +216,11 @@ var mp3site = {
 	vividsInitialized : function () {
         na.analytics.logMetaEvent ('musicPlayer : vividsInitialized()');
 		mp3site.settings.vividsInitialized = true;
-		jQuery('.vividDialog_dialog, #playlist_wrapper__dialog, #infoWindow_mp3desc__dialog, #infoWindow_comments__dialog, #mp3s__scrollpane__container, #player').css({opacity:0.0001});
+		jQuery('.vividDialog_dialog, #app__musicPlayer__playlist__dialog, #app__musicPlayer__description__dialog, #infoWindow_comments__dialog, #mp3s__scrollpane__container, #app__musicPlayer__player').css({opacity:0.0001});
 
 		mp3site.setupDragNDrop();
 		window.parent.na.s.c.transformLinks (jQuery('#mp3s')[0]);
-		window.parent.na.s.c.transformLinks (jQuery('#player')[0]);
+		window.parent.na.s.c.transformLinks (jQuery('#app__musicPlayer__player')[0]);
 		
 	
 		// initialize the audio player
@@ -480,7 +480,7 @@ var mp3site = {
 		
 		pl.appendChild (npi);
 		na.vcc.init (npi, function () {
-			//na.sp.containerSizeChanged(jQuery('#playlist_wrapper__scrollpane')[0]);
+			//na.sp.containerSizeChanged(jQuery('#app__musicPlayer__playlist__scrollpane')[0]);
             na.apps.loaded.mp3site.onWindowResize();
 			if (mp3site.settings.stopped) {		
 				mp3site.selectMP3 (npi.id, file);
@@ -598,19 +598,19 @@ debugger;
                 /*
                 if (jQuery('#mp3desc__container').length>0) {
                     jQuery('#mp3desc__container').css ({
-                        height : jQuery('#infoWindow_mp3desc').height() + 'px'
+                        height : jQuery('#app__musicPlayer__description').height() + 'px'
                     });
-                    na.sp.containerSizeChanged(jQuery('#infoWindow_mp3desc__scrollpane')[0]);
+                    na.sp.containerSizeChanged(jQuery('#app__musicPlayer__description__scrollpane')[0]);
                 };
-                na.sp.containerSizeChanged(jQuery('#infoWindow_mp3desc__scrollpane')[0]);
+                na.sp.containerSizeChanged(jQuery('#app__musicPlayer__description__scrollpane')[0]);
                 */
 /*
-                if (jQuery('#infoWindow_mp3desc').css('visibility')=='hidden') {
-                    jQuery('#infoWindow_mp3desc__dialog').css ({
+                if (jQuery('#app__musicPlayer__description').css('visibility')=='hidden') {
+                    jQuery('#app__musicPlayer__description__dialog').css ({
                         display : 'none',
                         visibility:'visible'
                     }).fadeIn ('slow');
-                    jQuery('#infoWindow_mp3desc').css({visibility:'visible'});
+                    jQuery('#app__musicPlayer__description').css({visibility:'visible'});
                 }
 */						
                 if (!firstRun) {
@@ -723,7 +723,7 @@ debugger;
 			jQuery('#siteIntroText').fadeIn (1000);
 			/*
 			setTimeout (function () {
-				na.sp.containerSizeChanged(jQuery('#infoWindow_mp3desc__scrollpane')[0]);
+				na.sp.containerSizeChanged(jQuery('#app__musicPlayer__description__scrollpane')[0]);
 			}, 100);*/
 		}, 1010);
 	},
@@ -896,7 +896,7 @@ debugger;
                         //debugger;
                         
                         //setTimeout (mp3site.onWindowResize, 1000);
-                        //na.sp.containerSizeChanged(jQuery('#playlist_wrapper__scrollpane')[0]);
+                        //na.sp.containerSizeChanged(jQuery('#app__musicPlayer__playlist__scrollpane')[0]);
 debugger;
                         if (mp3site.settings.stopped) mp3site.selectMP3 (dragged.id, jQuery(dragged).attr('file'), false);
                                  
@@ -1014,42 +1014,42 @@ debugger;
             }, 100);
         
             //setTimeout (function() {
-			jQuery('.vividDialog, .vividScrollpane, .vividDialog_dialog, .vsp_container, #heading_wrapper, #siteIntroText, #mp3s__scrollpane__container, #mp3s__scrollpane, #mp3s, #player, #player_table, #playlist_wrapper, #infoWindow_help, #comments')
+			jQuery('.vividDialog, .vividScrollpane, .vividDialog_dialog, .vsp_container, #heading_wrapper, #siteIntroText, #mp3s__scrollpane__container, #mp3s__scrollpane, #mp3s, #app__musicPlayer__player, #app__musicPlayer__player_table, #app__musicPlayer__playlist, #infoWindow_help, #comments')
 				.not ('#infoWindow_info, #infoWindow_tools, #infoWindow_tools__dialog, #infoWindow_info__dialog')
 				.css ({visibility:'visible',display:'block',opacity:1});
             //}, 1000);
         }
 		
 		//debugger;
-        na.vcc.applyTheme ('infoWindow_mp3desc');				
+        na.vcc.applyTheme ('app__musicPlayer__desc');
 		
         //setTimeout (function() {
-            jQuery('#infoWindow_mp3desc__dialog, #infoWindow_mp3desc__CSS3, #infoWindow_mp3desc__item__0, #infoWindow_mp3desc__item__0__img1, infoWindow_mp3desc__item__0__img2, #infoWindow_mp3desc__scrollpane__container, #infoWindow_mp3desc__scrollpane').css({
+            jQuery('#app__musicPlayer__description__dialog, #app__musicPlayer__description__CSS3, #app__musicPlayer__description__item__0, #app__musicPlayer__description__item__0__img1, app__musicPlayer__desc__item__0__img2, #app__musicPlayer__description__scrollpane__container, #app__musicPlayer__description__scrollpane').css({
                 position : 'absolute',
                 width : 300,
                 height : (myHeight - 40 - 120) /2,
                 opacity : 1                                                                                                                                                                                                                                                
             });
-            jQuery('#infoWindow_mp3desc__dialog').css({
+            jQuery('#app__musicPlayer__description__dialog').css({
                 left : leftOffset + 250 + 20,
-                top : 30 + jQuery('#player__dialog')[0].offsetHeight + 20,
+                top : 30 + jQuery('#app__musicPlayer__player__dialog')[0].offsetHeight + 20,
                 width : 300,
                 height : ((myHeight - 40 - 120) /2),
                 opacity : 1
             });
-			jQuery('#infoWindow_mp3desc__CSS3').css({
+			jQuery('#app__musicPlayer__description__CSS3').css({
 				width : 300,
 				height : (myHeight - 40 - 120) /2,
                 opacity : 0.5
 			});
             
             
-            jQuery('#infoWindow_mp3desc > table').css({
+            jQuery('#app__musicPlayer__description > table').css({
                 width : '',
                 height : ((myHeight - 40 - 120) /2),
                 opacity : 1
             });
-            jQuery('#infoWindow_mp3desc').css({
+            jQuery('#app__musicPlayer__description').css({
                 height : 'auto',
                 width : '',
                 left : 0,
@@ -1057,15 +1057,15 @@ debugger;
                 overflow : 'hidden',
                 opacity : 1
             });
-            jQuery('#infoWindow_mp3desc__scrollpane').css({
+            jQuery('#app__musicPlayer__description__scrollpane').css({
                 overflow : 'hidden',
                 opacity : 1
             });
             
             //setTimeout (function() {
-                na.sp.containerSizeChanged (jQuery('#infoWindow_mp3desc__scrollpane')[0]);
+                na.sp.containerSizeChanged (jQuery('#app__musicPlayer__description__scrollpane')[0]);
                 /*
-                jQuery('#infoWindow_mp3desc__dialog').animate({
+                jQuery('#app__musicPlayer__description__dialog').animate({
                     opacity : 1
                 });
                 */
@@ -1074,12 +1074,12 @@ debugger;
 			
 	 
 		var dialogMP3sList = '#mp3s__scrollpane__container';
-		if (jQuery('#infoWindow_mp3desc__dialog').length>0) var dialogMP3desc = '#infoWindow_mp3desc__dialog'; 
-			else var dialogMP3desc = '#infoWindow_mp3desc';
-		if (jQuery('#playlist_wrapper__dialog').length>0) var dialogPlaylist = '#playlist_wrapper__dialog, #playlist_wrapper'; 
-			else var dialogPlaylist = '#playlist_wrapper';
-		if (jQuery('#player__dialog').length>0) var dialogPlayer = '#player__dialog, #player, #player__CSS3'; 
-			else var dialogPlayer = '#player, #player__CSS3';
+		if (jQuery('#app__musicPlayer__description__dialog').length>0) var dialogMP3desc = '#app__musicPlayer__description__dialog';
+			else var dialogMP3desc = '#app__musicPlayer__description';
+		if (jQuery('#app__musicPlayer__playlist__dialog').length>0) var dialogPlaylist = '#app__musicPlayer__playlist__dialog, #app__musicPlayer__playlist';
+			else var dialogPlaylist = '#app__musicPlayer__playlist';
+		if (jQuery('#app__musicPlayer__player__dialog').length>0) var dialogPlayer = '#app__musicPlayer__player__dialog, #app__musicPlayer__player, #app__musicPlayer__player__CSS3';
+			else var dialogPlayer = '#app__musicPlayer__player, #app__musicPlayer__player__CSS3';
 		
 		if (jQuery('#infoWindow_comments__dialog').length>0) var dialogComments = '#infoWindow_comments__dialog'; else var dialogComments = '#infoWindow_comments';
 
@@ -1102,15 +1102,15 @@ debugger;
 
         //setTimeout(function(){
             var playerLeft = (leftOffset + 250 + 20);
-            jQuery('#player__dialog, #player__CSS3').css ({
+            jQuery('#app__musicPlayer__player__dialog, #app__musicPlayer__player__CSS3').css ({
                 left : playerLeft,
                 width : 300,
                 top : dialogsTop + 'px',
                 opacity : 1
             });
-            jQuery('#player__CSS3').css ({ left : '', top : '', opacity : 0.5 });
+            jQuery('#app__musicPlayer__player__CSS3').css ({ left : '', top : '', opacity : 0.5 });
             na.vcc.applyTheme ('player');
-            jQuery('#player').css ({ left : 10, width : 300, top : 10, opacity : 1 });
+            jQuery('#app__musicPlayer__player').css ({ left : 10, width : 300, top : 10, opacity : 1 });
             
             
             
@@ -1168,12 +1168,12 @@ debugger;
 				top : ($dialogMP3desc[0].offsetTop + $dialogMP3desc.height() + 20) + 'px',
 				opacity : 1
 			});
-			jQuery('#playlist_wrapper__CSS3').css({
+			jQuery('#app__musicPlayer__playlist__CSS3').css({
 				width : 300,
 				height : (myHeight - 40 - 120) /2,
 				opacity : 0.5
 			});
-			jQuery('#playlist_wrapper').css ({
+			jQuery('#app__musicPlayer__playlist').css ({
 				top : 1,
 				left : 1,
 				position : 'relative',
@@ -1185,15 +1185,15 @@ debugger;
 				height : '100%' 
 			});
 				
-			//na.vcc.applyTheme ('playlist_wrapper');
+			//na.vcc.applyTheme ('app__musicPlayer__playlist');
             
-            jQuery('.mp3', jQuery('#playlist_wrapper')[0]).css({height:30});
+            jQuery('.mp3', jQuery('#app__musicPlayer__playlist')[0]).css({height:30});
             debugger;
 		//}, timeDelay);// + (3 * timeIncrease) );
 
         /*
 		setTimeout (function() {
-			//na.sp.containerSizeChanged (jQuery('#playlist_wrapper__scrollpane')[0]);
+			//na.sp.containerSizeChanged (jQuery('#app__musicPlayer__playlist__scrollpane')[0]);
 			window.top.na.sp.containerSizeChanged (jQuery('#siteContent__scrollpane', window.top.document.body)[0], true);
 		}, timeDelay + (8 * timeIncrease) );
 		*/
@@ -1238,7 +1238,7 @@ debugger;
 		};
 		
 		setTimeout (function() {
-		jQuery('#player__dialog, #playlist_wrapper__dialog, #infoWindow_mp3desc__dialog, #infoWindow_comments__dialog, #mp3s__scrollpane__container').css({opacity:1});
+		jQuery('#app__musicPlayer__player__dialog, #app__musicPlayer__playlist__dialog, #app__musicPlayer__description__dialog, #infoWindow_comments__dialog, #mp3s__scrollpane__container').css({opacity:1});
 		}, timeDelay + (9 * timeIncrease) );
 	
 		if (failed) setTimeout (mp3site.onWindowResize, 500);

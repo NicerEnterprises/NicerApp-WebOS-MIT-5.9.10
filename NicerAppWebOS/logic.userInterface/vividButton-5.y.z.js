@@ -73,6 +73,7 @@ class naVividButton {
                 break;
                 
             case 'text' : 
+                /*
                 if (
                     createHTML
                     && $el.length > 0
@@ -88,7 +89,7 @@ class naVividButton {
                         //$el2.css({height:h}).attr('customHeight', h);
                     } else {
                         $(t.el).css({height:thm.h,fontSize:thm.fontSize}).attr('customHeight', thm.h);
-                        //$el2.css({height:h/*,top:(50-(h))/2*/}).attr('customHeight', h);
+                        //$el2.css({height:h/*,top:(50-(h))/2* /}).attr('customHeight', h);
                     }
                 } else {
                     if ($('a',t.el).length>0) {
@@ -111,7 +112,7 @@ class naVividButton {
                         $(t.el).css({height:thm.h,fontSize:thm.fontSize}).attr('customHeight', thm.h);
                     }
                 }
-
+                */
                 break;
         }
         //debugger;

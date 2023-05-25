@@ -1,16 +1,27 @@
- html, body, .vector-header-container, .vector-feature-zebra-design-disabled, .mw-page-container, .vector-feature-zebra-design-disabled body, .vector-feature-zebra-design-disabled .mw-page-container, .vector-feature-zebra-design-disabled .vector-header-container {
+ html, body, .vector-header-container, .vector-feature-zebra-design-disabled, .mw-page-container, .vector-feature-zebra-design-disabled body, .vector-feature-zebra-design-disabled .mw-page-container, .vector-feature-zebra-design-disabled .vector-header-container, .mw-body, .parsoid-body, #mw-page-base {
      background : transparent;
  }
-
+ .central-featured-lang, .other-project-link, .footer-sidebar-content, .footer-sidebar-text, .app-badges .footer-sidebar-content, .vector-feature-zebra-design-disabled .vector-toc { border-radius : 8px; background : rgba(255,255,255,0.5);}
+.central-featured-lang :hover {background-color:transparent;}
+.central-featured-lang:hover, .other-project-link:hover {background-color:rgba(0,0,100,0.5);}
  .mw-parser-output #mp-topbanner {
      background : rgba(200,200,255,0.555);
  }
 
-.mw-parser-output #mp-right {
+.mw-parser-output #mp-right, .infobox td, .infobox th {
     background : rgba(100,100,255,0.4);
 }
+.infobox td, .infobox th, .mw-parser-output p {
+    border-radius : 5px;
+    padding : 5px;
+}
+.mw-parser-output p, .mw-parser-output li {
+}
+.mw-parser-output li {
+    width : fit-content;
+}
 
-.mw-parser-output #mp-left {
+.mw-parser-output #mp-left, .mw-parser-output p {
     background : rgba(100,255,100,0.4);
 }
 
@@ -18,7 +29,7 @@
     background : transparent;
     position : relative;
 }
-.infobox::before, .vector-pinned-container::before, .vector-body-before-content::before, .vector-page-toolbar-container::before, .hatnote::before, p::before, .mw-parser-output > ul > li::before {
+.infobox::before, .vector-pinned-container::before, .vector-body-before-content::before, .vector-page-toolbar-container::before, .hatnote::before, p::before:not(.jsl10n), .mw-parser-output > ul > li::before {
     content : '';
     background : rgba(255,255,255,0.5);
     border-radius : 10px;

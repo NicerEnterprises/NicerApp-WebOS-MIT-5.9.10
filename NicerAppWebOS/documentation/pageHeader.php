@@ -13,7 +13,7 @@
 ?>
     <div class="container" style="display:flex;justify-content:left;align-items:center;">
         <div id="divFor_neCompanyLogo" style="margin-left:5px;margin-bottom:20px;width:125px;height:125px;border-radius:10px;border:solid rgba(0,0,0,0.8);padding:5px;box-shadow:0px 0px 2px 1px rgba(0,0,0,0.55);">
-            <img id="neCompanyLogo_img" style="position:absolute;opacity:0.00001;z-index:-" src="/NicerAppWebOS/favicon/android-chrome-512x512.png"/>
+            <img id="neCompanyLogo_img" style="position:absolute;opacity:0.00001;z-index:-1;" src="/NicerAppWebOS/favicon/android-chrome-512x512.png"/>
             <canvas id="neCompanyLogo" width="125" height="125" onclick="event.data={element:'neCompanyLogo'}; na.logo.settings.stage.removeAllChildren(); na.logo.init_do_createLogo('neCompanyLogo','countryOfOriginColors');"></canvas>
         </div>
         <div>

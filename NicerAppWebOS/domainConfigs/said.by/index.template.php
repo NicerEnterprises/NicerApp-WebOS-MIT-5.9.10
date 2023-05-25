@@ -705,7 +705,7 @@ echo $naWebOS->html_vividButton (
         <div id="themeEditor_backgroundColor" class="themeEditorComponent" style="text-align:center;">
             <input id="colorpicker" class="themeEditor_colorPicker" style="position:absolute;top:auto;"></input>
         </div>
-        <div id="themeEditor_jsTree" class="themeEditorComponent" style="top:auto;display:none;"></div>
+        <div id="themeEditor_jsTree_backgrounds" class="themeEditorComponent" style="top:auto;display:none;"></div>
         <div id="themeEditor_photoAlbum_specs" class="themeEditorComponent" style="height:6.4em;flex-flow: wrap row;position:relative;top:auto;display:none;">
             <div class="themeEditor_input_containerDiv">
             <label id="label_themeEditor_photoOpacity" class="labelthemeEditor" for="themeEditor_photoOpacity">Opacity</label>

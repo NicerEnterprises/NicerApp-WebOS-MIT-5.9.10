@@ -11,7 +11,7 @@ if ($wiki_url=='https://frontpage') $wiki_url = 'https://www.wikipedia.org';
 if ($wiki_url=='https://') $wiki_url = 'https://www.wikipedia.org/search-redirect.php';
 
 
-$xec = 'curl -L '.$wiki_url;
+$xec = 'curl -L '.$wiki_url.' -H "X-NA-Forwarded-For: '.$naIP.'" -H "X-NA-IS: https://nicer.app/wiki/frontpage"';
 //var_dump ($xec);
 if (array_key_exists('search',$_GET)) $xec .= '?search='.$_GET['search'];
 if (array_key_exists('family',$_GET)) $xec .= '&family='.$_GET['family'];
@@ -24,6 +24,8 @@ $output2 = join ("\n", $output);
 //echo $output2;
 //die();
 //
+
+$output2 = str_replace('<body class="', '<body class="vividScrollpane ', $output2);
 
 preg_match_all('/<form (.*?)action="(.*?)"/', $output2, $m, PREG_PATTERN_ORDER);
 //var_dump ($m); die();
@@ -38,7 +40,7 @@ foreach ($m[0] as $idx => $str) {
 preg_match_all('/<img (.*?)src="(.*?)"/', $output2, $m, PREG_PATTERN_ORDER);
 //var_dump ($m); die();
 foreach ($m[0] as $idx => $str) {
-    //echo '$idx='.$idx.PHP_EOL;
+  //  echo '$idx='.$idx.PHP_EOL;
     //var_dump (htmlentities($str));
     $replace = $m[2][$idx];
     //var_dump ($replace);
@@ -47,15 +49,17 @@ foreach ($m[0] as $idx => $str) {
 
     $mangleMe1 = !(
         substr($replace,0,8)=='https://'
-        || substr($replace,0,2)=='//'
+       || substr($replace,0,2)=='//'
         || substr($replace,0,1)=='/'
     );
 
     $rf = mangleURL ($replace, $mangleMe1);
+    //var_dump (substr($replace,0,8));
+    //var_dump ($mangleMe1);
     //var_dump ($rf);
     //$replaceFinal = $wiki_url.str_replace ('//', '/', $replace);
 //    $replaceFinal = str_replace ('https://'.$wiki_url.'https://'.$wiki_url, 'https:', $replaceFinal);
-    $r1 = '<img '.$m[1][$idx].'src="'.$replace.'"'.$m[3][$idx].$m[4][$idx].'>';
+    //$r1 = '<img '.$m[1][$idx].'src="'.$replace.'"'.$m[3][$idx].$m[4][$idx].'>';
     $r2 = '<img '.$m[1][$idx].' src="'.$rf.'"';
     //var_dump (strpos($output2, $str));
     //var_dump (htmlentities($r2));
@@ -136,7 +140,7 @@ function mangleURL ($replace, $mangleMe1=true) {
     global $wiki_url;
     if (substr($replace,0,2)=='//' && $mangleMe1) $rf = str_replace('//','',$replace);
     elseif (substr($replace,0,2)=='//' && !$mangleMe1) $rf = $replace;//str_replace('//','',$replace);
-    elseif (substr($replace,0,8)=='https://') $rf = str_replace('https://','',$replace);
+    elseif (substr($replace,0,8)=='https://' && $mangleMe1) $rf = str_replace('https://','',$replace);
     elseif (substr($replace,0,1)=='/' && $mangleMe1) $rf = str_replace('https://','',$wiki_url).substr($replace,1);
     elseif (substr($replace,0,1)=='/' && !$mangleMe1) $rf = '//'.parse_url($wiki_url, PHP_URL_HOST).$replace;
     elseif ($mangleMe1) $rf = '//'.parse_url($wiki_url, PHP_URL_HOST).'/'.$replace;
