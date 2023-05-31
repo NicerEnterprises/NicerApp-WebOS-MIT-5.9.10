@@ -37,6 +37,7 @@ class naVividMenu__behavior_rainbowPanels {
 
                 $(itEl).css({position:'absolute'});
                 t.showMenuItem (t, itEl.it, dim, { currentTarget : null });
+                t.prevDisplayedEl = itEl;
                 if (t.useFading)
                     $(itEl).stop(true,true).fadeIn(t.fadingSpeed);
                 else
@@ -124,17 +125,17 @@ class naVividMenu__behavior_rainbowPanels {
 
             if (it && it.level === 1) {
                 rootItems++;
-                if (!t.children[t.el.id]) t.children[t.el.id] = {};
-                t.children[t.el.id][it.idx] = it;
-                it.levelIdx = Object.keys(t.children[t.el.id]).length - 1;
+                if (!t.children[t.el.id]) t.children[t.el.id] = [];
+                t.children[t.el.id].push(it);
+                it.levelIdx = t.children[t.el.id].length;
             } else if (it && it.parent) {
                 var
                 itp_idx = parseInt(it.parent.id.replace(/.*__/,'')),
                 itp = t.items[itp_idx];
                 if (!itp) debugger;
-                if (!t.children[itp.idx]) t.children[itp.idx] = {};
-                t.children[itp.idx][it.idx] = it;
-                it.levelIdx = Object.keys(t.children[itp.idx]).length - 1;
+                if (!t.children[itp.idx]) t.children[itp.idx] = [];
+                t.children[itp.idx].push(it);
+                it.levelIdx = t.children[t.el.id].length;
             } //else debugger;
         });
 
@@ -292,7 +293,10 @@ class naVividMenu__behavior_rainbowPanels {
         itp = null,
         i = it.levelIdx;
         if (typeof useFading=='undefined') useFading = true;
-        if (!it.b) t.createVividButton (t, it.idx, it.li);
+        if (!it.b) {
+            t.createVividButton (t, it.idx, it.li);
+            if (!t.prevDisplayedEl) t.prevDisplayedEl = it.b.el;
+        }
 
         if (it.parents && it.parents[0]) {
             var
@@ -313,12 +317,28 @@ class naVividMenu__behavior_rainbowPanels {
             h = dim.space2bottom > dim.space2top ? dim.space2bottom : dim.space2top,
             w = dim.space2left > dim.space2right ? dim.space2left : dim.space2right,
             numRows = (h/(($(it.b.el).height() + na.d.g.margin))  );
+            if (!$('div#'+t.el.id+'__backPanel__'+itp_idx)[0]) {
+                var container = document.createElement('div');
+                container.id = t.el.id+'__'+itp_idx;
+                container.className = 'vividMenu_item_subpanelLayoutContainer';
+                $(container).css({ position : 'relative', left:$(it.b.el).width()*.7*(it.level-1),top:0, maxWidth : w-20, maxHeight : h-20 });
+                $(t.el).append(container);
+            } else {
+                var container = $('div#'+t.el.id+'__backPanel__'+itp_idx)[0];
+            };
+            $(it.b.el).detach().appendTo(container);
+            //container.appendChild(it.b.el);
+            //$(it.b.el).css({position:'relative'});
             var
-            numColumns = (w / (($(it.b.el).outerWidth() + na.d.g.margin))),
+            //numColumns = (w / (($(it.b.el).outerWidth() + na.d.g.margin))),
             numColumns = Math.floor(numKids/numRows);
             if (numColumns===0) numColumns = 1;
             var
             numRows = Math.ceil(numKids/numColumns);
+
+    $(container).css ({ width : 310, height : 'auto' });
+            //$(container).css ({ width : numColumns * (na.d.g.margin + $(it.b.el).width()), height : numRows * (na.d.g.margin + $(t.prevDisplayedEl).height()) });
+            var bcr = container.getBoundingClientRect();
             if (numRows===0) numRows = 1;
             //console.log ('w='+w+', numKids='+numKids+', ohm='+($(it.b.el).height()+na.d.g.margin)+', numKids/numRows='+(numKids/numRows)+', owm='+($(it.b.el).outerWidth() + na.d.g.margin)+', numRows='+numRows+', numColumns='+numColumns);
             // na.site.setStatusMsg('numRows='+numRows+', numColumns='+numColumns, true); // NEVER AGAIN IN NON-ESSENTIAL CODE! forces entire page resizing!
@@ -328,7 +348,7 @@ class naVividMenu__behavior_rainbowPanels {
             column = (t.columnDisplayed ? t.columnDisplayed : 1),
             lidx = it.level === 1 ? it.levelIdx : it.levelIdx + 1 - (numRows * (column-1));
 
-            while (lidx > numColumns) {
+            while (lidx > 1 && row < numRows) {
                 row++;
                 t.columnDisplayed++;
                 lidx -= 1;
@@ -369,10 +389,10 @@ class naVividMenu__behavior_rainbowPanels {
                     ? 0
                     : $(it.b.el).outerWidth() * 0.7
                 : it.level === 1
-                    ? ( $(it.b.el).outerWidth() + na.d.g.margin ) * (column-1)
+                    ? ( $(it.b.el).outerWidth() + na.d.g.margin ) * (column)
                     : it.level===2
                         ? 0
-                        : ( $(it.b.el).outerWidth() * 0.7 ) + (2 * na.d.g.margin )
+                        : ( $(it.b.el).outerWidth() * 0.7 * column ) + (2 * column * na.d.g.margin )
             )
         ),
         top = (
@@ -381,25 +401,32 @@ class naVividMenu__behavior_rainbowPanels {
                 ? 0
                 : it.level === 1
                     ? 0
-                    : na.d.g.margin + ( ( $(it.b.el).height() + (2*na.d.g.margin) ) * (row - 1) )
+                    : na.d.g.margin + ( ( $(t.prevDisplayedEl).height() + (2*na.d.g.margin) ) * (row - 1) )
             )
         ),
+        tpde_bcr = t.prevDisplayedEl ? t.prevDisplayedEl.getBoundingClientRect() : { top : 0, left : 0 },
+        tpade_bcr = it.parents && it.parents[0] ? p_bcr : { top : 0, left : 0 },
+        top = (it.parents&&it.parents[0] ? itp.level==1 ? offsetY + tpde_bcr.top : itp.level>=1 ? tpde_bcr.top + tpde_bcr.height : 0 : 0) + na.d.g.margin,
         position = (
             it.b.el.parentNode===document.body
             ? 'relative'
-            : 'fixed'
+            : 'relative'
         );
-
+        debugger;
         if (t.useFading && useFading) {
             $(it.b.el).css ({
                 position : position,
                 opacity : 1,
                 display : 'none',
-                marginLeft : left - (it.level > 2 ? na.d.g.margin : 0),
-                marginTop : top,
-                zIndex : 2000 + (
+                //marginLeft : left - (it.level > 2 ? na.d.g.margin : 0),
+                //marginTop : top,
+                zIndex : 700000 + (
                     (it.level * 2)
                 )
+            });
+            $(container).css({
+                //marginLeft : left,
+               // marginTop : top
             });
             $(it.b.el).stop(true,true).fadeIn(t.fadingSpeed);
         } else {
@@ -407,11 +434,15 @@ class naVividMenu__behavior_rainbowPanels {
                 opacity : 1,
                 display : 'block',
                 position : position,
-                marginLeft : left,
-                marginTop : top,
-                zIndex : 2000 + (
+                //marginLeft : left,
+                //marginTop : top,
+                zIndex : 700000 + (
                     dim.verDirection=='south' ? (it.level * 2) : (it.level * 2)
                 )
+            });
+            $(container).css({
+               // marginLeft : left,
+               // marginTop : top
             });
         }
 
@@ -645,7 +676,7 @@ class naVividMenu__behavior_rainbowPanels {
         var
         itsKids = t.children[pit.idx],
         kids = [];
-        for (var kidIdx in itsKids) {
+        for (var kidIdx=0; kidIdx<itsKids.length; itsKids++) {
             var itKid = itsKids[kidIdx];
             kids.push (itKid.b.el);
         }
@@ -873,7 +904,7 @@ class naVividMenu__behavior_rainbowPanels {
         t = this,
         evt = event,
         el = event.currentTarget,
-        myKids = t.children[el.it.idx];
+        myKids = t.children[el.parent?el.parent.el.id:el.idx];
 
         if (!t.timeout_onmouseover) t.timeout_onmouseover = {};
         if (t.timeout_onmouseover[el.it.idx]) clearTimeout (t.timeout_onmouseover[el.it.idx]);
@@ -907,15 +938,20 @@ class naVividMenu__behavior_rainbowPanels {
             var
             r = null,
             dim = t.getDimensions(t, el, false);
-
-            for (var kidIdx in myKids) {
+            t.prevDisplayedEl = null;
+            debugger;
+            for (var i=0; i<myKids.length; i++) {
                 var
-                it = myKids[kidIdx],
+                it = myKids[i];
 
+                debugger;
                 //setTimeout (function(t,it,dim,evt) {
-                    r = t.showMenuItem (t, it, dim, evt);
+                    var r = t.showMenuItem (t, it, dim, evt);
+                    t.prevDisplayedEl = it.b.el;
+
                 //}, kidIdx * 10, t, it, dim, evt);
             }
+            t.prevDisplayedEl = t.currentEl;
 
             var
             pit = t.currentEl;
@@ -968,7 +1004,7 @@ class naVividMenu__behavior_rainbowPanels {
         var
         t = this,
         el = event.currentTarget,
-        myKids = t.children[el.it.idx];
+        myKids = t.children[el.parent?el.parent.el.id:t.el.id];
 
         var
         t = this,

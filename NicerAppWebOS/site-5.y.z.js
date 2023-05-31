@@ -676,7 +676,7 @@ na.site = {
             top : b.offset().top + b.height() + 10,
             left : b.offset().left,
             width : 330,
-            zIndex : 5000
+            zIndex : 700000
         }).fadeIn('slow');
         setTimeout (na.site.setSpecificity, 200);
         //debugger;
@@ -3391,14 +3391,16 @@ onclick_btnFullResetOfAllThemes : function (event) {
             && $(selector+' > .vdBackground').css('background-color') !== ''
         ) ret[selector+' > .vdBackground'].background = $(selector+' > .vdBackground').css('background-color'); 
         
+        /*
         ret[selector+' td'] = {
             fontSize : $(selector+' td').css('fontSize'),
             fontWeight : $(selector+' td').css('fontWeight'),
             fontFamily : $(selector+' td').css('fontFamily'),
             textShadow : $(selector+' td').css('textShadow')
         };
+        */
         if (ret[selector].fontFamily) ret[selector].fontFamily = ret[selector].fontFamily.replace(/"/g, '');
-        if (ret[selector+' td'].fontFamily) ret[selector+' td'].fontFamily = ret[selector+' td'].fontFamily.replace(/"/g, '');
+        //if (ret[selector+' td'].fontFamily) ret[selector+' td'].fontFamily = ret[selector+' td'].fontFamily.replace(/"/g, '');
         return ret;
     }
 

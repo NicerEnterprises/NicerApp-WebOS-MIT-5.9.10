@@ -43,7 +43,7 @@ h2 {
 }
 
 /* musicPlayer */
-#player::before, #app__musicPlayer__description::before, #app__musicPlayer__playlist::before {
+#app__musicPlayer__player::before, #app__musicPlayer__description::before, #app__musicPlayer__playlist::before {
     -webkit-mask-image: url(/NicerAppWebOS/siteMedia/vividDialog_borderMask_300x500.png);
     mask-image: url(/NicerAppWebOS/siteMedia/vividDialog_borderMask_300x500.png);
 }
@@ -63,36 +63,9 @@ h2 {
     border-radius : 10px;
 }
 
-.jstree-wholerow {
-    background : none;
-    margin : 0 !important;
-}
-.jstree-wholerow-hovered {
-    background : linear-gradient(to bottom, rgba(200,255,200,.4) 0%, rgba(200,255,200,0.8) 100%) !important;
-}
-.jstree-wholerow-clicked {
-    background : linear-gradient(to bottom, rgba(100,100,255,.4) 0%, rgba(100,100,255,0.8) 100%) !important;
-}
-.vakata-context, .vakata-context ul {
-    z-index : 5000;
-    border-radius : 15px;
-    border : 2px ridge white !important;
-    /*box-shadow : inset 2px 2px 1px 1px rgba(0,0,0,0.7), 4px 4px 2px 2px rgba(0,0,0,0.7) !important;*/
-    background : url('/NicerAppWebOS/siteMedia/backgrounds/tiled/grey/117802292-seamless-texture-of-paving-stones-gray-tile-background-.jpg') repeat !important;
-    background-size : 130px !important;
-    opacity : 0.88;
-}
-.vakata-context a {
-    color : blue !important;
-    font-weight : bold;
-    font-size : 200%;
-}
-.vakata-context li > a:hover, .vakata-context-hover {
-    background : linear-gradient(to bottom, rgba(150,150,255,.4) 0%, rgba(150,150,255,0.7) 100%) !important;
-}
-.vakata-contextmenu-sep, .vakata-context-separator {
-    display : none !important;
-}
+
+
+
 #btnOptions_menu span, #btnOptions_menu p, #btnOptions_menu__backgroundTimeSettingsChanged_save__containerDiv span, #changeBackgroundsAutomatically_label {
     text-shadow : 4px 4px 3px rgba(0,0,0,0.7), 0px 0px 4px rgba(0,0,0,0.8);
 }
@@ -207,7 +180,7 @@ a {
     color : rgba(100,100,255,1);
     text-decoration : none;
     font-weight : bold;
-    z-index : 999999999;
+    z-index : 750000;
     position : relative;
 }
 a:visited {
@@ -334,20 +307,25 @@ ul.index > li {
     display : inline;
     z-index : 30000;
 }
+.na_themes_dropdown {
+    z-index : 800000;
+}
 .vividDropDownBox_selected, .vividDropDownBox_selector {
     width : -webkit-box-flex;
     display : inline-block;
+    position : relative;
 }
 .vividDropDownBox_selected {
     vertical-align : middle;
     text-align : center;
 }
 .vividDropDownBox_selector {
-    position : absolute;
+    position : fixed;
     display : none;
     height : auto;
     width : fit-content;
     max-height : fit-content;
+    z-index : 800000;
 }
 .vividDropDownBox_selector > div {
     width : calc(100% - 20px);
@@ -702,7 +680,7 @@ ul.index > li {
   font-weight : bold;
   position : relative;
 }
-.contentSectionTitle2_span, .animatedText-blue {
+.contentSectionTitle2_span, .animatedText-blue, .naExternalLink {
   --bg-size: 400%;
   --color-one-blue: #005050;
   --color-two-blue: #00AAAA;
@@ -716,9 +694,31 @@ ul.index > li {
   background-clip: text;
   -webkit-background-clip: text;
   animation: move-bg 8s infinite cubic-bezier(0.11, 0, 0.5, 0);
-  text-shadow : none;
+  text-shadow : 0px 0px 2px rgba(255,255,255,0.555), 2px 2px 2px rgba(0,0,0,0.8);
   position : relative;
 }
+
+
+a:hover, a:visited {
+  --bg-size: 400%;
+  --color-one-yellow: #f5db16;
+  --color-two-white : #DDDDDD;
+  background: linear-gradient(
+                315deg,
+                var(--color-one-yellow),
+                var(--color-two-white),
+                var(--color-one-yellow)
+              ) 0 0 / var(--bg-size) 100%;
+  color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
+  animation: move-bg 8s infinite cubic-bezier(0.11, 0, 0.5, 0);
+  text-shadow : 0px 0px 2px rgba(255,255,255,0.555), 2px 2px 2px rgba(0,0,0,0.8);
+  position : relative;
+}
+
+
+
 .contentSectionTitle3_span, .animatedText-green {
   --bg-size: 400%;
   --color-one-green : lime;
@@ -737,10 +737,24 @@ ul.index > li {
   position : relative;
 }
 
+.vividDialog, .vividDialogContent,
 .contentSectionTitle1_a, .contentSectionTitle2_a, .contentSectionTitle3_a,
 .contentSectionTitle1_span, .contentSectionTitle2_span, .contentSectionTitle3_span {
     z-index : 500000;
 }
+
+.geoIP, .vividDialogPopup, .vividMenu_subMenuPanel, .vividMenu_item, .vividButton, .vividButton_icon_50x50_siteTop, .vividButton_icon_50x50 {
+    z-index : 700000;
+}
+.vividMenu_item_subpanelLayoutContainer {
+    width : fit-content;
+    height : fit-content;
+    z-index : 800000;
+}
+.vividMenu_item_subpanelLayoutContainer .vividButton {
+    float : left;
+    z-index : 800000;
+};
 .contentSectionTitle1, .contentSectionTitle2 {
     background : rgba(0,0,0,0.44);
     border-radius : 15px;
@@ -768,64 +782,63 @@ ul.index > li {
 }
 
 
-    .vividDialog {
-        overflow : visible;
-        border-radius : 20px;
-        box-shadow : 2px 2px 3px 3px rgba(0,0,0,0.55);
-    }
+.vividDialog {
+    overflow : visible;
+    border-radius : 20px;
+    box-shadow : 2px 2px 3px 3px rgba(0,0,0,0.55);
+}
 
-    .vividDialog.vividTheme_dutchFlag::before {
-        background : linear-gradient(180deg,
-            rgba(255,0,0,0.6) 0%,
-            rgba(255,255,255,0.66) 8%,
-            rgba(255,255,255,0.77) 12%,
-            rgba(0,0,150,0.543) 40%,
-            rgba(0,0,150,0.543) 60%,
-            rgba(255,255,255,0.77) 88%,
-            rgba(255,255,255,0.66) 92%,
-            rgba(255,0,0,0.6) 100%
-        );
-    }
+.vividDialog.vividTheme_dutchFlag::before {
+    background : linear-gradient(180deg,
+        rgba(255,0,0,0.6) 0%,
+        rgba(255,255,255,0.66) 8%,
+        rgba(255,255,255,0.77) 12%,
+        rgba(0,0,150,0.543) 40%,
+        rgba(0,0,150,0.543) 60%,
+        rgba(255,255,255,0.77) 88%,
+        rgba(255,255,255,0.66) 92%,
+        rgba(255,0,0,0.6) 100%
+    );
+}
 
-    .vividDialog::before {
-        content : '';
-        overflow : visible;
-        background : linear-gradient(180deg,
-            rgba(255,255,255,0.55) 0%,
-            rgba(0,0,150,0.55) 50%,
-            rgba(255,255,255,0.55) 100%
+.vividDialog::before {
+    content : '';
+    overflow : visible;
+    background : linear-gradient(180deg,
+        rgba(255,255,255,0.55) 0%,
+        rgba(0,0,150,0.55) 50%,
+        rgba(255,255,255,0.55) 100%
 
-        );
-        z-index: -1;
-        -webkit-mask-image: url(/NicerAppWebOS/siteMedia/vividDialog_borderMask_3840x2160.png);
-        mask-image: url(/NicerAppWebOS/siteMedia/vividDialog_borderMask_3840x2160.png);
-        -webkit-mask-size: 100% 100%, contain;
-        -webkit-mask-repeat : no-repeat;
-        border-radius : 16px;
-        position : absolute;
-        top:0px;
-        left:0px;
-        width : 100%;
-        height : 100%;
-    }
-    .vividDialog > .vdBackground {
-        border-radius : 16px;
-        position:absolute;
-        top : 8px;
-        left : 8px;
-        width : calc(100% - 16px);
-        height : calc(100% - 16px);
-        box-shadow : inset 0px 0px 4px 4px rgba(0, 0, 0, 0.4);
-    }
+    );
+    z-index: -1;
+    -webkit-mask-image: url(/NicerAppWebOS/siteMedia/vividDialog_borderMask_3840x2160.png);
+    mask-image: url(/NicerAppWebOS/siteMedia/vividDialog_borderMask_3840x2160.png);
+    -webkit-mask-size: 100% 100%, contain;
+    -webkit-mask-repeat : no-repeat;
+    border-radius : 16px;
+    position : absolute;
+    top:0px;
+    left:0px;
+    width : 100%;
+    height : 100%;
+}
+.vividDialog > .vdBackground {
+    border-radius : 16px;
+    position:absolute;
+    top : 8px;
+    left : 8px;
+    width : calc(100% - 16px);
+    height : calc(100% - 16px);
+    box-shadow : inset 0px 0px 4px 4px rgba(0, 0, 0, 0.4);
+}
 
 .vividDialogPopup {
     border-radius : 16px;
     position : absolute;
     width : 300px;
     height : auto;
-    margin : 6px; /* TO: Satan Himself. Signed: Rv 20230416 13:37CEST*/
+    margin : 6px;
     padding : 10px;
-    z-index : 5000;
     display : none;
 }
 .vividDialogPopup::before {
@@ -856,10 +869,10 @@ ul.index > li {
     z-index : -1;
     border-radius : 16px;
     position:absolute;
-    top : 0px;
-    left : 0px;
-    height : 100%;
-    width : 100%;
+    top : 8px;
+    left : 8px;
+    height : calc(100% - 16px);
+    width : calc(100% - 16px);
     opacity : 0.8;
 }
 
@@ -928,7 +941,17 @@ ul.index > li {
         }
     }
 
-
+/* na.analytics */
+.geoIP {
+    display : none;
+    position : absolute;
+    background : rgba(0,0,0,0.8);
+    border : 3px ridge white;
+    border-radius : 5px;
+}
+.naan_rec, .naan_bot {
+    z-index : 700000;
+}
 .naan_rec p, .naan_bot p {
     font-weight : bold;
 }
@@ -946,4 +969,36 @@ ul.index > li {
 }
 .naan_bot .naan_msg p {
     color : grey;
+}
+
+/* jstree */
+.jstree-wholerow {
+    background : none;
+    margin : 0 !important;
+}
+.jstree-wholerow-hovered {
+    background : linear-gradient(to bottom, rgba(200,255,200,.4) 0%, rgba(200,255,200,0.8) 100%) !important;
+}
+.jstree-wholerow-clicked {
+    background : linear-gradient(to bottom, rgba(100,100,255,.4) 0%, rgba(100,100,255,0.8) 100%) !important;
+}
+.vakata-context, .vakata-context ul {
+    z-index : 5000;
+    border-radius : 15px;
+    border : 2px ridge white !important;
+    /*box-shadow : inset 2px 2px 1px 1px rgba(0,0,0,0.7), 4px 4px 2px 2px rgba(0,0,0,0.7) !important;*/
+    background : url('/NicerAppWebOS/siteMedia/backgrounds/tiled/grey/117802292-seamless-texture-of-paving-stones-gray-tile-background-.jpg') repeat !important;
+    background-size : 130px !important;
+    opacity : 0.88;
+}
+.vakata-context a {
+    color : blue !important;
+    font-weight : bold;
+    font-size : 200%;
+}
+.vakata-context li > a:hover, .vakata-context-hover {
+    background : linear-gradient(to bottom, rgba(150,150,255,.4) 0%, rgba(150,150,255,0.7) 100%) !important;
+}
+.vakata-contextmenu-sep, .vakata-context-separator {
+    display : none !important;
 }

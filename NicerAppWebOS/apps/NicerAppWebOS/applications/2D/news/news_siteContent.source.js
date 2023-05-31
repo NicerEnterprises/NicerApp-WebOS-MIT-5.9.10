@@ -350,9 +350,9 @@ na.m.preventScreenLock();
                     });
                     $('#siteContent__content').css({
                         top : $('#siteContent__header').position().top + $('#siteContent__header').height() + na.d.g.margin,
-                        left : $('#siteContent > .vividDialogContent').offset().left,
-                        width : $('#siteContent > .vividDialogContent').width() - $('#siteContent > .vividDialogContent').offset().left,
-                        height : $('#siteContent').height() - $('#siteContent__header').height() - $('#siteContent__header').position().top - (2 * na.d.g.margin),
+                        left : 0,//$('#siteContent > .vividDialogContent').offset().left,
+                        width : $('#siteContent > .vividDialogContent').width(),// - $('#siteContent > .vividDialogContent').offset().left,
+                        height : $('#siteContent > .vividDialogContent').height() - $('#siteContent__header').height() /*- $('#siteContent__header').position().top */- (2 * na.d.g.margin),
                         opacity : 1
                     });
 
@@ -637,7 +637,7 @@ na.m.preventScreenLock();
             dtBeginURL = na1.formatDateForLoading(dtBegin),//('' + dtBegin).replace('+', '%2B'),
             dtEndURL = na1.formatDateForLoading(dtEnd),//('' + dtEnd).replace('+', '%2B'),
             url = '/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/news/ajax_get_items.php';//?loads='+c.loads+'&section='+settings.section.replace(/-/g,'/').replace(/ /g, '_')+'&dateBegin='+dtBeginURL+'&dateEnd='+dtEndURL;
-debugger;
+
 
             s.url = settings.section;
 
@@ -674,9 +674,9 @@ debugger;
                     });
                     $('#siteContent__content').css({
                         top : $('#siteContent__header').position().top + $('#siteContent__header').height() + na.d.g.margin,
-                        left : $('#siteContent > .vividDialogContent').offset().left,
-                        width : $('#siteContent > .vividDialogContent').width() - $('#siteContent > .vividDialogContent').offset().left,
-                        height : $('#siteContent').height() - $('#siteContent__header').height() - $('#siteContent__header').position().top - (2 * na.d.g.margin),
+                        left : 0,//$('#siteContent > .vividDialogContent').offset().left,
+                        width : $('#siteContent > .vividDialogContent').width(),// - $('#siteContent > .vividDialogContent').offset().left,
+                        height : $('#siteContent > .vividDialogContent').height() - $('#siteContent__header').height() /*- $('#siteContent__header').position().top */- (2 * na.d.g.margin),
                         opacity : 1
                     });
 
@@ -816,7 +816,6 @@ debugger;
                 }
             };
         //na.m.log (20, url);
-    debugger;
         $.ajax (ajaxCommand);
         }, 100);
     },
@@ -1609,9 +1608,9 @@ debugger;
             var seov = appSettings.section.replace(/.*__/,'').replace('__','-').replace('_','-').toLowerCase();
         };
         html += '<div class="newsApp__item__footer"><span class="newsApp__item__date"><a class="nomod noPushState" target="_new"  target="newsAppItem_'+it.idx+'" href="' + it.rssURL+'">' + na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/news'].formatDate(it)+'</a></span><br/>';
-        html += '<span class="newsApp__item__copy"><a class="nomod noPushState" href="javascript:var el = $(\'#newsApp__item__'+it.idx+'\')[0], textarea = $(\'#siteContent__textareaCopy\')[0]; if (!textarea) { var el2=document.createElement(\'textarea\'); window.top.document.append(el2); textarea=el2 }; el_html = el.innerHTML; debugger; el.innerHTML = el.innerHTML.replace(\/<span class..newsApp__item__copy.>.*<.a><.span>\/,\'\') + \'Found via <a href=\\\'https://nicer.app/'+seov+'\\\' target=\\\'_new\\\'>https://nicer.app/'+seov+'</a>\'; var selection = window.getSelection(); var range = document.createRange(); range.selectNodeContents(el); selection.removeAllRanges(); selection.addRange(range); window.top.document.execCommand(\'copy\');setTimeout(function(){selection.removeAllRanges(); el.innerHTML=el_html;},1000);">Copy to clipboard</a></span></div> ';
+        html += '<span class="newsApp__item__copy"><a class="nomod noPushState" href="javascript:var el = $(\'#newsApp__item__'+it.idx+'\')[0], textarea = $(\'#siteContent__textareaCopy\')[0]; if (!textarea) { var el2=document.createElement(\'textarea\'); window.top.document.append(el2); textarea=el2 }; el_html = el.innerHTML; debugger; el.innerHTML = el.innerHTML.replace(\/<span class..newsApp__item__copy.>.*<.a><.span>\/,\'\') + \'Found via <a href=\\\'https://nicer.app/'+seov+'\\\' target=\\\'_new\\\'>https://nicer.app/'+seov+'</a>\'; const type = \'text/plain\'; const blob = new Blob([el.innerHTML], { type }); const data = [new ClipboardItem({ [type]: blob })]; navigator.clipboard.write(data).then( () => {/* success */}, () => {/* failure */} ); var selection = window.getSelection(); var range = document.createRange(); range.selectNodeContents(el); selection.removeAllRanges(); selection.addRange(range); window.top.document.execCommand(\'copy\');setTimeout(function(){selection.removeAllRanges(); el.innerHTML=el_html;},1000);">Copy to clipboard</a></span></div> ';
         html+= '</div>';
-         
+
         // tooltipster HTML
         var html2 = '';
         html2+= '<span class="newsApp__item__url"><a class="nomod" target="newsAppItem_'+it.idx+'" href="' + it._id+'">Article</a> discovered via ';
@@ -1884,138 +1883,141 @@ debugger;
     },
 
     onresize : function (settings, displayNews) {
-        var
-        na1 = na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/news'], g = na1.globals, s = na1.settings,
-        c = s.current, db = c.db;
+        setTimeout (function() { // na.desktop.resize delay buffer
+            var
+            na1 = na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/news'], g = na1.globals, s = na1.settings,
+            c = s.current, db = c.db;
 
-        if (displayNews!==false) displayNews = true;
+            if (displayNews!==false) displayNews = true;
 
-        if ($(window).width() < 400) {
-            $('.newsAppButton').css({ display : 'none' });
-            $('.popupButtons').css({ display : 'flex' });
-        } else {
-            $('.newsAppButton').css({ display : 'block' });
-            $('.popupButtons').css({ display : 'none' });
-        }
+            if ($(window).width() < 400) {
+                $('.newsAppButton').css({ display : 'none' });
+                $('.popupButtons').css({ display : 'flex' });
+            } else {
+                $('.newsAppButton').css({ display : 'block' });
+                $('.popupButtons').css({ display : 'none' });
+            }
 
-        $('#siteContent__btnOptions_menu').detach().appendTo('body').css({display:'block',opacity:0.0001});
-            $('.vividButton, .vividButton_icon_50x50_siteTop, .vividButton_icon_50x50', $('#siteContent__btnOptions_menu')[0])
-                .each(function(idx,el){
-                    if (!na.site.settings.buttons['#'+el.id])
-                        na.site.settings.buttons['#'+el.id] = new naVividButton(el);
+            $('#siteContent__btnOptions_menu').detach().appendTo('body').css({display:'block',opacity:0.0001});
+                $('.vividButton, .vividButton_icon_50x50_siteTop, .vividButton_icon_50x50', $('#siteContent__btnOptions_menu')[0])
+                    .each(function(idx,el){
+                        if (!na.site.settings.buttons['#'+el.id])
+                            na.site.settings.buttons['#'+el.id] = new naVividButton(el);
+                    });
+            setTimeout (function() {
+                $('#siteContent__btnOptions_menu').css({display:'block',opacity:0.0001});
+                var bcr = $('#newsApp_options')[0].getBoundingClientRect();
+                $('#siteContent__btnOptions_menu').css({display:'none',opacity:1}).animate({
+                    left : bcr.left + bcr.width - $('#siteContent__btnOptions_menu').outerWidth(),
+                    top : bcr.top + bcr.height + 5
                 });
-        setTimeout (function() {
-            $('#siteContent__btnOptions_menu').css({display:'block',opacity:0.0001});
-            var bcr = $('#newsApp_options')[0].getBoundingClientRect();
-            $('#siteContent__btnOptions_menu').css({display:'none',opacity:1}).animate({
-                left : bcr.left + bcr.width - $('#siteContent__btnOptions_menu').outerWidth(),
-                top : bcr.top + bcr.height + 5
-            });
-        }, 200);
+            }, 200);
 
-        na1.themeAppsChanged();
+            na1.themeAppsChanged();
 
-        /*
-        if (na.m.userDevice.isPhone) $('#btnOptions, #btnLoginLogout, #btnChangeBackground').css({opacity:1})
-        else $('#btnOptions, #btnLoginLogout, #btnChangeBackground').animate({opacity:1},'normal');
-        */
-                       
-        var 
-        na1 = na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/news'], g = na1.globals, s = na1.settings, c = s.current, db = c.db,
-        ow = ($('#siteContent .vividDialogContent')[0].offsetWidth),
-        oh = $('#siteContent .vividDialogContent')[0].offsetHeight, 
-        dw = (
-            na.m.userDevice.isPhone
-            ? ow - 2
-            : ow > 430 ? 430 : ow
-        ),  
-        wf = ow / dw,
-        iw = ( ow / wf ), // iw = initial width of news item (in pixels)
-        iw = iw < dw ? dw : iw,
-        iw = dw,
-        wo = ow, // wo = width outer container
-        wo = (
-            true // $('#newsApp_content__sliderbar__ver')[0].style.display!=='none'
-            ? wo
-            : wo
-        ),
-        wt = 0, // wt = width target
-        i = 0; // counter of news items measured horizontally
-        
-        while (wt < wo) {
-            wt += iw;
-            i++;
-        }
-        wt -= iw;
-        i--;
-        
-        var
-        wu = wt, // wu = width used
-        wl = wo - wu, // wl = width left over
-        we = (wl) / i; // we = width extra per news item (above iw)
-        //w = iw + we - 60; // 50 or 60 is the magic number here.. don't know why..
-        w = $('.newsApp__item__outer').width();
+            /*
+            if (na.m.userDevice.isPhone) $('#btnOptions, #btnLoginLogout, #btnChangeBackground').css({opacity:1})
+            else $('#btnOptions, #btnLoginLogout, #btnChangeBackground').animate({opacity:1},'normal');
+            */
+
+            var
+            na1 = na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/news'], g = na1.globals, s = na1.settings, c = s.current, db = c.db,
+            ow = ($('#siteContent .vividDialogContent')[0].offsetWidth),
+            oh = $('#siteContent .vividDialogContent')[0].offsetHeight,
+            dw = (
+                na.m.userDevice.isPhone
+                ? ow - 2
+                : ow > 430 ? 430 : ow
+            ),
+            wf = ow / dw,
+            iw = ( ow / wf ), // iw = initial width of news item (in pixels)
+            iw = iw < dw ? dw : iw,
+            iw = dw,
+            wo = ow, // wo = width outer container
+            wo = (
+                true // $('#newsApp_content__sliderbar__ver')[0].style.display!=='none'
+                ? wo
+                : wo
+            ),
+            wt = 0, // wt = width target
+            i = 0; // counter of news items measured horizontally
+
+            while (wt < wo) {
+                wt += iw;
+                i++;
+            }
+            wt -= iw;
+            i--;
+
+            var
+            wu = wt, // wu = width used
+            wl = wo - wu, // wl = width left over
+            we = (wl) / i; // we = width extra per news item (above iw)
+            //w = iw + we - 60; // 50 or 60 is the magic number here.. don't know why..
+            w = $('.newsApp__item__outer').width();
 
 
-        na.m.waitForCondition ('/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/news.onresize() : na.m.HTMLidle()?', na.m.HTMLidle, function () {
-            $('#siteContent__header').css({
-                display : 'inline-block',
-                width : ow
-            });
-            $('#newsApp_content_shadow, #newsApp_content, #siteContent__content').css({
-                height : $('#siteContent__content').height() - 14,
-                width : ow
-            });
+            na.m.waitForCondition ('/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/news.onresize() : na.m.HTMLidle()?', na.m.HTMLidle, function () {
+                    $('#siteContent__header').css({
+                        display : 'inline-block',
+                        width : ow
+                    });
+                    debugger;
+                    $('#newsApp_content_shadow, #newsApp_content, #siteContent__content').css({
+                        height : $('#siteContent__content').height() - 14,
+                        width : ow
+                    });
 
-            $('#newsApp_content_shadow, #newsApp_content').css({
-                left : $('#siteContent .vividDialogContent').position().left
-            });
-            na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/news'].settings.itemWidth = w;
-            if (displayNews /*&& c.dtCurrent*/)
-                na.m.waitForCondition(
-                    '/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/news::onresize() : have news items to display?',
-                    function () {
-                        var r = c.unread > 0;
-                        return r;
-                    },
-                    function () {
-                        var
-                        na1 = na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/news'],
-                        g = na1.globals, s = na1.settings, c = s.current, db = c.db, app = na.site.globals.app;
+                    $('#newsApp_content_shadow, #newsApp_content').css({
+                        left : $('#siteContent .vividDialogContent').position().left
+                    });
+                    na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/news'].settings.itemWidth = w;
+                    if (displayNews /*&& c.dtCurrent*/)
+                        na.m.waitForCondition(
+                            '/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/news::onresize() : have news items to display?',
+                            function () {
+                                var r = c.unread > 0;
+                                return r;
+                            },
+                            function () {
+                                var
+                                na1 = na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/news'],
+                                g = na1.globals, s = na1.settings, c = s.current, db = c.db, app = na.site.globals.app;
 
 
-                        setTimeout (function() {
-                            na1.onresize_do(s.dnf?s.dnf.id:undefined);
-                            var doCountDown = false;
-                            $('.newsApp__item__outer').each(function(idx3, el3) {
-                                if ($(window).width() < 400) $(el3).css({marginLeft:0});
-                                if (
-                                    (
-                                        $(el3).offset().top + $(el3).height()
-                                        > $('#siteContent .vividDialogContent').offset().top
-                                            + $('#siteContent .vividDialogContent').height()
-                                    ) || (
-                                        $(el3).offset().left + $(el3).width()
-                                        > $('#siteContent .vividDialogContent').offset().left
-                                            + $('#siteContent .vividDialogContent').width()
-                                    )
-                                ) {
-                                    //c.unread += 1;
-                                    $(el3).remove();
-                                    doCountDown = true;
-                                }
-                            });
-                            if (doCountDown) {
-                                $('.newsApp__header__countDownStr').animate({opacity:1});
-                                na1.countDown();
-                                //na1.loadNews_read_loop();
-                            }
-                        }, 50);
+                                setTimeout (function() {
+                                    na1.onresize_do(s.dnf?s.dnf.id:undefined);
+                                    var doCountDown = false;
+                                    $('.newsApp__item__outer').each(function(idx3, el3) {
+                                        if ($(window).width() < 400) $(el3).css({marginLeft:0});
+                                        if (
+                                            (
+                                                $(el3).offset().top + $(el3).height()
+                                                > $('#siteContent .vividDialogContent').offset().top
+                                                    + $('#siteContent .vividDialogContent').height()
+                                            ) || (
+                                                $(el3).offset().left + $(el3).width()
+                                                > $('#siteContent .vividDialogContent').offset().left
+                                                    + $('#siteContent .vividDialogContent').width()
+                                            )
+                                        ) {
+                                            //c.unread += 1;
+                                            $(el3).remove();
+                                            doCountDown = true;
+                                        }
+                                    });
+                                    if (doCountDown) {
+                                        $('.newsApp__header__countDownStr').animate({opacity:1});
+                                        na1.countDown();
+                                        //na1.loadNews_read_loop();
+                                    }
+                                }, 50);
 
-                        //$els2.css ({minWidth : '', width : 'auto'});
-                    }, 200);
-            if (typeof settings=='object' && settings!==null && typeof settings.callback=='function') settings.callback (settings);
-        }, 200);
+                                //$els2.css ({minWidth : '', width : 'auto'});
+                            }, 200);
+                    if (typeof settings=='object' && settings!==null && typeof settings.callback=='function') settings.callback (settings);
+            }, 200);
+        }, 1000);
     },
 
     onresize_do : function (sel) {

@@ -99,6 +99,8 @@ function processBackgroundFile_value ($cd) {
         preg_match_all ($regex, $output[0], $m);
         $wt = $m[1][0].'x'.$m[2][0];
         $ref = [ $td => $wt ];
+    } else {
+        $ref = [ $td => 'UNKNOWNxUNKNOWN' ];
     }
 }
 

@@ -296,7 +296,7 @@ echo $naWebOS->html_vividButton (
         </div>
         <div class="flexBreak"></div>
         -->
-        <div id="specificitySettings" class="themeEditorComponent_alwaysVisible" style="font-size:15px;flex-wrap:wrap;">
+        <div id="specificitySettings" class="themeEditorComponent_alwaysVisible" style="font-size:15px;flex-wrap:wrap;box-shadow:inset 0px 0px 4px 2px rgba(0,0,0,0.6);">
 <?php
 global $naLAN;
 if (false && $naLAN) {
@@ -449,7 +449,7 @@ echo $naWebOS->html_vividButton (
 
             </div>
             -->
-            <div class="navbar" style="order:5;width:100%;display:flex;align-items:center;justify-content:center;">
+            <div class="navbar" style="order:5;width:100%;display:flex;align-items:center;justify-content:space-between;">
 <?php
 echo $naWebOS->html_vividButton (
     4, 'order:1',
@@ -474,7 +474,7 @@ echo $naWebOS->html_vividButton (
     null
 );
 echo $naWebOS->html_vividButton (
-    4, 'order:2;margin-left:10px',
+    4, 'order:2;',
 
     'btnSelectElement', 'vividButton_icon_50x50 grouped', '_50x50', 'grouped',
     '',
@@ -569,7 +569,7 @@ echo $naWebOS->html_vividButton (
 );
 ?>
             </div>
-            <div class="navbar" style="order:7;display:flex;align-items:center;justify-content:center;">
+            <div class="navbar" style="order:7;display:flex;align-items:center;justify-content:space-between;">
 <?php
 echo $naWebOS->html_vividButton (
     4, 'order:4',
@@ -663,11 +663,11 @@ echo $naWebOS->html_vividButton (
             </div>
 
         </div>
-        <div id="nate_selectorSet" class="themeEditorComponent_containerDiv2 vividScrollpane" style="order:8;display:block;width:100%;height:100%;display:none;">
-            <div class="naNavBar_darkenedBG" style="width:100%;position:relative;display:flex;align-items:center;justify-content:center;">
+        <div id="nate_selectorSet" class="themeEditorComponent_containerDiv2 vividScrollpane" style="order:8;display:block;width:100%;height:auto;display:none;justify-content:space-between">
+            <div class="naNavBar_darkenedBG" style="width:calc(100% - 14px);position:relative;display:flex;align-items:center;justify-content:space-between;border-radius:10px;box-shadow:inset 0px 0px 4px 2px rgba(0,0,0,0.6);">
 <?php
 echo $naWebOS->html_vividButton (
-    4, 'order:4',
+    4, 'order:1',
 
     'btnAddSelector', 'vividButton_icon_50x50 grouped', '_50x50', 'grouped',
     '',
@@ -679,17 +679,17 @@ echo $naWebOS->html_vividButton (
 
     'btnCssVividButton_outerBorder.png',
     'btnCssVividButton.png',
-    'btnCssVividButton.mintGreen.png',
-    'documentAdd.png',
+    'btnCssVividButton.greenBlue.png',
+    'btnSelector.png',
 
-    null,
+    '<img class="vividButton_icon_imgButtonIcon_50x50_sup1" srcPreload="/NicerAppWebOS/siteMedia/btnPlus_shaded.png" style="position:absolute;left:0px;width:15px;z-index:2021;"/>',
 
     null,
     null,
     null
 );
 echo $naWebOS->html_vividButton (
-    4, 'order:4',
+    4, 'order:2',
 
      'btnDeleteSelector', 'vividButton_icon_50x50 grouped', '_50x50', 'grouped',
     '',
@@ -701,10 +701,53 @@ echo $naWebOS->html_vividButton (
 
     'btnCssVividButton_outerBorder.png',
     'btnCssVividButton.png',
-    'btnCssVividButton.mintGreen.png',
-    'btnTrashcan_red_500x500.png',
+    'btnCssVividButton.yellow4a.png',
+    'btnSelector.png',
+
+    '<img class="vividButton_icon_imgButtonIcon_50x50_sup1" srcPreload="/NicerAppWebOS/siteMedia/btnDelete.png" style="position:absolute;left:0px;width:15px;z-index:2021;"/>',
 
     null,
+    null,
+    null
+);
+echo $naWebOS->html_vividButton (
+    4, 'order:3',
+
+     'btnAddCSS', 'vividButton_icon_50x50 grouped', '_50x50', 'grouped',
+    '',
+    'na.te.onclick_btnDeleteCSS(event)',
+    '',
+    '',
+
+    433, 'Add graphics.',
+
+    'btnCssVividButton_outerBorder.png',
+    'btnCssVividButton.png',
+    'btnCssVividButton.greenBlue.png',
+    'btnPickColor_canvasSquared.png',
+
+    '<img class="vividButton_icon_imgButtonIcon_50x50_sup1" srcPreload="/NicerAppWebOS/siteMedia/btnPlus_shaded.png" style="position:absolute;left:0px;width:15px;z-index:2021;"/>',
+
+    null,
+    null,
+    null
+);echo $naWebOS->html_vividButton (
+    4, 'order:4',
+
+     'btnDeleteCSS', 'vividButton_icon_50x50 grouped', '_50x50', 'grouped',
+    '',
+    'na.te.onclick_btnDeleteCSS(event)',
+    '',
+    '',
+
+    433, 'Delete graphics.',
+
+    'btnCssVividButton_outerBorder.png',
+    'btnCssVividButton.png',
+    'btnCssVividButton.red1a.png',
+    'btnPickColor_canvasSquared.png',
+
+    '<img class="vividButton_icon_imgButtonIcon_50x50_sup1" srcPreload="/NicerAppWebOS/siteMedia/btnDelete.png" style="position:absolute;left:0px;width:15px;z-index:2021;"/>',
 
     null,
     null,

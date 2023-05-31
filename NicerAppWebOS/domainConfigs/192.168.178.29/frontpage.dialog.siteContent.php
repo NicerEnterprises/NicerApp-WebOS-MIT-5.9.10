@@ -6,6 +6,12 @@
         delete na.site.settings.current.app;
     </script>
 
+    <p>
+    Take a video or (tiled) background of any resolution, and project information onto that using any weblanguage you want.<br/>
+    Written in a style simple enough for children to learn from.<br/>
+    Opensourced <a href="https://github.com/NicerEnterprises/NicerApp-WebOS" class="naExternalLink nomod noPushState" target="ghMain">here</a>, development branch <a href="https://github.com/NicerEnterprises/NicerApp-WebOS-dev" class="naExternalLink nomod noPushState" target="ghDev">here</a>
+    </p>
+
     <h1 class="contentSectionTitle1"><span class="contentSectionTitle1_span">Available Apps</span></h1><br/>
 
     <a href="<?php echo $naURLs['music'];?>" class="contentSectionTitle3_a"><h3 class="contentSectionTitle3"><span class="contentSectionTitle3_span">Music</span></h3></a><br/>
@@ -52,6 +58,6 @@
 
     <p>
     Bids can be sent in by unencrypted email to <a href="maillto:rene.veerman.netherlands@gmail.com">rene.veerman.netherlands @gmail.com</a>, via which we can exchange WhatsApp contact details for encrypted communications.<br/>
-    I find all potential buyers to be legitimate buyers (meaning : i do not discriminate), and the
+    I find all potential buyers to be legitimate buyer, and the
     <b>starting price is 50 million euro</b>, which is offered as a <b>total buy-out offer</b> with optionally me becoming part of the buyer's workforce.<br/>
     </p>

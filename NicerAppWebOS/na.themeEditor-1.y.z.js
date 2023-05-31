@@ -19,7 +19,7 @@ na.te = na.themeEditor = {
         na.te.s.c.forDialogID = forDialogID;
         $('#specificityForDiv').html ('#'+forDialogID);
         
-        $('.themeEditorComponent').css({display:'none'});
+        $('.themeEditorComponent, .themeEditorComponent_containerDiv2').css({display:'none'});
         na.te.makeThemesList( na.te.s.c.selectedThemeName );
         for (var appName in na.site.globals.app) break;
         $('#span_cb_app').html ('<b>App : </b>'+appName);
@@ -98,7 +98,9 @@ na.te = na.themeEditor = {
             url : url,
             success : function (data, ts, xhr) {
         */
-                let dat = na.te.transform_siteGlobalsThemes_to_jsTree();
+                let dat2 = na.te.transform_siteGlobalsThemes_to_jsTree();
+                let dat = dat2.dat;
+                let did = dat2.did;
                 //debugger;
                 //na.te.s.c.db = dat;
 
@@ -152,41 +154,12 @@ na.te = na.themeEditor = {
                         "state", "types", "wholerow", "multiselect"
                     ]
                 }).on('changed.jstree', function (e, data) {
-                    if (
-                        rec
-                        && na.blog
-                        && na.te.s.c.selectedTreeNode
-                        && na.te.s.c.selectedTreeNode.type=='naDocument'
-                    ) na.blog.saveEditorContent(na.blog.settings.current.selectedTreeNode);
-
-                    for (var i=0; i<data.selected.length; i++) {
-                        var
-                        d = data.selected[i],
-                        rec = data.instance.get_node(d),
-                        btn = na.site.settings.buttons['#btnSelectBackgroundImage'];
-
-                        $('#documentTitle').val(rec.original.text);
-                        na.te.s.c.selectedTreeNode = rec;
-                        if (rec.original.type=='naDocument') {
-                            if (btn) btn.disable();
-                        } else if (rec.original.type=='naMediaAlbum') {
-                            if (btn) btn.enable();
-                            var
-                            path = na.te.currentPath(rec),
-                            path = path.replace(/ /g, '%20'),
-                            src = '/NicerAppWebOS/logic.userInterface/photoAlbum/4.0.0/index.php?basePath='+path,
-                            el = $('#themeEditor_photoAlbum')[0];
-                            el.onload = setTimeout(na.te.onresize,250);
-                            el.src = src;
-                        } else {
-                            if (btn) btn.disable();
-                        }
-
-                    };
+                    na.te.s.c.selectedSelector = data;
+                    na.te.enableDisableButtons('selectedSelector');
                 });
 
-                if (lastFolder) setTimeout (function() {
-                    $('#themeEditor_jsTree_backgrounds').jstree('deselect_all').jstree('select_node', lastFolder.id);
+                if (did) setTimeout (function() {
+                    $('#themeEditor_jsTree_selectors').jstree('deselect_all').jstree('select_node', did);
                 }, 200);
 
                 $('#siteToolbarLeft .lds-facebook').fadeOut('slow');
@@ -291,37 +264,8 @@ na.te = na.themeEditor = {
                         "state", "types", "wholerow", "multiselect"
                     ]
                 }).on('changed.jstree', function (e, data) {
-                    if (
-                        rec
-                        && na.blog
-                        && na.te.s.c.selectedTreeNode
-                        && na.te.s.c.selectedTreeNode.type=='naDocument'
-                    ) na.blog.saveEditorContent(na.blog.settings.current.selectedTreeNode);
-                    
-                    for (var i=0; i<data.selected.length; i++) {
-                        var 
-                        d = data.selected[i], 
-                        rec = data.instance.get_node(d),
-                        btn = na.site.settings.buttons['#btnSelectBackgroundImage'];
-                        
-                        $('#documentTitle').val(rec.original.text);
-                        na.te.s.c.selectedTreeNode = rec;
-                        if (rec.original.type=='naDocument') {
-                            if (btn) btn.disable();
-                        } else if (rec.original.type=='naMediaAlbum') {
-                            if (btn) btn.enable();
-                            var
-                            path = na.te.currentPath(rec),
-                            path = path.replace(/ /g, '%20'),
-                            src = '/NicerAppWebOS/logic.userInterface/photoAlbum/4.0.0/index.php?basePath='+path,
-                            el = $('#themeEditor_photoAlbum')[0];
-                            el.onload = setTimeout(na.te.onresize,250);
-                            el.src = src;
-                        } else {
-                            if (btn) btn.disable();
-                        }
-
-                    };
+                    na.te.s.c.selectedBackground = data;
+                    na.te.enableDisableButtons('selectedBackgrounds');
                 });
                 
                 if (lastFolder) setTimeout (function() {
@@ -507,30 +451,116 @@ na.te = na.themeEditor = {
         setTimeout (na.te.onresize, 200);
     },
 
+    enableDisableButtons : function (which) {
+        var x = na.te.s.c;
+
+        if (which=='selectedSelector') {
+            var data = na.te.s.c.selectedSelector;
+            if (data.action=='ready') {
+                na.te.disableAllButtons();
+                var l = data.selected.length, rec = null;
+                for (var i=0; i<l; i++) {
+                    var d = data.selected[i], rec2 = data.instance.get_node(d);
+                    if (rec2 && rec2.original) rec = rec2;
+                }
+                if (rec && rec.type=='naCSS')
+                    na.te.enableButtons([
+                        '#btnSelectBackgroundColor', '#btnSelectBorderSettings' , '#btnSelectBoxShadowSettings',
+                        '#btnSelectTextSettings', '#btnSelectTextShadowSettings',
+                        '#btnSelectBackgroundFolder' , '#btnSelectBackgroundImage'
+                    ]);
+                if (rec && rec.type=='naElement')
+                    if (
+                        rec.text.match(/#site[\w\d]+$/)
+                        || rec.text.match(/#app__[\w\d]+$/)
+                    )
+                        na.te.enableButtons([
+                            '#btnSelectBackgroundColor', '#btnSelectBorderSettings' , '#btnSelectBoxShadowSettings',
+                            '#btnSelectTextSettings', '#btnSelectTextShadowSettings'
+                        ]);
+                    else if (
+                        rec.text.match(/#site.*\s\>\s\.vdBackground$/)
+                        || rec.text.match(/#app__.*\s\>\s\.vdBackground$/)
+                    )
+                        na.te.enableButtons([
+                            '#btnSelectBackgroundFolder' , '#btnSelectBackgroundImage'
+                        ]);
+            }
+            if (data.action=='select_node') {
+                na.te.disableAllButtons();
+                if (data.node && data.node.type=='naCSS')
+                    na.te.enableButtons([
+                        '#btnSelectBackgroundColor', '#btnSelectBorderSettings' , '#btnSelectBoxShadowSettings',
+                        '#btnSelectTextSettings', '#btnSelectTextShadowSettings',
+                        '#btnSelectBackgroundFolder' , '#btnSelectBackgroundImage'
+                    ]);
+                if (data.node && data.node.type=='naElement')
+                    if (
+                        data.node.text.match(/#site[\w\d]+$/)
+                        || data.node.text.match(/#app__[\w\d]+$/)
+                    )
+                        na.te.enableButtons([
+                            '#btnSelectBackgroundColor', '#btnSelectBorderSettings' , '#btnSelectBoxShadowSettings',
+                            '#btnSelectTextSettings', '#btnSelectTextShadowSettings'
+                        ]);
+                    else if (data.node.text.match(/#site.*\s\>\s\.vdBackground$/))
+                        na.te.enableButtons([
+                            '#btnSelectBackgroundFolder' , '#btnSelectBackgroundImage'
+                        ]);
+            }
+        } else if (which=='selectedBackground') {
+            var data = na.te.s.c.selectedBackground;
+
+        }
+    //    debugger;
+    },
+
+    disableAllButtons : function () {
+        $('#siteToolbarThemeEditor .navbar .vividButton_icon_50x50').each(function(idx,el) {
+            switch (el.id) {
+                case 'btnSelectSelectorSet' : break;
+                default : na.site.settings.buttons['#'+el.id].disable(); break;
+            }
+        });
+        $('#siteToolbarThemeEditor .naNavBar_darkenedBG .vividButton_icon_50x50').each(function(idx,el) {
+            na.site.settings.buttons['#'+el.id].disable();
+        });
+    },
+
+    enableButtons : function(buttons) {
+        for (var i=0; i<buttons.length; i++) {
+            na.site.settings.buttons[buttons[i]].enable();
+        }
+    },
+
     transform_siteGlobalsThemes_to_jsTree : function() {
         var
         themeName = 'default',
         inputData = na.site.globals.themes[themeName].themeSettings,
-        outputData = na.te.transform_siteGlobalsThemes_to_jsTree__recurse(inputData, [], 'Selectors', '#', 'naSelectorSet');
+        outputData = na.te.transform_siteGlobalsThemes_to_jsTree__recurse({dat:inputData,did:null}, {dat:[],did:null}, 'Selectors', '#', 'naSelectorSet');
         return outputData;
     },
 
     transform_siteGlobalsThemes_to_jsTree__recurse : function (inputData, outputData, parentName, parentID, type) {
-        for (var key in inputData) {
-            var value = inputData[key], newID = na.m.randomString();
+        var did = inputData.did;
+        for (var key in inputData.dat) {
+            var value = inputData.dat[key], newID = na.m.randomString();
             if (key=='css') {
-                outputData.push ({
+                for (var key2 in value) break;
+                outputData.dat.push ({
                     id : newID,
                     parent : parentID,
-                    text : key,
+                    text : 'main',
                     state : {
-                        opened : true
+                        opened : true,
+                        selected : 'site'+parentName==na.te.s.c.forDialogID
                     },
                     type : 'naCSS'
                 });
+                if ('site'+parentName==na.te.s.c.forDialogID) outputData.did = newID;
                 for (var key2 in value) {
                     var newID2 = na.m.randomString();
-                    outputData.push ({
+                    outputData.dat.push ({
                         id : newID2,
                         parent : newID,
                         text : key2,
@@ -541,7 +571,7 @@ na.te = na.themeEditor = {
                     });
                 }
             } else {
-                outputData.push ({
+                outputData.dat.push ({
                     id : newID,
                     parent : parentID,
                     text : key,
@@ -550,7 +580,9 @@ na.te = na.themeEditor = {
                     },
                     type : type
                 });
-                if (typeof value=='object') $.extend (outputData, na.te.transform_siteGlobalsThemes_to_jsTree__recurse (value, outputData, key, newID, type));
+                if (typeof value=='object') {
+                    $.extend (outputData.dat, na.te.transform_siteGlobalsThemes_to_jsTree__recurse ({dat:value,did:outputData.did}, outputData, key, newID, type).dat)
+                };
             };
         }
         return outputData;
@@ -592,7 +624,7 @@ na.te = na.themeEditor = {
         $('.themeEditor_colorPicker').next().css ({ width : 230, zIndex : 1100  });
         //$('#siteToolbarThemeEditor label', t.el).not('.specificityCB').css ({ float : 'left' });
         
-        $('.themeEditorComponent').css({
+        $('.themeEditorComponent, .themeEditorComponent_containerDiv2').css({
             width : 'calc(100% - 20px)',
             height : 
                 $('#siteToolbarThemeEditor .vividDialogContent').height() 
@@ -912,7 +944,7 @@ na.te = na.themeEditor = {
         $.ajax(ajaxCmd);            
     },
     setPermissionsForTheme : function (event) {
-        $('.themeEditorComponent').not('#themePermissions').fadeOut('fast');
+        $('.themeEditorComponent, .themeEditorComponent_containerDiv2').not('#themePermissions').fadeOut('fast');
         $('.themeEditor_colorPicker').next().fadeOut('fast');
         $('#themePermissions').fadeIn('fast', 'swing', function () {
             na.te.s.c.oldThemeNames = [];
@@ -1131,9 +1163,9 @@ na.te = na.themeEditor = {
             - $('.sds_dialogTitle').outerHeight() 
             - $('#specificitySettings').outerHeight() 
             - ( 4 * $('.flexBreak').outerHeight() );
-        $('.themeEditorComponent').css({ width : w1/*, height : h1 */});
+        $('.themeEditorComponent, .themeEditorComponent_containerDiv2').css({ width : w1/*, height : h1 */});
         //$('#borderSettings').children().css({ width : w1 });
-        $('.themeEditorComponent').not('#borderSettings').fadeOut('fast');
+        $('.themeEditorComponent, .themeEditorComponent_containerDiv2').not('#borderSettings').fadeOut('fast');
         $('.themeEditor_colorPicker').next().fadeOut('fast');
         $('#borderSettings').fadeIn('fast', 'swing');/*, function () {
             $('#borderSettings > .themeEditorComponent_containerDiv > *')
@@ -1180,8 +1212,8 @@ na.te = na.themeEditor = {
         var h1 = $('#siteToolbarThemeEditor .vividDialogContent').height() - $('.nate_dialogTitle').outerHeight() - $('#specificitySettings').outerHeight() - ( 4 * $('.flexBreak').outerHeight() );
         //$('.themeEditorComponent').css({ width : w1, height : h1 });
         //$('#boxShadowSettings').children().css({ width : w1 });
-        $('.themeEditorComponent').css({ width : w1 });
-        $('.themeEditorComponent').not('#boxShadowSettings').fadeOut('fast');
+        $('.themeEditorComponent, .themeEditorComponent_containerDiv2').css({ width : w1 });
+        $('.themeEditorComponent, .themeEditorComponent_containerDiv2').not('#boxShadowSettings').fadeOut('fast');
         $('.themeEditor_colorPicker').next().fadeOut('fast');
         $('#boxShadowSettings').css({display:'inline-block',height:h1}).fadeIn('fast', 'swing', function () {
             var
@@ -1399,7 +1431,7 @@ na.te = na.themeEditor = {
         if ($(ct).is('.disabled')) return false;
         na.te.onclick(ct);
         na.te.s.c.selectedSetting = 'backgroundColor';
-        $('.themeEditorComponent').not('#themeEditor_backgroundColor').fadeOut('fast', function () {
+        $('.themeEditorComponent, .themeEditorComponent_containerDiv2').not('#themeEditor_backgroundColor').fadeOut('fast', function () {
             $('.themeEditor_colorPicker').next().css ({ width : 230, zIndex : 1100  });
             if ($('#themeEditor_backgroundColor').css('display')==='none')
                 $('#themeEditor_backgroundColor').css({top:8,opacity:1}).fadeIn('fast', function() {
@@ -1428,7 +1460,7 @@ na.te = na.themeEditor = {
         if ($(ct).is('.disabled')) return false;
         na.te.onclick(ct);
         na.te.s.c.selectedSetting = 'backgroundFolder';
-        $('.themeEditorComponent').not('#themeEditor_jsTree_backgrounds').fadeOut('fast');
+        $('.themeEditorComponent, .themeEditorComponent_containerDiv2').not('#themeEditor_jsTree_backgrounds').fadeOut('fast');
         $('.themeEditor_colorPicker').next().fadeOut('fast');
         $('#themeEditor_jsTree_backgrounds').fadeIn('fast');
         setTimeout(na.te.onresize,250);
@@ -1440,7 +1472,7 @@ na.te = na.themeEditor = {
         na.te.onclick(ct);
         na.te.s.c.selectedSetting = 'backgroundImage';
 
-        $('.themeEditorComponent').not('#themeEditor_photoAlbum, #themeEditor_photoAlbum_specs').fadeOut('fast');
+        $('.themeEditorComponent, .themeEditorComponent_containerDiv2').not('#themeEditor_photoAlbum, #themeEditor_photoAlbum_specs').fadeOut('fast');
         setTimeout (function () {
             $('.themeEditor_colorPicker').next().fadeOut('fast');
             $('#themeEditor_photoAlbum, #themeEditor_photoOpacity, #themeEditor_photoAlbum_specs').fadeIn('fast');
@@ -1539,7 +1571,7 @@ na.te = na.themeEditor = {
         na.te.onclick(ct);
         na.te.s.c.selectedSetting = 'text';
         $('.themeEditor_colorPicker').next().css ({ width : 230, zIndex : 1100  }).fadeOut('fast');;
-        $('.themeEditorComponent').not('#textSettings').fadeOut('fast', function () {
+        $('.themeEditorComponent, .themeEditorComponent_containerDiv2').not('#textSettings').fadeOut('fast', function () {
             if ($('#textSettings').css('display')==='none')
                 $('#textSettings').fadeIn('fast', 'swing', function () {
                     
@@ -1576,7 +1608,7 @@ na.te = na.themeEditor = {
         if ($(ct).is('.disabled')) return false;
         na.te.onclick(ct);
         na.te.s.c.selectedSetting = 'textShadow';
-        $('.themeEditorComponent').not('#textShadowSettings').fadeOut('fast', function () {
+        $('.themeEditorComponent, .themeEditorComponent_containerDiv2').not('#textShadowSettings').fadeOut('fast', function () {
         
             //$('.themeEditor_colorPicker').next().fadeOut('fast');
             if ($('#textShadowSettings').css('display')==='none')
@@ -1933,15 +1965,15 @@ na.te = na.themeEditor = {
         if ($(ct).is('.disabled')) return false;
         na.te.onclick(ct);
         na.te.s.c.selectedSetting = 'selectorSet';
-        var w1 = $('#siteToolbarThemeEditor .vividDialogContent').width();
+        var w1 = $('#siteToolbarThemeEditor .vividDialogContent').width() -20;
         var h1 =
             $('#siteToolbarThemeEditor .vividDialogContent').height()
             - $('.sds_dialogTitle').outerHeight()
             - $('#specificitySettings').outerHeight()
             - ( 4 * $('.flexBreak').outerHeight() );
-        $('.themeEditorComponent').css({ width : w1/*, height : h1 */});
+        $('.themeEditorComponent, .themeEditorComponent_containerDiv2').css({ width : w1/*, height : h1 */});
         //$('#borderSettings').children().css({ width : w1 });
-        $('.themeEditorComponent').not('#nate_selectorSet').fadeOut('fast');
+        $('.themeEditorComponent, .themeEditorComponent_containerDiv2').not('#nate_selectorSet').fadeOut('fast');
         $('#nate_selectorSet').add('#themeEditor_jsTree_selectors').fadeIn('fast', 'swing');/*, function () {
             $('#borderSettings > .themeEditorComponent_containerDiv > *')
                 .not('.boxSettings_label_containerDiv, #borderColorpicker, .sp-container')

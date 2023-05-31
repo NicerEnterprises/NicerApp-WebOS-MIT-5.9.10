@@ -1021,7 +1021,7 @@ class NicerAppWebOS {
                         if ($accountType == 'role') {
                             //if ($debug) { echo '$this->dbs->roles='; var_dump($this->dbs->roles); };
                             if (is_string($this->dbs)) {
-                                echo $fncn.' : WARNING : invalid database connection ($this->dbs="'.json_encode($this->dbs).'")- this database server, or even the entire webserver, has been hacked by hostiles.';
+                                echo $fncn.' : WARNING : invalid database connection ($this->dbs='.json_encode($this->dbs).').';
                                 die(); // or exit();
                             }
                             foreach ( $this->dbs->findConnection('couchdb')->roles
@@ -1081,7 +1081,7 @@ class NicerAppWebOS {
         
         foreach ($selectors2 as $idx => $selector) {
             $css = $this->getPageCSS_specific($selector);
-            //{ echo '<pre>$idx='.$idx; echo '$selector='; var_dump($selector); var_dump($css); echo '</pre>'; };
+            //{ echo '<pre>667 : $idx='.$idx; echo '$selector='; var_dump($selector); var_dump($css); echo '</pre>'; };
             //if (is_array($css)) $css = json_encode($css, JSON_PRETTY_PRINT);
             if ($debug && is_array($css)) { echo '<pre>$selector='; var_dump($selector); var_dump($css); echo '</pre>'; };
             if (false && is_string($css) && $debug) {
@@ -1348,7 +1348,8 @@ class NicerAppWebOS {
         //echo '<pre>$this->view='; var_dump ($this->view); die();
         if (is_array($this->view)) {
             foreach ($this->view as $viewFolder => $viewSettings) break;
-            $viewFolder = preg_replace('/.*\//','', $viewFolder);
+            //$viewFolder = preg_replace('/.*\//','', $viewFolder);
+            //var_dump ($viewFolder); die();
             $url = '/view/'.base64_encode_url(json_encode($this->view));
         } /*else if (array_key_exists('REQUEST_URI',$_SERVER)) {
             // use defaults if not in proper format (when URL uses HTTP URL parameters for instance)..
@@ -1567,10 +1568,10 @@ class NicerAppWebOS {
                     $selectors[] = array (
                         'permissions' => array (
                             'read' => array(
-                                'user' => $username100
+                                'role' => $role
                             ),
                             'write' => array(
-                                'user' => $username100
+                                'role' => $role
                             )
                         ),
                         'specificityName' => 'app \''.$viewFolder.'\' for group '.$role,
@@ -1582,10 +1583,10 @@ class NicerAppWebOS {
                     $selectors[] = array (
                         'permissions' => array (
                             'read' => array(
-                                'user' => $username100
+                                'role' => $role
                             ),
                             'write' => array(
-                                'user' => $username100
+                                'role' => $role
                             )
                         ),
                         'specificityName' => 'app \''.$viewFolder.'\' for group '.$role.' at the client',
@@ -1602,10 +1603,10 @@ class NicerAppWebOS {
                 $selectors[] = array (
                     'permissions' => array (
                         'read' => array(
-                            'user' => $username100
+                            'role' => $role
                         ),
                         'write' => array(
-                            'user' => $username100
+                            'role' => $role
                         )
                     ),
                     'specificityName' => 'current page for group '.$role,
@@ -1618,10 +1619,10 @@ class NicerAppWebOS {
                 $selectors[] = array (
                     'permissions' => array (
                         'read' => array(
-                            'user' => $username100
+                            'role' => $role
                         ),
                         'write' => array(
-                            'user' => $username100
+                            'role' => $role
                         )
                     ),
                     'specificityName' => 'current page for group '.$role.' at the client',

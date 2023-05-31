@@ -89,8 +89,11 @@ na.backgrounds = {
                     }
 
                     if (
-                        $(window).width() > w
-                        || $(window).height() > h
+                        bgk.match(/\.txt$/)
+                        && (
+                            $(window).width() > w
+                            || $(window).height() > h
+                        )
                     ) {
                         hit = false;
                     }

@@ -7,7 +7,8 @@ $cdb = $naWebOS->dbs->findConnection('couchdb')->cdb;
 
 if (!array_key_exists('database',$_POST)) {
     $dbg = [
-        '$_REQUEST' => $_REQUEST
+        '$_GET' => $_GET,
+        '$_POST' => $_POST
     ];
     cdb_error (403, null, 'Hacking attempt detected (attempt to access database with '.json_encode($dbg).'). Event logged.');
 }

@@ -469,7 +469,7 @@ export class na3D_fileBrowser {
                 for (var i=0; i<6; i++) textures[i] = '/NicerAppWebOS/siteMedia/folderIcon.png';
                 for (var i=0; i<6; i++) {
                     var p = null;
-                    if (itd[''+i] && itd[''+i].match(/.*\.png|.*\.jpeg|.*\.jpg|.*\.gif$/)) {
+                    if (itd[''+i] && typeof itd[''+i]=='object' && Object.keys(itd[''+i])[0].match(/.*\.png|.*\.jpeg|.*\.jpg|.*\.gif$/)) {
                         var
                         fullPath = '/NicerAppWebOS/siteMedia/backgrounds' + itd[''+i],
                         filename = fullPath.replace(/^.*[\\\/]/, ''),
