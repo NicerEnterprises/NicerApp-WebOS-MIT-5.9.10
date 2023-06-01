@@ -1195,13 +1195,13 @@ na.desktop = {
         }
         //na.m.log (556, fncn + ' : na.desktop.settings.animatingDivs='+JSON.stringify(na.d.s.animatingDivs, null, 2), false);
         //debugger;
+        //na.m.log (50, fncn + ' : allCompleted='+(allCompleted?'true':'false')+', na.m.HTMLidle()='+(na.m.HTMLidle()?'true':'false'), false);
         if (!allCompleted) {
             na.d.s.animating = true;
             return false;
         } else {
             na.d.s.animating = false;
         }
-        //na.m.log (50, fncn + ' : allCompleted='+(allCompleted?'true':'false')+', na.m.HTMLidle()='+(na.m.HTMLidle()?'true':'false'), false);
 
 
         // call desktop.registerCallback() callbackFunctions, 
@@ -1210,7 +1210,7 @@ na.desktop = {
             var cb = na.d.s.callbacks[i];
             if (cb.divID=='#'+div.id && typeof cb.callback=='function') cb.callback(cb, div, calculationResults, sectionIdx, section, divOrderIdx);
         };
-        
+
 
         // and now call the na.desktop equivalent of jQuery.animate({complete:callbackFunction}) 
         //  for all #div.id, AFTER allCompleted==true and na.m.HTMLidle()===true

@@ -2314,32 +2314,6 @@ onclick_btnFullResetOfAllThemes : function (event) {
         //na.desktop.resize(null, false);
         //na.site.onresize ({ reloadMenu:false });
 
-        var 
-        callback3x = (settings ? settings.callback : null),
-        callback2b = function () {
-            na.m.log (210, '<UL> & <LI> DATA LOADED FOR #siteMenu', false);
-            na.m.log (210, 'STARTING TO RE-INITIALIZE #siteMenu', false);
-
-            na.site.settings.menus['#siteMenu'] = new naVividMenu($('#siteMenu')[0], function(menu) {
-                na.m.log (210, 'DONE RE-INITIALIZING #siteMenu', false);
-                var topLevelItemCount = $('.vividMenu_mainUL > li', menu).length;
-                //debugger;
-                $('#siteMenu').attr('fontSize', na.site.settings.current.menuFontSize);
-
-
-
-
-                if (settings) settings.naVividMenu_menuInitialized = menu;
-                /*setTimeout (function() {
-                    na.site.renderAllCustomHeadingsAndLinks();
-                    if (typeof callback3x=='function') callback3x (settings);
-                }, 500);*/
-                    if (typeof callback3x=='function') callback3x (settings);
-            });
-        };
-
-
-
 
         //na.m.waitForCondition ('na.site.reloadMenu() : na.m.HTMLidle() && !na.site.settings.current.startingApps?', function() {
         na.m.waitForCondition ('na.site.reloadMenu() : na.m.HTMLidle()?', function() {
@@ -2348,9 +2322,28 @@ onclick_btnFullResetOfAllThemes : function (event) {
                 //&& !na.site.settings.current.startingApps;
             return r;
         }, function() {
+            var
+            callback3x = (settings ? settings.callback : null),
+            callback2b = function () {
+                na.m.log (210, '<UL> & <LI> DATA LOADED FOR #siteMenu', false);
+                na.m.log (210, 'STARTING TO RE-INITIALIZE #siteMenu', false);
+
+                setTimeout (function() {
+                    na.site.settings.menus['#siteMenu'] = new naVividMenu($('#siteMenu')[0], function(menu) {
+                        na.m.log (210, 'DONE RE-INITIALIZING #siteMenu', false);
+                        var topLevelItemCount = $('.vividMenu_mainUL > li', menu).length;
+                        //debugger;
+                        $('#siteMenu').attr('fontSize', na.site.settings.current.menuFontSize);
+
+                        if (settings) settings.naVividMenu_menuInitialized = menu;
+                        if (typeof callback3x=='function') callback3x (settings);
+                    });
+                }, 50);
+            };
+
             na.site.reloadMenu_reOrganise (callback2b);
             na.site.renderAllCustomHeadingsAndLinks();
-        }, 100);
+        }, 50);
     },
     
     reloadMenu_reOrganise : function(callback4a) {
