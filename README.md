@@ -124,15 +124,20 @@ After that :
 #
 # HTTPS
 server {
-  listen 443 ssl http2;
-  listen [::]:443 ssl http2;
+  listen 45000 ssl http2;
+  listen [::]:45000 ssl http2;
 
   server_name DOMAIN_TLD;
+  # DOMAIN_TLD can be nicer.app, said.by or myShop.com for instance
+  # you'd then have to foward your external IP address to your LAN card's IP address in the web administration interface of
+  # your internet modem. you can find out your LAN card's IP addresses (which have to be in the 192.168.178.[0-255] range
+  # i think) with the linux 'ifconfig' commandline command.
+
   root /var/www/DOMAIN_TLD;
   # actually : root /var/www/nicer.app or /var/www/mysite.com, of course.
     
-  ssl_certificate /etc/letsencrypt/live/nicer.app/fullchain.pem;
-  ssl_certificate_key /etc/letsencrypt/live/nicer.app/privkey.pem;
+  ssl_certificate /etc/letsencrypt/live/DOMAIN_TLD/fullchain.pem;
+  ssl_certificate_key /etc/letsencrypt/live/DOMAIN_TLD/privkey.pem;
 
   ssl_session_cache shared:SSL:10m;
   ssl_session_timeout 10m;
@@ -149,9 +154,51 @@ server {
   #add_header 'Access-Control-Expose-Headers' 'Authorization' always;
 
   location / {
-    # forward traffic to your server's LAN (Local Area Network) IP Address, apache2 at port 447:
-    proxy_pass https://192.168.178.21:447/;
+    # forward traffic to your server's LAN (Local Area Network) IP Address, apache2 at port 45000:
+    proxy_pass https://192.168.178.21:45000/;
 	
+    proxy_redirect off;
+    proxy_buffering off;
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Ssl on;
+
+    proxy_connect_timeout 159s;
+    proxy_send_timeout   60;
+    proxy_read_timeout   60;
+    send_timeout 60;
+    resolver_timeout 60;
+  }
+}
+server {
+  listen 45001 ssl http2;
+  listen [::]:45001 ssl http2;
+
+  server_name DOMAIN2_TLD;
+  root /var/www/DOMAIN2_TLD;
+  # actually : root /var/www/nicer.app or /var/www/mysite.com, of course.
+
+  ssl_certificate /etc/letsencrypt/live/DOMAIN2_TLD/fullchain.pem;
+  ssl_certificate_key /etc/letsencrypt/live/DOMAIN2_TLD/privkey.pem;
+
+  ssl_session_cache shared:SSL:10m;
+  ssl_session_timeout 10m;
+  ssl_protocols TLSv1.2 TLSv1.1 TLSv1;
+  ssl_ciphers 'kEECDH+ECDSA+AES128 kEECDH+ECDSA+AES256 kEECDH+AES128 kEECDH+AES256 kEDH+AES128 kEDH+AES256 DES-CBC3-SHA +SHA !aNULL !eNULL !LOW !kECDH !DSS !MD5 !RC4 !EXP !PSK !SRP !CAMELLIA !SEED';
+  ssl_prefer_server_ciphers on;
+  ssl_dhparam /etc/nginx/dhparam.pem;
+
+  add_header 'Access-Control-Allow-Origin' 'https://fiddle.jshell.net' always;
+  add_header 'Access-Control-Allow-Credentials' 'true' always;
+  add_header 'Access-Control-Allow-Methods' 'GET, POST, PUT, DELETE, OPTIONS' always;
+  add_header 'Access-Control-Allow-Headers' 'Accept,Authorization,Cache-Control,Content-Type,DNT,If-Modified-Since,Keep-Alive,Origin,User-Agent,X-Requested-With' always;
+  # required to be able to read Authorization header in frontend
+  #add_header 'Access-Control-Expose-Headers' 'Authorization' always;
+
+  location / {
+    # forward traffic to your server's LAN (Local Area Network) IP Address, apache2 at port 45001:
+    proxy_pass https://192.168.178.21:45001/;
+
     proxy_redirect off;
     proxy_buffering off;
     proxy_set_header Host $host;
@@ -178,11 +225,13 @@ port 80 should be disabled in all files in /etc/apache2/sites-available/, by mod
 Listen 80
 
 <IfModule ssl_module>
-        Listen 192.168.178.77:447
+        Listen 192.168.178.77:45000
+        Listen 192.168.178.77:45001
 </IfModule>
 
 <IfModule mod_gnutls.c>
-        Listen 192.168.178.77:447
+        Listen 192.168.178.77:45000
+        Listen 192.168.178.77:45001
 </IfModule>
 ````
 
@@ -190,7 +239,7 @@ Listen 80
 i'll provide an example apache2 config file for https://DOMAIN_TLD
 the following is in /etc/apache2/sites-available/001-DOMAIN_TLD.conf
 ````
-<VirtualHost *:447>
+<VirtualHost *:45000>
         # The ServerName directive sets the request scheme, hostname and port that
         # the server uses to identify itself. This is used when creating
         # redirection URLs. In the context of virtual hosts, the ServerName
@@ -212,8 +261,8 @@ the following is in /etc/apache2/sites-available/001-DOMAIN_TLD.conf
         #LogLevel info ssl:warn
         LogLevel info ssl:warn
 
-        #ErrorLog ${APACHE_LOG_DIR}/error.448.log
-        #CustomLog ${APACHE_LOG_DIR}/access.448.log combined
+        #ErrorLog ${APACHE_LOG_DIR}/error.45000.log
+        #CustomLog ${APACHE_LOG_DIR}/access.45000.log combined
         SetEnvIf X-Forwarded-For "^.*\..*\..*\..*" forwarded
         LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"" combined
         LogFormat "%{X-Forwarded-For}i %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"" forwarded
