@@ -321,9 +321,9 @@ and possibly .../NicerAppWebOS/domainConfigs/YOURDOMAIN_TLD/desktop.source.js as
 
 # Adding new URLs and apps into a nicerapp site
 All apps and pages on a nicerapp site are loaded through a URL that looks somewhat like this :
-http://localhost/apps/eyJtdXNpYyI6eyJzZXQiOiJpbmRleCJ9fQ
+http://localhost/view/eyJtdXNpYyI6eyJzZXQiOiJpbmRleCJ9fQ
 
-You will notice the "strange" sequence after /apps/ in that URL.
+You will notice the "strange" sequence after /view/ in that URL.
 It's strange because it's base64-encoded JSON, allowing for multiple settings to be passed into the nicerapp PHP code, while avoiding the "old" practice of using http://localhost/apps/someApp.php?setting1=x&setting2=y (which forces non-ASCII characters to be 'urlEncoded' which makes for really difficult reading).
 
 If you want to simplify things for use in Search Engine Optimization (SEO), you can have http://localhost/abc automatically translated into http://localhost/apps/eyJtdXNpYyI6eyJzZXQiOiJpbmRleCJ9fQ in **.../.htaccess** - there are already some examples supplied.
