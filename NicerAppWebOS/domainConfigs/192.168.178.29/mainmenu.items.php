@@ -375,6 +375,7 @@
                     "apps" => [
                         'diskText' => [
                             'file' => '/NicerAppWebOS/documentation/NicerApp-WebOS--overview.php',
+                            'title' => '/NicerAppWebOS/documentation/NicerApp-WebOS--overview.title.php',
                             'SEO_value' =>  [ 'docs', 'docs-overview' ]
                         ]
                      ]
@@ -391,6 +392,7 @@
                     "apps" => [
                         'diskText' => [
                             'file' => '/NicerAppWebOS/LICENSE.php',
+                            'title' => '/NicerAppWebOS/LICENSE.title.php',
                             'SEO_value' =>  [ 'license', 'LICENSE', 'docs-license' ]
                         ]
                      ]
@@ -406,6 +408,7 @@
                     "apps" => [
                         'diskText' => [
                             'file' => '/NicerAppWebOS/documentation/NicerApp-WebOS--todoList.php',
+                            'title' => '/NicerAppWebOS/documentation/NicerApp-WebOS--todoList.title.php',
                             'SEO_value' =>  [ 'todo', 'docs-todoList' ]
                         ]
                      ]
@@ -422,6 +425,7 @@
                     "apps" => [
                         'diskText' => [
                             'file' => '/NicerAppWebOS/documentation/NicerEnterprises--company.php',
+                            'title' => '/NicerAppWebOS/documentation/NicerEnterprises--company.title.php',
                             'SEO_value' =>  'company'
                         ]
                      ]

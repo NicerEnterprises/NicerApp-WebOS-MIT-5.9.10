@@ -46,7 +46,6 @@ class naVividMenu__behavior_rainbowPanels {
         });
 
         $(el).css({display:'flex',height:50,alignItems:'center'});
-debugger;
 
         if (typeof callback7=='function') callback7(t.el);
 
@@ -90,6 +89,7 @@ debugger;
         LIs.each(function(idx,li) {
             $(li).attr('id', t.el.id+'__li__'+idx);
             var html2 = '<div id="'+t.el.id+'__'+idx+'" class="vividButton vividButton_text vividMenu_item backdropped"  theme="dark" style="display:none;">'+$(li).children('a')[0].outerHTML.replace($(li).children('a')[0].innerHTML+'</a>', '<span class="contentSectionTitle3_span">'+$(li).children('a')[0].innerText+'</span></a>').replace('class="linkToNewPage"', 'class="linkToNewPage contentSectionTitle3_a"')+'</div>';
+            //var html2 = '<div id="'+t.el.id+'__'+idx+'" class="vividButton vividButton_text vividMenu_item backdropped"  theme="dark" style="display:none;">'+$(li).children('a')[0].outerHTML+'</div>';
             html += html2;
 
             t.items[idx] = {
@@ -260,10 +260,9 @@ debugger;
             if (it.level > 0 ) {
                 //if (t.debugMe) na.m.log (20, 'naVividMenu.createVividButton() : bind("mouseout") : hiding sub-menu for "'+it.label+'" after 500ms.', true);
 
-                if (false && t.useDelayedShowingAndHiding) {
+                if (t.useDelayedShowingAndHiding) {
                     t.cancelHidings(t);
                     t.timeout_hideSubMenu[it.idx] = setTimeout(function(t,idx,evt){
-                        debugger;
                         t.onmouseout(evt);
                         delete t.timeout_hideSubMenu[idx]
                     }, 150, t, it.idx, event);
@@ -312,8 +311,8 @@ debugger;
                     ? na.d.g.margin + ( ( $(parentItem).parent().height() - $(parentItem).height() ) / 2 )
                     : na.d.g.margin - ( ( $(parentItem).parent().height() - $(parentItem).height() ) / 2 )
                 : dim.verDirection == 'south'
-                    ? p_bcr.top + na.d.g.margin - ( ( $(parentItem).parent().height() - $(parentItem).height() ) / 2 )
-                    : p_bcr.top - na.d.g.margin - ( ( $(parentItem).parent().height() - $(parentItem).height() ) / 2 ),
+                    ? /*p_bcr.top + */na.d.g.margin - ( ( $(parentItem).parent().height() - $(parentItem).height() ) / 2 )
+                    : /*p_bcr.top - */ na.d.g.margin - ( ( $(parentItem).parent().height() - $(parentItem).height() ) / 2 ),
             numKids = Object.keys(t.children[itp_idx]).length,
             sqrtNumKids = Math.ceil(Math.sqrt(numKids)),
             h = dim.space2bottom > dim.space2top ? dim.space2bottom : dim.space2top,
@@ -323,7 +322,13 @@ debugger;
                 var container = document.createElement('div');
                 container.id = t.el.id+'__backPanel__'+itp_idx;
                 container.className = 'vividMenu_item_subpanelLayoutContainer';
-                $(container).css({ position : 'absolute', left:p_bcr.left-tel_bcr.left+(it.level>2?$(it.b.el).width()*.7:0),top:p_bcr.top+p_bcr.height+na.d.g.margin, maxWidth : w-20, maxHeight : h-20 });
+                $(container).css({
+                    position : 'absolute',
+                    left : p_bcr.left-tel_bcr.left+(it.level>2?$(it.b.el).width()*.7:0),
+                    top : p_bcr.top+p_bcr.height+na.d.g.margin-tel_bcr.top,
+                    maxWidth : w-20,
+                    maxHeight : h-20
+                });
                 $(t.el).append(container);
             } else {
                 var container = $('div#'+t.el.id+'__backPanel__'+itp_idx)[0];
@@ -1103,12 +1108,23 @@ debugger;
 
         var myPeers = [];
         var prevKids = [];
+        var prevPeers = [];
         if (
             t.currentEl
             && t.prevEl
             //&& t.currentEl.it.level !== t.prevEl.it.level
             && t.currentEl.it.parents && t.currentEl.it.parents.length > 0
         ) {
+            for (var pIdx=0; pIdx<t.currentEl.it.parents.length; pIdx++) {
+                var prevPeers_idxs = t.children[t.currentEl.it.parents[pIdx].idx];
+                for (var peerIdx in prevPeers_idxs) {
+                    var it2 = prevPeers_idxs[peerIdx];
+                    if (it2.b) prevPeers.push (it2.b.el);
+                }
+                var panel = $('#'+t.el.id+'__panel__'+t.currentEl.it.parents[pIdx].idx);
+                //if (panel[0]) prevPeers.push (it2.b.el);
+            }
+
             var myPeers_idxs = t.children[t.currentEl.it.parents[0].idx];
 
             for (var peerIdx in myPeers_idxs) {
@@ -1143,9 +1159,9 @@ debugger;
         }
 
 
-        currs = $(currs).not(myPeers).not(prevKids).not(myKids);
+        currs = $(currs).not(myPeers).not(prevPeers).not(prevKids).not(myKids);
         if (t.useFading) {
-            $('.vividMenu_item', menu).add('.vividMenu_subMenuPanel').not(rootLevel).not(currs).not(myPeers).not(parentPanels).not(myKids)
+            $('.vividMenu_item', menu).add('.vividMenu_subMenuPanel').not(rootLevel).not(currs).not(myPeers).not(parentPanels).not(myKids).not(prevPeers)
                 .stop(true,true).fadeOut('fast', function () {
                     if (
                         $(this).is('.vividMenu_subMenuPanel')
@@ -1154,7 +1170,7 @@ debugger;
                 });
         } else {
             $('.vividMenu_item, .vividMenu_subMenuPanel', menu)
-                .not(rootLevel).not(currs).not(myPeers).not(parentPanels).not(myKids)
+                .not(rootLevel).not(currs).not(myPeers).not(parentPanels).not(myKids).not(prevPeers)
                 .css({display:'none'});
             $('.vividMenu_subMenuPanel').each(function(idx,el){
                 if (el.id.indexOf(t.el.id)!==-1) $(this).remove();

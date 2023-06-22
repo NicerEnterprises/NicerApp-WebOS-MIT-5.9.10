@@ -39,26 +39,26 @@ sudo touch /var/log/apache2/NicerEnterprises-NicerApp-WebOS.log
 sudo chown www-data:www-data /var/log/apache2/NicerEnterprises-NicerApp-WebOS.log
 sudo chmod 640 /var/log/apache2/NicerEnterprises-NicerApp-WebOS.log
 
-echo "SETTING PERMISSIONS FOR $ROOT_PATH/NicerAppWebOS/3rd-party/geoLite2/downloads"
-if [ ! -d $ROOT_PATH/NicerAppWebOS/3rd-party/geoLite2/downloads ]; then
-	sudo mkdir $ROOT_PATH/NicerAppWebOS/3rd-party/geoLite2/downloads
-fi
-if [ ! -d $ROOT_PATH/NicerAppWebOS/3rd-party/geoLite2/downloads/GeoLite2-City ]; then
-	sudo mkdir $ROOT_PATH/NicerAppWebOS/3rd-party/geoLite2/downloads/GeoLite2-City
-fi
-if [ ! -d $ROOT_PATH/NicerAppWebOS/3rd-party/geoLite2/downloads/GeoLite2-Country ]; then
-	sudo mkdir $ROOT_PATH/NicerAppWebOS/3rd-party/geoLite2/downloads/GeoLite2-Country
-fi
-sudo chown -R $NA_MAIN_USER:$NA_MAIN_GROUP $ROOT_PATH/NicerAppWebOS/3rd-party/geoLite2/downloads
-sudo chmod -R $NA_USERDATA_PERMISSIONS $ROOT_PATH/NicerAppWebOS/3rd-party/geoLite2/downloads
-sudo find $ROOT_PATH/NicerAppWebOS/3rd-party/geoLite2/downloads -type d -exec chmod u+x,g+x {} \;
-sudo chown -R $NA_MAIN_USER:$NA_MAIN_GROUP $ROOT_PATH/NicerAppWebOS/3rd-party/geoLite2/*.mmdb
-sudo chmod -R $NA_USERDATA_PERMISSIONS $ROOT_PATH/NicerAppWebOS/3rd-party/geoLite2/*.mmdb
+#echo "SETTING PERMISSIONS FOR $ROOT_PATH/NicerAppWebOS/3rd-party/geoLite2/downloads"
+#if [ ! -d $ROOT_PATH/NicerAppWebOS/3rd-party/geoLite2/downloads ]; then
+#	sudo mkdir $ROOT_PATH/NicerAppWebOS/3rd-party/geoLite2/downloads
+#fi
+#if [ ! -d $ROOT_PATH/NicerAppWebOS/3rd-party/geoLite2/downloads/GeoLite2-City ]; then
+#	sudo mkdir $ROOT_PATH/NicerAppWebOS/3rd-party/geoLite2/downloads/GeoLite2-City
+#fi
+#if [ ! -d $ROOT_PATH/NicerAppWebOS/3rd-party/geoLite2/downloads/GeoLite2-Country ]; then
+#	sudo mkdir $ROOT_PATH/NicerAppWebOS/3rd-party/geoLite2/downloads/GeoLite2-Country
+#fi
+#sudo chown -R $NA_MAIN_USER:$NA_MAIN_GROUP $ROOT_PATH/NicerAppWebOS/3rd-party/geoLite2/downloads
+#sudo chmod -R $NA_USERDATA_PERMISSIONS $ROOT_PATH/NicerAppWebOS/3rd-party/geoLite2/downloads
+#sudo find $ROOT_PATH/NicerAppWebOS/3rd-party/geoLite2/downloads -type d -exec chmod u+x,g+x {} \;
+#sudo chown -R $NA_MAIN_USER:$NA_MAIN_GROUP $ROOT_PATH/NicerAppWebOS/3rd-party/geoLite2/*.mmdb
+#sudo chmod -R $NA_USERDATA_PERMISSIONS $ROOT_PATH/NicerAppWebOS/3rd-party/geoLite2/*.mmdb
 
 CURRENT_PATH="$ROOT_PATH/NicerAppWebOS/apps/NicerAppWebOS/application-programmer-interfaces/crawlers/imagesMetaInfo/output"
 echo "SETTING PERMISSIONS FOR $CURRENT_PATH"
 if [ ! -d $CURRENT_PATH ]; then
-	sudo mkdir $CURRENT_PATH
+	sudo mkdir -p $CURRENT_PATH
 fi
 
 
@@ -107,13 +107,13 @@ sudo find $ROOT_PATH/NicerAppWebOS/siteData -type d -exec chmod u+x,g+x {} \;
 
 echo "SETTING PERMISSIONS FOR $ROOT_PATH/NicerAppWebOS/apps/nicer.app/application-programmer-interfaces/technology/crawlers/imageSearch"
 if [ ! -d $ROOT_PATH/NicerAppWebOS/apps/nicer.app/application-programmer-interfaces/technology/crawlers/imageSearch/output ]; then
-	sudo mkdir $ROOT_PATH/NicerAppWebOS/apps/nicer.app/application-programmer-interfaces/technology/crawlers/imageSearch/output
+	sudo mkdir -p $ROOT_PATH/NicerAppWebOS/apps/nicer.app/application-programmer-interfaces/technology/crawlers/imageSearch/output
 fi
 sudo chown -R $NA_MAIN_USER:$NA_MAIN_GROUP $ROOT_PATH/NicerAppWebOS/apps/nicer.app/application-programmer-interfaces/technology/crawlers/imageSearch/output
 sudo chmod -R $NA_USERDATA_PERMISSIONS $ROOT_PATH/NicerAppWebOS/apps/nicer.app/application-programmer-interfaces/technology/crawlers/imageSearch/output
 sudo find $ROOT_PATH/NicerAppWebOS/apps/nicer.app/application-programmer-interfaces/technology/crawlers/imageSearch/output -type d -exec chmod u+x,g+x {} \;
 
-sudo chmod u+x,g+x $ROOT_PATH/NicerAppWebOS/apps/nicer.app/application-programmer-interfaces/technology/crawlers/imageSearch/doDailyDownload.sh
+sudo chmod u+x,g+x $ROOT_PATH/NicerAppWebOS/apps/NicerAppWebOS/application-programmer-interfaces/technology/crawlers/imageSearch/doDailyDownload.sh
 sudo chmod u+x,g+x $ROOT_PATH/NicerAppWebOS/3rd-party/imapsync-2.178/imapsync
 
 echo "END OF ./setPermissions.sh"

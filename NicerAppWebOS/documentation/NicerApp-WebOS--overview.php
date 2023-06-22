@@ -23,10 +23,8 @@
 
     <p>
     <b>NicerApp WebOS is free to use for personal, non-profit and governmental purposes.</b><br/>
-    <b>Actual commercial usage currently asks just 5% of the final price of installation, modifications, and sales made with this platform.</b><br/>
+    <b>Actual commercial usage currently demands 20% of the price of sales made with this platform.</b><br/>
     All commercial contracts are signed per Licensee and The Owner of Nicer Enterprises, me, Rene AJM Veerman, and have no expiration date at all.<br/>
-    As more features get added to the base layers of The Software, the price *might* increase, at some point in time. Advance notice will be given, but i can not guarantee exactly how long before a price increase the features will be announced publicly that cause the price increase, and at what percentage that will bring the new total price.<br/>
-    <b>Nicerapp also uses the software industry standard business model of paid expansion packs, so don't worry about price hikes to 20% or more ;)</b><br/>
     <br/>
     Full <a href="/docs-license">NA-COMMIT-licensed</a>[1] sources are available at <a href="https://github.com/NicerEnterprises/NicerApp-WebOS" target="githubNA" class="noPushState">https://github.com/NicerEnterprises/NicerApp-WebOS</a>.<br/>
     Documentation is available at <a href="https://github.com/NicerEnterprises/NicerApp-WebOS#readme" target="githubNAdocs" class="noPushState">https://github.com/NicerEnterprises/NicerApp-WebOS#readme</a>.<br/>

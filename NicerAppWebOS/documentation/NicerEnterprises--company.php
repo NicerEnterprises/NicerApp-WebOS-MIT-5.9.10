@@ -16,7 +16,7 @@
 <div>
     <p>
     <a href="https://nicer.app" target="naHP">https://nicer.app</a>, <a href="https://said.by" target="sbHP">https://said.by</a>, <a href="https://zoned.at" target="zAt">https://zoned.at</a>, are all
-    Copyrighted (c) and have (r), All Rights Reserved 2002-2022 by Rene A.J.M. Veerman &lt;<a href="mailto:rene.veerman.netherlands@gmail.com" class="noPushState" target="writeMailToRene">rene.veerman.netherlands@gmail.com</a>&gt;.<br/>
+    Copyrighted (C) and have (R), All Rights Reserved 2002-2023 by Rene A.J.M. Veerman &lt;<a href="mailto:rene.veerman.netherlands@gmail.com" class="noPushState" target="writeMailToRene">rene.veerman.netherlands@gmail.com</a>&gt;.<br/>
     i am also the owner, CEO, CTO and CFO for all of these websites.<br/>
     <br/>
     My social media accounts are <a class="noPushState" href="https://facebook.com/rene.veerman.90" target="fbMain">https://facebook.com/rene.veerman.90</a><br/>
@@ -26,7 +26,7 @@
 
     <p>
     Should I unexpectedly die for some strange reason, i want the Copyright (C) and All Rights Reserved (R) of my software NicerApp WebOS[1] donated to kubuntu.com *and* apache.org where the license will be decided by kubuntu.com who may or may not include advice from apache.org into their considerations.<br/>
-    The rest of my belongings i donate to the Amsterdam.NL stedelijk museum, who may do with it all as they please.<br/>
+    The rest of my belongings i donate first to my parents, and second to the Amsterdam.NL stedelijk museum, who may do with it all as they please, but who are requested to keep a copy of nicer.app up and running. My accountant's details are well engraved into medical law.<br/>
     <br/>
     [1] <a href="https://github.com/NicerEnterprises/NicerApp-WebOS" class="noPushState" target="ghp1">https://github.com/NicerEnterprises/NicerApp-WebOS</a>.
     </p>

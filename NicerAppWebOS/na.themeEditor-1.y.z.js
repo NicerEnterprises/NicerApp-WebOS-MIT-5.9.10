@@ -36,6 +36,23 @@ na.te = na.themeEditor = {
                     na.site.settings.menus['#siteToolbarThemeEditor__selector'] =
                         new naVividMenu ($('#siteToolbarThemeEditor__selector')[0], true);
         //}, 1000);
+        */
+        delete na.site.settings.menus['#textFontFamily'];
+        na.site.settings.menus['#textFontFamily'] =
+            new naVividMenu ($('#textFontFamily')[0], true);
+
+
+        $('#textFontFamily')[0].addEventListener('mouseover', function() {
+            clearTimeout (na.te.s.c.timeout_hover_textFontFamily);
+            $('#siteToolbarThemeEditor > .vividDialogContent').css({ overflow : 'visible' });
+        });
+        $('#textFontFamily')[0].addEventListener('mouseout', function() {
+            clearTimeout (na.te.s.c.timeout_hover_textFontFamily);
+            na.te.s.c.timeout_hover_textFontFamily = setTimeout (function() {
+                $('#siteToolbarThemeEditor > .vividDialogContent').css({ overflow : 'visible auto' });
+            }, 1000);
+        });
+
 
         na.desktop.registerProgress ('[ThemeEditor]', function() {
             var
@@ -51,6 +68,7 @@ na.te = na.themeEditor = {
                 );
             }
 
+            /*
             itEl = $('#siteToolbarThemeEditor__selector')[0],
             t = na.site.settings.menus['#siteToolbarThemeEditor__selector'];
             if (t) {
@@ -62,7 +80,7 @@ na.te = na.themeEditor = {
                     t.getDimensions (t, itEl2, false),
                     false
                 );
-            }
+            }*/
         });
         na.desktop.registerCallback ('[ThemeEditor]', '#siteToolbarThemeEditor', function() {
             var
@@ -77,6 +95,7 @@ na.te = na.themeEditor = {
                 );
             }
 
+            /*
             itEl = $('#siteToolbarThemeEditor__selector')[0],
             t = na.site.settings.menus['#siteToolbarThemeEditor__selector'];
             if (t) {
@@ -87,8 +106,8 @@ na.te = na.themeEditor = {
                     t.getDimensions (t, itEl2, false)
                 );
             }
+            */
         });
-        */
 
         /*
         var
@@ -99,6 +118,7 @@ na.te = na.themeEditor = {
             success : function (data, ts, xhr) {
         */
                 let dat2 = na.te.transform_siteGlobalsThemes_to_jsTree();
+                na.te.s.c.dbSelectors = dat2;
                 let dat = dat2.dat;
                 let did = dat2.did;
                 //debugger;
@@ -127,36 +147,7 @@ na.te = na.themeEditor = {
                 if ($.jstree) $.jstree.defaults.core.error = function (a,b,c,d) {
                     //debugger;
                 };
-                $('#themeEditor_jsTree_selectors').css({
-                    height : $('#siteToolbarLeft .vividDialogContent').height() - $('#jsTree_navBar').height()
-                }).jstree('destroy').jstree({
-                    core : {
-                        data : dat,
-                        check_callback : true,
-                        multiple : false
-                    },
-                    types : {
-                        "naSelectorSet" : {
-                            "icon" : "/NicerAppWebOS/siteMedia/na.view.tree.selectorSet.png",
-                            "valid_children" : [ 'naElement', "naSelectorSet", 'naCSS' ]
-                        },
-                        "naCSS" : {
-                            "icon" : "/NicerAppWebOS/siteMedia/na.view.tree.css.png",
-                            "valid_children" : [ 'naElement' ]
-                        },
-                        "naElement" : {
-                            "icon" : "/NicerAppWebOS/siteMedia/na.view.tree.element.png",
-                            "valid_children" : ["naSelectorSet"]
-                        }
-                    },
-                    "plugins" : [
-                        "contextmenu", "dnd", "search",
-                        "state", "types", "wholerow", "multiselect"
-                    ]
-                }).on('changed.jstree', function (e, data) {
-                    na.te.s.c.selectedSelector = data;
-                    na.te.enableDisableButtons('selectedSelector');
-                });
+                na.te.initSelectorsTree (dat);
 
                 if (did) setTimeout (function() {
                     $('#themeEditor_jsTree_selectors').jstree('deselect_all').jstree('select_node', did);
@@ -265,7 +256,32 @@ na.te = na.themeEditor = {
                     ]
                 }).on('changed.jstree', function (e, data) {
                     na.te.s.c.selectedBackground = data;
-                    na.te.enableDisableButtons('selectedBackgrounds');
+                    for (var i=0; i<data.selected.length; i++) {
+                        var
+                        d = data.selected[i],
+                        rec = data.instance.get_node(d),
+                        btn = na.site.settings.buttons['#btnSelectBackgroundImage'];
+
+                        $('#documentTitle').val(rec.original.text);
+                        na.te.s.c.selectedTreeNode = rec;
+                        if (rec.original.type=='naDocument') {
+                            if (btn) btn.disable();
+                        } else if (rec.original.type=='naMediaAlbum') {
+                            if (btn) btn.enable();
+                            var
+                            path = na.te.currentPath(rec),
+                            path = path.replace(/ /g, '%20'),
+                            src = '/NicerAppWebOS/logic.userInterface/photoAlbum/4.0.0/index.php?basePath='+path,
+                            el = $('#themeEditor_photoAlbum')[0];
+                            el.onload = setTimeout(function(el) {
+                                na.te.onresize()
+                            }, 10, el);
+                            el.src = src;
+                        } else {
+                            if (btn) btn.disable();
+                        }
+
+                    };
                 });
                 
                 if (lastFolder) setTimeout (function() {
@@ -280,9 +296,16 @@ na.te = na.themeEditor = {
         };
         $.ajax(ac);
 
-        var 
-        div = $('#'+na.te.s.c.forDialogID),
-        bg = $('#'+na.te.s.c.forDialogID+' > .vdBackground')[0],
+        if (na.te.s.c.forDialogID) {
+            var
+            div = $('#'+na.te.s.c.forDialogID),
+            bg = $('#'+na.te.s.c.forDialogID+' > .vdBackground')[0];
+        } else {
+            var
+            div = $(na.te.s.c.forElements),
+            bg = $(na.te.s.c.forElements)[0];
+        }
+        var
         rgbaRegEx = /rgba\(\d{1,3}\,\s*\d{1,3}\,\s*\d{1,3}\,\s*([\d.]+)\).*/,
         rgbRegEx = /rgb\(\d{1,3}\,\s*\d{1,3}\,\s*\d{1,3}\).*/,
         scaleRegEx = /(\d+)px\s(\d+)px/,
@@ -326,8 +349,11 @@ na.te = na.themeEditor = {
         bgSrc = bgSrc.replace("')", '');
         var bgEl = document.createElement('img');
         bgEl.onload = function () {
-            var
-            bg = $('#'+na.te.s.c.forDialogID+' > .vdBackground')[0],
+            if (na.te.s.c.forDialogID) {
+                var bg = $('#'+na.te.s.c.forDialogID+' > .vdBackground')[0];
+            } else {
+                var bg = $(na.te.s.c.forElements)[0];
+            }
             scaleRegEx = /(\d+)px\s(\d+)px/,
             test3a = $(bg).css('backgroundSize').match(scaleRegEx);
             
@@ -356,7 +382,11 @@ na.te = na.themeEditor = {
             clickoutFiresChange : false, 
             change : function (color) {
                 if (typeof color=='object') color = 'rgba('+color._r+', '+color._g+', '+color._b+', '+color._a+')';
-                var bg = $('#'+na.te.s.c.forDialogID+' > .vdBackground');
+                if (na.te.s.c.forDialogID) {
+                    var bg = $('#'+na.te.s.c.forDialogID+' > .vdBackground')[0];
+                } else {
+                    var bg = $(na.te.s.c.forElements);
+                }
                 $(bg).css({ background : color, opacity : 1 });
                 na.site.saveTheme();                        
             }});
@@ -410,8 +440,6 @@ na.te = na.themeEditor = {
             $('#textShadow_0').css({ textShadow : $(div).css('textShadow') });
         }
         setTimeout (function() {
-            var x = $('#'+forDialogID+' > .vdBackground').css('background');
-            //na.m.log (300, 'x='+x);
             $('.mediaThumb', $('#themeEditor_photoAlbum')[0].contentWindow.document).each(function(idx,el) {
                 //na.m.log (300, 'el.src='+el.src.replace('thumbs/', ''));
                 if (x && x.indexOf(el.src.replace('thumbs/', ''))!==-1) {
@@ -451,6 +479,40 @@ na.te = na.themeEditor = {
         setTimeout (na.te.onresize, 200);
     },
 
+    initSelectorsTree : function (dat) {
+        na.te.s.c.dbSelectors = dat;
+        $('#themeEditor_jsTree_selectors').css({
+            height : $('#siteToolbarLeft .vividDialogContent').height() - $('#jsTree_navBar').height()
+        }).jstree('destroy').jstree({
+            core : {
+                data : dat,
+                check_callback : true,
+                multiple : false
+            },
+            types : {
+                'naSelectorSet' : {
+                    'icon' : '/NicerAppWebOS/siteMedia/na.view.tree.selectorSet.png',
+                    'valid_children' : [ 'naElement', 'naSelectorSet', 'naCSS' ]
+                },
+                'naCSS' : {
+                    'icon' : '/NicerAppWebOS/siteMedia/na.view.tree.css.png',
+                    'valid_children' : [ 'naElement' ]
+                },
+                "naElement" : {
+                    'icon' : '/NicerAppWebOS/siteMedia/na.view.tree.element.png',
+                    'valid_children' : []
+                }
+            },
+            "plugins" : [ // " or ', that very often doesn't matter.
+                "contextmenu", "dnd", "search",
+                "state", "types", "wholerow", "multiselect"
+            ]
+        }).on('changed.jstree', function (e, data) {
+            na.te.s.c.selectedSelector = data;
+            na.te.enableDisableButtons('selectedSelector');
+        });
+    },
+
     enableDisableButtons : function (which) {
         var x = na.te.s.c;
 
@@ -463,9 +525,16 @@ na.te = na.themeEditor = {
                     var d = data.selected[i], rec2 = data.instance.get_node(d);
                     if (rec2 && rec2.original) rec = rec2;
                 }
+                if (rec && rec.type=='naSelectorSet' && rec.text!=='Dialogs' && rec.text!=='App') {
+                    na.te.enableButtons ([ '#btnAddCSS' ]);
+                }
+                if (rec && rec.type=='naCSS' && rec.text!=='main') {
+                    na.te.enableButtons ([ '#btnDeleteCSS' ]);
+                }
                 if (rec && rec.type=='naCSS')
                     na.te.enableButtons([
-                        '#btnSelectBackgroundColor', '#btnSelectBorderSettings' , '#btnSelectBoxShadowSettings',
+                        '#btnAddElement', '#btnSelectBackgroundColor',
+                        '#btnSelectBorderSettings' , '#btnSelectBoxShadowSettings',
                         '#btnSelectTextSettings', '#btnSelectTextShadowSettings',
                         '#btnSelectBackgroundFolder' , '#btnSelectBackgroundImage'
                     ]);
@@ -475,6 +544,7 @@ na.te = na.themeEditor = {
                         || rec.text.match(/#app__[\w\d]+$/)
                     )
                         na.te.enableButtons([
+                            '#btnAddElement', '#btnDeleteElement',
                             '#btnSelectBackgroundColor', '#btnSelectBorderSettings' , '#btnSelectBoxShadowSettings',
                             '#btnSelectTextSettings', '#btnSelectTextShadowSettings'
                         ]);
@@ -488,9 +558,16 @@ na.te = na.themeEditor = {
             }
             if (data.action=='select_node') {
                 na.te.disableAllButtons();
+                if (data.node && data.node.type=='naSelectorSet' && data.node.text!=='Dialogs' && data.node.text!=='App') {
+                    na.te.enableButtons ([ '#btnAddGraphics' ]);
+                }
+                if (data && data.node.type=='naCSS' && data.node.text!=='main') {
+                    na.te.enableButtons ([ '#btnDeleteGraphics' ]);
+                }
                 if (data.node && data.node.type=='naCSS')
                     na.te.enableButtons([
-                        '#btnSelectBackgroundColor', '#btnSelectBorderSettings' , '#btnSelectBoxShadowSettings',
+                        '#btnAddElement', '#btnSelectBackgroundColor',
+                        '#btnSelectBorderSettings' , '#btnSelectBoxShadowSettings',
                         '#btnSelectTextSettings', '#btnSelectTextShadowSettings',
                         '#btnSelectBackgroundFolder' , '#btnSelectBackgroundImage'
                     ]);
@@ -498,15 +575,29 @@ na.te = na.themeEditor = {
                     if (
                         data.node.text.match(/#site[\w\d]+$/)
                         || data.node.text.match(/#app__[\w\d]+$/)
-                    )
+                    ) {
+                        na.te.s.c.forDialogID = data.node.text;
+                        na.te.s.c.forElements = null;
+                        na.te.enableButtons([
+                            '#btnAddElement', '#btnDeleteElement',
+                            '#btnSelectBackgroundColor', '#btnSelectBorderSettings' , '#btnSelectBoxShadowSettings',
+                            '#btnSelectTextSettings', '#btnSelectTextShadowSettings'
+                        ]);
+                    } else if (data.node.text.match(/#site.*\s\>\s\.vdBackground$/)) {
+                        na.te.s.c.forDialogID = data.node.text.match(/#(site.*)\s/)[1];
+                        na.te.s.c.forElements = null;
+                        na.te.enableButtons([
+                            '#btnSelectBackgroundFolder' , '#btnSelectBackgroundImage'
+                        ]);
+                    } else {
+                        na.te.s.c.forDialogID = null;
+                        na.te.s.c.forElements = data.node.text;
                         na.te.enableButtons([
                             '#btnSelectBackgroundColor', '#btnSelectBorderSettings' , '#btnSelectBoxShadowSettings',
                             '#btnSelectTextSettings', '#btnSelectTextShadowSettings'
                         ]);
-                    else if (data.node.text.match(/#site.*\s\>\s\.vdBackground$/))
-                        na.te.enableButtons([
-                            '#btnSelectBackgroundFolder' , '#btnSelectBackgroundImage'
-                        ]);
+                    }
+
             }
         } else if (which=='selectedBackground') {
             var data = na.te.s.c.selectedBackground;
@@ -558,17 +649,52 @@ na.te = na.themeEditor = {
                     type : 'naCSS'
                 });
                 if ('site'+parentName==na.te.s.c.forDialogID) outputData.did = newID;
-                for (var key2 in value) {
+                for (var divSel in value) {
                     var newID2 = na.m.randomString();
                     outputData.dat.push ({
                         id : newID2,
                         parent : newID,
-                        text : key2,
+                        text : divSel,
                         state : {
                             opened : true
                         },
                         type : 'naElement'
                     });
+                }
+            } else if (key=='Extras') {
+                outputData.dat.push ({
+                    id : newID,
+                    parent : parentID,
+                    text : key,
+                    state : {
+                        opened : true
+                    },
+                    type : type
+                });
+                for (var cssText in value) {
+                    var vdata = value[cssText];
+                    var newID2 = na.m.randomString();
+                    outputData.dat.push ({
+                        id : newID2,
+                        parent : newID,
+                        text : cssText,
+                        state : {
+                            opened : true
+                        },
+                        type : 'naCSS'
+                    });
+                    for (var divSel in vdata) {
+                        var newID3 = na.m.randomString();
+                        outputData.dat.push ({
+                            id : newID3,
+                            parent : newID2,
+                            text : divSel,
+                            state : {
+                                opened : true
+                            },
+                            type : 'naElement'
+                        });
+                    }
                 }
             } else {
                 outputData.dat.push ({
@@ -586,6 +712,60 @@ na.te = na.themeEditor = {
             };
         }
         return outputData;
+    },
+
+    transform_jsTree_to_siteGlobalsThemes : function() {
+        var
+        jsonNodes = $('#themeEditor_jsTree_selectors').jstree(true).get_json('#', { flat: true }),
+        themeSettings = {};
+
+        for (var i in jsonNodes) {
+            var it = jsonNodes[i];
+            na.te.transform_jsTree_to_siteGlobalsThemes__do (it, themeSettings);
+        }
+        debugger;
+        return themeSettings;
+    },
+
+    transform_jsTree_to_siteGlobalsThemes__do : function (it, themeSettings) {
+
+        /*
+         * na.site.loadTheme(), .saveTheme() and .fetchTheme() distribute and collect the settings under the
+         * 'Dialogs' and 'Apps' nodes of the Theme Editor's main tree view (the selectors jstree).
+         *
+         * that leaves us with only the custom built selectors to pick up here,
+         * to be used in na.site.saveTheme() and na.site.loadTheme()
+         */
+
+        switch (it.type) {
+            /*
+            case 'naSelectorSet' :
+                var data = {};
+                data[it.text] = {};
+                themeSettings = $.extend (themeSettings, data);
+                break;
+            case 'naCSS' :
+                var data = {};
+                data[it.text] = {};
+                themeSettings = $.extend (themeSettings, data);
+                break;
+            */
+            case 'naElement' :
+                var
+                parent = $('#themeEditor_jsTree_selectors').jstree(true).get_node(it.parent),
+                regExDialogs = /#site(.*)[\s\w\.\#\d\>]*/,
+                regExApps = /#app__(.*)__(.*)$/;
+
+                if (!themeSettings[parent.text]) themeSettings[parent.text] = {};
+                if (
+                    !it.text.match(regExDialogs)
+                    && !it.text.match(regExApps)
+                ) {
+                    themeSettings[parent.text] = $.extend (themeSettings[parent.text], na.site.fetchTheme(it.text));
+                }
+                break;
+        }
+        return themeSettings;
     },
     
     hide : function (event) {
@@ -615,19 +795,20 @@ na.te = na.themeEditor = {
             if (na.te.s.c.selectedImage) na.te.imageSelected(na.te.s.c.selectedImage);
         };*/
         $('#themeEditor_jsTree_backgrounds').css({
-            width : $('#siteToolbarThemeEditor .vividDialogContent').width(),
+            width : $('#siteToolbarThemeEditor > .vividDialogContent').width(),
             height : 
-                $('#siteToolbarThemeEditor .vividDialogContent').height() 
-                - $('#themeEditor_jsTree_backgrounds').position().top + 10
+                $('#siteToolbarThemeEditor > .vividDialogContent').height()
+                - $('#themeEditor_jsTree_backgrounds').position().top
+                + 10
         });
         
         $('.themeEditor_colorPicker').next().css ({ width : 230, zIndex : 1100  });
         //$('#siteToolbarThemeEditor label', t.el).not('.specificityCB').css ({ float : 'left' });
         
         $('.themeEditorComponent, .themeEditorComponent_containerDiv2').css({
-            width : 'calc(100% - 20px)',
+            width : 'calc(100% - 10px)',
             height : 
-                $('#siteToolbarThemeEditor .vividDialogContent').height() 
+                $('#siteToolbarThemeEditor > .vividDialogContent').height()
                 - $('.nate_dialogTitle').height() - 10
                 - $('#specificitySettings').height() - 8
                 - 18
@@ -638,16 +819,17 @@ na.te = na.themeEditor = {
         });
         */
         $('.boxSettings_input_containerDiv, .textSettings_input_containerDiv, .textShadowSettings_input_containerDiv').css ({
-            width : 'calc(100% - 50px - 20px)',
+            width : 'calc(100%)',
         });
             
-        
+        var psy = label_themeEditor_photoScaleY = $('#label_themeEditor_photoScaleY')[0];
+        var psyn = $(psy).position().top + $(psy).height() + na.d.g.margin;
         $('#themeEditor_photoAlbum').css({
             display : 'flex',
-            width : $('#siteToolbarThemeEditor .vividDialogContent').width()-10,
-            height : 
-                $('#siteToolbarThemeEditor .vividDialogContent').height() 
-                - $('#specificitySettings').height() - 250,
+            width : $('#siteToolbarThemeEditor > .vividDialogContent').width(),
+            height : '100%',
+                //$('#siteToolbarThemeEditor > .vividDialogContent').height()
+                //- $('#themeEditor_photoAlbum').position().top,
             top : 'auto'
         }).css({display:display});
     },
@@ -1186,18 +1368,32 @@ na.te = na.themeEditor = {
     borderSettingsSelected : function (color) {
         if (color) na.te.s.c.borderColor = color; else color = na.te.s.c.borderColor;
         if (typeof color=='object') color = 'rgba('+color._r+', '+color._g+', '+color._b+', '+color._a+')'; // firefox bugfix
-        var 
-        bg = $('#'+na.te.s.c.forDialogID),
-        newBorder = $('#borderWidth').val() + 'px ' + $('#borderType').val() + ' ' + color,
-        newBorderRadius = parseInt($('#borderRadius').val());
-        debugger;
-        
-        $(bg).css({ border: '', borderRadius: '' });
-        //$(bg).css({ border : newBorder, borderRadius : newBorderRadius });
-        //$('#'+na.te.s.c.forDialogID).css({borderRadius : Math.round((newBorderRadius/4)*3) });
-        //$('.boxShadow', bg).css({ border : newBorder, borderRadius : newBorderRadius });
-        $('#'+na.te.s.c.forDialogID+' > .vdBackground').css({ border:newBorder, borderRadius : newBorderRadius });
-        $(bg).css({borderRadius:newBorderRadius});
+
+        if (na.te.s.c.forDialogID) {
+            var
+            bg = $('#'+na.te.s.c.forDialogID),
+            newBorder = $('#borderWidth').val() + 'px ' + $('#borderType').val() + ' ' + color,
+            newBorderRadius = parseInt($('#borderRadius').val());
+
+            $(bg).css({ border: '', borderRadius: '' });
+            //$(bg).css({ border : newBorder, borderRadius : newBorderRadius });
+            //$('#'+na.te.s.c.forDialogID).css({borderRadius : Math.round((newBorderRadius/4)*3) });
+            //$('.boxShadow', bg).css({ border : newBorder, borderRadius : newBorderRadius });
+            $('#'+na.te.s.c.forDialogID+' > .vdBackground').css({ border:newBorder, borderRadius : newBorderRadius });
+            $(bg).css({borderRadius:newBorderRadius});
+        } else {
+            var
+            bg = $(na.te.s.c.forElements),
+            newBorder = $('#borderWidth').val() + 'px ' + $('#borderType').val() + ' ' + color,
+            newBorderRadius = parseInt($('#borderRadius').val());
+
+            $(bg).css({ border: '', borderRadius: '' });
+            //$(bg).css({ border : newBorder, borderRadius : newBorderRadius });
+            //$('#'+na.te.s.c.forDialogID).css({borderRadius : Math.round((newBorderRadius/4)*3) });
+            //$('.boxShadow', bg).css({ border : newBorder, borderRadius : newBorderRadius });
+            $(na.te.s.c.forElements).css({ border:newBorder, borderRadius : newBorderRadius });
+            //$(bg).css({borderRadius:newBorderRadius});
+        }
         /*if (na.te.s.c.fireSaveTheme) */na.site.saveTheme();
     },
     
@@ -1216,9 +1412,16 @@ na.te = na.themeEditor = {
         $('.themeEditorComponent, .themeEditorComponent_containerDiv2').not('#boxShadowSettings').fadeOut('fast');
         $('.themeEditor_colorPicker').next().fadeOut('fast');
         $('#boxShadowSettings').css({display:'inline-block',height:h1}).fadeIn('fast', 'swing', function () {
+            if (na.te.s.c.forDialogID) {
+                var
+                div = $('#'+na.te.s.c.forDialogID),
+                bg = $('#'+na.te.s.c.forDialogID+' > .vdBackground');
+            } else {
+                var
+                div = $(na.te.s.c.forElements),
+                bg = $(na.te.s.c.forElements);
+            };
             var
-            div = $('#'+na.te.s.c.forDialogID),
-            bg = $('#'+na.te.s.c.forDialogID+' > .vdBackground'),
             bg1 = $(bg).css('background').replace(/"/g, '\''),
             bs = $(div).css('boxShadow').split(', rgb');
             opacity = bg1.indexOf('url(')!==-1 ? bg.css('opacity') : 1,
@@ -1436,9 +1639,16 @@ na.te = na.themeEditor = {
             if ($('#themeEditor_backgroundColor').css('display')==='none')
                 $('#themeEditor_backgroundColor').css({top:8,opacity:1}).fadeIn('fast', function() {
                     $('#themeEditor_backgroundColor .sp-container').fadeIn('slow', 'swing', function() {
-                        var 
-                        bg =  $('#'+na.te.s.c.forDialogID+' > .vdBackground'),
-                        bg1 = bg.css('backgroundColor');
+                        if (na.te.s.c.forDialogID) {
+                            var
+                            bg =  $('#'+na.te.s.c.forDialogID+' > .vdBackground'),
+                            bg1 = bg.css('backgroundColor');
+                        } else {
+                            var
+                            bg = $(na.te.s.c.forElements),
+                            bg1 = bg.css('backgroundColor');
+                        };
+
                         if (bg1)
                             if ($('#themeEditor_backgroundColor  .sp-container').length > 0)
                                 $('#colorpicker').spectrum('set', bg1);
@@ -1475,7 +1685,10 @@ na.te = na.themeEditor = {
         $('.themeEditorComponent, .themeEditorComponent_containerDiv2').not('#themeEditor_photoAlbum, #themeEditor_photoAlbum_specs').fadeOut('fast');
         setTimeout (function () {
             $('.themeEditor_colorPicker').next().fadeOut('fast');
-            $('#themeEditor_photoAlbum, #themeEditor_photoOpacity, #themeEditor_photoAlbum_specs').fadeIn('fast');
+            $('#themeEditor_photoAlbum, #themeEditor_photoOpacity, #themeEditor_photoAlbum_specs').fadeIn('fast', function () {
+                resizeIFrameToFitContent($('#themeEditor_photoAlbum')[0]);
+            });
+
             setTimeout(function() {
                 $('#themeEditor_photoAlbum_specs').css({
                     display : 'flex',
@@ -1485,24 +1698,24 @@ na.te = na.themeEditor = {
                 });
                 //$('.labelthemeEditor').css ({ width : 170, flexShrink : 0, flexGrow : 0 });
                 
-                $('#label_themeEditor_photoOpacity').css ({ top : 4, position : 'absolute' });
+                //$('#label_themeEditor_photoOpacity').css ({ top : 4, position : 'absolute' });
                 $('#themeEditor_photoOpacity').css({
                     display : 'block',
-                    width:$('#siteToolbarThemeEditor .vividDialogContent').width() - 70 - 20,
+                    width:$('#siteToolbarThemeEditor .vividDialogContent').width() - 70 - 40,
                     left : 70
                 });
 
-                $('#label_themeEditor_photoScaleX').css ({ top : 37, position : 'absolute' });
+                //$('#label_themeEditor_photoScaleX').css ({ top : 37, position : 'absolute' });
                 $('#themeEditor_photoScaleX').css({
                     display : 'block',
-                    width:$('#siteToolbarThemeEditor .vividDialogContent').width() - 70 - 20,
+                    width:$('#siteToolbarThemeEditor .vividDialogContent').width() - 70 - 40,
                     left : 70
                 }).val(na.te.s.c.scaleX).fadeIn('fast');
                 
-                $('#label_themeEditor_photoScaleY').css ({ top : 66, position : 'absolute' });
+                //$('#label_themeEditor_photoScaleY').css ({ top : 66, position : 'absolute' });
                 $('#themeEditor_photoScaleY').css({
                     display : 'block',
-                    width:$('#siteToolbarThemeEditor .vividDialogContent').width() - 70 - 20,
+                    width:$('#siteToolbarThemeEditor .vividDialogContent').width() - 70 - 40,
                     left : 70
                 }).val(na.te.s.c.scaleX).fadeIn('fast');
                 
@@ -1613,9 +1826,16 @@ na.te = na.themeEditor = {
             //$('.themeEditor_colorPicker').next().fadeOut('fast');
             if ($('#textShadowSettings').css('display')==='none')
                 $('#textShadowSettings').fadeIn('fast', 'swing', function() {
+                    if (na.te.s.c.forDialogID) {
+                        var
+                        div = $('#'+na.te.s.c.forDialogID),
+                        bg =  $('#'+na.te.s.c.forDialogID+' > .vdBackground');
+                    } else {
+                        var
+                        div = $(na.te.s.c.forElements),
+                        bg =  $(na.te.s.c.forElements);
+                    };
                     var
-                    div = $('#'+na.te.s.c.forDialogID),
-                    bg =  $('#'+na.te.s.c.forDialogID+' > .vdBackground'),
                     bg1 = bg.css('background').replace(/\'/g, '\\\'').replace(/"/g, '\''),
                     opacity = bg1.indexOf('url(') !== -1 ? bg.css('opacity') : 1,
                     border = div.css('border'),
@@ -1654,10 +1874,15 @@ na.te = na.themeEditor = {
     },
 
     updateTextSettingsControls : function () {
-        var
-        el = $('#'+na.te.s.c.forDialogID),
-        el2 = $('#'+na.te.s.c.forDialogID+' > .vividDialogContent'),
-        el3 = $('#'+na.te.s.c.forDialogID+' td'),
+        if (na.te.s.c.forDialogID) {
+            var
+            el = $('#'+na.te.s.c.forDialogID),
+            el2 = $('#'+na.te.s.c.forDialogID+' > .vividDialogContent'),
+            el3 = $('#'+na.te.s.c.forDialogID+' td');
+        } else {
+            var el = el2 = el3 = $(na.te.s.c.forElements);
+        };
+
         ts = $(el).css('textShadow').split(', rgb');
         for (var i=1; i<ts.length; i++) {
             ts[i] = 'rgb'+ts[i];
@@ -1753,10 +1978,14 @@ na.te = na.themeEditor = {
             var idx2 = parseInt(el.id.replace('textShadow_',''));
             if (idx2 > last) last = idx2;
         });
-        
-        var
-        div = $('#'+na.te.s.c.forDialogID),
-        bg =  $('#'+na.te.s.c.forDialogID+' > .vdBackground'),
+
+        if (na.te.s.c.forDialogID) {
+            var
+            div = $('#'+na.te.s.c.forDialogID),
+            bg =  $('#'+na.te.s.c.forDialogID+' > .vdBackground');
+        } else {
+            var div = bg = $(na.te.s.c.forElements);
+        };
         bg1 = bg.css('background').replace(/\'/g, '\\\'').replace(/"/g, '\''),
         opacity = bg1.match(/url\(/) ? bg.css('opacity') : 1,
         border = div.css('border'),
@@ -1816,10 +2045,15 @@ na.te = na.themeEditor = {
             )
         ) na.te.s.c.selectedTextShadowID = evt.currentTarget.id;
 //debugger;
+        if (na.te.s.c.forDialogID) {
+            var
+            el = $('#'+na.te.s.c.forDialogID),
+            el2 = $('#'+na.te.s.c.forDialogID+' > .vividDialogContent'),
+            el3 = $('#'+na.te.s.c.forDialogID+' td');
+        } else {
+            var el = el2 = el3 = $(na.te.s.c.forElements);
+        };
         var
-        el = $('#'+na.te.s.c.forDialogID),
-        el2 = $('#'+na.te.s.c.forDialogID+' > .vividDialogContent'),
-        el3 = $('#'+na.te.s.c.forDialogID+' td'),
         newTextShadow =
             $('#textShadowXoffset').val()+'px '
             +$('#textShadowYoffset').val()+'px '
@@ -1830,7 +2064,6 @@ na.te = na.themeEditor = {
         newFontFamily = newFontFamily ? newFontFamily : na.te.s.c.selectedFontFamily, //$('#textFontFamily').val(),//.replace(/ /g, '+'),
         els = $('#'+na.te.s.c.selectedTextShadowID+' > div')
                 .add(el).add(el2).add(el3);
-        debugger;
         if (newFontFamily) na.te.s.c.selectedFontFamily = newFontFamily;
 
         els.css ({
@@ -1883,10 +2116,14 @@ na.te = na.themeEditor = {
     textSettingsSelected_textColor : function (color) {
         if (color) na.te.s.c.textColor = color; else color = na.te.s.c.textColor;
         if (typeof color=='object') color = 'rgba('+color._r+', '+color._g+', '+color._b+', '+color._a+')'; // firefox bugfix
-        var
-        el = $('#'+na.te.s.c.forDialogID),
-        el2 = $('#'+na.te.s.c.forDialogID+' > .vividDialogContent'),
-        el3 = $('#'+na.te.s.c.forDialogID+' td');
+        if (na.te.s.c.forDialogID) {
+            var
+            el = $('#'+na.te.s.c.forDialogID),
+            el2 = $('#'+na.te.s.c.forDialogID+' > .vividDialogContent'),
+            el3 = $('#'+na.te.s.c.forDialogID+' td');
+        } else {
+            var el = el2 = el3 = $(na.te.s.c.forElements);
+        };
         $(el).add(el2).add(el3).css ({ color : color });
         /*if (na.te.s.c.fireSaveTheme) */na.site.saveTheme();
     },
@@ -1984,6 +2221,128 @@ na.te = na.themeEditor = {
     },
 
     selectorSettingsSelected : function (evt, doe) {
+    },
+
+    onclick_btnAddGraphics : function (event) {
+        var newNodeID = na.m.randomString();
+        $('#themeEditor_jsTree_selectors').jstree().create_node(na.te.s.c.selectedSelector.node.id, {
+            id : newNodeID,
+            text : 'New Graphics',
+            type : 'naCSS'
+        }, 'last');
+        $('#themeEditor_jsTree_selectors').jstree('deselect_all').jstree('select_node', newNodeID);
+        $('#themeEditor_jsTree_selectors').jstree(true).edit(na.te.s.c.selectedSelector.node);
+    },
+
+    onclick_btnAddElement : function () {
+        if ($('div, p, span, li, ol, ul, h1, h2, h3, h4').css('cursor').match(/grab/)) {
+            $('div, p, span, li, ol, ul, h1, h2, h3, h4').css({cursor:'inherit'}).each (function(){this.removeEventListener('click',na.te.btnAddElement_clickElement)});
+        } else {
+            $('div, p, span, li, ol, ul, h1, h2, h3, h4').css({cursor:'url(/NicerAppWebOS/siteMedia/btnSettings2.32x32.png) 16 16, grab'}).each (function(idx,el) { this.addEventListener('click',na.te.btnAddElement_clickElement,{capture:true})});
+        }
+    },
+
+    btnAddElement_clickElement : function () {
+        /*
+        //works just fine :
+        na.m.log (100,
+            '\n#'+event.target.id+'.'+event.target.className.replace(' ', '.')+'\n'
+            +'#'+event.currentTarget.id+'.'+event.currentTarget.className.replace(' ', '.')+'\n',
+            false
+        );
+        */
+
+
+        if (
+            event.target.tagName!==event.currentTarget.tagName
+            || event.target.id!==event.currentTarget.id
+            || event.target.className!==event.currentTarget.className
+        ) {
+            //debugger;
+            if (
+                !na.te.s.c.pickedElement
+                || (
+                    na.te.s.c.pickedElement.length>0
+                    && na.te.s.c.lastPickedElement!==event.target
+                )
+            ) {
+                na.te.s.c.pickedElement = [ { event : $.extend({},event) } ];
+                na.te.s.c.lastPickedElement = event.target;
+            } else na.te.s.c.pickedElement.push ({ event : $.extend({},event) });
+        } else {
+            na.te.s.c.pickedElement.push ({ event : $.extend({},event) });
+            na.te.s.c.lastPickedElement = event.target;
+            var msg = '';
+            $('#siteToolbarThemeEditor__elementPicker').html('<div class="vividListSelector vividScrollpane"></div>').delay(50);
+            for (var i=0; i<na.te.s.c.pickedElement.length; i++) {
+                var ev = na.te.s.c.pickedElement[i].event;
+                msg +=
+                    //'\n#'+ev.target.id+'.'+ev.target.className.replace(' ', '.')+'\n'
+                    '\n'+ev.currentTarget.tagName+'#'+ev.currentTarget.id+'.'+ev.currentTarget.className.replace(' ', '.')+'\n';
+                var itemHTML = '<div class="vividButton" style="display:inline-block;width:fit-content;position:relative;z-index:900000">'+ev.currentTarget.tagName+'</div><div class="vividButton" style="display:inline-block;width:fit-content;position:relative;">#'+ev.currentTarget.id+'</div><div class="vividButton" style="display:inline-block;width:fit-content;position:relative;">.'+ev.currentTarget.className.replace(' ', '</div><div class="vividButton" style="display:inline-block;width:fit-content;position:relative;">.')+'</div>';
+                var divEl = document.createElement('div');
+                $(divEl).html(itemHTML);
+                $('.vividButton', divEl).each(function(idx,btnEl) {
+                    var jsEl = new naVividButton (btnEl);
+                    btnEl.addEventListener ('click', na.te.btnAddElement_clickSelector, {capture:true});
+                });
+                $('#siteToolbarThemeEditor__elementPicker > .vividListSelector').append(divEl);
+            }
+
+            var itemHTML = '<div class="vividButton btnSave" style="display:inline-block;width:fit-content;position:relative;z-index:900000">Save</div>';
+            var divEl = document.createElement('div');
+            $(divEl).html(itemHTML);
+            $('.vividButton', divEl).each(function(idx,btnEl){
+                btnEl.addEventListener ('click', function() {
+                    $('#siteToolbarThemeEditor__elementPicker').fadeOut('normal');
+                    $('div, p, span, li, ol, ul, h1, h2, h3, h4').css({cursor:'inherit'}).each (function(){this.removeEventListener('click',na.te.btnAddElement_clickElement)});
+                } )
+            });
+            $('#siteToolbarThemeEditor__elementPicker > .vividListSelector').append(divEl);
+
+            na.m.log (110, msg);
+            var br = event.target.getBoundingClientRect();
+            $('#siteToolbarThemeEditor__elementPicker').css({position:'absolute',left:br.left,top:br.top+br.height,zIndex:900000}).fadeIn('slow');
+            event.preventDefault();
+
+            na.te.s.c.newElementID = na.m.randomString();
+            $('#themeEditor_jsTree_selectors').jstree().create_node(na.te.s.c.selectedSelector.node, {
+                id : na.te.s.c.newElementID,
+                text : 'New Element',
+                type : 'naElement'
+            }, 'last');
+            //$('#themeEditor_jsTree_selectors').jstree('deselect_all').jstree('select_node', na.te.s.c.newElementID);
+
+        }
+    },
+
+    btnAddElement_clickSelector : function (event) {
+        event.target.this.select();
+
+        // edit the treeview node
+        var selector = '';
+        $('#siteToolbarThemeEditor__elementPicker > .vividListSelector > div').each(function(idx,divEl) {
+            var hitsOnThisLine = false;
+            var selectorPart = '';
+            $('.vividButton', divEl).each(function(idx2,btnEl) {
+                if ($(btnEl).is('.selected')) {
+                    hitsOnThisLine = true;
+                    selectorPart += btnEl.innerText;
+                }
+            });
+            if (hitsOnThisLine) {
+                if ( na.te.s.c.lastLineWithHits == idx - 1) selector += ' > ';
+                na.te.s.c.lastLineWithHits = idx;
+            } else selector += ' ';
+            selector += selectorPart;
+        });
+        $('#themeEditor_jsTree_selectors').jstree().rename_node (na.te.s.c.newElementID, selector);
+    },
+
+    onclick_btnDeleteGraphics : function (event) {
+        var node = $('#themeEditor_jsTree_selectors').jstree().get_node(na.te.s.c.selectedSelector.node.id);
+        $('#themeEditor_jsTree_selectors').jstree('delete_node', node);
+        na.site.saveTheme (na.site.loadTheme);
     }
 
 };

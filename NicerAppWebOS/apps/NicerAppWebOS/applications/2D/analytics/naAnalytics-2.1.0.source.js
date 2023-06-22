@@ -110,7 +110,7 @@ na.an = na.analytics = {
                         html += 
                             '<tr class="naan_rec">'
                             +'<td class="naan_datetimeStr"><p>'+(d3.timeStr?d3.timeStr:d3.datetimeStr)+'</p></td>'
-                            +'<td class="naan_ip" onmouseover="na.an.geoIP(event, \''+d3.ip+'\')" onmouseout="na.an.geoIP_mouseout(event)"><p>'+d3.ip+'</p></td>'
+                            +'<td class="naan_ip" onmouseover="na.an.geoIP(event, \''+d3.ip+'\')"><p>'+d3.ip+'</p></td>'
                             +'<td class="naan_msg"><p>'+d3.msg+'</p></td>'
                             +'</tr>'
                     }
@@ -350,9 +350,9 @@ na.an = na.analytics = {
             success : function (data, ts) {
                 var 
                 evt = na.analytics.settings.evt,
-                html = '<div class="geoIP" style="display:none;position:absolute;top:'+evt.layerY+'px;left:'+(evt.layerX+50)+'px;background:rgba(0,0,0,0.8);border:3px ridge white;border-radius:5px;z-index:1200;">'+data+'</div>';
+                html = '<div class="geoIP" style="display:none;position:absolute;top:'+evt.layerY+'px;left:'+(evt.layerX+50)+'px;background:rgba(0,0,0,0.8);border:3px ridge white;border-radius:5px;z-index:12000000000000;" onmouseout="na.an.geoIP_mouseout(event)">'+data+'</div>';
                 //var div = $.parseHTML(html);
-                jQuery('#siteContent').append(html);
+                jQuery('body').append(html);
                 $('.geoIP').fadeIn('normal');
                 na.an.s.c.recentlyAdded_geoIP = true;
                 setTimeout(function() {

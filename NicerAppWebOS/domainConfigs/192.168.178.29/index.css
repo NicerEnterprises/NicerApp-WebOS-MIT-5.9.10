@@ -318,14 +318,12 @@ img.bg_last {
     margin-left : 0px;
 }
 #siteStatusbar .vividDialogContent {
-    margin : 10px;
+    margin : 5px;
+    margin-left : 15px;
     height : auto;
 }
 #siteStatusbar {
     height : auto;
-}
-#siteStatusbar > .vividDialogContent {
-    padding : 8px;
 }
 
 /*
@@ -527,7 +525,6 @@ body, a, p, span, div, li, td {
     -webkit-appearance: none;  /* Override default CSS styles */
     appearance: none;
     width: calc(100% - 15px); /* Full-width */
-    height: 25px; /* Specified height */
     background: rgba(0,0,0,0.95); /* Grey background */
     z-index : 5000;
     border : 2px ridge rgba(100,100,100,0.7);
@@ -536,6 +533,7 @@ body, a, p, span, div, li, td {
     opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
     -webkit-transition: .2s; /* 0.2 seconds transition on hover */
     transition: opacity .2s;
+    margin : 4px;
 }
 .sliderOpacityRangethemeEditor:hover {
   opacity: 1; /* Fully shown on mouse-over */
@@ -1060,6 +1058,12 @@ body, a, p, span, div, li, td {
 							0 -0.2rem 0.7rem rgba(80, 0, 0, 0.7) inset,
 							0 0.7rem 0.5rem rgba(255,255,255, 0.4) inset,
 							0 0.2rem 0.5rem 0 rgba(80, 0, 0, 0.7) inset;    
+}
+.vividButton.btnSave {
+	box-shadow: 0.5rem 0.5rem 0.7rem 0 rgba(0,0,0,0.50),
+							0 -0.2rem 0.7rem rgba(0, 0, 255, 0.7) inset,
+							0 0.7rem 0.5rem rgba(255,255,255, 0.4) inset,
+							0 0.2rem 0.5rem 0 rgba(0, 0, 255, 0.7) inset;
 }
 .vividButton_icon_50x50_text div {
 	color: white;

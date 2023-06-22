@@ -260,10 +260,13 @@ echo $naWebOS->html_vividButton (
         <div id="siteErrors_msg">{$div_siteErrors}</div>
     </div>
     
-    
+
+    <div id="siteToolbarThemeEditor__elementPicker" class="vividDialogPopup_noBorder" style="display:none;">
+        <div id="siteToolbarThemeEditor__elementPicker_dropdown" class="na_elementPicker_dropdown vividScrollpane" style="position:relative;height:auto;white-space:normal;"></div>
+    </div>
 
     <div id="siteToolbarThemeEditor" class="vdToolbar vividDialog">
-    <div class="vividDialogContent vividScrollpane" style="overflow:hidden;overflow-y:auto;">
+    <div class="vividDialogContent vividScrollpane" style="overflow:visible;overflow-y:auto;">
     <!--
         <div class="sds_dialogTitle">
 <?php
@@ -473,6 +476,7 @@ echo $naWebOS->html_vividButton (
     null,
     null
 );
+/*
 echo $naWebOS->html_vividButton (
     4, 'order:2;',
 
@@ -495,7 +499,7 @@ echo $naWebOS->html_vividButton (
     null,
     null,
     null
-);
+);*/
 ?>
            <!-- </div>
             <div class="navbar" style="order:6;display:flex;align-items:center;justify-content:center;">-->
@@ -663,9 +667,10 @@ echo $naWebOS->html_vividButton (
             </div>
 
         </div>
-        <div id="nate_selectorSet" class="themeEditorComponent_containerDiv2 vividScrollpane" style="order:8;display:block;width:100%;height:auto;display:none;justify-content:space-between">
+        <div id="nate_selectorSet" class="themeEditorComponent_containerDiv2" style="order:8;display:block;width:100%;height:auto;display:none;justify-content:space-between">
             <div class="naNavBar_darkenedBG" style="width:calc(100% - 14px);position:relative;display:flex;align-items:center;justify-content:space-between;border-radius:10px;box-shadow:inset 0px 0px 4px 2px rgba(0,0,0,0.6);">
 <?php
+/*
 echo $naWebOS->html_vividButton (
     4, 'order:1',
 
@@ -709,13 +714,13 @@ echo $naWebOS->html_vividButton (
     null,
     null,
     null
-);
+);*/
 echo $naWebOS->html_vividButton (
     4, 'order:3',
 
-     'btnAddCSS', 'vividButton_icon_50x50 grouped', '_50x50', 'grouped',
+     'btnAddGraphics', 'vividButton_icon_50x50 grouped', '_50x50', 'grouped',
     '',
-    'na.te.onclick_btnDeleteCSS(event)',
+    'na.te.onclick_btnAddGraphics(event)',
     '',
     '',
 
@@ -734,9 +739,9 @@ echo $naWebOS->html_vividButton (
 );echo $naWebOS->html_vividButton (
     4, 'order:4',
 
-     'btnDeleteCSS', 'vividButton_icon_50x50 grouped', '_50x50', 'grouped',
+     'btnDeleteGraphics', 'vividButton_icon_50x50 grouped', '_50x50', 'grouped',
     '',
-    'na.te.onclick_btnDeleteCSS(event)',
+    'na.te.onclick_btnDeleteGraphics(event)',
     '',
     '',
 
@@ -746,6 +751,49 @@ echo $naWebOS->html_vividButton (
     'btnCssVividButton.png',
     'btnCssVividButton.red1a.png',
     'btnPickColor_canvasSquared.png',
+
+    '<img class="vividButton_icon_imgButtonIcon_50x50_sup1" srcPreload="/NicerAppWebOS/siteMedia/btnDelete.png" style="position:absolute;left:0px;width:15px;z-index:2021;"/>',
+
+    null,
+    null,
+    null
+);
+echo $naWebOS->html_vividButton (
+    4, 'order:5',
+
+     'btnAddElement', 'vividButton_icon_50x50 grouped', '_50x50', 'grouped',
+    '',
+    'na.te.onclick_btnAddElement(event)',
+    '',
+    '',
+
+    433, 'Add element.',
+
+    'btnCssVividButton_outerBorder.png',
+    'btnCssVividButton.png',
+    'btnCssVividButton.greenBlue.png',
+    'btnSettings2.png',
+
+    '<img class="vividButton_icon_imgButtonIcon_50x50_sup1" srcPreload="/NicerAppWebOS/siteMedia/btnPlus_shaded.png" style="position:absolute;left:0px;width:15px;z-index:2021;"/>',
+
+    null,
+    null,
+    null
+);echo $naWebOS->html_vividButton (
+    4, 'order:6',
+
+     'btnDeleteElement', 'vividButton_icon_50x50 grouped', '_50x50', 'grouped',
+    '',
+    'na.te.onclick_btnDeleteElement(event)',
+    '',
+    '',
+
+    433, 'Delete element.',
+
+    'btnCssVividButton_outerBorder.png',
+    'btnCssVividButton.png',
+    'btnCssVividButton.red1a.png',
+    'btnSettings2.png',
 
     '<img class="vividButton_icon_imgButtonIcon_50x50_sup1" srcPreload="/NicerAppWebOS/siteMedia/btnDelete.png" style="position:absolute;left:0px;width:15px;z-index:2021;"/>',
 
@@ -895,35 +943,52 @@ echo $naWebOS->html_vividButton (
             <input id="colorpicker" class="themeEditor_colorPicker" style="position:absolute;top:auto;"></input>
         </div>
         <div id="themeEditor_jsTree_backgrounds" class="themeEditorComponent" style="top:auto;display:none;"></div>
-        <div id="themeEditor_photoAlbum_specs" class="themeEditorComponent" style="height:6.4em;flex-flow: wrap row;position:relative;top:auto;display:none;">
+        <div id="themeEditor_photoAlbum_specs" class="themeEditorComponent" style="height:auto;flex-flow: wrap row;position:relative;top:auto;display:none;">
+            <div class="themeEditor_input_containerDiv flexColumns" style="display:flex;">
+                <label for="themeEditor_photoSpecificity_dialog" class="labelthemeEditor2">Dialog
+                <input type="radio" id="themeEditor_photoSpecificity_dialog" name="psdp" class="radioInput" value="dialog" checked="checked"/>
+                </label>
+
+                <label for="themeEditor_photoSpecificity_page" class="labelthemeEditor2">Page
+                <input type="radio" id="themeEditor_photoSpecificity_page" name="psdp" class="radioInput" value="dialog"/>
+                </label>
+            </div>
+            <div style="flex-basis:100%;height:0;">&nbsp;</div>
             <div class="themeEditor_input_containerDiv">
             <label id="label_themeEditor_photoOpacity" class="labelthemeEditor" for="themeEditor_photoOpacity">Opacity</label>
             <input id="themeEditor_photoOpacity" type="range" min="1" max="100" value="50" class="sliderOpacityRangethemeEditor" oninput="if (na.te.settings.current.selectedImage) na.te.imageSelected(na.te.settings.current.selectedImage);"/>
             </div>
             
+            <div style="flex-basis:100%;height:0;">&nbsp;</div>
             <div class="themeEditor_input_containerDiv">
             <label id="label_themeEditor_photoScaleX" class="labelthemeEditor" for="themeEditor_photoScaleX">Scale hor</label>
-            <input id="themeEditor_photoScaleX" type="range" min="25" max="200" value="100" class="sliderOpacityRangethemeEditor" style="top:30px;" oninput="if (na.te.settings.current.selectedImage) na.te.imageSelected(na .te.settings.current.selectedImage);"/>
+            <input id="themeEditor_photoScaleX" type="range" min="25" max="200" value="100" class="sliderOpacityRangethemeEditor" style="" oninput="if (na.te.settings.current.selectedImage) na.te.imageSelected(na .te.settings.current.selectedImage);"/>
             </div>
             
+            <div style="flex-basis:100%;height:0;">&nbsp;</div>
             <div class="themeEditor_input_containerDiv">
             <label id="label_themeEditor_photoScaleY" class="labelthemeEditor" for="themeEditor_photoScaleY">Scale ver</label>
-            <input id="themeEditor_photoScaleY" type="range" min="25" max="200" value="100" class="sliderOpacityRangethemeEditor" style="top:63px;" oninput="if (na.te.settings.current.selectedImage) na.te.imageSelected(na.te.settings.current.selectedImage);"/>
+            <input id="themeEditor_photoScaleY" type="range" min="25" max="200" value="100" class="sliderOpacityRangethemeEditor" style="" oninput="if (na.te.settings.current.selectedImage) na.te.imageSelected(na.te.settings.current.selectedImage);"/>
             </div>
             
-            <!--
-            <div class="flexColumns" style="display:inline-flex;top:65px">
-                <label for="themeEditor_photoSpecificity_dialog" class="labelthemeEditor2">Dialog
-                <input type="radio" id="themeEditor_photoSpecificity_dialog" name="psdp" class="radioInput" value="dialog" checked="checked"/>
-                </label>
-                
-                <label for="themeEditor_photoSpecificity_page" class="labelthemeEditor2">Page
-                <input type="radio" id="themeEditor_photoSpecificity_page" name="psdp" class="radioInput" value="dialog"/>
-                </label>
-            </div>
-            -->
+            <div style="flex-basis:100%;height:0;">&nbsp;</div>
         </div>
-        <iframe id="themeEditor_photoAlbum" class="themeEditorComponent" style="top:calc(230px + 4em);height:calc(100% - 220px - 4em);display:none;border:0px"></iframe>
+        <script type="application/javascript">
+            function resizeIFrameToFitContent( iFrame ) {
+                if (
+                    iFrame
+                    && iFrame.src.match(/photoAlbum/)
+                ) {
+                    $('div.vividScrollpane', iFrame.contentWindow.document.body).css({
+                        width : $(iFrame).width()+'px'
+                    });
+                    setTimeout (function(iFrame) {
+                        iFrame.style.height = ($('div.vividScrollpane', iFrame.contentWindow.document.body)[0].scrollHeight+20)+'px';
+                    }, 50, iFrame);
+                };
+            }
+        </script>
+        <iframe id="themeEditor_photoAlbum" class="themeEditorComponent" style="top:calc(230px + 4em);display:none;border:0px"></iframe>
         <div id="textSettings" class="themeEditorComponent" style="top:auto;display:none;">
             <div class="themeEditor_input_containerDiv">
             <div class="textSettings_label_containerDiv">
@@ -934,7 +999,16 @@ echo $naWebOS->html_vividButton (
             </div>
             </div>
 
-            <div class="themeEditor_input_containerDiv">
+            <div id="textHasAnimatedColor_section" class="themeEditor_input_containerDiv">
+            <div class="textSettings_input_containerDiv_checkbox" style="width:70px;text-align:right">
+                <input id="textHasAnimatedColor" type="checkbox" style=""></input>
+            </div>
+            <div class="textSettings_label_containerDiv" style="flex-grow:7;">
+                <label id="labelTextAnimatedColor" class="textColorpicker textSettings_label" for="textHasAnimatedColor" style="width:calc(100% - 10px);">Animated Color</label>
+            </div>
+            </div>
+
+        <div class="themeEditor_input_containerDiv">
             <div class="textSettings_label_containerDiv">
                 <label id="labelTextFontFamily" class="textSettings_label" for="textFontFamily">Font</label>
             </div>

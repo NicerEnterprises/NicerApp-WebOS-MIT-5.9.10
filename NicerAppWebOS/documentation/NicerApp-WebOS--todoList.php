@@ -38,10 +38,10 @@
 
     <li class="todoList releaseDate"><div>(DONE) (2022 Nov 7th) : the emerging of <a href="https://said.by" class="nomod noPushState noVividText contentSectionTitle2_a" target="saidDotBy" style="margin:0 !important;"><span class="contentSectionTitle2_span">https://said.by</span></a> as an online blogging platform for end-users</a>.</li>
 
-    <li class="todoList releaseDate"><div>(DONE) (2023 May 4th) Release <a href="https://github.com/NicerEnterprises/NicerApp-WebOS" class="nomod noPushState noVividText contentSectionTitle2_a" target="ghNA"><span class="contentSectionTitle2_span">version 5.2.8</span></a> : Fixes for the remaining blogging feature bugs, smartphone bugs, the page switching bugs and many other bugs. Improved user-interface as well.
+    <li class="todoList releaseDate"><div>(DONE) (2023 June 22nd) Release <a href="https://github.com/NicerEnterprises/NicerApp-WebOS" class="nomod noPushState noVividText contentSectionTitle2_a" target="ghNA"><span class="contentSectionTitle2_span">version 5.5.0</span></a> : Theme Editor upgrade released.
     </div></li>
 
-    <li class="todoList"><div>(CURRENT) (2023 May) Build a <a href="/wiki/frontpage">view port</a> into <a href="https://wikipedia.org" target="wikipedia">https://wikipedia.org</a> data, whose content one may re-use without legal consequences, and which is *great*. :D</li>
+    <li class="todoList"><div>(DONE) (2023 May) Build a <a href="/wiki/frontpage">view port</a> into <a href="https://wikipedia.org" target="wikipedia">https://wikipedia.org</a> data, whose content one may re-use without legal consequences, and which is *great*. :D</li>
 
     <li class="todoList"><div>
         <ol class="todoList_l1">
@@ -59,19 +59,13 @@
 
             <li class="todoList_l1"><div>(2023) write 'vividRangeFinder' (a percentage bar with 2 percentage stops)</div></li>
 
-            <li class="todoList_l1"><div>(2023) Enable 'vividButton' components to be put in 'vividMenu' components, with options for onclick and onmouseover (show a 'vividDialog' for instance).
-            </div></li>
 
 
             <!--<li class="todoList_l1"><div>Show a small error window for a short time when a page can't load.</div></li>-->
         </ol>
     </div></li>
 
-    <li class="todoList"><div>(CURRENT) (2023 May-June) Transform the Theme Editor (that's currently restricted to NicerApp vividDialogs) into a Universal Web Theme Editor.<br/>
-    In the existing Theme Editor, add 1 vividMenu component beneath the 'Theme' menu at the top of the dialog containing a tiered list of categories and menu-items that can optionally lead to a JSON object that lists 1 HTML selector and all the CSS, canvas, webgl and js settings that can 'belong' to that category or menu-item.<br/>
-    Build a button (50x50) next to that vividMenu (on the right side of it), and make it so that when one clicks on that button and then any HTML element on the page, it lists that element's ID and class names as part of a vividDialogPopup, as a float:left list of vividButtons.<br/>
-    From this list inside the popup dialog, an item can be dragged into the theme settings vividMenu and dropped on a specific parent for (future) editing.<br/>
-    Add more tab-pages to specify even more different HTML styles to HTML selectors.
+    <li class="todoList"><div>(CURRENTLY POLISHING) (2023 June) Transform the Theme Editor (that was restricted to NicerApp vividDialogs) into a Universal Web Theme Editor that can work on any HTML selector.<br/>
     </div></li>
 
     <li class="todoList"><div>(2023 June-Aug) Start work on a custom HTML WYSIWYG rich-text editor component of my own, that ties into the UWTE.<br/>

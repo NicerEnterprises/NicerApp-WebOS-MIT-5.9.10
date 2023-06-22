@@ -292,7 +292,7 @@ ul.index > li {
 #nb_url1_dropdown, #nb_url1-2, #nb_url2_value, #nb_documentLabel, #url1_dropdown, #url1-2, #url2_value, #documentLabel, .vividDropDownBox_selected, .vividDropDownBox_selector {
     z-index : 30000;
 }
-#nb_url2_value, #nb_documentLabel, #nb_documentTitle, .vividTheme_input_urls, #url2_value, #documentLabel, #documentTitle, .vividDropDownBox_selected, .vividDropDownBox_selector {
+#nb_url2_value, #nb_documentLabel, #nb_documentTitle, .vividTheme_input_urls, #url2_value, #documentLabel, #documentTitle, .vividDropDownBox_selected, .vividDropDownBox_selector, .vividListSelector {
     height : 1.5em;
     padding : 5px;
     margin : 8px;
@@ -307,7 +307,7 @@ ul.index > li {
     display : inline;
     z-index : 30000;
 }
-.na_themes_dropdown {
+.na_elementPicker_dropdown, .na_themes_dropdown {
     z-index : 800000;
 }
 .vividDropDownBox_selected, .vividDropDownBox_selector {
@@ -327,23 +327,35 @@ ul.index > li {
     max-height : fit-content;
     z-index : 800000;
 }
-.vividDropDownBox_selector > div {
+.vividListSelector {
+    /*position : fixed;*/
+    height : auto;
+    max-height : fit-content;
+    z-index : 800000;
+    display : block;
+    position : relative;
+    width : 272px;
+}
+#siteToolbarThemeEditor__elementPicker .vividButton {
+    font-size : 0.661em;
+}
+.vividDropDownBox_selector > div, .vividListSelector > div {
     width : calc(100% - 20px);
     white-space: nowrap;
     padding : 5px;
     margin : 5px;
     border-radius : 20px;
 }
-.vividDropDownBox_selector > div.disabled {
+.vividDropDownBox_selector > div.disabled, .vividListSelector > div.disabled {
     color : grey;
 }
 #nb_url2_value, #url2_value, .vividDropDownBox_selected {
     background: linear-gradient(0deg, rgba(2,0,36,0.5) 0%, rgba(9,9,121,0.5) 35%, rgba(0,212,255,0.5) 100%);
 }
-.vividDropDownBox_selector > div:hover {
+.vividDropDownBox_selector > div:hover, .vividListSelector > div:hover {
     background : linear-gradient(0deg, rgba(2,150,36,0) 0%, rgba(2,150,36,.55) 25%, rgba(0,50,155,.55) 50%, rgba(2,150,36,.55) 75%, rgba(2,150,36,0) 100%);
 }
-.vividDropDownBox_selector > div.selected {
+.vividDropDownBox_selector > div.selected, .vividListSelector > div.selected {
     background : linear-gradient(0deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.4) 25%, rgba(0,50,155,.4) 50%, rgba(255,255,255,.4) 75%, rgba(255,255,255,0) 100%);
 }
 
@@ -498,8 +510,6 @@ ul.index > li {
     background-image: -webkit-linear-gradient(bottom, rgba(0,0,0,0.57) 25%, rgba(40,40,40,0.57) 81%);
     background-image: -ms-linear-gradient(bottom, rgba(0,0,0,0.57) 25%, rgba(40,40,40,0.57) 81%);
     background-image: linear-gradient(bottom, rgba(0,0,0,0.57) 25%, rgba(40,40,40,0.57) 81%);
-    z-index : 1;
-    pointer-events : none;
 }
 .vividButton[theme="dark"] {
     color : white;
@@ -512,10 +522,8 @@ ul.index > li {
     background-image: -ms-linear-gradient(bottom, rgba(0,0,0,0.57) 25%, rgba(40,40,40,0.57) 81%);
     background-image: linear-gradient(bottom, rgba(0,0,0,0.57) 25%, rgba(40,40,40,0.57) 81%);
     padding : 3px;
-    z-index : 1;
-    pointer-events : none;
 }
-.vividButtonSelected {
+.vividButton.selected, .vividButtonSelected {
     border : 2px ridge rgba(0,255,0,0.75);
     border-radius : 14px;
     padding : 4px;
@@ -523,7 +531,7 @@ ul.index > li {
     z-index : 1;
     pointer-events : none;
 }
-.vividButtonSelected[theme="dark"] {
+.vividButton.selected[theme="dark"], .vividButtonSelected[theme="dark"] {
     border : 2px ridge rgba(0,255,0,0.75);
     border-radius : 14px;
     padding : 4px;
@@ -531,7 +539,7 @@ ul.index > li {
     z-index : 1;
     pointer-events : none;
 }
-.vividButton[theme="dark"] a, .vividButtonSelected[theme="dark"] a {
+.vividButton[theme="dark"] a, .vividButton.selected[theme="dark"] a, .vividButtonSelected[theme="dark"] a {
   color : lime;
   text-decoration : none;
 }
@@ -561,7 +569,7 @@ ul.index > li {
     background-image: -ms-linear-gradient(bottom, rgba(0,0,50,0.4) 25%, rgba(40,40,80,0.8) 81%);
     background-image: linear-gradient(bottom, rgba(0,0,50,0.4) 25%, rgba(40,40,80,0.8) 81%);
 }
-.vividButtonSelected[theme="dark"]:before {
+.vividButtonSelected[theme="dark"]:before, .vividButton.selected[theme="dark"]:before {
     content: "";
     position: absolute;
     pointer-events: all;
@@ -579,7 +587,7 @@ ul.index > li {
     transition: opacity 0.5s linear;
     opacity: 1;
 }    
-.vividButtonSelected[theme="dark"]:hover:before {
+.vividButtonSelected[theme="dark"]:hover:before, .vividButton.selected[theme="dark"]:hover:before {
     opacity: 1;
     background-image: -o-linear-gradient(bottom, rgba(0,100,0,0.4) 25%, rgba(40,255,40,0.8) 81%);
     background-image: -moz-linear-gradient(bottom, rgba(0,100,0,0.4)  25%, rgba(40,255,40,0.8) 81%);
@@ -974,6 +982,10 @@ a:hover, a:visited {
 .jstree-wholerow {
     background : none;
     margin : 0 !important;
+
+}
+.jstree-wholerow-ul .jstree-anchor {
+    font-size : 0.61em;
 }
 .jstree-wholerow-hovered {
     background : linear-gradient(to bottom, rgba(200,255,200,.4) 0%, rgba(200,255,200,0.8) 100%) !important;
@@ -982,7 +994,7 @@ a:hover, a:visited {
     background : linear-gradient(to bottom, rgba(100,100,255,.4) 0%, rgba(100,100,255,0.8) 100%) !important;
 }
 .vakata-context, .vakata-context ul {
-    z-index : 5000;
+    z-index : 1000000;
     border-radius : 15px;
     border : 2px ridge white !important;
     /*box-shadow : inset 2px 2px 1px 1px rgba(0,0,0,0.7), 4px 4px 2px 2px rgba(0,0,0,0.7) !important;*/
@@ -993,8 +1005,9 @@ a:hover, a:visited {
 .vakata-context a {
     color : blue !important;
     font-weight : bold;
-    font-size : 200%;
+    font-size : 0.61em;
 }
+
 .vakata-context li > a:hover, .vakata-context-hover {
     background : linear-gradient(to bottom, rgba(150,150,255,.4) 0%, rgba(150,150,255,0.7) 100%) !important;
 }

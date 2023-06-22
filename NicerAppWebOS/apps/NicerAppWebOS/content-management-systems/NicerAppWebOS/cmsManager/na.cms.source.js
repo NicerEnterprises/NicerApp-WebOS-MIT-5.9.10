@@ -1115,7 +1115,7 @@ na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/Nic
         
         //var url = '/'+user+'/in/'+sel.original.dataID;//na.m.base64_encode_url (JSON.stringify(arr));
         na.cms.saveEditorContent(sel, function(rec) {
-            var url = '/'+user.replace(/ /g, '-')+'/'+rec.original.url1+'/'+rec.original.seo_value;
+            var url = '/'+user.replace(/ /g, '-')+'/'+$('#nb_url1_dropdown_selected')[0].innerText+'/'+rec.original.seo_value;
             na.site.loadContent(null, url);
 
         });
