@@ -12,15 +12,21 @@ require_once ($rootPathNA.'/boot.php');
         ],
         'fields' => [ '_id', '_rev' ]
     ];
+    $cdbDomain = $naWebOS->domainForDB; //str_replace('.','_',$naWebOS->domain);
+    $dataSetName = $cdbDomain.'___themes';
     $cdb->setDatabase ($dataSetName);
     try {
         $call = $cdb->find ($findCommand);
     } catch (Exception $e) {
-        cdb_error (503, 'Could not delete themes. $e->getMessage()=='.$e->getMessage());
+        cdb_error (503, $e, 'Could not delete themes. $e->getMessage()=='.$e->getMessage());
         exit();
     }
-    foreach ($call->body->rows as $idx => $row) {
-        $cdb->delete ($row->_id, $row->_rev);
+    if (!property_exists($call->body, 'docs')) {
+        cdb_error (503, null, 'Could not delete themes. $call='.json_encode($call->body, JSON_PRETTY_PRINT));
+        exit();
+    }
+    foreach ($call->body->docs as $idx => $doc) {
+        $cdb->delete ($doc->_id, $doc->_rev);
     }
 ?>
 status : Success.

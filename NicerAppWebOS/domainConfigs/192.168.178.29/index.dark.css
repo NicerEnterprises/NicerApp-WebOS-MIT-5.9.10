@@ -177,18 +177,60 @@ h2 {
 }
 
 a {
-    color : rgba(100,100,255,1);
+    --bg-size: 400%;
+    --color-one-blue: #0000FF;
+    --color-two-white: #DDDDDD;
+    background: linear-gradient( 315deg, var(--color-one-blue), var(--color-two-white), var(--color-one-blue) ) 0 0 / var(--bg-size) 100%;
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    animation: move-bg 18s infinite cubic-bezier(0.11, 0, 0.5, 0);
+    text-shadow: 0px 0px 2px rgba(255,255,255,0.555), 2px 2px 2px rgba(0,0,0,0.8);
+    position: relative;
+
     text-decoration : none;
     font-weight : bold;
+    font-size : 120%;
     z-index : 750000;
     position : relative;
 }
 a:visited {
-    color : rgba(0,200,0,1);
+  --bg-size: 400%;
+  --color-one-yellow: #f5db16;
+  --color-two-white : #DDDDDD;
+  background : linear-gradient(
+                315deg,
+                var(--color-one-yellow),
+                var(--color-two-white),
+                var(--color-one-yellow)
+              ) 0 0 / var(--bg-size) 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  animation: move-bg 8s infinite cubic-bezier(0.11, 0, 0.5, 0);
+  text-shadow : 0px 0px 2px rgba(255,255,255,0.555), 2px 2px 2px rgba(0,0,0,0.8);
+  font-size : 120%;
+  position : relative;
 }
 a:hover {
-    color : rgba(150,255,150,1);
+  --bg-size: 400%;
+  --color-one-green: #50FF50;
+  --color-two-white : #AAA;
+  background: linear-gradient(
+                135deg,
+                var(--color-one-green),
+                var(--color-two-white),
+                var(--color-one-green)
+              ) 0 0 / var(--bg-size) 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  animation: move-bg 5s infinite cubic-bezier(0.11, 0, 0.5, 0);
+  text-shadow : 0px 0px 2px rgba(255,255,255,0.555), 2px 2px 2px rgba(0,0,0,0.8);
+  font-size : 120%;
+  position : relative;
 }
+
 
 h1.pageTitle {
     margin-block-start : 0px;
@@ -205,10 +247,12 @@ h1:not(.pageTitle), h2, h3 {
     border-radius : 10px;
     display : block;
 }
+h1 span { font-size : 140%; }
+h2 span { font-size : 130%; }
 a, p, span, h1, h2, h3 {
     width : fit-content;
     /*display : content;*/
-    display : inline-block;
+    /*display : inline-block;*/
 }
 li > div > div:not(.jstree-wholerow), li > div:not(.jstree-wholerow), .contentSectionTitle1, .contentSectionTitle2, .contentSectionTitle3), li > span:not(.vt), .backdropped {
     margin-block-start : 0;
@@ -307,9 +351,6 @@ ul.index > li {
     display : inline;
     z-index : 30000;
 }
-.na_elementPicker_dropdown, .na_themes_dropdown {
-    z-index : 800000;
-}
 .vividDropDownBox_selected, .vividDropDownBox_selector {
     width : -webkit-box-flex;
     display : inline-block;
@@ -339,7 +380,7 @@ ul.index > li {
 #siteToolbarThemeEditor__elementPicker .vividButton {
     font-size : 0.661em;
 }
-.vividDropDownBox_selector > div, .vividListSelector > div {
+.vividDropDownBox_selector > .vividScrollpane > div, .vividListSelector > .vividScrollpane > div {
     width : calc(100% - 20px);
     white-space: nowrap;
     padding : 5px;
@@ -352,10 +393,10 @@ ul.index > li {
 #nb_url2_value, #url2_value, .vividDropDownBox_selected {
     background: linear-gradient(0deg, rgba(2,0,36,0.5) 0%, rgba(9,9,121,0.5) 35%, rgba(0,212,255,0.5) 100%);
 }
-.vividDropDownBox_selector > div:hover, .vividListSelector > div:hover {
+.vividDropDownBox_selector > .vividScrollpane > div:hover, .vividListSelector > .vividScrollpane > div:hover {
     background : linear-gradient(0deg, rgba(2,150,36,0) 0%, rgba(2,150,36,.55) 25%, rgba(0,50,155,.55) 50%, rgba(2,150,36,.55) 75%, rgba(2,150,36,0) 100%);
 }
-.vividDropDownBox_selector > div.selected, .vividListSelector > div.selected {
+.vividDropDownBox_selector > .vividScrollpane > div.selected, .vividListSelector > .vividScrollpane > div.selected {
     background : linear-gradient(0deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.4) 25%, rgba(0,50,155,.4) 50%, rgba(255,255,255,.4) 75%, rgba(255,255,255,0) 100%);
 }
 
@@ -707,25 +748,6 @@ ul.index > li {
 }
 
 
-a:hover, a:visited {
-  --bg-size: 400%;
-  --color-one-yellow: #f5db16;
-  --color-two-white : #DDDDDD;
-  background: linear-gradient(
-                315deg,
-                var(--color-one-yellow),
-                var(--color-two-white),
-                var(--color-one-yellow)
-              ) 0 0 / var(--bg-size) 100%;
-  color: transparent;
-  background-clip: text;
-  -webkit-background-clip: text;
-  animation: move-bg 8s infinite cubic-bezier(0.11, 0, 0.5, 0);
-  text-shadow : 0px 0px 2px rgba(255,255,255,0.555), 2px 2px 2px rgba(0,0,0,0.8);
-  position : relative;
-}
-
-
 
 .contentSectionTitle3_span, .animatedText-green {
   --bg-size: 400%;
@@ -870,16 +892,16 @@ a:hover, a:visited {
     opacity : 0.8;
 }
 .vividDialogPopup_background {
-    background-image:url(/NicerAppWebOS/siteMedia/backgrounds/tiled/blue/scratched-texture.jpg);
+    background:url(/NicerAppWebOS/siteMedia/backgrounds/tiled/blue/scratched-texture.jpg) repeat;
     /*background : url('/NicerAppWebOS/siteMedia/backgrounds/tiled/grey/pale_blue_background_111.jpg') repeat;*/
     opacity : 0.8;
     z-index : -1;
-    border-radius : 16px;
+    border-radius : 4px;
     position:absolute;
-    top : 8px;
-    left : 8px;
-    height : calc(100% - 16px);
-    width : calc(100% - 16px);
+    top : 6px;
+    left : 6px;
+    height : calc(100% - 12px);
+    width : calc(100% - 12px);
     opacity : 0.8;
 }
 

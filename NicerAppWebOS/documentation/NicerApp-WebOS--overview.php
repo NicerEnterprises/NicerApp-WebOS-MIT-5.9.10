@@ -22,15 +22,11 @@
     </p>
 
     <p>
-    <b>NicerApp WebOS is free to use for personal, non-profit and governmental purposes.</b><br/>
-    <b>Actual commercial usage currently demands 20% of the price of sales made with this platform.</b><br/>
-    All commercial contracts are signed per Licensee and The Owner of Nicer Enterprises, me, Rene AJM Veerman, and have no expiration date at all.<br/>
-    <br/>
-    Full <a href="/docs-license">NA-COMMIT-licensed</a>[1] sources are available at <a href="https://github.com/NicerEnterprises/NicerApp-WebOS" target="githubNA" class="noPushState">https://github.com/NicerEnterprises/NicerApp-WebOS</a>.<br/>
+    <b>NicerApp WebOS is completely free to use for all use-cases.</b><br/>
+    Full <a href="/docs-license">MIT-licensed</a>[1] sources are available at <a href="https://github.com/NicerEnterprises/NicerApp-WebOS" target="githubNA" class="noPushState">https://github.com/NicerEnterprises/NicerApp-WebOS</a>.<br/>
     Documentation is available at <a href="https://github.com/NicerEnterprises/NicerApp-WebOS#readme" target="githubNAdocs" class="noPushState">https://github.com/NicerEnterprises/NicerApp-WebOS#readme</a>.<br/>
     The log of recent changes can be found <a href="https://github.com/NicerEnterprises/NicerApp-WebOS/commits/main" class="noPushState" target="naRecentChangesLog">here</a>.<br/>
     And the add-on packages (that are too large for github.com) can be found on <a href="https://tinyurl.com/NicerAppWebOS-bgs-favs-3" class="noPushState" target="GoogleDrive_NicerAppWebOS">https://tinyurl.com/NicerAppWebOS-bgs-favs-3</a>.<br/>
-    [1] (The NA-COMMIT license is a derivative of the <a href="https://opensource.org/licenses/MIT" class="noPushState" target="MITL">MIT license</a>).
     </p>
 
     <!--

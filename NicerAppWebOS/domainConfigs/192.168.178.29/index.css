@@ -5,6 +5,11 @@ html, body {
     padding : 0;
     margin : 0;
     font-family: 'Open Sans', sans-serif;
+    position : absolute;
+    top : 0px;
+    left : 0px;
+    width : 100%;
+    height : 100%;
 }
 body {
     overflow : hidden;
@@ -142,22 +147,18 @@ li.todoList > div, li.todoList > span {
     outline : 0
 }
 
+
 #btnOptions_menu {
     height : auto;
     overflow : hidden;
 }
-#btnOptions_menu__background {
-    position : absolute;
-    z-index : -1;
-    width : 100%;
-    height : 100%;
-}
-#btnOptions_menu__backgroundTimeSettingsChanged_save__containerDiv, #btnOptions_menu__specificity__containerDiv { 
+#btnOptions_menu__backgroundTimeSettingsChanged_save__containerDiv, .btnOptions_menu__specificity__containerDiv {
     width : calc(100% - 10px);
 }
-#btnOptions_menu__backgroundTimeSettingsChanged_save__containerDiv span, #btnOptions_menu__specificity__containerDiv span { 
+#btnOptions_menu__backgroundTimeSettingsChanged_save__containerDiv span, .btnOptions_menu__specificity__containerDiv span {
     border-radius : 5px;
 }
+
 #backgroundChange_hours, #backgroundChange_minutes {
     padding : 8px;
     border-radius : 8px;    
@@ -366,14 +367,14 @@ img.bg_last {
     display : flex;
     text-shadow : 3px 3px 2px rgba(0,0,0,0.7);
 }
-body, a, p, span, div, li, td {
+body, a, p, span:not(.hasOwnProps), div, li, td {
     font-size: 0.8rem;
 }
 #siteDateTime > div > div {
     font-size: 0.8rem;
 }
 .vividDialogPopup p, .vividDialogPopup span, .vividDialogPopup div {
-    font-size : 0.8em;
+    font-size : 0.8rem;
 }
 
 .vividMenu_item {
@@ -490,6 +491,20 @@ body, a, p, span, div, li, td {
     width : 40px;
     z-index : inherit;
 }
+.vdTools {
+    position : absolute;
+    top : -15px;
+    right : 15px;
+    width : 200px;
+    height : 40px;
+}
+.vdTools img {
+    position : absolute;
+    top : 0px;
+    left : 0px;
+    width : 40px;
+    z-index : inherit;
+}
 .sliderOpacityRange {
     position : absolute;
     top : -2px;
@@ -588,7 +603,7 @@ body, a, p, span, div, li, td {
 }
 
 .vividButton_container_50x50 {
-    height : 50px;
+    height : auto;
 }
 .vividButton_icon_50x50_sdsdt img {
     position : absolute;
@@ -1020,8 +1035,8 @@ body, a, p, span, div, li, td {
 .vividButton_icon_50x50_text div {
     display : inline-block;
     position : relative;
-    padding : 5px;
-    padding-bottom : 10px;
+/*    padding : 5px;
+    padding-bottom : 10px;*/
 }
 
 .vividButton_icon_50x50_text {

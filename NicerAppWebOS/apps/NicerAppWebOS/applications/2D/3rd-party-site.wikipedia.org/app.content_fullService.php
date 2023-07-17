@@ -82,7 +82,7 @@ foreach ($m[0] as $idx => $str) {
     //var_dump ($replaceFinal);
     //var_dump (substr($replace,0,8)=='https://');
 
-    $r1 = '<a '.$m[1][$idx].'href="'.$replace.'"'.$m[3][$idx].'>'.$m[4][$idx].'</a>';
+   // $r1 = '<a '.$m[1][$idx].'href="'.$replace.'"'.$m[3][$idx].'>'.$m[4][$idx].'</a>';
     $r2 = '<a '.$m[1][$idx].' class="contentSectionTitle3_a" href="'.$replaceFinal.'"'.$m[3][$idx].'><span class="contentSectionTitle3_span">';
     //var_dump (strpos($output2, $r1)).PHP_EOL;
     $output2 = str_replace ($str, $r2, $output2);

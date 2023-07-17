@@ -5,9 +5,19 @@ html, body {
     padding : 0;
     margin : 0;
     font-family: 'Open Sans', sans-serif;
+    position : absolute;
+    top : 0px;
+    left : 0px;
+    width : 100%;
+    height : 100%;
 }
 body {
     overflow : hidden;
+}
+
+h1, h2, h3, h4, h5 {
+    margin-block-start : 0px;
+    margin-block-end : 0px;
 }
 
 .vividButton {
@@ -137,22 +147,18 @@ li.todoList > div, li.todoList > span {
     outline : 0
 }
 
+
 #btnOptions_menu {
     height : auto;
     overflow : hidden;
 }
-#btnOptions_menu__background {
-    position : absolute;
-    z-index : -1;
-    width : 100%;
-    height : 100%;
-}
-#btnOptions_menu__backgroundTimeSettingsChanged_save__containerDiv, #btnOptions_menu__specificity__containerDiv { 
+#btnOptions_menu__backgroundTimeSettingsChanged_save__containerDiv, .btnOptions_menu__specificity__containerDiv {
     width : calc(100% - 10px);
 }
-#btnOptions_menu__backgroundTimeSettingsChanged_save__containerDiv span, #btnOptions_menu__specificity__containerDiv span { 
+#btnOptions_menu__backgroundTimeSettingsChanged_save__containerDiv span, .btnOptions_menu__specificity__containerDiv span {
     border-radius : 5px;
 }
+
 #backgroundChange_hours, #backgroundChange_minutes {
     padding : 8px;
     border-radius : 8px;    
@@ -182,11 +188,6 @@ li.todoList > div, li.todoList > span {
 #btnOptions_menu__specificity__containerDiv span, #btnFullResetOfAllThemes, #btnFullResetOfAllMenuLayoutData, #btnOptions_menu__backgroundTimeSettingsChanged_save__containerDiv span {
     margin-left : 10px;
 }*/
-
-#logoAndSiteTitle h1:before, #logoAndSiteTitle:before h2, #logoAndSiteTitle h3:before {
-    content : %20%20;
-}
-
 
 #pageTitle::before {
     content : '';
@@ -304,7 +305,7 @@ img.bg_last {
 }
 .vividDialogContent {
     overflow : auto;
-    margin : 20px;
+    margin : 18px;
     display : none;
     width : calc(100% - 35px);
     height : calc(100% - 40px);
@@ -318,14 +319,12 @@ img.bg_last {
     margin-left : 0px;
 }
 #siteStatusbar .vividDialogContent {
-    margin : 10px;
+    margin : 5px;
+    margin-left : 15px;
     height : auto;
 }
 #siteStatusbar {
     height : auto;
-}
-#siteStatusbar > .vividDialogContent {
-    padding : 8px;
 }
 
 /*
@@ -368,12 +367,20 @@ img.bg_last {
     display : flex;
     text-shadow : 3px 3px 2px rgba(0,0,0,0.7);
 }
-body, a, p, span, div, li, td {
-    font-size: clamp(0.625rem, 0.5932rem + 0.1589vw, 1rem);
+body {
+    font-size: 0.8rem;
+}
+#siteDateTime > div > div {
+    font-size: 0.8rem;
+}
+.vividDialogPopup p, .vividDialogPopup span, .vividDialogPopup div {
+    font-size : 0.8rem;
+}
 
+.vividMenu_item {
+    float : left;
 }
 .vividMenu_item a span {
-    font-size: clamp(0.4375rem, 0.4004rem + 0.1854vw, 0.875rem);
 }
 .vividDropDownBox_selected, .vividDropDownBox_selector {
     font-size: clamp(0.4375rem, 0.4004rem + 0.1854vw, 0.875rem);
@@ -412,17 +419,13 @@ body, a, p, span, div, li, td {
 
 .vividButton, .vividMenu {
     position : absolute;
-    z-index : 20000;
+    z-index : 700000;
 }
 .vividButton {
     display : flex;
     justify-content : center;
     align-items : center;
     text-align : center;
-}
-.mp3.vividButton, .mp3.vividButtonSelected {
-    margin-bottom:5px;
-    padding : 3px;
 }
 .vividButton, .vividButtonSelected {
     position : absolute;
@@ -465,9 +468,6 @@ body, a, p, span, div, li, td {
     opacity : 0.0001;
     z-index : 500;
 }
-#titlebar {
-font-size: clamp(1rem, -105rem + 320vw, 3rem);
-}
 #btnChangeBackground {
     position : absolute;
     opacity : 0.0001;
@@ -481,6 +481,20 @@ font-size: clamp(1rem, -105rem + 320vw, 3rem);
     height : 40px;
 }
 .vdSettings img {
+    position : absolute;
+    top : 0px;
+    left : 0px;
+    width : 40px;
+    z-index : inherit;
+}
+.vdTools {
+    position : absolute;
+    top : -15px;
+    right : 15px;
+    width : 200px;
+    height : 40px;
+}
+.vdTools img {
     position : absolute;
     top : 0px;
     left : 0px;
@@ -522,7 +536,6 @@ font-size: clamp(1rem, -105rem + 320vw, 3rem);
     -webkit-appearance: none;  /* Override default CSS styles */
     appearance: none;
     width: calc(100% - 15px); /* Full-width */
-    height: 25px; /* Specified height */
     background: rgba(0,0,0,0.95); /* Grey background */
     z-index : 5000;
     border : 2px ridge rgba(100,100,100,0.7);
@@ -531,6 +544,7 @@ font-size: clamp(1rem, -105rem + 320vw, 3rem);
     opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
     -webkit-transition: .2s; /* 0.2 seconds transition on hover */
     transition: opacity .2s;
+    margin : 4px;
 }
 .sliderOpacityRangethemeEditor:hover {
   opacity: 1; /* Fully shown on mouse-over */
@@ -580,10 +594,12 @@ font-size: clamp(1rem, -105rem + 320vw, 3rem);
 }
 
 
-
+.vividMenu_subMenuPanel {
+    position : absolute;
+}
 
 .vividButton_container_50x50 {
-    height : 50px;
+    height : auto;
 }
 .vividButton_icon_50x50_sdsdt img {
     position : absolute;
@@ -1015,8 +1031,8 @@ font-size: clamp(1rem, -105rem + 320vw, 3rem);
 .vividButton_icon_50x50_text div {
     display : inline-block;
     position : relative;
-    padding : 5px;
-    padding-bottom : 10px;
+/*    padding : 5px;
+    padding-bottom : 10px;*/
 }
 
 .vividButton_icon_50x50_text {
@@ -1053,6 +1069,12 @@ font-size: clamp(1rem, -105rem + 320vw, 3rem);
 							0 -0.2rem 0.7rem rgba(80, 0, 0, 0.7) inset,
 							0 0.7rem 0.5rem rgba(255,255,255, 0.4) inset,
 							0 0.2rem 0.5rem 0 rgba(80, 0, 0, 0.7) inset;    
+}
+.vividButton.btnSave {
+	box-shadow: 0.5rem 0.5rem 0.7rem 0 rgba(0,0,0,0.50),
+							0 -0.2rem 0.7rem rgba(0, 0, 255, 0.7) inset,
+							0 0.7rem 0.5rem rgba(255,255,255, 0.4) inset,
+							0 0.2rem 0.5rem 0 rgba(0, 0, 255, 0.7) inset;
 }
 .vividButton_icon_50x50_text div {
 	color: white;
@@ -1487,7 +1509,6 @@ input.specificityCB {
 }
 .themeItem.onfocus {
     background : rgba(0,0,255,0.5);
-    font-weight : bold;
 }
 
 .specificityLabel {

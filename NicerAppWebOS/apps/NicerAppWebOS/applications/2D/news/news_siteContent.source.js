@@ -56,6 +56,8 @@ na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/news'] = {
                             $('#siteContent__header').css({display:'flex'});
                         });
 
+                        na1.themeAppsChanged();
+
 
                         na.m.waitForCondition('news app : siteContent dialog reappearance', function () {
                             return (
@@ -626,7 +628,6 @@ na.m.preventScreenLock();
         fncn = 'na.apps.loaded["applications/2D/news"].loadNews_get_forDateTimeRange(dtBegin,dtEnd,settings)',
         na1 = na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/news'], g = na1.globals, s = na1.settings, c = s.current, db = c.db;
         c.loads++;
-        debugger;
         na.m.waitForCondition ('has the news app finished loading?', function () {
             var r = !s.loading;
             return r;
@@ -1206,6 +1207,7 @@ na.m.preventScreenLock();
                 }
             };
         }
+        na.te.reApplySelectorsTree();
         return true;
     },
 
@@ -1586,7 +1588,7 @@ na.m.preventScreenLock();
         if (hf < h2) hf = h2;
 
         html += '<div id="newsApp__item__'+it.idx+'" class="newsApp__item__outer" style="justify-self:center;align-self:center;width:'+w+'px;'+fontSize+';height:auto;opacity:0.00001;">';
-        html += '<div id="newsApp__item__'+it.idx+'__bg" class="newsApp__item__outer__bg" style="">';
+        html += '<div id="newsApp__item__'+it.idx+'__bg" class="newsApp__item__outer__bg vdBackground" style="">';
             html += '<div id="newsApp__item__'+it.idx+'__bg___1" class="newsApp__item__outer__bgFile1" style="">';
             html += '&nbsp;</div>';
             html += '<div id="newsApp__item__'+it.idx+'__bg___2" class="newsApp__item__outer__bgFile2" style="">';
@@ -1608,7 +1610,7 @@ na.m.preventScreenLock();
             var seov = appSettings.section.replace(/.*__/,'').replace('__','-').replace('_','-').toLowerCase();
         };
         html += '<div class="newsApp__item__footer"><span class="newsApp__item__date"><a class="nomod noPushState" target="_new"  target="newsAppItem_'+it.idx+'" href="' + it.rssURL+'">' + na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/news'].formatDate(it)+'</a></span><br/>';
-        html += '<span class="newsApp__item__copy"><a class="nomod noPushState" href="javascript:var el = $(\'#newsApp__item__'+it.idx+'\')[0], textarea = $(\'#siteContent__textareaCopy\')[0]; if (!textarea) { var el2=document.createElement(\'textarea\'); window.top.document.append(el2); textarea=el2 }; el_html = el.innerHTML; debugger; el.innerHTML = el.innerHTML.replace(\/<span class..newsApp__item__copy.>.*<.a><.span>\/,\'\') + \'Found via <a href=\\\'https://nicer.app/'+seov+'\\\' target=\\\'_new\\\'>https://nicer.app/'+seov+'</a>\'; const type = \'text/html\'; const blob = new Blob([el.innerHTML], { type }); const data = [new ClipboardItem({ [type]: blob })]; navigator.clipboard.write(data).then( () => {/* success */}, () => {/* failure */} ); var selection = window.getSelection(); var range = document.createRange(); range.selectNodeContents(el); selection.removeAllRanges(); selection.addRange(range); window.top.document.execCommand(\'copy\');setTimeout(function(){selection.removeAllRanges(); el.innerHTML=el_html;},1000);">Copy to clipboard</a></span></div> ';
+        html += '<span class="newsApp__item__copy"><a class="nomod noPushState" href="javascript:var el = $(\'#newsApp__item__'+it.idx+'\')[0], textarea = $(\'#siteContent__textareaCopy\')[0]; if (!textarea) { var el2=document.createElement(\'textarea\'); window.top.document.append(el2); textarea=el2 }; el_html = el.innerHTML; el.innerHTML = el.innerHTML.replace(\/<span class..newsApp__item__copy.>.*<.a><.span>\/,\'\') + \'Found via <a href=\\\'https://nicer.app/'+seov+'\\\' target=\\\'_new\\\'>https://nicer.app/'+seov+'</a>\'; const type = \'text/html\'; const blob = new Blob([el.innerHTML], { type }); const data = [new ClipboardItem({ [type]: blob })]; navigator.clipboard.write(data).then( () => {/* success */}, () => {/* failure */} ); var selection = window.getSelection(); var range = document.createRange(); range.selectNodeContents(el); selection.removeAllRanges(); selection.addRange(range); window.top.document.execCommand(\'copy\');setTimeout(function(){selection.removeAllRanges(); el.innerHTML=el_html;},1000);">Copy to clipboard</a></span></div> ';
         html+= '</div>';
 
         // tooltipster HTML
@@ -1839,7 +1841,8 @@ na.m.preventScreenLock();
         na1 = na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/news'], g = na1.globals, s = na1.settings,
         c = s.current, db = c.db;
 
-        var theme = na.site.globals.themes[$('#themeChange_themeName')[0].innerText];
+        var theme = na.site.globals.themes[na.site.globals.themeName];
+        debugger;
         if (!theme.apps) theme.apps = { '/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/news' : { } };
         else if (!theme.apps['/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/news'])
             theme.apps['/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/news'] = {};
@@ -1858,9 +1861,9 @@ na.m.preventScreenLock();
     themeAppsChanged : function () {
         var
         na1 = na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/news'], g = na1.globals, s = na1.settings, c = s.current, db = c.db,
-        theme = na.site.globals.themes[$('.na_themes_dropdown > .vividDropDownBox_selected').html()];
+         theme = na.site.globals.themes[$('#btnOptions_menu__themes_dropdown > .vividDropDownBox_selected').html()];
 
-        if (theme && theme.apps) {
+         if (theme && theme.apps) {
             var tApp = theme.apps['/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/news'];
             if (tApp) {
                 $('#blankScreenBeforePageChange')[0].checked = tApp.blankScreenBeforePageChange;
@@ -1883,7 +1886,8 @@ na.m.preventScreenLock();
     },
 
     onresize : function (settings, displayNews) {
-        setTimeout (function() { // na.desktop.resize delay buffer
+        clearTimeout (na.te.s.c.timeout_onresize);
+        na.te.s.c.timeout_onresize = setTimeout (function() { // na.desktop.resize delay buffer
             var
             na1 = na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/news'], g = na1.globals, s = na1.settings,
             c = s.current, db = c.db;
@@ -1899,11 +1903,11 @@ na.m.preventScreenLock();
             }
 
             $('#siteContent__btnOptions_menu').detach().appendTo('body').css({display:'block',opacity:0.0001});
-                $('.vividButton, .vividButton_icon_50x50_siteTop, .vividButton_icon_50x50', $('#siteContent__btnOptions_menu')[0])
-                    .each(function(idx,el){
-                        if (!na.site.settings.buttons['#'+el.id])
-                            na.site.settings.buttons['#'+el.id] = new naVividButton(el);
-                    });
+            $('.vividButton, .vividButton_icon_50x50_siteTop, .vividButton_icon_50x50', $('#siteContent__btnOptions_menu')[0])
+                .each(function(idx,el){
+                    if (!na.site.settings.buttons['#'+el.id])
+                        na.site.settings.buttons['#'+el.id] = new naVividButton(el);
+                });
             setTimeout (function() {
                 $('#siteContent__btnOptions_menu').css({display:'block',opacity:0.0001});
                 var bcr = $('#newsApp_options')[0].getBoundingClientRect();
@@ -1962,7 +1966,7 @@ na.m.preventScreenLock();
                         display : 'inline-block',
                         width : ow
                     });
-                    debugger;
+
                     $('#newsApp_content_shadow, #newsApp_content, #siteContent__content').css({
                         height : $('#siteContent__content').height() - 14,
                         width : ow

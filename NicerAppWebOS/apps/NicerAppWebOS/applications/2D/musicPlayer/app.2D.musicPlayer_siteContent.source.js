@@ -44,7 +44,7 @@ na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/musicPlayer'] 
                     axis : 'x',
                     drag : function () {
                         na.musicPlayer.settings.masterLeftOffset = jQuery('#horizontalMover')[0].offsetLeft;
-                        debugger;
+                        //debugger;
                         na.musicPlayer.onWindowResize();
                     }
                 });
@@ -69,12 +69,10 @@ na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/musicPlayer'] 
                         function () { return na.m.HTMLidle(); },
                         function () {
                                 $('#mp3s .vividButton').each(function(idx,el) {
-                                    var w = $('#mp3s').width()-25;
                                     $(el).css({width:w});
                                     na.site.settings.buttons['#'+el.id] = new naVividButton(el);
                                 });
                         }, 100); // milliseconds delay number (milliseconds between check of 2nd parameter function call)
-
                     na.mp.setupDragNDrop();
                     
                     $('.audioSeekBar_setting').css({ height : $('.audioSeekBar').height() - 4, marginTop : 2, marginLeft : 2, borderRadius:5 });
@@ -192,14 +190,12 @@ na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/musicPlayer'] 
                 if (json.description) {
                     var html = '';
                     html += '<div style="height:15px;">&nbsp;</div>';
-                    html += '<table>';
-                    html += '<tr><td colspan="2" style="text-align:center"><a href="' + na.mp.globals.url + '/download_mp3.php?file='+file+'">download</a></td></tr>';
-                    html += '<tr><td><span class="mp3_info_label mp3_title_label">title</span></td><td><span class="mp3_title">'+json.title+'</span></td></tr>';
-                    html += '<tr><td><span class="mp3_info_label mp3_album_label">album</span></td><td><span class="mp3_album">' + json.album + '</span></td></tr>';
-                    html += '<tr><td><span class="mp3_info_label mp3_length_label">length</span></td><td><span class="mp3_length">' + json.length + '</span></td></tr>';
-                    html += '<tr><td><span class="mp3_info_label mp3_year_label">year</span></td><td><span class="mp3_year">'+json.year+'</span></td></tr>';
-                    html += '<tr><td colspan="2"><span class="mp3_description">' + json.description + '</span></td></tr>';
-                    html += '</table>';
+                    html += '<div style="margin-bottom:10px;font-size:inherit;text-align:center;"><a href="' + na.mp.globals.url + '/download_mp3.php?file='+file+'">download</a></div>';
+                    html += '<div style="margin-bottom:10px;font-size:inherit;"><span class="mp3_info_label mp3_title_label hasOwnProps">title</span> <span class="mp3_title hasOwnProps">'+json.title+'</span></div>';
+                    html += '<div style="margin-bottom:10px;font-size:inherit;"><span class="mp3_info_label mp3_album_label hasOwnProps">album</span> <span class="mp3_album hasOwnProps">' + json.album + '</span></div>';
+                    html += '<div style="margin-bottom:10px;font-size:inherit;"><span class="mp3_info_label mp3_length_label hasOwnProps">length</span> <span class="mp3_length hasOwnProps">' + json.length + '</span></div>';
+                    html += '<div style="margin-bottom:10px;font-size:inherit;"><span class="mp3_info_label mp3_year_label hasOwnProps">year</span> <span class="mp3_year hasOwnProps">'+json.year+'</span></div>';
+                    html += '<div style="font-size:inherit;"><span class="mp3_description hasOwnProps">' + json.description + '</span></div>';
                 } else {
                     var html = '';
                     html += '<table>';
@@ -669,7 +665,7 @@ na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/musicPlayer'] 
             width : 300,
             height : (myHeight - 40 - 120) /2
         });
-        $('#mp3descText').css({ marginLeft : 40 });
+        //$('#mp3descText').css({ marginLeft : 40 });
         
         
         $('#app__musicPlayer__description > table').css({

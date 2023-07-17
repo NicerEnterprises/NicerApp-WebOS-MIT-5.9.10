@@ -26,6 +26,7 @@ function naPhotoAlbum ($basePath=null) {
         'files' => $files
     );
     //echo '<pre style="color:black;background:white;border-radius:3px;border:1px solid black;">'; var_dump ($dbg); echo '</pre>';
+    $r .= '<div style="display:flex;flex-wrap:wrap">';
     foreach ($files as $idx => $filePath) {
         $fileName = str_replace ($targetDir.'/', '', $filePath);
         $thumbPath = $thumbDir.'/'.$fileName;
@@ -40,7 +41,7 @@ function naPhotoAlbum ($basePath=null) {
             'thumbURL' => $thumbURL
         );
         //echo '<pre style="color:black;background:white;border-radius:3px;border:1px solid black;">'; var_dump ($dbg); echo '</pre>';
-        $r .= '<div style="overflow:hidden;float:left;width:220px;height:200px;margin:5px;padding:10px;padding-top:20px;border-radius:10px;border:1px solid black;background:rgba(0,0,0,0.7);box-shadow:2px 2px 2px rgba(0,0,0,0.5), inset 1px 1px 1px rgba(0,0,255,0.5), inset -1px -1px 1px rgba(0,0,255,0.5);">';
+        $r .= '<div style="overflow:hidden;float:left;width:220px;height:fit-content;margin:5px;padding:10px;padding-top:20px;border-radius:10px;border:1px solid black;background:rgba(0,0,0,0.7);box-shadow:2px 2px 2px rgba(0,0,0,0.5), inset 1px 1px 1px rgba(0,0,255,0.5), inset -1px -1px 1px rgba(0,0,255,0.5);">';
         
         $onclick = '';
         $href = '';
@@ -57,6 +58,7 @@ function naPhotoAlbum ($basePath=null) {
         
         $r .= '<center><a href="'.$href.'"><img src="'.$thumbURL.'" style="width:200px" '.$onclick.'/><br/><span class="filename">'.$fileName.'</span></a></center></div>';        
     }
+    $r .= '</div>';
     return $r;
 }
 ?>

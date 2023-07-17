@@ -14,6 +14,27 @@ na.m = {
         waitForCondition : {}
     },
 
+    adjustColorOpacity : function (el, opacityValue) {
+        var
+        rgbaRegEx = /rgba\((\d{1,3})\,\s*(\d{1,3})\,\s*(\d{1,3})\,\s*([\d\.]+)\)(.*)/,
+        rgbRegEx = /rgb\((\d{1,3})\,\s*(\d{1,3})\,\s*(\d{1,3})\)(.*)/,
+        bg = $(el).css('background');
+        if (bg.match(rgbRegEx)) {
+            var x = bg.match(rgbRegEx);
+            if (x)
+                var rgba = 'rgba('+x[1]+','+x[2]+','+x[3]+','+opacityValue+')';
+            else
+                var rgba = false;
+            return rgba;
+        } else {
+            if (x)
+                var rgba = 'rgba('+x[1]+','+x[2]+','+x[3]+','+opacityValue+')';
+            else
+                var rgba = false;
+            return rgba;
+        }
+    },
+
 	preventScreenLock : function () {
 		// Create the root video element
 		var video = document.createElement('video');

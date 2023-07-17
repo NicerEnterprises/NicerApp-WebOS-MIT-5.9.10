@@ -1,6 +1,6 @@
 <?php
 require_once (realpath(dirname(__FILE__).'/../../../../..').'/boot.php');
-$debug = false;
+$debug = true;
 
 global $naWebOS;
 $cdb = $naWebOS->dbs->findConnection('couchdb')->cdb;
@@ -11,7 +11,7 @@ if (!array_key_exists('database',$_POST)) {
     ];
     cdb_error (403, null, 'Hacking attempt detected (attempt to access database with '.json_encode($dbg).'). Event logged.');
 }
-if (strpos($_POST['database'], '_tree_')===false)
+if (strpos($_POST['databases'], '_tree_')===false)
     cdb_error (403, null, 'Hacking attempt detected (attempt to access database '.$_POST['database'].'). Event logged.');
 
 
@@ -36,7 +36,7 @@ foreach ($dbs as $idx => $dbName) {
 //die();
 
 
-$cdb->setDatabase($_POST['database'],false);
+$cdb->setDatabase(str_replace('_documents_','_tree_',$_POST['database']),false);
 $call = $cdb->get ($_POST['id']);
 if (!property_exists($call->body,'state') || !is_object($call->body->state))
     $call->body->state = json_decode(json_encode([

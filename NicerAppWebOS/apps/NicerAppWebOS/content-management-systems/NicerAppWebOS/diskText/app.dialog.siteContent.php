@@ -14,6 +14,7 @@ $view = (array)$naWebOS->view;
 <?php
 global $naWebOS;
 //echo '<pre>'; var_dump ($view);
+
 foreach ($view as $fp1 => $rec) {
     $rec = (array)$rec;
     $fp1 = '/var/www/'.$naWebOS->domain.$fp1;
@@ -21,6 +22,7 @@ foreach ($view as $fp1 => $rec) {
         $fPath = '/var/www/'.$naWebOS->domain.$rec['file'];
     else
         $fPath = $fp1.'/'.$rec['file'];
-    echo require_once ($fPath);
+    echo require_return ($fPath);
+    //echo $fPath;
 }
 ?>

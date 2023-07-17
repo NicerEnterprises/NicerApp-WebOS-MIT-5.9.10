@@ -1140,14 +1140,14 @@ debugger;
             });
             jQuery('#mp3s').css ({
                 left : 0,
-                width : 200,
+                //width : 200,
                 height : 'auto',
                 opacity : 1
             });
             
             // hardcoded for now with use of vividTheme__lava_002.png
             jQuery('.vbutton_item, .vbutton_img', jQuery('.mp3', jQuery('#mp3s')[0])).css ({
-                width : 200
+                //width : 200
                 //height : 23
             });
             jQuery('.mp3', jQuery('#mp3s')[0]).css ({

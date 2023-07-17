@@ -3,15 +3,16 @@
     global $naWebOS;
     error_reporting (E_ALL);
 ?>
+<form id="myForm" name="myForm">
 <div id="btnOptions_menu__background" class="vividDialogPopup_background"></div>
 
-<div id="btnOptions_menu__specificity__containerDiv" style="display:flex;align-items:center;height:auto;">
+<div class="btnOptions_menu__specificity__containerDiv" style="display:flex;align-items:center;height:auto;">
     <!--<span class="label_specificityOrThemeChange">Specificity</span><select id="specificityChange_specificityName" type="text"></select>-->
     <div id="btnLockSpecificity" class="vividButton4" buttonType="btn_lock" onclick="na.site.settings.current.lockSpecificity = !na.site.settings.current.lockSpecificity;"></div>
     <span class="btnOptions_menu__label__specificity_dropdown">Specificity</span>
     <div id="btnOptions_menu__specificity_dropdown" class="na_themes_dropdown na_themes_dropdown__specificity"></div>
 </div>
-<div id="btnOptions_menu__theme__containerDiv" style="display:flex;align-items:center;height:44px;">
+<div class="btnOptions_menu__theme__containerDiv" style="display:flex;align-items:center;height:44px;">
     <!--<span class="label_specificityOrThemeChange">Theme</span><select id="themeChange_themeName" type="text" onchange="na.te.themeSelected(event);"></select>-->
     <span class="btnOptions_menu__label__themes_dropdown">Theme</span>
     <div id="btnOptions_menu__themes_dropdown" class="na_themes_dropdown na_themes_dropdown__themes"></div>
@@ -20,14 +21,14 @@
 
 
 <p style="margin:5px;padding:5px;text-align:center;width:calc(100%-10px);">Set the time between background changes :</p>
-<div id="btnOptions_menu__backgroundTimeSettingsChanged_save__containerDiv">
-    <div style="margin-left:10px;width:calc(100% - 20px)">
+<div id="btnOptions_menu__backgroundTimeSettingsChanged_save__containerDiv" style="">
+    <div style="margin-left:10px;width:calc(100% - 20px);">
         <input id="changeBackgroundsAutomatically" type="checkbox" onchange="setTimeout(na.site.saveTheme, 250);">
         <label id="changeBackgroundsAutomatically_label" class="smallPadding" for="changeBackgroundsAutomatically" onclick="setTimeout(na.site.saveTheme, 250);">Change backgrounds automatically</label>
     </div>
-    <div style="margin:10px;width:calc(100% - 40px)">
-        <span>Hours</span><input id="backgroundChange_hours" type="number" min="0" max="23" value="0" style="width:40px;height:1em;margin-left:15px" onchange="setTimeout(na.site.saveTheme, 250);"></input>
-        <span style="margin-left:10px;">Minutes</span><input id="backgroundChange_minutes" type="number" min="1" max="59" value="5" style="width:40px;height:1em;margin-left:15px" onchange="setTimeout(na.site.saveTheme, 250);"></input>
+    <div style="margin:10px;width:calc(100% - 40px);">
+        <label for="backgroundChange_hours" style="">Hours<input id="backgroundChange_hours" name="backgroundChange_hours" type="number" min="0" max="23" value="0" style="width:40px;height:1em;margin-left:15px;" onchange="setTimeout(na.site.saveTheme, 250);"/></label>
+        <label for="backgroundChange_minutes" style="margin-left:10px;">Minutes<input id="backgroundChange_minutes" name="backgroundChange_minutes" type="number" min="1" max="59" value="5" style="width:40px;height:1em;margin-left:15px;" onchange="setTimeout(na.site.saveTheme, 250);"/></label>
     </div>
 </div>
 
@@ -184,4 +185,4 @@
         ''
     );*/
 ?>
-
+</form>

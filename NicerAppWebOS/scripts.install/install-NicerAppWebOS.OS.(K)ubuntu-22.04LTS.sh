@@ -2,20 +2,23 @@
 cd /var/www
 
 echo "Your website will be installed under /var/www"
-echo "Question 1of5 : What is the name of your website (your MYDOMAIN.COM / MYDOMAIN.TLD)?"
+echo "Question 1of7 : What is the name of your website (your MYDOMAIN.COM / MYDOMAIN.TLD)?"
 read DOMAIN_TLD
 
-read "Question 2of5 : Under what domain name (localhost / MYDOMAIN.COM) or IP address do you want to publish your website?"
+read "Question 2of7 : Under what domain name (localhost / MYDOMAIN.COM) or IP address do you want to publish your website?"
 read SERVER_NAME
 
-echo "Question 3of5 : What email address do you wish to use for webserver level errors and notifications?"
+echo "Question 3of7 : What email address do you wish to use for webserver level errors and notifications?"
 read APACHE_EMAIL
 
-echo "Question 4of5 : What is the name of the Owner of the MYDOMAIN.TLD company?"
+echo "Question 4of7 : What is the name of the Owner of the MYDOMAIN.TLD company?"
 read OWNER_NAME
 
-echo "Question 5of5 : What is the email address of the Owner of the MYDOMAIN.TLD company?"
+echo "Question 5of7 : What is the email address of the Owner of the MYDOMAIN.TLD company?"
 read OWNER_EMAIL
+
+echo "Question 6of7 : What do you want the end-user password for the Owner of the MYDOMAIN.TLD company to be? Please be sure to make this a strong password, with at least a mix of alphanumerical characters and some punctuation."
+read OWNER_PASSWORD
 
 set -o xtrace
 
@@ -84,12 +87,12 @@ curl https://couchdb.apache.org/repo/keys.asc | gpg --dearmor | sudo tee /usr/sh
 source /etc/os-release
 echo "deb [signed-by=/usr/share/keyrings/couchdb-archive-keyring.gpg] https://apache.jfrog.io/artifactory/couchdb-deb/ jammy main" \
     | sudo tee /etc/apt/sources.list.d/couchdb.list >/dev/null
-echo "For sheer installation ability, you shouldn't list non-alphanumerical characters in your CouchDB ErLang cookie. Agree (y/n)?"
+echo "Question 7of7 : For sheer installation ability, you shouldn't list non-alphanumerical characters in your CouchDB ErLang cookie. Agree (y/n)?"
 read AGREE_COUCHDB_NON_ALPHA_COOKIE
 apt update
 apt install -y couchdb
 
-echo "{ \"OWNER_NAME\" : \"$OWNER_NAME\", \"OWNER_EMAIL\" : \"$OWNER_EMAIL\" }" > /var/www/$DOMAIN_TLD/NicerAppWebOS/domainConfigs/$DOMAIN_TLD/company.owner.json
+echo "{ \"OWNER_NAME\" : \"$OWNER_NAME\", \"OWNER_EMAIL\" : \"$OWNER_EMAIL\", \"OWNER_PASSWORD\" : \"$OWNER_PASSWORD\" }" > /var/www/$DOMAIN_TLD/NicerAppWebOS/domainConfigs/$DOMAIN_TLD/company.owner.json
 
 # mysql
 apt install mysql

@@ -5,22 +5,27 @@ na.te = na.themeEditor = {
             forDialogID : 'siteContent',
             //selectedButtonID : 'btnSelectBackgroundColor', // OBSOLETED
             selectedSetting : 'selectorSet',
-            selectedThemeName : na.site.globals.themeName
+            selectedThemeName : na.site.globals.themeName,
+            elementsCSS : {}
         } 
     }, 
     onload : function (forDialogID) {
         var
-        fncn = 'na.themeEditor.onload("'+forDialogID+'")',
         date = new Date(),
         timeInMilliseconds = date.getTime();
-        
+
         na.m.settings.startTime = timeInMilliseconds;
 
-        na.te.s.c.forDialogID = forDialogID;
-        $('#specificityForDiv').html ('#'+forDialogID);
+        if (typeof forDialogID=='string') {
+
+            var
+            fncn = 'na.themeEditor.onload("'+forDialogID+'")';
+            na.te.s.c.forDialogID = forDialogID;
+            $('#specificityForDiv').html ('#'+forDialogID);
+        }
         
         $('.themeEditorComponent, .themeEditorComponent_containerDiv2').css({display:'none'});
-        na.te.makeThemesList( na.te.s.c.selectedThemeName );
+        //na.te.makeThemesList( na.te.s.c.selectedThemeName );
         for (var appName in na.site.globals.app) break;
         $('#span_cb_app').html ('<b>App : </b>'+appName);
 
@@ -255,32 +260,34 @@ na.te = na.themeEditor = {
                         "state", "types", "wholerow", "multiselect"
                     ]
                 }).on('changed.jstree', function (e, data) {
-                    na.te.s.c.selectedBackground = data;
-                    for (var i=0; i<data.selected.length; i++) {
-                        var
-                        d = data.selected[i],
-                        rec = data.instance.get_node(d),
-                        btn = na.site.settings.buttons['#btnSelectBackgroundImage'];
-
-                        $('#documentTitle').val(rec.original.text);
-                        na.te.s.c.selectedTreeNode = rec;
-                        if (rec.original.type=='naDocument') {
-                            if (btn) btn.disable();
-                        } else if (rec.original.type=='naMediaAlbum') {
-                            if (btn) btn.enable();
+                    if (data.action=='select_node') {
+                        na.te.s.c.selectedBackground = data;
+                        for (var i=0; i<data.selected.length; i++) {
                             var
-                            path = na.te.currentPath(rec),
-                            path = path.replace(/ /g, '%20'),
-                            src = '/NicerAppWebOS/logic.userInterface/photoAlbum/4.0.0/index.php?basePath='+path,
-                            el = $('#themeEditor_photoAlbum')[0];
-                            el.onload = setTimeout(function(el) {
-                                na.te.onresize()
-                            }, 10, el);
-                            el.src = src;
-                        } else {
-                            if (btn) btn.disable();
-                        }
+                            d = data.selected[i],
+                            rec = data.instance.get_node(d),
+                            btn = na.site.settings.buttons['#btnSelectBackgroundImage'];
 
+                            $('#documentTitle').val(rec.original.text);
+                            na.te.s.c.selectedTreeNode = rec;
+                            if (rec.original.type=='naDocument') {
+                                if (btn) btn.disable();
+                            } else if (rec.original.type=='naMediaAlbum') {
+                                if (btn) btn.enable();
+                                var
+                                path = na.te.currentPath(rec),
+                                path = path.replace(/ /g, '%20'),
+                                src = '/NicerAppWebOS/logic.userInterface/photoAlbum/4.0.0/index.php?basePath='+path,
+                                el = $('#themeEditor_photoAlbum')[0];
+                                el.onload = setTimeout(function(el) {
+                                    na.te.onresize()
+                                }, 10, el);
+                                el.src = src;
+                            } else {
+                                if (btn) btn.disable();
+                            }
+
+                        };
                     };
                 });
                 
@@ -305,74 +312,76 @@ na.te = na.themeEditor = {
             div = $(na.te.s.c.forElements),
             bg = $(na.te.s.c.forElements)[0];
         }
-        var
-        rgbaRegEx = /rgba\(\d{1,3}\,\s*\d{1,3}\,\s*\d{1,3}\,\s*([\d.]+)\).*/,
-        rgbRegEx = /rgb\(\d{1,3}\,\s*\d{1,3}\,\s*\d{1,3}\).*/,
-        scaleRegEx = /(\d+)px\s(\d+)px/,
-        bgRegEx = /.*\/(Groups.*?)"\)/,
-        test1a = $(bg).css('background').match(rgbaRegEx),
-        test1b = $(bg).css('backgroundColor').match(rgbaRegEx)
-        test2a = $(div).css('border').match(rgbaRegEx),
-        test2b = $(div).css('borderTopColor').match(rgbaRegEx),
-        test2c = $(div).css('border').match(rgbRegEx),
-        test2d = $(div).css('borderTopColor').match(rgbRegEx),
-        test3a = $(bg).css('backgroundSize').match(scaleRegEx),
-        c = test1a ? $(bg).css('background') : test1b ? $(bg).css('backgroundColor') : 'rgba(0,0,0,0.5)',
-        c2 = (
-            test2a 
-            ? $(div).css('border')
-            : test2b
-                ? $(div).css('borderTopColor')
-                : test2c
-                    ? $(div).css('border')  
-                    : test2d
-                        ? $(div).css('borderTopColor')
-                        : 'black'
-        ),
-        c3 = $(bg).css('backgroundImage'),
-        c3a = c3.match(bgRegEx);
-        
-        if (c3a) {
+        if ($(bg).css('background')) {
             var
-            c4a = c3a[1].lastIndexOf('/'),
-            c4b = c3a[1].substr(0, c4a);
-            
-            na.te.s.c.backgroundFolder = c4b;        
-        };
-        
-        na.te.s.c.borderColor = c2;
-
-        var bgSrc = $(bg).css('backgroundImage');
-        bgSrc = bgSrc.replace('url("', '');
-        bgSrc = bgSrc.replace('")', '');
-        bgSrc = bgSrc.replace("url'", '');
-        bgSrc = bgSrc.replace("')", '');
-        var bgEl = document.createElement('img');
-        bgEl.onload = function () {
-            if (na.te.s.c.forDialogID) {
-                var bg = $('#'+na.te.s.c.forDialogID+' > .vdBackground')[0];
-            } else {
-                var bg = $(na.te.s.c.forElements)[0];
-            }
+            rgbaRegEx = /rgba\(\d{1,3}\,\s*\d{1,3}\,\s*\d{1,3}\,\s*([\d\.]+)\).*/,
+            rgbRegEx = /rgb\(\d{1,3}\,\s*\d{1,3}\,\s*\d{1,3}\).*/,
             scaleRegEx = /(\d+)px\s(\d+)px/,
-            test3a = $(bg).css('backgroundSize').match(scaleRegEx);
-            
-            if (test3a) {
-                na.te.s.c.scaleX = (parseInt(test3a[1]) * 100) / bgEl.naturalWidth;
-                na.te.s.c.scaleY = (parseInt(test3a[2]) * 100) / bgEl.naturalHeight;        
-            } else {
-                na.te.s.c.scaleX = 100; 
-                na.te.s.c.scaleY = 100;
+            bgRegEx = /.*\/(Groups.*?)"\)/,
+            test1a = $(bg).css('background').match(rgbaRegEx),
+            test1b = $(bg).css('backgroundColor').match(rgbaRegEx)
+            test2a = $(div).css('border').match(rgbaRegEx),
+            test2b = $(div).css('borderTopColor').match(rgbaRegEx),
+            test2c = $(div).css('border').match(rgbRegEx),
+            test2d = $(div).css('borderTopColor').match(rgbRegEx),
+            test3a = $(bg).css('backgroundSize').match(scaleRegEx),
+            c = test1a ? $(bg).css('background') : test1b ? $(bg).css('backgroundColor') : 'rgba(0,0,0,0.5)',
+            c2 = (
+                test2a
+                ? $(div).css('border')
+                : test2b
+                    ? $(div).css('borderTopColor')
+                    : test2c
+                        ? $(div).css('border')
+                        : test2d
+                            ? $(div).css('borderTopColor')
+                            : 'black'
+            ),
+            c3 = $(bg).css('backgroundImage'),
+            c3a = c3.match(bgRegEx);
+
+            if (c3a) {
+                var
+                c4a = c3a[1].lastIndexOf('/'),
+                c4b = c3a[1].substr(0, c4a);
+
+                na.te.s.c.backgroundFolder = c4b;
             };
-            $('#themeEditor_photoScaleX').val(na.te.s.c.scaleX);
-            $('#themeEditor_photoScaleY').val(na.te.s.c.scaleY);
-        };
-        bgEl.src = bgSrc;
-        
+
+            na.te.s.c.borderColor = c2;
+
+            var bgSrc = $(bg).css('backgroundImage');
+            bgSrc = bgSrc.replace('url("', '');
+            bgSrc = bgSrc.replace('")', '');
+            bgSrc = bgSrc.replace("url'", '');
+            bgSrc = bgSrc.replace("')", '');
+            var bgEl = document.createElement('img');
+            bgEl.onload = function () {
+                if (na.te.s.c.forDialogID) {
+                    var bg = $('#'+na.te.s.c.forDialogID+' > .vdBackground')[0];
+                } else {
+                    var bg = $(na.te.s.c.forElements)[0];
+                }
+                scaleRegEx = /(\d+)px\s(\d+)px/,
+                test3a = $(bg).css('backgroundSize').match(scaleRegEx);
+
+                if (test3a) {
+                    na.te.s.c.scaleX = (parseInt(test3a[1]) * 100) / bgEl.naturalWidth;
+                    na.te.s.c.scaleY = (parseInt(test3a[2]) * 100) / bgEl.naturalHeight;
+                } else {
+                    na.te.s.c.scaleX = 100;
+                    na.te.s.c.scaleY = 100;
+                };
+                $('#themeEditor_photoScaleX').val(na.te.s.c.scaleX);
+                $('#themeEditor_photoScaleY').val(na.te.s.c.scaleY);
+            };
+            bgEl.src = bgSrc;
+        }
         
         $('#siteToolbarThemeEditor').css({ display : 'flex', flexDirection : 'row', flexWrap : 'wrap' });
         
         var x = $('#colorpicker').css('display'), y = 'abc';
+        if (typeof c==='undefined') c = 'rgba(0,0,0,0.5)';
         //debugger;
         $('#colorpicker').css({display:'block'}).spectrum ({
             color:c, 
@@ -386,12 +395,14 @@ na.te = na.themeEditor = {
                     var bg = $('#'+na.te.s.c.forDialogID+' > .vdBackground')[0];
                 } else {
                     var bg = $(na.te.s.c.forElements);
-                }
+                };
+                debugger;
                 $(bg).css({ background : color, opacity : 1 });
                 na.site.saveTheme();                        
             }});
         //if (na.te.s.c.selectedButtonID!=='btnSelectBackgroundColor') $('#colorpicker').next().css({display:x});
         var x = $('#borderColorpicker').css('display');
+        if (typeof c2==='undefined') c2 = 'black';
         $('#borderColorpicker').css({display:'block'}).spectrum ({
             color:c2, 
             type: "flat", 
@@ -460,7 +471,9 @@ na.te = na.themeEditor = {
             na.site.settings.buttons['#btnDeleteSpecificity'].enable();
         }
         
-        $('#btnViewResult .vividButton_icon_borderCSS_50x50').css({ boxShadow : '0px 0px 0px 0px rgba(0,0,0,0)' });
+        $('#btnViewResult .vividButton_icon_borderCSS_50x50').css({
+            boxShadow : '0px 0px 0px 0px rgba(0,0,0,0)'
+        });
         
         $('.vividButton, .vividButton_icon_50x50', $('#siteToolbarThemeEditor')[0]).each(function(idx,el){
             na.site.settings.buttons['#'+el.id] = new naVividButton(el);
@@ -571,39 +584,117 @@ na.te = na.themeEditor = {
                         '#btnSelectTextSettings', '#btnSelectTextShadowSettings',
                         '#btnSelectBackgroundFolder' , '#btnSelectBackgroundImage'
                     ]);
-                if (data.node && data.node.type=='naElement')
+                if (data.node && data.node.type=='naElement') {
+                    var
+                    regExSite = /#site([\w\d]+)$/,
+                    regExApps = /#app__([\w\d]+)__([\w\d]+)$/;
+
                     if (
-                        data.node.text.match(/#site[\w\d]+$/)
-                        || data.node.text.match(/#app__[\w\d]+$/)
+                        data.node.text.match(regExSite)
+
                     ) {
-                        na.te.s.c.forDialogID = data.node.text;
+                        na.te.s.c.forDialogID = data.node.text.replace('#','');
                         na.te.s.c.forElements = null;
                         na.te.enableButtons([
                             '#btnAddElement', '#btnDeleteElement',
+                            '#btnSelectBackgroundFolder' , '#btnSelectBackgroundImage',
                             '#btnSelectBackgroundColor', '#btnSelectBorderSettings' , '#btnSelectBoxShadowSettings',
                             '#btnSelectTextSettings', '#btnSelectTextShadowSettings'
                         ]);
-                    } else if (data.node.text.match(/#site.*\s\>\s\.vdBackground$/)) {
-                        na.te.s.c.forDialogID = data.node.text.match(/#(site.*)\s/)[1];
+                    } else if (data.node.text.match(regExApps)) {
+                        na.te.s.c.forDialogID = data.node.text.replace('#','');
+                        //debugger;
                         na.te.s.c.forElements = null;
                         na.te.enableButtons([
-                            '#btnSelectBackgroundFolder' , '#btnSelectBackgroundImage'
+                            '#btnSelectBackgroundFolder' , '#btnSelectBackgroundImage',
+                            '#btnSelectBackgroundColor', '#btnSelectBorderSettings' , '#btnSelectBoxShadowSettings',
+                            '#btnSelectTextSettings', '#btnSelectTextShadowSettings'
                         ]);
                     } else {
                         na.te.s.c.forDialogID = null;
                         na.te.s.c.forElements = data.node.text;
                         na.te.enableButtons([
+                            '#btnSelectBackgroundFolder' , '#btnSelectBackgroundImage',
                             '#btnSelectBackgroundColor', '#btnSelectBorderSettings' , '#btnSelectBoxShadowSettings',
                             '#btnSelectTextSettings', '#btnSelectTextShadowSettings'
-                        ]);
-                    }
 
+                        ]);
+                        if (data.instance.get_node(data.node.parent).text!=='main') {
+                            //debugger;
+                            na.te.enableButtons([
+                                '#btnDeleteElement'
+                            ]);
+                        }
+                    }
+                }
             }
         } else if (which=='selectedBackground') {
             var data = na.te.s.c.selectedBackground;
 
         }
     //    debugger;
+    },
+
+    applySelector : function (rec) {
+        if (rec && rec.type=='naElement') {
+            var
+            regExSite = /#site([\w\d]+)$/,
+            regExApps = /#app__([\w\d]+)__([\w\d]+)$/;
+
+            if (
+                rec.text.match(regExSite)
+
+            ) {
+                //na.te.s.c.forDialogID = rec.text.match(regExSite)[1];
+                //na.te.s.c.forElements = null;
+            } else if (rec.text.match(regExApps)) {
+                //na.te.s.c.forDialogID = rec.text.match(regExApps);
+                debugger;
+                //na.te.s.c.forElements = null;
+            } else {
+                //na.te.s.c.forDialogID = null;
+                //na.te.s.c.forElements = rec.text;
+                //debugger;
+                if (na.te.s.c.elementsCSS[rec.id]) {
+                    setTimeout (function () {
+
+                        let
+                        bg = $('#'+na.te.s.c.forDialogID+' > .vdBackground'),
+                        bg3 = $(rec.text),
+                        src = na.te.s.c.elementsCSS[rec.id].background;
+
+                        //debugger;
+                        if (src.match(/rgba\(/))
+                            $(bg3).css({
+                                background : src,
+                                opacity : 1
+                            });
+                        else if (rec.text.match(/\s+\.newsApp__item__outer\s+>\s+.vdBackground\s*/)) {
+                            debugger;
+                            $(bg3).css({
+                                background : src.match(/url\(/)
+                                    ? src.match(/url\(.*\).*%/)
+                                        ? src
+                                        : src.replace(')',') 0% 0% / ')
+                                    : 'url("'+src+'") repeat',
+                                opacity : na.te.s.c.elementsCSS[rec.id].opacity,
+                                //opacity : parseInt($('#themeEditor_photoOpacity').val())/100,
+                                backgroundSize : na.te.s.c.elementsCSS[rec.id].backgroundSize
+                            });
+                        }
+                        //console.log ('t3333:'+rec.text);
+
+                    }, 200);
+                };
+            }
+        }
+    },
+
+    reApplySelectorsTree : function () {
+        var jsonNodes = $('#themeEditor_jsTree_selectors').jstree(true).get_json('#', { flat: true });
+        $.each(jsonNodes, function (i, val) {
+            na.te.applySelector (val);
+        });
     },
 
     disableAllButtons : function () {
@@ -624,9 +715,9 @@ na.te = na.themeEditor = {
         }
     },
 
-    transform_siteGlobalsThemes_to_jsTree : function() {
+    transform_siteGlobalsThemes_to_jsTree : function(specifier) {
         var
-        themeName = 'default',
+        themeName = na.site.globals.themeName,
         inputData = na.site.globals.themes[themeName].themeSettings,
         outputData = na.te.transform_siteGlobalsThemes_to_jsTree__recurse({dat:inputData,did:null}, {dat:[],did:null}, 'Selectors', '#', 'naSelectorSet');
         return outputData;
@@ -636,6 +727,7 @@ na.te = na.themeEditor = {
         var did = inputData.did;
         for (var key in inputData.dat) {
             var value = inputData.dat[key], newID = na.m.randomString();
+            if (typeof value.length!=='undefined') continue;
             if (key=='css') {
                 for (var key2 in value) break;
                 outputData.dat.push ({
@@ -650,6 +742,7 @@ na.te = na.themeEditor = {
                 });
                 if ('site'+parentName==na.te.s.c.forDialogID) outputData.did = newID;
                 for (var divSel in value) {
+                    if (divSel.match(/\> .vdBackground/)) continue;
                     var newID2 = na.m.randomString();
                     outputData.dat.push ({
                         id : newID2,
@@ -672,6 +765,7 @@ na.te = na.themeEditor = {
                     type : type
                 });
                 for (var cssText in value) {
+                    if (cssText.match(/\> .vdBackground/)) continue;
                     var vdata = value[cssText];
                     var newID2 = na.m.randomString();
                     outputData.dat.push ({
@@ -683,6 +777,7 @@ na.te = na.themeEditor = {
                         },
                         type : 'naCSS'
                     });
+
                     for (var divSel in vdata) {
                         var newID3 = na.m.randomString();
                         outputData.dat.push ({
@@ -694,6 +789,7 @@ na.te = na.themeEditor = {
                             },
                             type : 'naElement'
                         });
+                        na.te.s.c.elementsCSS[newID3] = vdata[divSel];
                     }
                 }
             } else {
@@ -718,12 +814,10 @@ na.te = na.themeEditor = {
         var
         jsonNodes = $('#themeEditor_jsTree_selectors').jstree(true).get_json('#', { flat: true }),
         themeSettings = {};
-
         for (var i in jsonNodes) {
             var it = jsonNodes[i];
             na.te.transform_jsTree_to_siteGlobalsThemes__do (it, themeSettings);
         }
-        debugger;
         return themeSettings;
     },
 
@@ -756,12 +850,15 @@ na.te = na.themeEditor = {
                 regExDialogs = /#site(.*)[\s\w\.\#\d\>]*/,
                 regExApps = /#app__(.*)__(.*)$/;
 
-                if (!themeSettings[parent.text]) themeSettings[parent.text] = {};
                 if (
                     !it.text.match(regExDialogs)
                     && !it.text.match(regExApps)
+                    && !it.text.match(/Dialog/)
                 ) {
-                    themeSettings[parent.text] = $.extend (themeSettings[parent.text], na.site.fetchTheme(it.text));
+                    if (!themeSettings[parent.text]) themeSettings[parent.text] = {};
+                    themeSettings[parent.text] = $.extend (
+                        themeSettings[parent.text], na.site.fetchTheme(it.text)
+                    );
                 }
                 break;
         }
@@ -785,7 +882,9 @@ na.te = na.themeEditor = {
         doc = $('#themeEditor_photoAlbum')[0].contentWindow.document;
         $('.vividScrollpane div', doc).css({width:100,height:130});
         $('.vividScrollpane div img', doc).css({width:90,height:100}).each(function(idx,el){
-            el.onclick = function () { na.te.imageSelected(el); };
+            el.onclick = function () {
+                na.te.imageSelected(el);
+            };
         });
         /*$('#themeEditor_photoOpacity')[0].oninput = function () {
             if (na.te.s.c.selectedImage) na.te.imageSelected(na.te.s.c.selectedImage);
@@ -806,7 +905,7 @@ na.te = na.themeEditor = {
         //$('#siteToolbarThemeEditor label', t.el).not('.specificityCB').css ({ float : 'left' });
         
         $('.themeEditorComponent, .themeEditorComponent_containerDiv2').css({
-            width : 'calc(100% - 10px)',
+            width : '100%',
             height : 
                 $('#siteToolbarThemeEditor > .vividDialogContent').height()
                 - $('.nate_dialogTitle').height() - 10
@@ -911,34 +1010,27 @@ na.te = na.themeEditor = {
                 na.site.settings.buttons['#btnDeleteSpecificity'].enable();
             }
 
-            /*na.site.loadTheme (function () { // **POSSIBLY** NOT NEEDED
-                var btn = $('#'+na.te.s.c.selectedButtonID)[0];
-                if (btn) na.te.onclick(btn, false);
-            });*/
-
-            na.site.setSiteLoginLogout();
-        }
-        /*
-        debugger;
-        var opt = $(event.currentTarget).find('option:selected');
-        if (opt[0]) {
-            var s = JSON.parse( opt[0].value );
-            na.site.globals.themeSpecificityName = opt[0].innerHTML;
-            na.te.s.c.specificity = s;
-            if (!s.role && !s.user) {
-                na.site.settings.buttons['#btnDeleteSpecificity'].disable();
-            } else {
-                na.site.settings.buttons['#btnDeleteSpecificity'].enable();
-            }
-            
             na.site.loadTheme (function () { // **POSSIBLY** NOT NEEDED
                 var btn = $('#'+na.te.s.c.selectedButtonID)[0];
                 if (btn) na.te.onclick(btn, false);
             });
-            
+
             na.site.setSiteLoginLogout();
-        }*/
+        }
     },
+    /*
+    themeSelected : function (event) {
+        na.site.globals.themeName = $(event.currentTarget)[0].innerText;
+        $('.na_themes_dropdown__themes > .vividDropDownBox_selected').html (na.site.globals.themeName);
+
+        na.site.loadTheme (function () { // **POSSIBLY** NOT NEEDED
+            var btn = $('#'+na.te.s.c.selectedButtonID)[0];
+            if (btn) na.te.onclick(btn, false);
+        });
+
+        na.site.setSiteLoginLogout();
+    },*/
+
     deleteSpecificity : function (event, callback) {
         var
         fncn = 'na.themeEditor.deleteSpecificity(event, callback)',
@@ -1037,22 +1129,28 @@ na.te = na.themeEditor = {
         $.ajax(ac);
     },    
     themeSelected : function (event) {
+        debugger;
         var theme = $('.na_themes_dropdown__themes > .vividDropDownBox_selected').html();
         $('#themeName').val(theme);
         na.site.saveTheme(function() {
             na.te.s.c.selectedThemeName = theme;
 
-            na.site.loadTheme(function() {
-                var btn = $('#'+na.te.s.c.selectedButtonID)[0];
-                if (btn) na.te.onclick(btn, false);
-            }, theme);
-        },theme);
+            setTimeout (function(theme) {
+                na.site.loadTheme(function() {
+                    var btn = $('#'+na.te.s.c.selectedButtonID)[0];
+                    if (btn) na.te.onclick(btn, false);
+                }, theme);
+            }, 2000, theme);
+        },na.site.globals.themeName);
     },
     deleteTheme : function (event) {
         var
         fncn = 'na.themeEditor.deleteTheme(event)',
-        url = '/NicerAppWebOS/logic.AJAX/ajax_database_deleteAllThemes_byName.php',
-        themeName = $('.themeItem.onfocus')[0].value,
+        url = '/NicerAppWebOS/logic.AJAX/ajax_database_deleteAllThemes_byName.php';
+        debugger;
+        var
+        themeName = $('.themeItem.onfocus')[0].value;
+        var
         ajaxCmd = {
             type : 'POST',
             url : url,
@@ -1076,29 +1174,33 @@ na.te = na.themeEditor = {
         $.ajax(ajaxCmd);            
         
     },
-    themeNameSelected : function (themeNameID) {
+    themeNameSelected : function (themeName) {
         na.site.saveTheme (function() {
-            na.te.s.c.selectedThemeName = themeNameID;
+            na.site.globals.themeName = themeName;
+            na.te.s.c.selectedThemeName = themeName;
             
             $('.themeItem').removeClass('onfocus');
             setTimeout(function() {
+                //var themeName = $('.na_themes_dropdown__themes > .vividDropDownBox_selected').html();
                 $('.themeItem').each(function(idx,ti) {
-                    if ($(ti).html()==na.te.s.c.selectedThemeName) $(ti).addClass('onfocus');
+                    if ($(ti).val()==themeName)
+                        $(ti).addClass('onfocus');
                 });
 
                 na.site.loadTheme(function() {
                     var btn = $('#'+na.te.s.c.selectedButtonID)[0];
                     if (btn) na.te.onclick(btn, false);
-                }, na.te.s.c.selectedThemeName);
-            }, 500);
+                }, themeName);
+            }, 200);
         
-        }, themeNameID);
+        }, themeName);
     },
     themeNameChanged : function (themeIdx, themeNameID) {
         var
+        fncn = 'na.themeEditor.themeNameChanged()',
         oldThemeName = null,
-        newThemeName = $('#'+themeNameID).val();
-        
+        newThemeName = $(event.currentTarget).val();
+        debugger;
         $('.na_themes_dropdown__themes > .vividDropDownBox_selector > div').each(function(idx,optEl) {
             if ($(optEl).html()==themeNameID) oldThemeName=$(optEl).html();
         });
@@ -1115,7 +1217,8 @@ na.te = na.themeEditor = {
             success : function (data, ts, xhr) {
                 if (data == 'status : Success.') {
                     $('.na_themes_dropdown__themes > .vividDropDownBox_selector > div').each(function(idx,optEl){
-                        if (parseInt(idx) === parseInt(themeIdx)) $(optEl).html(newThemeName);
+                        debugger;
+                        if ($(optEl)[0].innerText === oldThemeName) $(optEl).html(newThemeName);
                     })
                 };                    
             },
@@ -1132,10 +1235,10 @@ na.te = na.themeEditor = {
             na.te.s.c.oldThemeNames = [];
             $('.themeItem').remove();
             var 
-            t = $('.na_themes_dropdown__themes > .vividDropDownBox_selector > div'),
+            t = $('#btnOptions_menu__themes_dropdown > .vividDropDownBox_selector > div'),
             html = '';
             for (var i=0; i<t.length; i++) {
-                html += '<div id="theme_'+i+'_div"><input id="theme_'+i+'" class="themeItem" type="text" onclick="na.te.themeNameSelected(\'theme_'+i+'\')" onchange="na.te.themeNameChanged('+i+', \'theme_'+i+'\')" value="'+t[i].html()+'"></div>';
+                html += '<div id="theme_'+i+'_div"><input id="theme_'+i+'" class="themeItem" type="text" onclick="na.te.themeNameSelected(\''+$(t[i])[0].innerText+'\')" onchange="na.te.themeNameChanged('+i+', \''+$(t[i])[0].innerText+'\')" value="'+$(t[i])[0].innerText+'"/></div>';
                 if ($(t[i]).is('.selected')) $('#themeName').val($(t[i]).html());
                 na.te.s.c.oldThemeNames.push ($(t[i]).html());
             }
@@ -1145,7 +1248,7 @@ na.te = na.themeEditor = {
     addTheme : function (event) {
         var 
         opt = document.createElement('div'),
-        i = $('#themes')[0].options.length;
+        i = $('#btnOptions_menu__themes_dropdown > .vividDropDownBox_selector > div').length;
         
         opt.id = 'div_theme_'+i;
         $(opt).html('new theme');
@@ -1222,10 +1325,22 @@ na.te = na.themeEditor = {
     },
     
     cssExtract : function (elID) {
-        var 
-        $el = $('#'+elID),
-        bs = $el.css('boxShadow').split(', rgb'),
-        ts = $el.css('textShadow').split(', rgb'),
+        if (!elID) return {};
+        if (elID.match(/\./))
+            var $el = $(elID);
+        else
+            var $el = $('#'+elID);
+
+        if ($el.css('boxShadow') && $el.css('boxShadow')!=='')
+            var bs = $el.css('boxShadow').split(', rgb');
+        else
+            var bs = '2px 2px 2px 2px rgba(0,0,0,0.7)'.split(', rgb');
+        if ($el.css('textShadow') && $el.css('textShadow')!=='')
+            var ts = $el.css('textShadow').split(', rgb');
+        else
+            var ts = '2px 2px 2px rgba(0,0,0,0.7)'.split(', rgb');
+
+        var
         b = $el.css('border');
         
         //console.log ('#'+el.id+'.boxShadow='+$(el).css('boxShadow'));
@@ -1366,6 +1481,7 @@ na.te = na.themeEditor = {
         na.te.borderSettingsSelected (evt2, false); //event.currentTarget === ct
     },
     borderSettingsSelected : function (color) {
+        debugger;
         if (color) na.te.s.c.borderColor = color; else color = na.te.s.c.borderColor;
         if (typeof color=='object') color = 'rgba('+color._r+', '+color._g+', '+color._b+', '+color._a+')'; // firefox bugfix
 
@@ -1392,6 +1508,8 @@ na.te = na.themeEditor = {
             //$('#'+na.te.s.c.forDialogID).css({borderRadius : Math.round((newBorderRadius/4)*3) });
             //$('.boxShadow', bg).css({ border : newBorder, borderRadius : newBorderRadius });
             $(na.te.s.c.forElements).css({ border:newBorder, borderRadius : newBorderRadius });
+            debugger;
+            $(na.te.s.c.forElements+' > .vdBackground').css({ borderRadius : newBorderRadius });
             //$(bg).css({borderRadius:newBorderRadius});
         }
         /*if (na.te.s.c.fireSaveTheme) */na.site.saveTheme();
@@ -1728,7 +1846,7 @@ na.te = na.themeEditor = {
     opacityChange : function (evt) {
         var 
         bg = $(evt.currentTarget).parents('.vividDialog')[0],
-        rgbaRegEx = /rgba\((\d{1,3})\,\s*(\d{1,3})\,\s*(\d{1,3})\,\s*([\d.]+)\)(.*)/,
+        rgbaRegEx = /rgba\((\d{1,3})\,\s*(\d{1,3})\,\s*(\d{1,3})\,\s*([\d\.]+)\)(.*)/,
         rgbRegEx = /rgb\((\d{1,3})\,\s*(\d{1,3})\,\s*(\d{1,3})\)(.*)/,
         opacity = $(evt.currentTarget).val()/100;
         
@@ -1751,9 +1869,22 @@ na.te = na.themeEditor = {
     
     imageSelected : function (el) {
         na.te.s.c.selectedImage = el;
+
         let 
         bg = $('#'+na.te.s.c.forDialogID+' > .vdBackground'),
+        bg2 = $(na.te.s.c.forElements+' > .vdBackground'),
+        bg3 = $(na.te.s.c.forElements),
+        bg4 = bg2.length > 0 ? bg2 : bg3,
         src = el.src.replace('thumbs/','');
+
+/*
+        var jsonNodes = $('#themeEditor_jsTree_selectors').jstree(true).get_json('#', { flat: true });
+        $.each(jsonNodes, function (i, val) {
+            if (val.text===na.te.s.c.forElements) {
+debugger;
+                na.te.s.c.elementsCSS[val.id].background = src;
+            }
+        });*/
 
         /*var bgSrc = $(bg).css('backgroundImage');
         bgSrc = bgSrc.replace('url("', '');
@@ -1762,10 +1893,21 @@ na.te = na.themeEditor = {
         bgSrc = bgSrc.replace("')", '');*/
         var bgEl = document.createElement('img');
         bgEl.onload = function () {
-            na.te.s.c.scaleX = (parseInt($('#themeEditor_photoScaleX').val()) * bgEl.naturalWidth) / 100;
-            na.te.s.c.scaleY = (parseInt($('#themeEditor_photoScaleY').val()) * bgEl.naturalHeight) / 100;
+            na.te.s.c.scaleX = Math.round((parseInt($('#themeEditor_photoScaleX').val()) * bgEl.naturalWidth) / 100);
+            na.te.s.c.scaleY = Math.round((parseInt($('#themeEditor_photoScaleY').val()) * bgEl.naturalHeight) / 100);
+
+
+            var s = na.te.s.c.selectedSelector;
+            if (s && s.node && na.te.s.c.elementsCSS[s.node.id]) {
+                na.te.s.c.elementsCSS[s.node.id].background = 'url("'+src+'") repeat';
+                na.te.s.c.elementsCSS[s.node.id].opacity =
+                    parseInt($('#themeEditor_photoOpacity').val())/100;
+                na.te.s.c.elementsCSS[s.node.id].backgroundSize =
+                    na.te.s.c.scaleX+'px '+na.te.s.c.scaleY+'px';
+            };
+
             if ($('#themeEditor_photoSpecificity_dialog')[0].checked) {
-                $(bg).css({ 
+                $(bg).add(bg4).css({
                     background : 'url("'+src+'") repeat', 
                     opacity : parseInt($('#themeEditor_photoOpacity').val())/100, 
                     backgroundSize : na.te.s.c.scaleX+'px '+na.te.s.c.scaleY+'px' 
@@ -1775,6 +1917,8 @@ na.te = na.themeEditor = {
             }
             /*if (na.te.s.c.fireSaveTheme) */na.site.saveTheme();
         };
+
+
         bgEl.src = src;
     },
     
@@ -1962,6 +2106,7 @@ na.te = na.themeEditor = {
             if (ts) {
                 var 
                 cssExtract = na.te.cssExtract(na.te.s.c.forDialogID);
+                if (Object.keys(cssExtract).length===0) cssExtract = na.te.cssExtract(na.te.s.c.forElements);
                 
                 na.te.s.c.textShadowColor = cssExtract.boxShadowColor[0];
                 //$('#textShadowColorpicker').spectrum('set', cssExtract.textShadowColor[ctI]);
@@ -2236,8 +2381,9 @@ na.te = na.themeEditor = {
 
     onclick_btnAddElement : function () {
         if ($('div, p, span, li, ol, ul, h1, h2, h3, h4').css('cursor').match(/grab/)) {
-            $('div, p, span, li, ol, ul, h1, h2, h3, h4').css({cursor:'inherit'}).each (function(){this.removeEventListener('click',na.te.btnAddElement_clickElement)});
+            $('div, p, span, li, ol, ul, h1, h2, h3, h4').css({cursor:'inherit'}).each (function(){debugger; this.removeEventListener('click',na.te.btnAddElement_clickElement)});
         } else {
+            na.te.s.c.addingElements = true;
             $('div, p, span, li, ol, ul, h1, h2, h3, h4').css({cursor:'url(/NicerAppWebOS/siteMedia/btnSettings2.32x32.png) 16 16, grab'}).each (function(idx,el) { this.addEventListener('click',na.te.btnAddElement_clickElement,{capture:true})});
         }
     },
@@ -2252,13 +2398,13 @@ na.te = na.themeEditor = {
         );
         */
 
+        if (!na.te.s.c.addingElements) return false;
 
         if (
             event.target.tagName!==event.currentTarget.tagName
             || event.target.id!==event.currentTarget.id
             || event.target.className!==event.currentTarget.className
         ) {
-            //debugger;
             if (
                 !na.te.s.c.pickedElement
                 || (
@@ -2279,7 +2425,7 @@ na.te = na.themeEditor = {
                 msg +=
                     //'\n#'+ev.target.id+'.'+ev.target.className.replace(' ', '.')+'\n'
                     '\n'+ev.currentTarget.tagName+'#'+ev.currentTarget.id+'.'+ev.currentTarget.className.replace(' ', '.')+'\n';
-                var itemHTML = '<div class="vividButton" style="display:inline-block;width:fit-content;position:relative;z-index:900000">'+ev.currentTarget.tagName+'</div><div class="vividButton" style="display:inline-block;width:fit-content;position:relative;">#'+ev.currentTarget.id+'</div><div class="vividButton" style="display:inline-block;width:fit-content;position:relative;">.'+ev.currentTarget.className.replace(' ', '</div><div class="vividButton" style="display:inline-block;width:fit-content;position:relative;">.')+'</div>';
+                var itemHTML = '<div class="vividButton" style="display:inline-block;width:fit-content;position:relative;z-index:900000">'+ev.currentTarget.tagName+'</div><div class="vividButton" style="display:inline-block;width:fit-content;position:relative;"><div class="vdBackground"></div><span style="opacity:1">#'+ev.currentTarget.id+'</span></div><div class="vividButton" style="display:inline-block;width:fit-content;position:relative;"><div class="vdBackground"></div><span style="opacity:1">.'+ev.currentTarget.className.replace(' ', '</span></div><div class="vividButton" style="display:inline-block;width:fit-content;position:relative;"><div class="vdBackground"></div><span style="opacity:1">.')+'</div>';
                 var divEl = document.createElement('div');
                 $(divEl).html(itemHTML);
                 $('.vividButton', divEl).each(function(idx,btnEl) {
@@ -2294,6 +2440,7 @@ na.te = na.themeEditor = {
             $(divEl).html(itemHTML);
             $('.vividButton', divEl).each(function(idx,btnEl){
                 btnEl.addEventListener ('click', function() {
+                    na.te.s.c.addingElements = false;
                     $('#siteToolbarThemeEditor__elementPicker').fadeOut('normal');
                     $('div, p, span, li, ol, ul, h1, h2, h3, h4').css({cursor:'inherit'}).each (function(){this.removeEventListener('click',na.te.btnAddElement_clickElement)});
                 } )
@@ -2309,15 +2456,19 @@ na.te = na.themeEditor = {
             $('#themeEditor_jsTree_selectors').jstree().create_node(na.te.s.c.selectedSelector.node, {
                 id : na.te.s.c.newElementID,
                 text : 'New Element',
-                type : 'naElement'
+                type : 'naElement',
             }, 'last');
+            na.te.s.c.elementsCSS[na.te.s.c.newElementID] = {
+                background : $(ev.currentTarget).css('background')
+            };
+
             //$('#themeEditor_jsTree_selectors').jstree('deselect_all').jstree('select_node', na.te.s.c.newElementID);
 
         }
     },
 
     btnAddElement_clickSelector : function (event) {
-        event.target.this.select();
+        event.target.parentNode.this.select();
 
         // edit the treeview node
         var selector = '';
@@ -2340,9 +2491,22 @@ na.te = na.themeEditor = {
     },
 
     onclick_btnDeleteGraphics : function (event) {
+        var jsonNodes = $('#themeEditor_jsTree_selectors').jstree(true).get_json(na.te.s.c.selectedSelector.node.id, { flat: true });
+        for (var i=0; i<jsonNodes.length; i++) {
+            var nit = jsonNodes[i];
+            if (nit.type=='naElement') na.te.deleteElement (nit);
+        };
+
         var node = $('#themeEditor_jsTree_selectors').jstree().get_node(na.te.s.c.selectedSelector.node.id);
         $('#themeEditor_jsTree_selectors').jstree('delete_node', node);
-        na.site.saveTheme (na.site.loadTheme);
+        na.site.saveTheme ();
+    },
+
+    deleteElement : function (nit) {
+        $(nit.text).css ({
+            color : '',
+            background : ''
+        });
     }
 
 };

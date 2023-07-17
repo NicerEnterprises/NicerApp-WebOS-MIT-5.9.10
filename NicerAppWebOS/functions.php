@@ -20,15 +20,37 @@ function filePathToURL ($filepath) {
     return $fp;
 }
 
-function safeLoadJSONfile($filePath, $mustExist=true) {
-
+function safeLoadJSONfile($filePath, $mustExist=true, $flush=true) {
+    $debug = true;
     if (!file_exists($filePath)) {
-        if (!$mustExist) return []; else trigger_error ('File "'.$filePath.'" does not exist', E_USER_ERROR);
+        if (!$mustExist) return []; else trigger_error ('File "'.$filePath.'" does not exist.', E_USER_ERROR);
     };
-    $textData = file_get_contents ($filePath);
-    $jsonData = json_decode ($textData, true);
-    //echo json_last_error_msg();
-    if (json_last_error()!==JSON_ERROR_NONE) trigger_error ('Error during JSON decoding of file content for file "'.$filePath.'" : '.json_last_error_msg(), E_USER_ERROR);
+    if (!is_readable($filePath)) {
+        if (!$mustExist) return []; else trigger_error ('File "'.$filePath.'" does is not readable.', E_USER_ERROR);
+    };
+        //var_dump (preg_match('/\.php$/', $filePath));
+    $textData =
+        preg_match('/\.php$/', $filePath)
+        ? require_return ($filePath, $flush)
+        : file_get_contents($filePath);
+    try {
+        if ($debug && false) {
+            echo '<pre style="color:yellow;background:rgba(0,0,50,0.5);border-radius:10px;padding:8px;">';
+            echo $textData;
+        }
+        if ($debug)
+            file_put_contents ($filePath.'_output.txt', $textData);
+        elseif (file_exists($filePath.'_output.txt'))
+            unlink ($filePath.'_output.txt');
+
+        $jsonData = json_decode ($textData, true);
+        if ($debug && false) {
+            echo json_last_error_msg();
+            echo '</pre>';
+        }
+    } catch (Exception $e) { }
+    //exit();
+    //if (json_last_error()!==JSON_ERROR_NONE) trigger_error ('Error during JSON decoding of file content for file "'.$filePath.'" : '.json_last_error_msg(), E_USER_ERROR);
     return $jsonData;
 }
 
@@ -135,6 +157,23 @@ function mainErrorHandler ($errno, $errstr, $errfile, $errline) {
     }*/
 
     global $naWebOS; global $naErr; global $naLog;
+
+
+    //trigger_error (json_encode(debug_backtrace()), E_USER_NOTICE);
+    $dbg = [
+        'errno' => $errno,
+        'errstr' => $errstr,
+        'errfile' => $errfile,
+        'errline' => $errline
+    ];
+    { echo '<pre style="color:white;background:rgba(255,0,0,0.8);border-radius:10px;padding:8px;box-shadow:inset 1px 1px 3px 2px rgba(0,0,0,0.7), 2px 2px 2px 1px rgba(0,0,0,0.8);">'; echo json_encode($dbg, JSON_PRETTY_PRINT);
+        { echo '<pre style="color:white;background:rgba(50,0,0,0.5);border-radius:10px;padding:8px;box-shadow:inset 1px 1px 3px 2px rgba(0,0,0,0.7), 2px 2px 2px 1px rgba(0,0,0,0.8);">'; echo json_encode(debug_backtrace(), JSON_PRETTY_PRINT); echo '</pre>'; }
+        echo '</pre>';
+    }
+
+
+
+
     $err = $naErr->add ($errno, $errstr, $errfile, $errline);
     $naLog->add ( [ $err ] ); // outputs to screen and apache log file as well.
     return true;
@@ -468,6 +507,7 @@ function css_array_to_css2($rules, $indent = 0) {
     $prefix = str_repeat('  ', $indent);
 
     //echo '<pre style="color:blue">'; var_dump ($rules); echo '</pre>';
+    if (is_array($rules))
     foreach ($rules as $key => $value) {
         //echo '<pre style="color:green">'; var_dump ($key); echo '</pre>';
         if (is_array($value) && $key=='css') {
@@ -476,6 +516,7 @@ function css_array_to_css2($rules, $indent = 0) {
             $css .= $prefix . css_array_to_css2 ($value, $indent);
         }
     }
+    //elseif (is_string($rules)) $css .= $rules;
 
     return $css;
 }
@@ -1501,6 +1542,7 @@ function &goodResult(&$r) {
 	return $r2;
 }
 
+/*
 function safeJSONload($filePath, $exampleFilepath='[NOT_SPECIFIED]') {
     $fncn = 'safeJSONload("'.$filePath.'")';
     if (!file_exists($filePath)) {
@@ -1525,6 +1567,7 @@ function safeJSONload($filePath, $exampleFilepath='[NOT_SPECIFIED]') {
     }
     return $jsonArr;
 }
+*/
 
 function NicerAppWebOS_jsonErrorHandler() {
 // maybe i don't need to write this at all, ever.

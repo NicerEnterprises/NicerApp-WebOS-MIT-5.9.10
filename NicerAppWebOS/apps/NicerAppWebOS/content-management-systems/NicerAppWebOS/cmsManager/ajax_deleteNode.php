@@ -7,7 +7,10 @@ if (!array_key_exists('database',$_POST)) {
     ];
     cdb_error (403, null, 'Hacking attempt detected (attempt to access database with '.json_encode($dbg).'). Event logged.');
 }
-if (strpos($_POST['database'], '_tree_')===false)
+if (
+    strpos($_POST['database'], '_tree_')===false
+    && strpos($_POST['database'], '_documents_')===false
+)
     cdb_error (403, null, 'Hacking attempt detected (attempt to access database '.$_POST['database'].'). Event logged.');
 
 
@@ -15,9 +18,9 @@ if (strpos($_POST['database'], '_tree_')===false)
 global $naWebOS;
 $cdb = $naWebOS->dbs->findConnection('couchdb')->cdb;
 
-$cdb->setDatabase($_POST['database'],false);
+$cdb->setDatabase(str_replace('_documents_', '_tree_', $_POST['database']),false);
 $doc = array (
-    'database' => $_POST['database'],
+    'database' => str_replace('_documents_', '_tree_', $_POST['database']),
     '_id' => $_POST['id'],
     'id' => $_POST['id']
 );

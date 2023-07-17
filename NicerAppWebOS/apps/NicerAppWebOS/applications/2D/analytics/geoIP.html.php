@@ -9,7 +9,7 @@ if (!array_key_exists($_GET['IP'],$_SESSION['geoIP'])) {
     //$reader = new Reader(realpath(dirname(__FILE__).'/../../../../').'/NicerAppWebOS/3rd-party/geoLite2/GeoLite2-City.mmdb');
     //$record = $reader->city($_GET['IP']);
     $apiKey = trim(file_get_contents(dirname(__FILE__).'/api.geolocation.io.APIKEY.txt'));
-    $xec = 'curl https://api.ipgeolocation.io/ipgeo?apiKey='.$apiKey.'&ip='.$_GET['IP'];
+    $xec = 'curl -H "X-Forwarded-For: '.$_GET['IP'].'" https://api.ipgeolocation.io/ipgeo?apiKey='.$apiKey.'&ip='.$_GET['IP'];
     exec ($xec, $output, $result);
 //var_dump ($xec); var_dump ($output); die();
     $_SESSION['geoIP'][$_GET['IP']] = json_decode($output[0], true);

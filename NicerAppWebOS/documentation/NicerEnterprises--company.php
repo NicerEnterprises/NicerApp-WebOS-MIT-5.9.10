@@ -7,7 +7,7 @@
             display : block;
         }
     </style>
-<h1 class="contentSectionTitle2">Nicer Enterprises - company overview</h1><br/><br/><br/>
+<h1 class="contentSectionTitle2"><span class="contentSectionTitle2_span">Nicer Enterprises - company overview</span></h1><br/><br/><br/>
 
 
 <div style="width:220px;margin-left:40px;padding:8px;background:rgba(0,0,0,0.4);border-radius:8px;border:1px solid white;box-shadow:3px 3px 2px 2px rgba(0,0,0,0.5);">
@@ -16,19 +16,17 @@
 <div>
     <p>
     <a href="https://nicer.app" target="naHP">https://nicer.app</a>, <a href="https://said.by" target="sbHP">https://said.by</a>, <a href="https://zoned.at" target="zAt">https://zoned.at</a>, are all
-    Copyrighted (C) and have (R), All Rights Reserved 2002-2023 by Rene A.J.M. Veerman &lt;<a href="mailto:rene.veerman.netherlands@gmail.com" class="noPushState" target="writeMailToRene">rene.veerman.netherlands@gmail.com</a>&gt;.<br/>
+    Copyrighted 2023 by Rene A.J.M. Veerman &lt;<a href="mailto:rene.veerman.netherlands@gmail.com" class="noPushState" target="writeMailToRene">rene.veerman.netherlands@gmail.com</a>&gt;.<br/>
     i am also the owner, CEO, CTO and CFO for all of these websites.<br/>
     <br/>
     My social media accounts are <a class="noPushState" href="https://facebook.com/rene.veerman.90" target="fbMain">https://facebook.com/rene.veerman.90</a><br/>
-    and <a class="noPushState" href="https://facebook.com/gavanHoverswell" target="fbMain">https://facebook.com/gavanHoverswell</a> for my pseudonym facebook blog account,<br/>
+    and <a class="noPushState" href="https://facebook.com/gavanHoverswell" target="fbMain2">https://facebook.com/gavanHoverswell</a> for my pseudonym facebook blog account,<br/>
     which also links into my online forum peace-activism activities.
     </p>
 
     <p>
-    Should I unexpectedly die for some strange reason, i want the Copyright (C) and All Rights Reserved (R) of my software NicerApp WebOS[1] donated to kubuntu.com *and* apache.org where the license will be decided by kubuntu.com who may or may not include advice from apache.org into their considerations.<br/>
-    The rest of my belongings i donate first to my parents, and second to the Amsterdam.NL stedelijk museum, who may do with it all as they please, but who are requested to keep a copy of nicer.app up and running. My accountant's details are well engraved into medical law.<br/>
-    <br/>
-    [1] <a href="https://github.com/NicerEnterprises/NicerApp-WebOS" class="noPushState" target="ghp1">https://github.com/NicerEnterprises/NicerApp-WebOS</a>.
+    Should I unexpectedly die for some strange reason, i want my belongings donated first to my parents, and second to the Amsterdam.NL stedelijk museum, who may do with it all as they please, but who are requested to keep a copy of https://nicer.app up and running.<br/>
+    My accountant's details are well engraved in medical law.<br/>
     </p>
 
 </div>

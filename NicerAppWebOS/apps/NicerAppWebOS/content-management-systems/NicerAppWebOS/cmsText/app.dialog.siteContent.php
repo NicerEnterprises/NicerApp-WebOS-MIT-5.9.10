@@ -44,9 +44,11 @@ $p = preg_match_all ('/:{"mediaFolder":".*"}:/', $doc, $matches, PREG_OFFSET_CAP
 foreach ($matches[0] as $idx => $match) {
     $cmd = json_decode (substr($match[0],1,strlen($match[0])-2), true);
     if (array_key_exists('mediaFolder',$cmd)) {
-        $doc = str_replace ($match[0], naPhotoAlbum($cmd['mediaFolder']), $doc);
+        $doc = str_replace ('<p>'.$match[0].'</p>', naPhotoAlbum($cmd['mediaFolder']), $doc);
     }
 }
+$doc = str_replace ('<p>\s+</p>', '<div style="height:1em"></div>', $doc);
+$doc = str_replace ('<p>&nbsp;</p>', '<div style="height:1em"></div>', $doc);
 
 echo $doc;
 

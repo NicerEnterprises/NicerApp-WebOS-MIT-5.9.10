@@ -28,6 +28,9 @@ class naVividDialog {
                 '<div class="vdSettings" style="z-index:10000;display:none;">'
                     +'<img class="btnSettings" src="/NicerAppWebOS/siteMedia/btnPickColor.png" onclick="na.site.settings.activeDivs = [\'#siteToolbarThemeEditor\']; var d = na.site.settings.dialogs[\'#'+this.el.id+'\']; d.displaySettingsDialog(d, \''+t.el.id+'\')"/>'
                     +'<input type="range" min="1" max="100" value="50" class="sliderOpacityRange" onchange="na.te.opacityChange(event);"/>'
+                +'</div>'
+                +'<div class="vdTools" style="z-index:10000;opacity:0.0001;">'
+                    +'<img class="btnComments" src="/NicerAppWebOS/siteMedia/pencil.png" onclick="if (na.d.s.visibleDivs.includes(\'siteComments\')) na.d.s.visibleDivs.remove(\'#siteComments\'); else na.d.s.visibleDivs.push(\'#siteComments\'); na.desktop.resize();"/>'
                 +'</div>';
             if (
                 t.el.id!=='#siteToolbarThemeEditor' 
@@ -63,7 +66,7 @@ class naVividDialog {
         $(dialog).find('.sliderOpacityRange').val(parseInt(opacity*100));
         
         var el = t.el;
-        $('.vdSettings', t.el).hover (function() {
+        $('.vdSettings, .vdTools', t.el).hover (function() {
             //if ( !$(el).is(':animated') ) 
                 $(this).stop(true,true).animate({ opacity : 1 }, 'fast');
                                       

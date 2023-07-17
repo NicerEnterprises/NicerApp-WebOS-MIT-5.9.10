@@ -88,7 +88,7 @@ class naVividMenu__behavior_rainbowPanels {
 
         LIs.each(function(idx,li) {
             $(li).attr('id', t.el.id+'__li__'+idx);
-            var html2 = '<div id="'+t.el.id+'__'+idx+'" class="vividButton vividButton_text vividMenu_item backdropped"  theme="dark" style="display:none;">'+$(li).children('a')[0].outerHTML.replace($(li).children('a')[0].innerHTML+'</a>', '<span class="contentSectionTitle3_span">'+$(li).children('a')[0].innerText+'</span></a>').replace('class="linkToNewPage"', 'class="linkToNewPage contentSectionTitle3_a"')+'</div>';
+            var html2 = '<div id="'+t.el.id+'__'+idx+'" class="vividButton vividButton_text vividMenu_item backdropped"  theme="dark" style="display:none;"><div class="vdBackground"></div>'+$(li).children('a')[0].outerHTML.replace($(li).children('a')[0].innerHTML+'</a>', '<span class="contentSectionTitle3_span">'+$(li).children('a')[0].innerText+'</span></a>').replace('class="linkToNewPage"', 'class="linkToNewPage contentSectionTitle3_a"')+'</div>';
             //var html2 = '<div id="'+t.el.id+'__'+idx+'" class="vividButton vividButton_text vividMenu_item backdropped"  theme="dark" style="display:none;">'+$(li).children('a')[0].outerHTML+'</div>';
             html += html2;
 

@@ -36,7 +36,7 @@ na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/Nic
                             na.desktop.resize();
                         };
 
-                        na.m.waitForCondition ('tinymce started? (na.cms.settings.loadedIn[\'#siteContent\'].onload(settings)', function() {
+                        na.m.waitForCondition ('na.cms.settings.loadedIn[\'#siteContent\'].onload(settings) : tinymce started?', function() {
                             return $('#tinymce_ifr')[0];
                         }, function() {
                             $('#cssPageSpecific', $('#tinymce_ifr')[0].contentDocument).remove();
@@ -198,6 +198,8 @@ na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/Nic
                 }).on('changed.jstree', function (e, data) {
                     if (
                         /*data.action!=='ready'
+                        && */
+                        /*data.action!=='model'
                         && */data.action!=='select_node'
                     ) return false;
 
@@ -322,8 +324,8 @@ na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/Nic
         };
         $.ajax(ac);
         na.desktop.settings.visibleDivs.push ('#siteToolbarLeft');
-        debugger;
-        //setTimeout(function() {
+
+         //setTimeout(function() {
         na.desktop.resize(na.cms.onresize);
             na.site.settings.current.loadingApps = false;
             na.site.settings.current.startingApps = false;
@@ -358,7 +360,6 @@ na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/Nic
             if (!dbs.includes(db[i].database)) dbs.push(db[i].database);
         };
         ac.data.databases = JSON.stringify (dbs);
-
         $.ajax(ac);
 
     },
@@ -389,7 +390,7 @@ na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/Nic
             }
 
             if (rec && rec.original) {
-                na.site.setSpecificity();
+                //na.site.setSpecificity(); // ENDLESS LOOP IN /cms
                 na.cms.treeButtonsEnableDisable (rec);
 
                 $('#documentLabel').val(rec.original.text);
@@ -710,21 +711,27 @@ na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/Nic
                 jt.settings.core.data = dat;
                 jt.refresh(false, false);
 
-                for (var i=0; i<dat.length; i++) {
-                    var dit = dat[i];
-                    if (dit.selected) {
-                        na.cms.settings.current.selectedTreeNode = dit;
-                        jt.select_node(dit._id);
-                    };
+                setTimeout (function (dat, jfu) {
+                    for (var i=0; i<dat.length; i++) {
+                        var dit = dat[i];
+                        if (dit.state.selected) {
+                            na.cms.settings.current.selectedTreeNode = dit;
+                            jt.select_node(dit._id);
+                        };
+                    }
+                    $('#siteToolbarLeft .lds-facebook').stop(true,true).fadeOut('slow');
+                    var
+                    rec = na.cms.settings.current.selectedTreeNode,
+                    relFilePath = na.cms.currentPath(rec);
+                    if (jfu) jfu.contentWindow.location.href = '/NicerAppWebOS/logic.userInterface/photoAlbum/4.0.0/index.php?basePath='+relFilePath;
 
-                }
+
+                    setTimeout (function () {
+                        if (typeof callback=='function') callback (dat);
+                    }, 500);
+                }, 1000, dat, jfu);
 
 
-                $('#siteToolbarLeft .lds-facebook').stop(true,true).fadeOut('slow');
-                if (jfu) jfu.contentWindow.location.reload(true);
-                setTimeout (function () {
-                    if (typeof callback=='function') callback (dat);
-                }, 500);
             },
             error : function (xhr, textStatus, errorThrown) {
                 na.site.ajaxFail(fncn, url, xhr, textStatus, errorThrown);
@@ -905,7 +912,14 @@ na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/Nic
         rec = na.cms.settings.current.selectedTreeNode,
         relFilePath = na.cms.currentPath(rec),
         oldFolderName = rec.original.text,
-        newFolderName = $('#mediaFolderLabel').val(),
+        newFolderName = $('#mediaFolderLabel').val();
+
+        if (newFolderName.match(/</)) {
+            alert ('Could not change mediaFolderLabel');
+            return false;
+        };
+
+        var
         newRelFilePath = relFilePath.replace('/'+oldFolderName, '/'+newFolderName),
         url = '/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/NicerAppWebOS/cmsManager/ajax_changeNode_mediaFolderLabel.php',
         ac = {
@@ -928,6 +942,15 @@ na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/Nic
         $.ajax(ac);
     },
     onchange_documentHeaders : function (evt,callback) {
+        if (
+            $('#nb_documentLabel').val().match(/</)
+            || $('#nb_documentTitle').val().match(/</)
+            || $('#nb_url2_value').val().match(/</)
+            || $('#nb_url1_dropdown_selected').html().match(/</)
+        ) {
+            alert ('Could not save document settings.');
+            return false;
+        };
         var
         fncn = 'na.cms.onchange_documentHeaders()',
         tree = $('#jsTree').jstree(true),
@@ -1079,12 +1102,19 @@ na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/Nic
                 currPath : path
             },
             success : function (data, ts, xhr) {
-                na.cms.refresh();
+                var parent = $('#jsTree').jstree(true).get_node(na.cms.sel.original.parent);
+                debugger;
+                na.cms.onchange_selectedNode ( {}, null, parent, function() {
+                    setTimeout (na.cms.refresh, 1000);//function() {
+                    //      na.cms.onchange_jsTreeNode(settings, data,rec);
+                    //});
+                });
             },
             error : function (xhr, textStatus, errorThrown) {
                 na.site.ajaxFail(fncn, url, xhr, textStatus, errorThrown);
-            }                
+            }
         };
+        na.cms.sel = sel;
         $.ajax(ac);
     },
     
@@ -1124,13 +1154,14 @@ na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/Nic
     onclick_insertMedia : function () {
         var
         tmce = tinymce.get('tinymce');
-        
+
         tmce.windowManager.open({
             title : 'Insert Photo Album',
             url : '/NicerAppWebOS/logic.userInterface/photoAlbum/4.0.0/index.all.php',
             width : 570,
             height: 700
         });
+        $('.mce-floatpanel').css({zIndex:900000});
     },
     
     insertMediaFolder : function (relPath) {
@@ -1151,14 +1182,16 @@ na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/Nic
     onclick_mediaThumbnail : function (evt, basePath, filename) {
         var 
         arr = {
+            misc : {
+                folder : '/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/NicerAppWebOS'
+            },
             cmsViewMedia : {
                 basePath : basePath,
                 filename : filename
             }
         },
         base64 = na.m.base64_encode_url(JSON.stringify(arr));
-        debugger;
-        na.site.loadContent(base64);
+        na.site.loadContent(evt, base64);
     },
     
     mediaFolder_viewChanged : function () {

@@ -13,6 +13,7 @@ LICENSE : see https://nicer.app/docs-license
 
 <!--<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />-->
 <meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
+<meta name="description" content="Use a video or (tled) photo background as wallpaper for your webpages. Comes with it's own theme editor." />
 {$viewport}
 <meta name="HandheldFriendly" content="true" />
 {$cssLinks}
@@ -37,7 +38,7 @@ $(document).ready(function() {
     <link rel="manifest" href="/NicerAppWebOS/favicon/site.webmanifest">
     <link rel="mask-icon" href="/NicerAppWebOS/favicon/safari-pinned-tab.svg" color="#5bbad5">
     <link rel="shortcut icon" href="/NicerAppWebOS/favicon/favicon.ico">
-    <?php echo '<link type="text/css" rel="StyleSheet" href="/NicerAppWebOS/logic.business/errors.css?c='.date('Ymd_His', filemtime(dirname(__FILE__).'/../../logic.business/errors.css')).'">'.PHP_EOL; ?>
+    <?php echo '<link type="text/css" rel="StyleSheet" href="/NicerAppWebOS/logic.business/errors.css?c='.date('Ymd_His', filemtime(dirname(__FILE__).'/../../../NicerAppWebOS/logic.business/errors.css')).'">'.PHP_EOL; ?>
     <?php echo '<link type="text/css" rel="StyleSheet" href="/NicerAppWebOS/3rd-party/jsTree-3.3.15/dist/themes/default/style.css?c='.date('Ymd_His', filemtime(dirname(__FILE__).'/../../../NicerAppWebOS/3rd-party/jsTree-3.3.15/dist/themes/default/style.css')).'">'.PHP_EOL; ?>
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-config" content="/NicerAppWebOS/favicon/browserconfig.xml">
@@ -132,12 +133,13 @@ $(document).ready(function() {
     <div id="siteVideoSearch" class="vividDialog" style="display:none;justify-content:center;align-items:center;text-align:center;">
         {$div_siteVideoSearch}
     </div>
-
+-->
     
     <div id="siteComments" class="vividDialog" style="display:none;justify-content:center;align-items:center;text-align:center;">
         {$div_siteComments}
     </div>
-    
+
+<!--
     <div id="siteToolbarTop" class="vdToolbar vividDialog">
     <div class="vividDialogContent vividScrollpane">
         {$div_siteToolbarTop}

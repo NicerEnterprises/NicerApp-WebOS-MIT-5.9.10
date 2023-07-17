@@ -3,13 +3,12 @@ $rootPath_na = realpath(dirname(__FILE__).'/../..'); global $rootPath_na;
 
 class NicerAppWebOS {
     public $cn = '.../NicerAppWebOS/logic.business/class.core.WebsiteOperatingSystem-5.y.z.php::class NicerAppWebOS';
-    public $version = '5.0.0';
+    public $version = '5.5.0';
     public $about = array(
         'whatsThis' => 'NicerApp Content Management System PHP class',
-        'version' => '5.0.0',
-        'history' => 'See HISTORY_and_FUTURE.html in the same folder as this file. For more information on the To-Do list for NicerApp WCS, see it\'s default front page.',
-        'lastModified' => 'Sunday, 21 July, 2022, 05:00 CEST (Amsterdam.NL timezone)',
-        'copyright' => 'Copyright (c) and (r) 2002-2022 by Rene A.J.M. Veerman <rene.veerman.netherlandsd@gmail.com>'
+        'version' => '5.5.0',
+        'lastModified' => 'Sunday, 9 July, 2023, 19:07 CEST (Amsterdam.NL timezone)',
+        'copyright' => 'Copyright 2002-2023 by Rene A.J.M. Veerman <rene.veerman.netherlandsd@gmail.com>'
     );
 
     public $initialized = false;
@@ -35,6 +34,9 @@ class NicerAppWebOS {
     public function __construct () {
         $fncn = $this->cn.'->__construct()';
 		$this->basePath = realpath(dirname(__FILE__).'/../..');
+
+        $this->debugThemeLoading = false;
+
         //echo $this->basePath; exit();
         $this->cssTheme = 'dark';
         if (array_key_exists ('siteTheme', $_POST)) $this->cssTheme = $_POST['siteTheme'];
@@ -44,13 +46,27 @@ class NicerAppWebOS {
         $this->domain = str_replace($p1.DIRECTORY_SEPARATOR,'', $p2);
         //var_dump ($this->domain); die();
 
+        $this->browserDebug = false;
         $dfd = strtolower($this->domain);
         $dfd = str_replace('.', '_', $dfd);
         if (preg_match('/^\d/', $dfd)) {
             $dfd = 'number_'.$dfd;
+            //$this->browserDebug = true; // TODO : CSS CONCATENATION DOES NOT WORK YET, FOR SOME STRANGE REASON
         }
         $this->domainForDB = $dfd;
 
+        $fnOwnerInfo = realpath(dirname(__FILE__).'/..').'/domainConfigs/'.$this->domain.'/company.owner.json';
+        if (!file_exists($fnOwnerInfo)) {
+            $msg = $fncn.' : file "'.$fnOwnerInfo.'" missing. please re-run .../NicerAppWebOS/scripts.install/install-NicerAppWebOS???.sh from the commandline.';
+            trigger_error ($msg, E_USER_ERROR);
+            exit();
+        }
+        if (!is_readable($fnOwnerInfo)) {
+            $msg = $fncn.' : file "'.$fnOwnerInfo.'" is not readable. please re-run .../NicerAppWebOS/scripts.maintenance/setPermissions.sh from the commandline.';
+            trigger_error ($msg, E_USER_ERROR);
+            exit();
+        }
+        $this->ownerInfo = safeLoadJSONfile($fnOwnerInfo);
 
         $midsFile =
             $this->basePath.'/NicerAppWebOS/apps/'
@@ -66,11 +82,18 @@ class NicerAppWebOS {
             .str_replace($this->domain, $mfc, $midsFile);
         $this->viewsMID = $mfc;
 
-        //var_dump ($this->view); exit();
-        // bll1 (business logic level 1 of NicerApp WCS Core Websites Code (Computer Language:PHP, OS:Linux Kubuntu and Linux Ubuntu,, database:couchdb)) :: :: variables initialization
-        //$this->cts = new class_api_codeTranslationSystem_for_NicerAppWebOS_5_y_z();
-        //$this->comments = new class_NicerApp_WCS_api_comments_v1_0_0()    ;
-        
+        global $rootPath_na;
+        $rp_domain = $rootPath_na.'/NicerAppWebOS/domainConfigs/'.$this->domain;
+        $this->cssFiles = [
+            [ 'indexFile' => $rp_domain.'/index.css.json', 'type' => 'css' ],
+            [ 'files' => $this->getVividButtonCSSfiles(), 'type' => 'css' ] //already included in "indexFile".
+        ];
+        $this->javascriptFiles = [
+            [ 'indexFile' => $rp_domain.'/index.javascripts.json', 'type' => 'javascript' ]//,
+            //[ 'indexFile' => $rp_domain.'/index.customerJavascripts.json', 'type' => 'javascript' ],
+            //[ 'files' => $this->getVividButtonJavascriptFiles(), 'type' => 'javascript' ] // already included in "indexFile"
+        ];
+
         if (function_exists('apache_request_headers')) {
             $this->ip = (array_key_exists('X-Forwarded-For',apache_request_headers())?apache_request_headers()['X-Forwarded-For'] : $_SERVER['REMOTE_ADDR']);
         }
@@ -140,8 +163,9 @@ class NicerAppWebOS {
             $this->dbsAdmin = 'initializing';
             // logged in as $cdbConfig['adminUsername']!
             //$this->dbAdmin = new class_NicerAppWebOS_database_API_couchdb_3_2 (clone $this, true);
+            $this->dbsAdmin = new class_NicerAppWebOS_database_API ('admin');
             try {
-                $this->dbsAdmin = new class_NicerAppWebOS_database_API ('admin');
+                //q$this->dbsAdmin = new class_NicerAppWebOS_database_API ('admin');
 
                 if (php_sapi_name() !== 'cli') {
                     //WILL NEVER WORK; HANDLED BY logic.AJAX/ajax_testDBconnection.php! setcookie('cdb_admin_loginName' ,$this->dbsAdmin->findConnection('couchdb')->username, time() + 604800, '/');
@@ -150,20 +174,28 @@ class NicerAppWebOS {
 
                 $this->hasDB = true;
             } catch (Throwable $e) {
+                echo '<pre style="color:white;background:rgba(0,50,0,0.5);border-radius:10px;padding:8px;">';
+                echo json_encode($e->getMessage());
+                echo '</pre>';
+                exit;
             } catch (Exception $e) {
+                echo '<pre style="color:white;background:rgba(0,50,0,0.5);border-radius:10px;padding:8px;">';
+                echo json_encode($e->getMessage());
+                echo '</pre>';
+                exit;
             }
         }
+        $this->dbs->setGlobals($this->dbs->findConnection('couchdb')->username);
+        $this->dbsAdmin->setGlobals($this->dbsAdmin->findConnection('couchdb')->username);
 
         $this->initialized = true;
     }
 
     public function initializeGlobals() {
         $fncn = $this->cn.'->initializeGlobals()';
-        $view = $fncn.' : FATAL ERROR : Could not look up view settings in database.<p style="color:blue;background:rgba(255,255,255,0.65);">$_GET='.json_encode($_GET,JSON_PRETTY_PRINT).'</p>'; // assume the worst
+        $view = $fncn.' : FATAL ERROR : Could not look up view settings in database.<p style="color:blue;background:rgba(255,255,255,0.65);">$_GET='.str_replace("\n", "<br/>\n", json_encode($_GET,JSON_PRETTY_PRINT)).'</p>'; // assume the worst
 
-        $this->ownerLoginName = 'Rene AJM Veerman';
-
-        //echo '<pre>'; var_dump ($_GET); die();
+        $this->comments = new class_NicerApp_WebOS_siteComments();
 
         global $argv;
         $this->url = array_key_exists('REQUEST_URI', $_SERVER)
@@ -260,7 +292,7 @@ class NicerAppWebOS {
                 //var_dump (json_last_error()); die();
                 if (json_last_error()!==0) {
                     // $view must be looked up in the database :
-
+//echo '<pre>'; echo json_encode(debug_backtrace(), JSON_PRETTY_PRINT); echo '</pre>'; die();
                     $db = $this->dbs->findConnection('couchdb');
                     $cdb = $db->cdb;
                     $dataSetName = $db->dataSetName('viewsIDs'); // i know, couchdb calls a 'table' a 'database'. and that sux.
@@ -269,7 +301,7 @@ class NicerAppWebOS {
                     $findCommand = [
                         'selector' => [ 'seo_value' => $_GET['seoValue'] ],
                         'use_index' => 'primaryIndex',
-                        'fields' => ['_id', 'viewID']
+                        'fields' => ['_id', 'viewID', 'seo_value']
                     ];
                     try {
                         $call = $cdb->find ($findCommand);
@@ -287,7 +319,10 @@ class NicerAppWebOS {
                         && is_object($call->body)
                         && is_array($call->body->docs)
                     ) {
-                        if (count($call->body->docs)===1) {
+                        if (count($call->body->docs)===0) {
+                            $this->view = '[NOT FOUND]';
+                            return false;
+                        } elseif (count($call->body->docs)===1) {
                             $cdb->setDatabase ($db->dataSetName('views'));
                             try {
                                 $call = $cdb->get ($call->body->docs[0]->viewID);
@@ -302,7 +337,7 @@ class NicerAppWebOS {
 
                             $view = json_decode(json_encode($call->body->view), true);
                         } else {
-                            $msg = $fncn.' : views count inconsistent for seoValue='.$_GET['seoValue'].'.<br/>'."\n".'<pre>$call->headers->_HTTP->status='.$call->headers->_HTTP->status.', $call->body='.json_encode($call->body,JSON_PRETTY_PRINT).'</pre>';
+                            $msg = $fncn.' : views count ('.count($call->body->docs).') inconsistent for seoValue='.$_GET['seoValue'].'.<br/>'."\n".'<pre>$call->headers->_HTTP->status='.$call->headers->_HTTP->status.', $call->body='.json_encode($call->body,JSON_PRETTY_PRINT).'</pre>';
                             trigger_error($msg, E_USER_WARNING);
                             error_log($msg);
                             $this->view = $msg;
@@ -324,6 +359,7 @@ class NicerAppWebOS {
         $templateFile = $rp_domain.'/index.template.php';
         $templateCustomerFile = $rp_domain.'/index.template.customer.php';
         //var_dump ($this->view); exit();
+        //var_dump ($_GET); die();
         if (array_key_exists('viewID', $_GET)) {
             if ($_GET['viewID']=='/') {
                 $titleFile = $rp_domain.'/index.title.php';
@@ -338,10 +374,9 @@ class NicerAppWebOS {
             }
         } elseif (array_key_exists('seoValue', $_GET)) {
             $view = $naWebOS->view;//json_decode (base64_decode_url($_GET['vi']), true);
-            //$this->view = $view;
-            //echo '<pre>';var_dump($_GET);var_dump ($this->view);exit();
-
-            foreach ($view as $viewFolder => $viewSettings) {
+            if ($view=='[NOT FOUND]') {
+                $titleFile = $rp_domain.'/index.title.php';
+            } else foreach ($view as $viewFolder => $viewSettings) {
                 $titleFile = realpath(dirname(__FILE__).'/../..').'/'.$viewFolder.'/app.title.site.php';
             }
         } elseif (array_key_exists('app-wikipedia_org', $_GET)) {
@@ -350,21 +385,25 @@ class NicerAppWebOS {
         } else {
             $titleFile = $rp_domain.'/index.title.php';
         }
+
+
         if (!isset($view) && !file_exists($titleFile)) {
             trigger_error ('app.title.site.php missing for app=frontpage_of_site, $titleFile="'.$titleFile.'"', E_USER_ERROR);
         } elseif (!isset($titleFile)) {
             trigger_error ('app.title.site.php missing for app='.json_encode($view), E_USER_ERROR);
         }
 
-        $cssLinks = $this->getLinks ( [
-            [ 'indexFile' => $rp_domain.'/index.css.json', 'type' => 'css' ],
-            [ 'files' => $this->getVividButtonCSSfiles(), 'type' => 'css' ]
-        ] );
-        $javascriptLinks = $this->getLinks ( [
-            [ 'indexFile' => $rp_domain.'/index.javascripts.json', 'type' => 'javascript' ],
-            //[ 'indexFile' => $rp_domain.'/index.customerJavascripts.json', 'type' => 'javascript' ],
-            [ 'files' => $this->getVividButtonJavascriptFiles(), 'type' => 'javascript' ]
-        ] );
+        // TODO : create no-debug option for $cssLinks and $javascriptLinks (to see if this significantly reduces browser startup time), that :
+        // * takes the latest filemtime() for all of the files referenced by these variables as {$changed}
+        // * outputs just 1 script or css link tag, that loads up all of these referenced files.
+        // * that 1 script should not call up all the initialization routines of $naWebOS.
+        if ($this->browserDebug) {
+            $cssLinks = $this->getConcatenatedLinks ($this->cssFiles);
+            $javascriptLinks = $this->getConcatenatedLinks ($this->javascriptFiles);
+        } else {
+            $cssLinks = $this->getLinks ($this->cssFiles);
+            $javascriptLinks = $this->getLinks ($this->javascriptFiles);
+        }
 
         $siteMenu_avoid = json_encode( [
             '#siteDateTime', '#btnOptions', '#btnLoginLogout', '#btnChangeBackground'
@@ -462,20 +501,100 @@ class NicerAppWebOS {
         return $lines;
     }
     
+    public function getConcatenatedLinks ($files) {
+        $lines = '';
+        $latestChange = 0;
+        $indexType = '';
+        foreach ($files as $idx => $fileRec) {
+            if (array_key_exists('indexFile', $fileRec)) {
+                $indexFilepath = $fileRec['indexFile'];
+                $filesRaw = file_get_contents($indexFilepath);
+                $files = json_decode ($filesRaw);
+                checkForJSONerrors ($filesRaw, $indexFilepath, '"null"');
+            } else if (array_key_exists('files', $fileRec)) {
+                $files = $fileRec['files'];
+            }
+
+            if (
+                $indexType!==''
+                && $indexType!==$fileRec['type']
+            ) trigger_error ($this->cn.'::getConcatenatedLinks() : "type" must be identical for all $files.', E_USER_ERROR);
+            $indexType = $fileRec['type'];
+
+            foreach ($files as $idx => $file) {
+                //trigger_error ($file.' (1)', E_USER_NOTICE);
+                $oFile = $file;
+                $file = str_replace ('apps/{$domain}', 'apps/'.$this->viewsMID, $file);
+                $file = str_replace ('apps/'.$this->domain, 'apps/'.$this->viewsMID, $file);
+                $file = str_replace ('{$domain}', $this->domain, $file);
+                //trigger_error ($file.' (2)', E_USER_NOTICE);
+                if (file_exists($this->basePath.'/'.$file)) {
+                    $url = str_replace ($this->basePath,'',$file);
+                    $fileLastChanged = filemtime($this->basePath.'/'.$file);
+                    if ($fileLastChanged > $latestChange) $latestChange = $fileLastChanged;
+                    //$search = array ('{$src}', '{$changed}');
+                    //$replace = array ($url, date('Ymd_His', $fileLastChanged));
+                    //$lines .= str_replace ($search, $replace, $lineSrc);
+                } else {
+                    trigger_error ('file "'.$this->basePath.'/'.$file.'" is missing (oFile='.$oFile.'), referenced from <span class="naCMS_getLinksFileRec">'.json_encode($fileRec).'</span>.', E_USER_ERROR);
+                }
+            }
+        }
+
+        switch ($indexType) {
+            case 'css': $lineSrc = "\t".'<link type="text/css" rel="StyleSheet" href="{$src}">'."\r\n"; break;
+            case 'javascript': $lineSrc = "\t".'<script type="text/javascript" src="{$src}"></script>'."\r\n"; break;
+        };
+        $url = '/NicerAppWebOS/ajax_getConcatenatedFiles.php?indexType='.$indexType.'&c='.date('Ymd-His',$latestChange);
+        $lines .= str_replace ('{$src}', $url, $lineSrc);
+
+        return $lines;
+    }
+
+    public function getConcatenatedLinksContent ($files) {
+        $r = '';
+        foreach ($files as $idx => $fileRec) {
+            if (array_key_exists('indexFile', $fileRec)) {
+                $indexFilepath = $fileRec['indexFile'];
+                $filesRaw = file_get_contents($indexFilepath);
+                $files = json_decode ($filesRaw);
+                checkForJSONerrors ($filesRaw, $indexFilepath, '"null"');
+            } else if (array_key_exists('files', $fileRec)) {
+                $files = $fileRec['files'];
+            }
+            $indexType = $fileRec['type'];
+
+            foreach ($files as $idx => $file) {
+                //trigger_error ($file.' (1)', E_USER_NOTICE);
+                $oFile = $file;
+                $file = str_replace ('apps/{$domain}', 'apps/'.$this->viewsMID, $file);
+                $file = str_replace ('apps/'.$this->domain, 'apps/'.$this->viewsMID, $file);
+                $file = str_replace ('{$domain}', $this->domain, $file);
+                //trigger_error ($file.' (2)', E_USER_NOTICE);
+                if (file_exists($this->basePath.'/'.$file)) {
+                    $r .= file_get_contents($this->basePath.DIRECTORY_SEPARATOR.$file).PHP_EOL.PHP_EOL;
+                } else {
+                    trigger_error ('file "'.$this->basePath.'/'.$file.'" is missing (oFile='.$oFile.'), referenced from <span class="naCMS_getLinksFileRec">'.json_encode($fileRec).'</span>.', E_USER_ERROR);
+                }
+            }
+        }
+        return $r;
+    }
+
     public function getVividButtonCSSfiles () {
         global $rootPath_na;
-        $basePath = $rootPath_na.'/NicerAppWebOS/logic.userInterface/vividUI-5.0.0/vividButton-4.1.0';
+        $basePath = $rootPath_na.'/NicerAppWebOS/logic.userInterface/vividButton-4.1.0';
         $files = getFilePathList ($basePath, true, '/btn_.*\.css/', null, array('file'), 1);
         foreach ($files as $idx => $file) {
             $files[$idx] = str_replace($this->basePath, '', $file);
         }
         sort($files);
-        return array_merge ([ '/NicerAppWebOS/logic.userInterface/vividUI-5.0.0/vividButton-4.1.0/themes.css' ], $files);
+        return array_merge ([ '/NicerAppWebOS/logic.userInterface/vividButton-4.1.0/themes.css' ], $files);
     }
     
     public function getVividButtonJavascriptFiles () {
         global $rootPath_na;
-        $basePath = $rootPath_na.'/NicerAppWebOS/logic.userInterface/vividUI-5.0.0/vividButton-4.1.0';
+        $basePath = $rootPath_na.'/NicerAppWebOS/logic.userInterface/vividButton-4.1.0';
         $files = getFilePathList ($basePath, true, '/btn_.*\.source\.js/', null, array('file'), 1);
         foreach ($files as $idx => $file) {
             $files[$idx] = str_replace($this->basePath, '', $file);
@@ -508,7 +627,7 @@ class NicerAppWebOS {
             ) return $this->getContent__data_by_users ($_GET['username'], $_GET['url1'], $_GET['dataID']);
 
             elseif ($this->nonEmptyStringField('app-wikipedia_org', $_GET))
-                return $this->getContent__view_wikipedia ($_GET['app-wikipedia.org']);
+                return $this->getContent__view_wikipedia ($_GET['app-wikipedia_org']);
 
             elseif ( $this->nonEmptyStringField('viewID',$_GET) )
                 return $this->getContent__view ($_GET['viewID']); // this handles the front page of a website too.
@@ -596,7 +715,7 @@ class NicerAppWebOS {
 
             } else {
                 // request view settings from database
-                $view = (array)$this->view;
+                $view = is_object($this->view)?(array)$this->view:$this->view;
                 //echo '<pre>'; var_dump($view);die();
                 $ret = [ 'siteContent' => '<pre>'.json_encode($view,JSON_PRETTY_PRINT).'</pre>'];
                 if (is_array($view)) {
@@ -613,20 +732,31 @@ class NicerAppWebOS {
                     //echo '<pre style="color:purple;background:cyan;">'; var_dump ($view); echo '</pre>'; die();
 
                     foreach ($view as $viewsFolder => $viewSettings) {
-                        $files = getFilePathList ($this->basePath.'/'.$viewsFolder, true, '/app.*/', null, array('file'), 1);
-                        //if ($debug) { var_dump ($rootPath.'/'.$viewsFolder); echo '<pre style="color:yellow;background:red;">'; var_dump ($files); echo '</pre>'.PHP_EOL.PHP_EOL;  }; die();
+                        if (!file_exists($this->basePath.'/'.$viewsFolder)) {
+                            $msg = 'Folder "'.$this->basePath.'/'.$viewsFolder.'" does not exist.'.PHP_EOL
+                                .' $_SERVER='.json_encode($_SERVER,JSON_PRETTY_PRINT)
+                                .' $VIEW='.json_encode($view,JSON_PRETTY_PRINT)
+                                .' BACKTRACE='.json_encode(debug_backtrace(), JSON_PRETTY_PRINT);
+                            trigger_error ($msg, E_USER_WARNING);
+                        } else {
+                            $files = getFilePathList ($this->basePath.'/'.$viewsFolder, true, '/app.*/', null, array('file'), 1);
+                            //if ($debug) { var_dump ($rootPath.'/'.$viewsFolder); echo '<pre style="color:yellow;background:red;">'; var_dump ($files); echo '</pre>'.PHP_EOL.PHP_EOL;  }; die();
 
-                        $titleFile = $this->basePath.'/'.$viewsFolder.'/app.title.site.php';
-                        foreach ($files as $idx3 => $contentFile) {
-                            if (strpos($contentFile, 'app.dialog.')!==false) {
-                                $divID = str_replace('app.dialog.', '', basename($contentFile));
-                                $divID = str_replace('.php', '', $divID);
-                                $ret[$divID] = execPHP ($contentFile);
+                            $titleFile = $this->basePath.'/'.$viewsFolder.'/app.title.site.php';
+                            foreach ($files as $idx3 => $contentFile) {
+                                if (strpos($contentFile, 'app.dialog.')!==false) {
+                                    $divID = str_replace('app.dialog.', '', basename($contentFile));
+                                    $divID = str_replace('.php', '', $divID);
+                                    $ret[$divID] = execPHP ($contentFile);
+                                }
                             }
+                            //$contentFile = $rootPath.'/'.$viewsFolder.'/app.dialog.siteContent.php';
+                            //$ret = [ 'siteContent' => execPHP ($contentFile) ];
                         }
-                        //$contentFile = $rootPath.'/'.$viewsFolder.'/app.dialog.siteContent.php';
-                        //$ret = [ 'siteContent' => execPHP ($contentFile) ];
                     }
+                } elseif ($view==='[NOT FOUND]') {
+                    // serve up the front page!
+                    $ret = ['siteContent' => $viewID ];
                 }
 
 
@@ -1000,7 +1130,7 @@ class NicerAppWebOS {
         global $naDebugAll;
         global $naLAN;
         $debug = false;
-
+        $db = $this->dbs->findConnection('couchdb');
         $viewFolder = '[UNKNOWN VIEW]';
 
         $selectors2 = &$d['selectors'];
@@ -1015,8 +1145,13 @@ class NicerAppWebOS {
             foreach ($permissions as $permissionType => $accounts) {
                 if ($permissionType=='write') {
                     foreach ($accounts as $accountType => $userOrGroupID) {
-                        $adjustedUserOrGroupID = str_replace (' ', '__', $userOrGroupID);
-                        $adjustedUserOrGroupID = str_replace ('.', '_', $adjustedUserOrGroupID);
+                        if ($accountType == 'user') {
+                            $adjustedUserOrGroupID = $db->translate_plainUserName_to_couchdbUserName($userOrGroupID);
+                        } else {
+                            $adjustedUserOrGroupID = $db->translate_plainGroupName_to_couchdbGroupName($userOrGroupID);
+                        }
+                        //$adjustedUserOrGroupID = $userOrGroupID; // TODO : check if this is necessary
+
                         //if ($debug) { echo 't666='; var_dump($accountType); var_dump ($this->dbs->username); echo PHP_EOL; var_dump ($userOrGroupID); echo PHP_EOL; var_dump ($adjustedUserOrGroupID); }
                         if ($accountType == 'role') {
                             //if ($debug) { echo '$this->dbs->roles='; var_dump($this->dbs->roles); };
@@ -1080,6 +1215,7 @@ class NicerAppWebOS {
 
         
         foreach ($selectors2 as $idx => $selector) {
+            //if (!$this->selectorPermissionsPass('write', $selector)) continue;
             $css = $this->getPageCSS_specific($selector);
             //{ echo '<pre>667 : $idx='.$idx; echo '$selector='; var_dump($selector); var_dump($css); echo '</pre>'; };
             //if (is_array($css)) $css = json_encode($css, JSON_PRETTY_PRINT);
@@ -1108,7 +1244,7 @@ class NicerAppWebOS {
                 $useVividTexts = !array_key_exists('uvt',$_GET) || $_GET['uvt']=='y' ? 'true' : 'false';
                 $useLoadContent = !array_key_exists('lc',$_GET) || $_GET['lc']=='y' ? 'true' : 'false';
 
-                //echo '<pre style="color:green">'; var_dump ($_GET); echo '</pre>'; die();
+                //echo '<pre style="color:green">'; var_dump ($css); echo '</pre>'; die();
 
                 foreach ($css['themes'] as $themeName => $theme) { break; };
                 $_SESSION['themeName'] = $themeName;
@@ -1173,6 +1309,10 @@ class NicerAppWebOS {
                 $r = '<style id="cssPageSpecific" type="text/css" theme="'.$theme['theme'].'" sel=\''.(json_encode($css['sel'])).'\' csn="'.$selector['specificityName'].'" dbID="'.$theme['dbID'].'">'.PHP_EOL;
                 //echo '<pre style="color:green">'; var_dump ($theme); echo '</pre>'; die();
                 $r .= css_array_to_css2($theme['themeSettings']).PHP_EOL;
+
+
+                //echo css_array_to_css2($theme['themeSettings']); die();
+
                 $this->theme = $theme;
                 //$r .= 'h1::before, h2::before, h3::before {'."\r\n".PHP_EOL;
                     //$r .= "\t".'content : \'\''."\r\n".PHP_EOL;
@@ -1182,86 +1322,87 @@ class NicerAppWebOS {
                     $r .= "\t".'border-radius : 10px !important;'."\r\n".PHP_EOL;
                 $r .= '}'."\r\n".PHP_EOL;
 
-                $theme['animations'] = css_keyframes_to_array(
-                    file_get_contents(dirname(__FILE__).'/../themes/nicerapp_default_animations__'.$themeName.'.css')
-                );
-                //echo '<pre class="css_keyframes_to_array">'; var_dump ($css['animations']); echo '</pre>';//die();
+                $fn = dirname(__FILE__).'/../themes/nicerapp_default_animations__'.$themeName.'.css';
+                if (file_exists($fn) && is_readable($fn)) {
+                    $theme['animations'] = css_keyframes_to_array( file_get_contents($fn) );
+                    //echo '<pre class="css_keyframes_to_array">'; var_dump ($css['animations']); echo '</pre>';//die();
 
-                $a1 = css_animation_template_to_animation (
-                    $themeName, $theme['animations'],
-                    [
-                        'naHS_l0_in', 'naHS_l1_in', 'naHS_l2_in', 'naHS_json_in',
-                        'naHS_releaseDate_l0_in', 'naHS_releaseDate_l1_in', 'naHS_releaseDate_l2_in'
-                    ],
-                    [ '0%' => [
-                        'background' => [
-                            [
-                                'search' => '/rgba\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3}),\s*([\d\.])+\)/',
-                                'replace' => 'rgba($1, $2, $3, '.$theme['textBackgroundOpacity'].')'
-                            ],
-                            [
-                                'search' => '/rgb\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3})\)/',
-                                'replace' => 'rgba($1, $2, $3, '.$theme['textBackgroundOpacity'].')'
+                    $a1 = css_animation_template_to_animation (
+                        $themeName, $theme['animations'],
+                        [
+                            'naHS_l0_in', 'naHS_l1_in', 'naHS_l2_in', 'naHS_json_in',
+                            'naHS_releaseDate_l0_in', 'naHS_releaseDate_l1_in', 'naHS_releaseDate_l2_in'
+                        ],
+                        [ '0%' => [
+                            'background' => [
+                                [
+                                    'search' => '/rgba\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3}),\s*([\d\.])+\)/',
+                                    'replace' => 'rgba($1, $2, $3, '.$theme['textBackgroundOpacity'].')'
+                                ],
+                                [
+                                    'search' => '/rgb\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3})\)/',
+                                    'replace' => 'rgba($1, $2, $3, '.$theme['textBackgroundOpacity'].')'
+                                ]
+                            ]
+                        ]]
+                    );
+                    //echo '<pre style="background:darkred; color:black;">'; var_dump ($a1); echo '</pre>'; die();
+                    $a2 = css_animation_template_to_animation (
+                        $themeName, $theme['animations'],
+                        [
+                            'naHS_l0_out', 'naHS_l1_out', 'naHS_l2_out', 'naHS_json_out',
+                            'naHS_releaseDate_l0_out', 'naHS_releaseDate_l1_out', 'naHS_releaseDate_l2_out'
+                        ],
+                        [ '100%' => [
+                            'background' => [
+                                [
+                                    'search' => '/rgba\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3}),\s*([\d\.])+\)/',
+                                    'replace' => 'rgba($1, $2, $3, '.$theme['textBackgroundOpacity'].')'
+                                ],
+                                [
+                                    'search' => '/rgb\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3})\)/',
+                                    'replace' => 'rgba($1, $2, $3, '.$theme['textBackgroundOpacity'].')'
+                                ]
                             ]
                         ]
-                    ]]
-                );
-                //echo '<pre style="background:darkred; color:black;">'; var_dump ($a1); echo '</pre>'; die();
-                $a2 = css_animation_template_to_animation (
-                    $themeName, $theme['animations'],
-                    [
-                        'naHS_l0_out', 'naHS_l1_out', 'naHS_l2_out', 'naHS_json_out',
-                        'naHS_releaseDate_l0_out', 'naHS_releaseDate_l1_out', 'naHS_releaseDate_l2_out'
-                    ],
-                    [ '100%' => [
-                        'background' => [
-                            [
-                                'search' => '/rgba\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3}),\s*([\d\.])+\)/',
-                                'replace' => 'rgba($1, $2, $3, '.$theme['textBackgroundOpacity'].')'
-                            ],
-                            [
-                                'search' => '/rgb\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3})\)/',
-                                'replace' => 'rgba($1, $2, $3, '.$theme['textBackgroundOpacity'].')'
-                            ]
+                    ]);
+
+                    $r .= css_animation_array_to_css (array_merge($a1,$a2));
+                    //echo '<pre style="background:darkred; color:white;">'; var_dump (htmlentities($r)); echo '</pre>'; die();
+
+                    $r .= css_animation_keys_to_css (
+                        $themeName,
+                        [
+                            'li.todoList > div.active' => 'naHS_l0_in',
+                                // the above key-value pair with a $css['theme']=='default', results in the following CSS rule :
+                                /*
+                                * li.todoList > div.active {
+                                *      animation : naHS_l0_in__default 1s forwards;
+                                * }
+                                */
+
+                            'li.todoList > div' => 'naHS_l0_out',
+                            '.todoList_l1 > li > div.active' => 'naHS_l1_in',
+                            '.todoList_l1 > li > div' => 'naHS_l1_out',
+                            '.todoList_l2 > li > div.active' => 'naHS_l2_in',
+                            '.todoList_l2 > li > div' => 'naHS_l2_out',
+
+                            '.todoList_l1 > li > pre.json.active' => 'naHS_l1_in',
+                            '.todoList_l1 > li > pre.json' => 'naHS_l1_out',
+
+                            '.todoList_l2 > li > pre.json.active' => 'naHS_l2_in',
+                            '.todoList_l2 > li > pre.json' => 'naHS_l2_out',
+
+                            'li.todoList.releaseDate > div.active' => 'naHS_releaseDate_l0_in',
+                            'li.todoList.releaseDate > div' => 'naHS_releaseDate_l0_out',
+                            '.todoList_l1.releaseDate > li > div.active' => 'naHS_releaseDate_l1_in',
+                            '.todoList_l1.releaseDate > li > div' => 'naHS_releaseDate_l1_out',
+                            '.todoList_l2.releaseDate > li > div.active' => 'naHS_releaseDate_l2_in',
+                            '.todoList_l2.releaseDate > li > div' => 'naHS_releaseDate_l2_out'
+
                         ]
-                    ]
-                ]);
-
-                $r .= css_animation_array_to_css (array_merge($a1,$a2));
-                //echo '<pre style="background:darkred; color:white;">'; var_dump (htmlentities($r)); echo '</pre>'; die();
-
-                $r .= css_animation_keys_to_css (
-                    $themeName,
-                    [
-                        'li.todoList > div.active' => 'naHS_l0_in',
-                            // the above key-value pair with a $css['theme']=='default', results in the following CSS rule :
-                            /*
-                             * li.todoList > div.active {
-                             *      animation : naHS_l0_in__default 1s forwards;
-                             * }
-                             */
-
-                        'li.todoList > div' => 'naHS_l0_out',
-                        '.todoList_l1 > li > div.active' => 'naHS_l1_in',
-                        '.todoList_l1 > li > div' => 'naHS_l1_out',
-                        '.todoList_l2 > li > div.active' => 'naHS_l2_in',
-                        '.todoList_l2 > li > div' => 'naHS_l2_out',
-
-                        '.todoList_l1 > li > pre.json.active' => 'naHS_l1_in',
-                        '.todoList_l1 > li > pre.json' => 'naHS_l1_out',
-
-                        '.todoList_l2 > li > pre.json.active' => 'naHS_l2_in',
-                        '.todoList_l2 > li > pre.json' => 'naHS_l2_out',
-
-                        'li.todoList.releaseDate > div.active' => 'naHS_releaseDate_l0_in',
-                        'li.todoList.releaseDate > div' => 'naHS_releaseDate_l0_out',
-                        '.todoList_l1.releaseDate > li > div.active' => 'naHS_releaseDate_l1_in',
-                        '.todoList_l1.releaseDate > li > div' => 'naHS_releaseDate_l1_out',
-                        '.todoList_l2.releaseDate > li > div.active' => 'naHS_releaseDate_l2_in',
-                        '.todoList_l2.releaseDate > li > div' => 'naHS_releaseDate_l2_out'
-
-                    ]
-                );
+                    );
+                }
 
                 $r .= '</style>'.PHP_EOL;
                 $ret .= $r;
@@ -1280,13 +1421,13 @@ class NicerAppWebOS {
                     $dbg = [
                         'na.site.loadContent' => !array_key_exists('lc',$_GET) || $_GET['lc']=='y' ? 'true' : 'false'
                     ];
-                    foreach ($css as $themeName => $theme) { break; };
+                    foreach ($css['themes'] as $themeName => $theme) { break; };
                     $r .= 'na.site.globals = $.extend(na.site.globals, {'.PHP_EOL;
                         $r .= "\tdebug : ".json_encode($dbg).",".PHP_EOL;
                         $r .= "\tuseVividTexts : ".$useVividTexts.",".PHP_EOL;
                         $r .= "\tbackground : '".$theme['background']."',".PHP_EOL;
                         $r .= "\tbackgroundSearchKey : '".$theme['backgroundSearchKey']."',".PHP_EOL;
-                        $r .= "\tthemes : ".json_encode($css).",".PHP_EOL;
+                        $r .= "\tthemes : ".json_encode($css['themes']).",".PHP_EOL;
                         $r .= "\tthemeName : '".$themeName."',".PHP_EOL;
                         $r .= "\tspecificityName : \"".$selector['specificityName']."\",".PHP_EOL;
                         //$r .= "\tspecificityName : \"".$specificityName."\",".PHP_EOL;
@@ -1320,10 +1461,12 @@ class NicerAppWebOS {
                 }
         };
         if ($debug) { echo '$ret='; var_dump(htmlentities($ret)); echo '</pre>'.PHP_EOL.PHP_EOL; exit(); };
+        if ($this->debugThemeLoading) exit();
         return $ret;
     }
 
     public function themeSettings_UL_list ($theme, $root=true) {
+        $css = '';
         if ($root) $css .= '<ul class="vividMenu_mainUL" style="display:none;" itemsLevel1="1" menuStructure="vertical">'; else $css .= '<ul>';
         foreach ($theme as $key => $value) {
             if ($key=='css') continue;
@@ -1342,6 +1485,8 @@ class NicerAppWebOS {
         global $naDebugAll;
         global $naLAN;
         $debug = false;
+        $db = $this->dbs->findConnection('couchdb');
+        $cdb = $db;
 
         $viewFolder = '[UNKNOWN VIEW]';
 
@@ -1368,17 +1513,18 @@ class NicerAppWebOS {
         }
         //if ($debug) { echo '<pre>'; var_dump ($url); echo PHP_EOL; var_dump ($this->view); echo '</pre>'.PHP_EOL; }
         if ($viewFolder!=='') {
+            $appName = preg_replace('/.*\//','',$viewFolder);
             $selectors = array (
                 0 => array (
                     'permissions' => array (
                         'read' => array(
-                            'role' => 'guests'
+                            'role' => $db->translate_plainGroupName_to_couchdbGroupName('Guests')
                         ),
                         'write' => array(
                         )
                     ),
                     'specificityName' => 'site (for all viewers)',
-                    'role' => 'guests',
+                    'role' => $db->translate_plainGroupName_to_couchdbGroupName('Guests'),
                     'display' => true,
                     'worksWithoutDatabase' => true
                 ),
@@ -1386,7 +1532,7 @@ class NicerAppWebOS {
                 1 => array (
                     'permissions' => array (
                         'read' => array(
-                            'role' => 'guests'
+                            'role' => $db->translate_plainGroupName_to_couchdbGroupName('Guests')
                         ),
                         'write' => array(
                         )
@@ -1394,21 +1540,21 @@ class NicerAppWebOS {
                     'specificityName' => 'view \''.$viewFolder.'\' (for all viewers)',
                     'view' => $viewFolder,
                     //'url' => $url,
-                    'role' => 'guests',
+                    'role' => $db->translate_plainGroupName_to_couchdbGroupName('Guests'),
                     'display' => true
                 ),
 
                 2 => array (
                     'permissions' => array (
                         'read' => array(
-                            'role' => 'guests'
+                            'role' => $db->translate_plainGroupName_to_couchdbGroupName('Guests')
                         ),
                         'write' => array(
                         )
                     ),
                     'specificityName' => 'current page (for all viewers)',
                     'url' => $url,
-                    'role' => 'guests',
+                    'role' => $db->translate_plainGroupName_to_couchdbGroupName('Guests'),
                     'display' => true
                 )
             );
@@ -1425,13 +1571,13 @@ class NicerAppWebOS {
                 0 => array (
                     'permissions' => array (
                         'read' => array(
-                            'role' => 'guests'
+                            'role' => $db->translate_plainGroupName_to_couchdbGroupName('Guests')
                         ),
                         'write' => array(
                         )
                     ),
                     'specificityName' => 'site (for all viewers)',
-                    'role' => 'guests',
+                    'role' => $db->translate_plainGroupName_to_couchdbGroupName('Guests'),
                     'display' => true,
                     'worksWithoutDatabase' => true
                 ),
@@ -1439,14 +1585,14 @@ class NicerAppWebOS {
                 1 => array (
                     'permissions' => array (
                         'read' => array(
-                            'role' => 'guests'
+                            'role' => $db->translate_plainGroupName_to_couchdbGroupName('Guests')
                         ),
                         'write' => array(
                         )
                     ),
                     'specificityName' => 'current page (for all viewers)',
                     'url' => $url,
-                    'role' => 'guests',
+                    'role' => $db->translate_plainGroupName_to_couchdbGroupName('Guests'),
                     'display' => true
                 )
             );
@@ -1506,7 +1652,7 @@ class NicerAppWebOS {
                 'user' => $username100,
                 'display' => true
             );
-            //$selectorNames[] = 'site for user '.$username100;
+            $selectorNames[] = 'site for user '.$username100;
             //$preferredSelectorName = 'site user '.$username100;
 
             $selectors[] = array (
@@ -1530,20 +1676,22 @@ class NicerAppWebOS {
 
 
             foreach ($this->dbs->findConnection('couchdb')->roles as $roleIdx => $role) {
+                $role2 = $this->dbs->findConnection('couchdb')->translate_couchdbGroupName_to_plainGroupName($role);
                 $selectors[] = array (
                     'permissions' => array (
                         'read' => array(
-                            'user' => $username100
+                            'user' => $username100,
+                            'role' => $db->translate_plainGroupName_to_couchdbGroupName('Guests')
                         ),
                         'write' => array(
-                            'user' => $username100
+                            'role' => $role
                         )
                     ),
-                    'specificityName' => 'site for group '.$role,
+                    'specificityName' => 'site for group '.$role2,
                     'role' => $role,
                     'display' => true
                 );
-                //$selectorNames[] = 'site for group '.$role;
+                $selectorNames[] = 'site for group '.$role2;
                 //$preferredSelectorName = 'site for group '.$role;
 
                 $selectors[] = array (
@@ -1552,19 +1700,19 @@ class NicerAppWebOS {
                             'user' => $username100
                         ),
                         'write' => array(
-                            'user' => $username100
+                            'role' => $role
                         )
                     ),
-                    'specificityName' => 'site for group '.$role.' at the client',
+                    'specificityName' => 'site for group '.$role2.' at the client',
                     'role' => $role,
                     'ip' => $naIP,
                     'display' => true
                 );
-                //$selectorNames[] = 'site for group '.$role.' at the client';
+                $selectorNames[] = 'site for group '.$role2.' at the client';
                 //$preferredSelectorName = 'site for group '.$role.' at the client';
-
-
-                if ($viewFolder!=='') {
+                if ($viewFolder!==''
+                    && $viewFolder!=='/'
+                ) {
                     $selectors[] = array (
                         'permissions' => array (
                             'read' => array(
@@ -1574,12 +1722,12 @@ class NicerAppWebOS {
                                 'role' => $role
                             )
                         ),
-                        'specificityName' => 'app \''.$viewFolder.'\' for group '.$role,
-                        'view' => $viewFolder,
+                        'specificityName' => 'app \''.$appName.'\' for group '.$role2,
+                        'app' => $viewFolder,
                         'role' => $role,
                         'display' => true
                     );
-                    //$selectorNames[] = 'app \''.$viewFolder.'\' for group '.$role;
+                    $selectorNames[] = 'app \''.$viewFolder.'\' for group '.$role2;
                     $selectors[] = array (
                         'permissions' => array (
                             'read' => array(
@@ -1589,13 +1737,13 @@ class NicerAppWebOS {
                                 'role' => $role
                             )
                         ),
-                        'specificityName' => 'app \''.$viewFolder.'\' for group '.$role.' at the client',
-                        'view' => $viewFolder,
+                        'specificityName' => 'app \''.$appName.'\' for group '.$role2.' at the client',
+                        'app' => $viewFolder,
                         'role' => $role,
                         'ip' => $naIP,
                         'display' => true
                     );
-                    //$selectorNames[] = 'app \''.$viewFolder.'\' for group '.$role.' at the client';
+                    $selectorNames[] = 'app \''.$viewFolder.'\' for group '.$role2.' at the client';
                 }
 
 
@@ -1609,8 +1757,9 @@ class NicerAppWebOS {
                             'role' => $role
                         )
                     ),
-                    'specificityName' => 'current page for group '.$role,
+                    'specificityName' => 'current page for group '.$role2,
                     'url' => $url,
+                    'app' => $viewFolder,
                     'role' => $role,
                     'display' => true
                 );
@@ -1625,8 +1774,9 @@ class NicerAppWebOS {
                             'role' => $role
                         )
                     ),
-                    'specificityName' => 'current page for group '.$role.' at the client',
+                    'specificityName' => 'current page for group '.$role2.' at the client',
                     'url' => $url,
+                        'app' => $viewFolder,
                     'role' => $role,
                     'ip' => $naIP,
                     'display' => true
@@ -1645,7 +1795,7 @@ class NicerAppWebOS {
                             'user' => $username100
                         )
                     ),
-                    'specificityName' => 'app \''.$viewFolder.'\' for user '.$username100,
+                    'specificityName' => 'app \''.$appName.'\' for user '.$username100,
                     'view' => $viewFolder,
                     'user' => $username100,
                     'display' => true
@@ -1660,7 +1810,7 @@ class NicerAppWebOS {
                             'user' => $username100
                         )
                     ),
-                    'specificityName' => 'app \''.$viewFolder.'\' for user '.$username100.' at the client',
+                    'specificityName' => 'app \''.$appName.'\' for user '.$username100.' at the client',
                     'view' => $viewFolder,
                     'user' => $username100,
                     'ip' => $naIP,
@@ -1686,7 +1836,7 @@ class NicerAppWebOS {
                 'user' => $username100,
                 'display' => true
             );
-            //$selectorNames[] = 'current page for user '.$username100;
+            $selectorNames[] = 'current page for user '.$username100;
             //$preferredSelectorName = 'current page for user '.$username100;
 
             $selectors[] = array (
@@ -1704,7 +1854,7 @@ class NicerAppWebOS {
                 'ip' => $naIP,
                 'display' => true
             );
-            //$selectorNames[] = 'current page for user '.$username100.' at the client';
+            $selectorNames[] = 'current page for user '.$username100.' at the client';
             //$preferredSelectorName = 'current page for user '.$username100.' at the client';
         };
 
@@ -1713,6 +1863,8 @@ class NicerAppWebOS {
             //ini_set('session.gc_maxlifetime', 3600);
             //session_start();
         //};
+
+        // TODO : filter $_SESSION['selectors'] here or in the code that exports it to js?
         $_SESSION['selectors'] = json_encode($selectors);
         //$_SESSION['selectorNames'] = json_encode($selectorNames);
         //echo '<pre>'; var_dump ($_SESSION);
@@ -1734,21 +1886,17 @@ class NicerAppWebOS {
     }
 
     public function getPageCSS_specific($selector) {
-        $debug = false;
+        $debug = $this->debugThemeLoading;
         $cdbFunctional1a = true;
         $fncn = $this->cn.'::getPageCSS_specific()';
         //$fncn = $this->cn.'::getPageCSS_specific("'.json_encode($selector).'")';
+
+        $db = $this->dbs->findConnection('couchdb');
 
         //if ($debug) 
         //{ echo '$selector='; var_dump ($selector); echo '<br/><br/>'.PHP_EOL.PHP_EOL; exit(); };
         
         $permissions = $selector['permissions'];
-        if ($debug && false) { 
-            echo '$permissions='; var_dump ($permissions); echo '<br/><br/>'.PHP_EOL.PHP_EOL;
-            unset ($selector['permissions']);
-            unset ($selector['display']);
-            exit();
-        }
         if ($debug) {
             echo '<pre>$selector='; var_dump ($selector); echo '</pre><br/>'.PHP_EOL.PHP_EOL;
         }
@@ -1780,9 +1928,14 @@ class NicerAppWebOS {
                 foreach ($permissions as $permissionType => $accounts) {
                     if ($permissionType=='read') {
                         foreach ($accounts as $accountType => $userOrGroupID) {
-                            $adjustedUserOrGroupID = str_replace (' ', '__', $userOrGroupID);
-                            $adjustedUserOrGroupID = str_replace ('.', '_', $adjustedUserOrGroupID);
-                            //if ($debug) { echo 't666='; var_dump($accountType); var_dump ($this->dbs->username); echo PHP_EOL; var_dump ($userOrGroupID); echo PHP_EOL; var_dump ($adjustedUserOrGroupID); }
+                        if ($accountType == 'user') {
+                            $adjustedUserOrGroupID = $db->translate_plainUserName_to_couchdbUserName($userOrGroupID);
+                        } else {
+                            $adjustedUserOrGroupID = $db->translate_plainGroupName_to_couchdbGroupName($userOrGroupID);
+                        }
+                        $adjustedUserOrGroupID = $userOrGroupID; // TODO : check if this is necessary
+
+                        //if ($debug) { echo 't666='; var_dump($accountType); var_dump ($this->dbs->username); echo PHP_EOL; var_dump ($userOrGroupID); echo PHP_EOL; var_dump ($adjustedUserOrGroupID); }
                             if ($accountType == 'role') {
                                 //if ($debug) { echo '$this->dbs->roles='; var_dump($this->dbs->roles); };
                                 if (is_string($this->dbs)) {
@@ -1792,8 +1945,8 @@ class NicerAppWebOS {
                                 foreach ( $this->dbs->findConnection('couchdb')->roles
                                     as $roleIdx => $groupID
                                 ) {
-                                    if ($debug) { echo 't667='; var_dump($groupID); };
-                                    if ($userOrGroupID==$groupID) {
+                                    if ($debug) { echo 't667A='; var_dump($groupID); var_dump ($adjustedUserOrGroupID);};
+                                    if ($adjustedUserOrGroupID==$groupID) {
                                         $hasPermission = true;
                                     }
                                 }
@@ -1827,7 +1980,7 @@ class NicerAppWebOS {
             }
 
             // try to fetch the requested cosmetics data
-            $dbName = $this->dbs->findConnection('couchdb')->dataSetName('data_themes');
+            $dbName = $this->dbs->findConnection('couchdb')->dataSetName('themes');
             try {
                 $this->dbs->findConnection('couchdb')->cdb->setDatabase($dbName, false);
             } catch (Exception $e) {
@@ -1835,13 +1988,14 @@ class NicerAppWebOS {
             }
 
             $sel = [];
-            if (array_key_exists('user', $selector)) $sel['user'] = $selector['user']; else $selector['user'] = [ '$exists' => false ];
-            if (array_key_exists('role', $selector)) $sel['role'] = $selector['role']; else $selector['role'] = [ '$exists' => false ];
-            if (array_key_exists('view', $selector)) $sel['view'] = $selector['view']; else $selector['view'] = [ '$exists' => false ];
-            if (array_key_exists('url', $selector)) $sel['url'] = $selector['url']; else $selector['url'] = [ '$exists' => false ];
-            //if (array_key_exists('specificityName', $selector)) $sel['specificityName'] = $selector['specificityName'];
-            if (array_key_exists('theme', $selector)) $sel['theme'] = $selector['theme']; else $selector['theme'] = [ '$exists' => false ];
-            if (array_key_exists('ip', $selector)) $sel['ip'] = $selector['ip']; else $selector['ip'] = [ '$exists' => false ];
+            if (array_key_exists('user', $selector)) $sel['user'] = $selector['user']; else $sel['user'] = [ '$exists' => false ];
+            if (array_key_exists('role', $selector)) $sel['role'] = $selector['role']; else $sel['role'] = [ '$exists' => false ];
+            if (array_key_exists('view', $selector)) $sel['view'] = $selector['view']; else $sel['view'] = [ '$exists' => false ];
+            if (array_key_exists('app', $selector)) $sel['app'] = $selector['app']; else $sel['app'] = [ '$exists' => false ];
+            if (array_key_exists('url', $selector)) $sel['url'] = $selector['url']; else $sel['url'] = [ '$exists' => false ];
+            if (array_key_exists('specificityName', $selector)) $sel['specificityName'] = $selector['specificityName'];
+            if (array_key_exists('theme', $selector)) $sel['theme'] = $selector['theme']; //else $sel['theme'] = [ '$exists' => false ];
+            if (array_key_exists('ip', $selector)) $sel['ip'] = $selector['ip']; else $sel['ip'] = [ '$exists' => false ];
             global $naIP;
             //$selector['ip'] = $naIP;
             //$selector['ua'] = $_SERVER['HTTP_USER_AGENT'];
@@ -1875,8 +2029,9 @@ class NicerAppWebOS {
                 foreach ($call->body->docs as $idx => $d) {
                     $hasRecord = true;
                     if ($debug) { echo '$d='; var_dump ($d); }
+                    $tn = ( isset($d->theme) ? $d->theme : 'default' );
                     $ret = [
-                        ( isset($d->theme) ? $d->theme : 'default' ) => [
+                        $tn => [
                             'dbID' => $d->_id,
                             'themeSettings' => json_decode(json_encode($d->themeSettings), true),
                             'apps' => json_decode(json_encode((property_exists($d,'apps')?$d->apps:[])), true),
@@ -1889,15 +2044,16 @@ class NicerAppWebOS {
                             ),
                             'backgroundChange_hours' => ( isset($d->backgroundChange_hours) ? $d->backgroundChange_hours : ''),
                             'backgroundChange_minutes' => ( isset($d->backgroundChange_minutes) ? $d->backgroundChange_minutes : ''),
-                            'theme' => ( isset($d->theme) ? $d->theme : '[default]' )
+                            'theme' => $tn
                         ]
                     ];
-                    if (isset($d->user)) $ret[( isset($d->theme) ? $d->theme : 'default' )]['user'] = json_decode(json_encode($d->user),true);
-                    if (isset($d->role)) $ret[( isset($d->theme) ? $d->theme : 'default' )]['role'] = json_decode(json_encode($d->role),true);
-                    if (isset($d->url)) $ret[( isset($d->theme) ? $d->theme : 'default' )]['url'] = json_decode(json_encode($d->url),true);
-                    if (isset($d->view)) $ret[( isset($d->theme) ? $d->theme : 'default' )]['view'] = json_decode(json_encode($d->view),true);
-                    if (isset($d->specificityName)) $ret[( isset($d->theme) ? $d->theme : 'default' )]['specificityName'] = json_decode(json_encode($d->specificityName),true);
-                    //if (isset($d->theme)) $ret[$d->theme]['theme'] = $d->theme;
+                    if (isset($d->user)) $ret[$tn]['user'] = $d->user;
+                    if (isset($d->role)) $ret[$tn]['role'] = $d->role;
+                    if (isset($d->url)) $ret[$tn]['url'] = $d->url;
+                    if (isset($d->view)) $ret[$tn]['view'] = $d->view;
+                    if (isset($d->app)) $ret[$tn]['app'] = $d->app;
+                    if (isset($d->specificityName)) $ret[$tn]['specificityName'] = $d->specificityName;
+                    if (isset($tn)) $ret[$tn]['theme'] = $tn;
 
                     if ($debug) echo '</pre>';
 
@@ -1919,6 +2075,13 @@ class NicerAppWebOS {
             }
             if ($debug) echo '</pre>';
         //}
+        if ($hasRecord) {
+            return [
+                'sel' => $sel,
+                'themes' => $rets
+            ];
+        }
+
         return false;        
     }
 

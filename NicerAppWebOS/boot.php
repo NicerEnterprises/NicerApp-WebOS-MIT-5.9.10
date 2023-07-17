@@ -8,7 +8,7 @@ rene.veerman.netherlands@gmail.com
 
 NicerApp WCS (Website Control System) from Nicer Enterprises
 */
-    define ("SESSION_ERRORS_ID", "NicerAppWebOS_errors_PHP");
+    define ("SESSION_ERRORS_ID", "NicerApp_WebOS_errors_PHP");
     define ("SEID", SESSION_ERRORS_ID);
 
     define ("FILE_FORMATS_photos", "/^(.*\.png)|(.*\.gif)|(.*\.jpg)|(.*\.jpeg)$/");
@@ -16,6 +16,8 @@ NicerApp WCS (Website Control System) from Nicer Enterprises
     define ("FILE_FORMATS_texts", "/^(.*\.txt)$/");
     define ("FILE_FORMATS_photos_texts", "/^(.*\.png)|(.*\.gif)|(.*\.jpg)|(.*\.jpeg)|(.*\.txt)$/");
     define ("FILE_FORMATS_NO_thumbs", '/(?!.*thumbs).*/');
+    global $na_full_init;
+    if (!isset($na_full_init)) $na_full_init = true;
 
     $rootPath_na = realpath(dirname(__FILE__).'/..');
     require_once($rootPath_na.'/NicerAppWebOS/lib_duration.php');
@@ -25,15 +27,16 @@ NicerApp WCS (Website Control System) from Nicer Enterprises
 
     $rootPath_na_dbs = $rootPath_na.'/NicerAppWebOS/logic.databases/generalizedDatabasesAPI-1.0.0';
     require_once ($rootPath_na_dbs.'/class.database_API.php');
-    require_once ($rootPath_na_dbs.'/connectors/forFuture_design_coding_debugging_and_usage/class.fileSystemDB-1.0.0.php');
+    //require_once ($rootPath_na_dbs.'/connectors/forFuture_design_coding_debugging_and_usage/class.fileSystemDB-1.0.0.php');
 
-    require_once ($rootPath_na_dbs.'/connectors/forFuture_design_coding_debugging_and_usage/class.adodb5_1.0.0.php');
-    require_once ($rootPath_na.'/NicerAppWebOS/3rd-party/adodb5/adodb.inc.php');
+    //require_once ($rootPath_na_dbs.'/connectors/forFuture_design_coding_debugging_and_usage/class.adodb5_1.0.0.php');
+    //require_once ($rootPath_na.'/NicerAppWebOS/3rd-party/adodb5/adodb.inc.php');
 
     require_once ($rootPath_na_dbs.'/connectors/class.couchdb-3.2.2_1.0.1.php');
     // Sag, the business code layer that i use towards the couchdb.apache.org database system.
     require_once($rootPath_na.'/NicerAppWebOS/3rd-party/sag/src/Sag.php');
     require_once ($rootPath_na.'/NicerAppWebOS/Sag-support-functions.php');
+    require_once ($rootPath_na.'/NicerAppWebOS/apps/NicerAppWebOS/userInterfaces/comments/boot.php');
 
 
 
@@ -123,8 +126,11 @@ NicerApp WCS (Website Control System) from Nicer Enterprises
 
     global $naWebOS;
     $naWebOS = new NicerAppWebOS();
-    $naWebOS->initializeDatabases();
-    $naWebOS->initializeGlobals();
+    if ($na_full_init) {
+        // MUST BE in the following order:
+        $naWebOS->initializeDatabases();
+        $naWebOS->initializeGlobals();
+    }
 
     // at the *bottom* of this file (that's for good reasons), 
     // you will find : require_once(dirname(__FILE__).'/apps/nicer.app/api.paymentSystems/boot.php');

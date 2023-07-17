@@ -1,24 +1,12 @@
-<html>
-<head>
-    <script type="text/javascript">
-        var na = {};
-    </script>
-    <style></style>
-    <link type="text/css" rel="StyleSheet" href="/NicerAppWebOS/domainConfigs/nicer.app/index.css?c=<?php echo date('Ymd_His',filemtime(realpath(dirname(__FILE__).'/../../../').'/domainConfigs/NicerAppWebOS/index.css'))?>">
-    <link type="text/css" rel="StyleSheet" href="/NicerAppWebOS/domainConfigs/nicer.app/index.dark.css?c=<?php echo date('Ymd_His',filemtime(realpath(dirname(__FILE__).'/../../../').'/domainConfigs/NicerAppWebOS/index.dark.css'))?>">
-    <script type="text/javascript" src="/NicerAppWebOS/logic.userInterface/photoAlbum/4.0.0/photoAlbum-4.0.0.source.js?c=<?php echo date('Ymd_His', filemtime(dirname(__FILE__).'/../userInterface/photoAlbum/4.0.0/photoAlbum-4.0.0.source.js'));?>"></script>
-</head>
-<body style="overflow:hidden" onload="window.top.resizeIFrameToFitContent(window.top.$('#themeEditor_photoAlbum', window.top.document.body)[0]);">
-<div class="vividScrollpane" style="width:100%;height:auto;overflow:visible;">
 <?php
     $root = realpath(dirname(__FILE__).'/../../../../');
     require_once ($root.'/NicerAppWebOS/boot.php');
-    
-    global $naDebugAll; 
-    $debug = false;    
-    
+
+    global $naDebugAll;
+    $debug = false;
+
     global $naWebOS;
-    
+//trigger_error (realpath(dirname(__FILE__).'/../../../').'/domainConfigs/'.$naWebOS->domain.'/index.dark.css', E_USER_NOTICE);
     $baseURL = '/NicerAppWebOS/siteData/'.$naWebOS->domain.'/';
     $baseDir = $root.'/NicerAppWebOS/siteData/'.$naWebOS->domain.'/';
     $targetDir = $baseDir.$_GET['basePath'];
@@ -28,9 +16,19 @@
 
     $files = getFilePathList ($targetDir, false, FILE_FORMATS_photos, null, array('file'));
     sort($files);
-    if ($debug) { echo $targetDir."<br/>\r\n"; echo json_encode($files, JSON_PRETTY_PRINT); };
-    
-    ?>
+?>
+<html>
+<head>
+    <script type="text/javascript">
+        var na = {};
+    </script>
+    <style></style>
+    <link type="text/css" rel="StyleSheet" href="/NicerAppWebOS/domainConfigs/<?php echo $naWebOS->domain?>/index.css?c=<?php echo date('Ymd_His',filemtime(realpath(dirname(__FILE__).'/../../../').'/domainConfigs/'.$naWebOS->domain.'/index.css'))?>">
+    <link type="text/css" rel="StyleSheet" href="/NicerAppWebOS/domainConfigs/<?php echo $naWebOS->domain?>/index.dark.css?c=<?php echo date('Ymd_His',filemtime(realpath(dirname(__FILE__).'/../../../').'/domainConfigs/'.$naWebOS->domain.'/index.dark.css'))?>">
+    <script type="text/javascript" src="/NicerAppWebOS/logic.userInterface/photoAlbum/4.0.0/photoAlbum-4.0.0.source.js?c=<?php echo date('Ymd_His', filemtime(dirname(__FILE__).'/../../../logic.userInterface/photoAlbum/4.0.0/photoAlbum-4.0.0.source.js'));?>"></script>
+</head>
+<body style="overflow:hidden" onload="window.top.resizeIFrameToFitContent(window.top.$('#themeEditor_photoAlbum', window.top.document.body)[0]);">
+<div class="vividScrollpane" style="width:100%;height:auto;overflow:visible;">
     <style>
         .filename {
             color : white;
@@ -63,7 +61,7 @@
         echo '<div style="overflow:hidden;display:inline-block;width:220px;height:auto;margin:5px;padding:10px;padding-top:20px;border-radius:10px;border:1px solid black;background:rgba(0,0,0,0.7);box-shadow:2px 2px 2px rgba(0,0,0,0.5), inset 1px 1px 1px rgba(0,0,255,0.5), inset -1px -1px 1px rgba(0,0,255,0.5);">';
         
         
-        $onclick = 'onclick="window.top.na.blog.onclick_mediaThumbnail(event, \''.$_GET['basePath'].'\', \''.$fileName.'\')"';
+        $onclick = 'onclick="window.top.na.cms.onclick_mediaThumbnail(event, \''.$_GET['basePath'].'\', \''.$fileName.'\');"'; // gets overridden by the Theme Editor for it's backgrounds selection procedures.
         
         echo '<center><img src="'.$thumbURL.'" class="mediaThumb" style="width:180px" '.$onclick.'/><br/><span class="filename">'.$fileName.'</span></center></div>';
     }

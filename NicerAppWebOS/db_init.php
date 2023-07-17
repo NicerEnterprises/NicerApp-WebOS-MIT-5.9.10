@@ -1,4 +1,3 @@
-<h1>nicerapp couchdb initialization script</h1>
 <?php 
 
 // default usage (bookmark this for https://YOURDOMAIN.TLD/NicerAppWebOS/db_init.php?....) :
@@ -8,7 +7,7 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 
-global $naBypassMainErrorHandler; $naBypassMainErrorHandler = true;
+global $naBypassMainErrorHandler; $naBypassMainErrorHandler = false;
 require_once (realpath(dirname(__FILE__)).'/boot.php');
 
 $debug = true; 
@@ -36,13 +35,13 @@ $dbs = [
     'data_by_users',
     'views',
     'cms_tree',
-    'cms_tree__role__guests',
-    'cms_tree__user__administrator',
-    'cms_tree__user__guest',
-    'cms_documents__role__guests',
-    'cms_documents__user__administrator',
-    'cms_documents__user__guest',
-    'data_themes',
+    'cms_tree___role___guests',
+    'cms_tree___user___administrator',
+    'cms_tree___user___guest',
+    'cms_documents___role___guests',
+    'cms_documents___user___administrator',
+    'cms_documents___user___guest',
+    'themes',
     'api_wallpaperscraper__plugin_bingImages',
     'api_wallpaperscraper__plugin_googleImages',
     'app_2D_news__rss_items',
@@ -63,13 +62,13 @@ $dbsReset = [
     'data_by_users',
     'views',
     'cms_tree',
-    'cms_tree__role__guests',
-    'cms_tree__user__administrator',
-    'cms_tree__user__guest',
-    'cms_documents__role__guests',
-    'cms_documents__user__administrator',
-    'cms_documents__user__guest',
-    'data_themes',
+    'cms_tree___role___guests',
+    'cms_tree___user___administrator',
+    'cms_tree___user___guest',
+    'cms_documents___role___guests',
+    'cms_documents___user___administrator',
+    'cms_documents___user___guest',
+    'themes',
     'api_wallpaperscraper__plugin_bingImages',
     'api_wallpaperscraper__plugin_googleImages',
     'app_2D_news__rss_items',
@@ -150,21 +149,21 @@ if (mustDo('urlRedirection')) {
 if (mustDo('cms')) {
     $dbs = goDo ($dbs, [
         'cms_tree',
-        'cms_tree__role__guests',
-        'cms_tree__user__administrator',
-        'cms_tree__user__guest',
-        'cms_documents__role__guests',
-        'cms_documents__user__administrator',
-        'cms_documents__user__guest'
+        'cms_tree___role___guests',
+        'cms_tree___user___administrator',
+        'cms_tree___user___guest',
+        'cms_documents___role___guests',
+        'cms_documents___user___administrator',
+        'cms_documents___user___guest'
     ]);
 };
 
 if (mustDo('themeData')) {
-    $dbs = goDo ($dbs, [ 'data_themes' ]);
+    $dbs = goDo ($dbs, [ 'themes' ]);
 };
 if (mustReset('themeData')) {
-    $dbs['data_themes'] = false; // don't delete *all* the user supplied data!
-    $dbsReset = goReset ($dbsReset, [ 'data_themes' ]);
+    $dbs['themes'] = false; // don't delete *all* the user supplied data!
+    $dbsReset = goReset ($dbsReset, [ 'themes' ]);
 };
 
 if (mustDo('api_imageSearch')) {
@@ -185,16 +184,37 @@ if (mustDo('app_fileManager')) {
 //echo '<pre style="color:blue">'; echo json_encode ($dbs, JSON_PRETTY_PRINT); echo '</pre>';
 
 $dbs2 = addPrefixes($dbs);
+//echo '<pre style="color:blue">'; echo json_encode ($naWebOS->dbsAdmin, JSON_PRETTY_PRINT); echo '</pre>';
 $allDBs = $naWebOS->dbsAdmin->getAllDatabases ();
 //echo '<pre style="color:green">'; var_dump ($allDBs); echo '</pre>'; die();
 //echo '<pre style="color:green">'; var_dump ($dbs); echo '</pre>'; die();
 echo $naWebOS->dbsAdmin->listDatabases ($allDBs, $dbs, $dbsReset);
 
-$usersJSON = require_return(dirname(__FILE__).'/domainConfigs/'.$naWebOS->domain.'/database.users.json.php');
-$users = json_decode($usersJSON, true);
-$groupsJSON = require_return(dirname(__FILE__).'/domainConfigs/'.$naWebOS->domain.'/database.groups.json.php');
-$groups = json_decode($groupsJSON, true);
-$naWebOS->dbsAdmin->createUsers($users, $groups);
+//echo require_return(dirname(__FILE__).'/domainConfigs/'.$naWebOS->domain.'/database.users.json.php', true); die();
+
+$users = safeLoadJSONfile(dirname(__FILE__).'/domainConfigs/'.$naWebOS->domain.'/database.users.json.php', true);
+//echo '<pre style="color:black;background:skyblue;">'; var_dump ($users); die();
+//$users = json_decode($usersJSON, true);
+$groups = safeLoadJSONfile(dirname(__FILE__).'/domainConfigs/'.$naWebOS->domain.'/database.groups.json.php', true);
+//$groups = json_decode($groupsJSON, true);
+
+$clientUsersJSONfn = dirname(__FILE__).'/domainConfigs/'.$naWebOS->domain.'/database.users.CLIENT.json.php';
+$clientUsersJSON = (!file_exists($clientUsersJSONfn) ? '' : require_return($clientUsersJSONfn, true));
+$clientUsers = json_decode ($clientUsersJSON, true);
+$clientGroupsJSONfn = dirname(__FILE__).'/domainConfigs/'.$naWebOS->domain.'/database.groups.CLIENT.json.php';
+$clientGroupsJSON = (!file_exists($clientGroupsJSONfn) ? '' : require_return($clientGroupsJSONfn, true));
+$clientGroups = json_decode ($clientGroupsJSON, true);
+
+if (!is_null($clientUsers))
+    $usersFinal = array_merge_recursive($users, $clientUsers);
+else $usersFinal = $users;
+
+if (!is_null($clientGroups))
+    $groupsFinal = array_merge_recursive($groups, $clientGroups);
+else $groupsFinal = $groups;
+
+$naWebOS->dbsAdmin->createUsers($users, $groupsFinal);
+
 $naWebOS->dbsAdmin->clearOutDatabases ($dbs2);
 $naWebOS->dbsAdmin->createDatabases ($dbs);
 $naWebOS->dbsAdmin->resetDatabases ($dbsReset);

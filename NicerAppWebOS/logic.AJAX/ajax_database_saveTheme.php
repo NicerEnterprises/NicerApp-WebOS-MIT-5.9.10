@@ -3,7 +3,7 @@ $rootPathNA = realpath(dirname(__FILE__).'/../..').'/NicerAppWebOS';
 require_once ($rootPathNA.'/boot.php');
 global $naIP;
 
-$debug = false;
+$debug = true;
 if ($debug) {
     echo 'info : '.__FILE__.' : $debug = true.<br/>'.PHP_EOL;
     ini_set('display_errors', 1);
@@ -29,7 +29,7 @@ $cdbDomain = $naWebOS->domainForDB;//str_replace('.','_',$naWebOS->domain);
 
 $cdb = $naWebOS->dbs->findConnection('couchdb')->cdb;
 
-$dataSetName = $cdbDomain.'___data_themes';
+$dataSetName = $cdbDomain.'___themes';
 $cdb->setDatabase($dataSetName, false);
 
 
@@ -92,8 +92,8 @@ $rec2 = array (
     'changeBackgroundsAutomatically' => $_POST['changeBackgroundsAutomatically'],
     'menusFadingSpeed' => $_POST['menusFadingSpeed'],
     'menusUseRainbowPanels' => $_POST['menusUseRainbowPanels'],
-    //'ip' => $naIP,
-    //'ua' => $_SERVER['HTTP_USER_AGENT'],
+    'ip' => $naIP,
+    'ua' => $_SERVER['HTTP_USER_AGENT'],
     'lastUsed' => date('U')
 );
 if (array_key_exists('specificityName',$_POST) && !is_null($_POST['specificityName'])) $rec2['specificityName'] = $_POST['specificityName'];
@@ -103,6 +103,12 @@ if (array_key_exists('view',$_POST) && !is_null($_POST['view'])) $rec2['view'] =
 if (array_key_exists('url',$_POST) && !is_null($_POST['url'])) $rec2['url'] = $_POST['url'];
 if (array_key_exists('role',$_POST) && !is_null($_POST['role'])) $rec2['role'] = $_POST['role'];
 if (array_key_exists('user',$_POST) && !is_null($_POST['user'])) $rec2['user'] = $_POST['user'];
+
+if (!preg_match('/Client$/i', $rec2['specificityName'])) {
+    unset ($rec2['ip']);
+    unset ($rec2['ua']);
+};
+
 
 /*if (session_status() === PHP_SESSION_NONE) {
     ini_set('session.gc_maxlifetime', 3600);

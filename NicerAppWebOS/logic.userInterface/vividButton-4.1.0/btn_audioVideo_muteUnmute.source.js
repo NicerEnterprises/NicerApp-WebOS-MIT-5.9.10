@@ -1,5 +1,5 @@
 if (!na || !na.ui || !na.ui.vividButton) debugger;
-na.ui.vividButton.buttonTypes['btnMuteUnmute'] = {
+na.ui.vividButton.buttonTypes['btn_audioVideo_muteUnmute'] = {
     buttonType : 'btnMuteUnmute',
     startupState : 'unmuted',
     selectedState : 'muted',

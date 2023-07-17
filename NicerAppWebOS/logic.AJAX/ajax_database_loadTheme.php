@@ -34,20 +34,18 @@ if ($debug) $f = fopen($fnl, 'w'); elseif (file_exists($fnl)) unlink ($fnl);
 
 
 global $naWebOS;
-$cdbDomain = $naWebOS->domainForDB; //str_replace('.','_',$naWebOS->domain);
-$cdb = $naWebOS->dbs->findConnection('couchdb')->cdb;
-$dbName = $cdbDomain.'___data_themes';
+$db = $naWebOS->dbs->findConnection('couchdb');
+$cdb = $db->cdb;
+$dbName = $db->dataSetName('themes');
 $cdb->setDatabase($dbName, false);
 try {
     $call = $cdb->getAllDocs();
     //var_dump ($call); exit();
     $callOK = $call->status === '200';
 } catch (Exception $e) {
-    if ($debug) {
-        echo 'info : database does not yet exist ('.$dbName.').<br/>'.PHP_EOL;
-        echo '<pre style="color:red">'.PHP_EOL; var_dump ($e); echo PHP_EOL.'</pre>'.PHP_EOL; 
-       // exit();
-    }
+    echo 'info : database does not yet exist ('.$dbName.').<br/>'.PHP_EOL;
+    echo '<pre style="color:red">'.PHP_EOL; var_dump ($e); echo PHP_EOL.'</pre>'.PHP_EOL;
+    exit();
 }
 
 //var_dump ($cdb->getAllDocs());
@@ -65,8 +63,13 @@ if ($callOK) {
     if (array_key_exists('url',$_POST) && !is_null($_POST['url'])) $findCommand['selector']['url'] = $_POST['url'];
     if (array_key_exists('role',$_POST) && !is_null($_POST['role'])) $findCommand['selector']['role'] = $_POST['role'];
     if (array_key_exists('user',$_POST) && !is_null($_POST['user'])) $findCommand['selector']['user'] = $_POST['user'];
-    //$findCommand['selector']['ip'] = $naIP;
-    //$findCommand['selector']['ua'] = $_SERVER['HTTP_USER_AGENT'];
+    if (
+        array_key_exists('specificityName', $_POST)
+        && preg_match('/client$/', $_POST['specificityName'])
+    ) {
+        $findCommand['selector']['ip'] = $naIP;
+        $findCommand['selector']['ua'] = $_SERVER['HTTP_USER_AGENT'];
+    }
     
     try { 
         $call = $cdb->find ($findCommand);

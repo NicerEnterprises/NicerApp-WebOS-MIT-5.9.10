@@ -53,8 +53,10 @@
 
             <li class="todoList_l1"><div>(DONE) (2023 May) Allow users (and Guests) to specify which theme a new end-user should initially see for a page managed by them on a NicerApp website.</div></li>
 
-            <li class="todoList_l1"><div>(STALLED UNTIL COMPLETION OF <a href="https://github.com/apache/couchdb/pull/4139" class="nomod noPushState contentSectionTitle2_a" target="_new"><span class="contentSectionTitle2_span">THIS</span></a>) (2023) Establish a proper permissions system and add users and groups editing capabilities to <a href="/cms" class="nomod noPushState contentSectionTitle3_a" target="_new"><span class="contentSectionTitle3_span">/cms</span></a>.<br/>
-            The last thing you wanna do in software development is replicate other people's work that you can work with (or soon can).</div></li>
+            <li class="todoList_l1"><div>(CURRENT) (2023) Establish a proper permissions system and add users and groups editing capabilities to <a href="/cms" class="nomod noPushState contentSectionTitle3_a" target="_new"><span class="contentSectionTitle3_span">/cms</span></a> and the Theme Editor.<br/>
+            The last thing you wanna do in software development is replicate other people's work that you can work with (or <a href="https://github.com/apache/couchdb/pull/4139" class="nomod noPushState contentSectionTitle2_a" target="_new"><span class="contentSectionTitle2_span">soon</span></a> can), but since i was advised by the couchdb developers on 2023-06-30 to "not wait for implementation of this functionality by couchdb staff", i'll go ahead and work on implementing these per-doc permissions features in my own new PHP business logic that sits between the PHP 'Sag' library and the rest of my database PHP business logic, as a plugin.</div></li>
+
+            <li class="todoList_l1"><div>(2023) Add a checkbox in the Theme Editor to select backgrounds and stretch instead of tile them for any DIV.</div></li>
 
 
             <li class="todoList_l1"><div>(2023) write 'vividRangeFinder' (a percentage bar with 2 percentage stops)</div></li>

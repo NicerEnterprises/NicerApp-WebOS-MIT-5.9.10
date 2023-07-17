@@ -21,12 +21,12 @@ class class_NicerAppWebOS_database_API {
         $configFilename = 'databases.username-'.$username.'.json';
         //echo '<pre style="color:green">'; var_dump($configFilename); var_dump(file_exists($configFilename)); echo '</pre>';
         if (!file_exists($domainConfigsPath.'/'.$configFilename)) $configFilename = 'databases.username-Guest.json';
-        //echo '<pre style="color:#500000">'; var_dump($configFilename); echo '</pre>';
+        //echo '<pre style="color:lime;background:green;">'; var_dump($configFilename); echo '</pre>';
         if (is_null($dbsConfigFile)) $dbsConfigFile = $domainConfigsPath.'/'.$configFilename;
 
         $exampleConfigFile = $domainConfigsPath.'/databases.jsonConfigFiles.EXAMPLES/'.$configFilename;
 
-        $p = safeJSONload ($dbsConfigFile, $exampleConfigFile);
+        $p = safeLoadJSONfile ($dbsConfigFile, $exampleConfigFile);
         $this->settings = $p;
         //var_dump ($username); var_dump ($dbsConfigFile); var_dump ($p); echo '<br/>';
 
@@ -82,7 +82,7 @@ class class_NicerAppWebOS_database_API {
                 $this->throwError ($fncn.' : Could not initialize .../NicerAppWebOS/3rd-party/adodb5/*', E_USER_WARNING);
                 $this->hasFSdb = false;
             } else {
-                $this->fsDBsettings = safeJSONload ($myPath_domainConfigs_MYDOMAIN_TLD_fsdb_settings_file);
+                $this->fsDBsettings = safeLoadJSONfile ($myPath_domainConfigs_MYDOMAIN_TLD_fsdb_settings_file);
                 $this->hasFSdb = true;
             }
         }
@@ -95,7 +95,7 @@ class class_NicerAppWebOS_database_API {
                 $this->throwError ($fncn.' : Could not initialize .../NicerAppWebOS/3rd-party/adodb5/*', E_USER_WARNING);
                 $this->hasAdodb = false;
             } else {
-                $this->adodbSSLsettings = safeJSONload ($myPath_domainConfigs_MYDOMAIN_TLD_adodb_sslJSONfile);
+                $this->adodbSSLsettings = safeLoadJSONfile ($myPath_domainConfigs_MYDOMAIN_TLD_adodb_sslJSONfile);
                 $this->hasAdodb = true;
             }
 
@@ -307,8 +307,12 @@ class class_NicerAppWebOS_database_API {
         return $this->callAllDataSets ('clearOutDatabases', [$dbs]);
     }
 
-    public function createUsers() {
-        return $this->callAllDataSets ('createUsers');
+    public function setGlobals ($username) {
+        return $this->callAllDataSets ('setGlobals', [$username]);
+    }
+
+    public function createUsers($users, $groups) {
+        return $this->callAllDataSets ('createUsers', [$users, $groups]);
     }
 
     public function createDatabases ($dbs) {
@@ -386,14 +390,14 @@ class class_NicerAppWebOS_database_API {
             $x = call_user_func_array ( [ $c['conn'], $functionName ], $params );
             $localCheck = $this->standardResultHandling($c, $x);
             $r = array_merge ($r, [$localCheck]);
-            if ($localCheck['result']!==true) $failedAtLeastOne = true;
+            if ($localCheck['result']!==true) {
+                $failedAtLeastOne = true;
+                $err = $naErr->addStandardResults ($r);
+                $naLog->add ( [ $err ] );
+            }
         }
 
-        if ($failedAtLeastOne) {
-            $err = $naErr->addStandardResults ($r);
-            $naLog->add ( [ $err ] );
-            return $r;
-        } else return $r;
+        return $r;
     }
 
     public function callDataSet ($ct, $functionName, $params=null) {
@@ -407,15 +411,15 @@ class class_NicerAppWebOS_database_API {
                 $x = call_user_func_array ( [ $c['conn'], $functionName ], $params );
                 $localCheck = $this->standardResultHandling($c, $x);
                 $r = array_merge ($r, [$localCheck]);
-                if ($localCheck['result']!==true) $failedAtLeastOne = true;
+                if ($localCheck['result']!==true) {
+                    $failedAtLeastOne = true;
+                    $err = $naErr->addStandardResults ($r);
+                    $naLog->add ( [ $err ] );
+                }
             }
         }
 
-        if ($failedAtLeastOne) {
-            $err = $naErr->addStandardResults ($r);
-            $naLog->add ( [ $err ] );
-            return $r;
-        } else return $r;
+        return $r;
     }
 
     public function addLogEntries ($entries) {

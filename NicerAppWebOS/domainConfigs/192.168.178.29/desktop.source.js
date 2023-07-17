@@ -746,6 +746,7 @@ na.desktop = {
                 )
             ) // calculationResults_visible
         };
+        //debugger;
         na.m.log (10010, fncn+' : calculated calculationResults_visible', false);
 
         var 
@@ -771,11 +772,11 @@ na.desktop = {
         if (visibleDivs.includes('#siteToolbarLeft')) c.order.push('#siteToolbarLeft');
         if (visibleDivs.includes('#siteToolbarRight')) c.order.push('#siteToolbarRight');
         if (visibleDivs.includes('#siteToolbarTop')) c.order.push('#siteToolbarTop');
-        */
-        c.order.push ('#siteContent');
         c.order.push ('#siteVideo');
         c.order.push ('#siteVideoSearch');
+        */
         c.order.push ('#siteComments');
+        c.order.push ('#siteContent');
         
         if (c['#siteContent']) {
             let gtl = c['#siteContent'].growToLimits;

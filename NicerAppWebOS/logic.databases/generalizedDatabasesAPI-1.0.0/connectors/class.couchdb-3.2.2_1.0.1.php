@@ -9,8 +9,8 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
     public $connectionType = 'couchdb';
     public $debug = false;
     public $ip;
-    public $security_admin = '{ "admins": { "names": [], "roles": ["administrators"] }, "members": { "names": [], "roles": ["administrators","guests"] } }';
-    public $security_guest = '{ "admins": { "names": [], "roles": ["guests"] }, "members": { "names": [], "roles": ["guests"] } }';
+    public $security_admin = null;//'{ "admins": { "names": [], "roles": ["administrators"] }, "members": { "names": [], "roles": ["administrators","guests"] } }';
+    public $security_guest = null;//'{ "admins": { "names": [], "roles": ["guests"] }, "members": { "names": [], "roles": ["guests"] } }';
     public $naWebOS;
     public $cdb;
     public $cdb_slr;
@@ -23,10 +23,13 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
 
         if (is_null($naWebOS)) $this->throwError('__construct($naWebOS) : invalid $naWebOS', E_USER_ERROR);
         $this->cms = $naWebOS;
+        //$db = $naWebOS->dbs->findConnection('couchdb');
         
         $this->connectionSettings = $cRec;
 
-        $admin = $username=='admin';
+        $admin = (
+            $username==$this->translate_plainUserName_to_couchdbUserName($naWebOS->ownerInfo['OWNER_NAME'])
+        );
 
         $this->cdb = new Sag($cRec['host'], $cRec['port']);
         $this->cdb->setHTTPAdapter($cRec['httpAdapter']);
@@ -135,6 +138,99 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
         return $this;
     }
 
+    public function setGlobals ($username) {
+        global $naWebOS;
+        $users = safeLoadJSONfile(
+            realpath(dirname(__FILE__).'/../../../..')
+            .'/NicerAppWebOS/domainConfigs/'.$naWebOS->domain.'/database.users.json.php'
+        );
+        //echo '<pre style="color:skyblue;background:rgba(0,50,0,0.7);">'; var_dump ($users); echo '</pre>'; die();
+        //$users = json_decode($usersJSON, true);
+        $groups = safeLoadJSONfile(
+            realpath(dirname(__FILE__).'/../../../..')
+            .'/NicerAppWebOS/domainConfigs/'.$naWebOS->domain.'/database.groups.json.php'
+        );
+        //$groups = json_decode($groupsJSON, true);
+
+        $clientUsersJSONfn = //dirname(__FILE__).'/domainConfigs/'.$naWebOS->domain.'/database.users.CLIENT.json.php';
+            realpath(dirname(__FILE__).'/../../../..')
+            .'/NicerAppWebOS/domainConfigs/'.$naWebOS->domain.'/database.users.CLIENT.json.php';
+
+        $clientUsersJSON = (!file_exists($clientUsersJSONfn) ? '' : require_return($clientUsersJSONfn));
+        $clientUsers = json_decode ($clientUsersJSON, true);
+
+        $clientGroupsJSONfn = //dirname(__FILE__).'/domainConfigs/'.$naWebOS->domain.'/database.groups.CLIENT.json.php';
+            realpath(dirname(__FILE__).'/../../../..')
+            .'/NicerAppWebOS/domainConfigs/'.$naWebOS->domain.'/database.groups.CLIENT.json.php';
+
+
+        $clientGroupsJSON = (!file_exists($clientGroupsJSONfn) ? '' : require_return($clientGroupsJSONfn));
+        $clientGroups = json_decode ($clientGroupsJSON, true);
+
+        if (!is_null($clientUsers))
+            $usersFinal = array_merge_recursive($users, $clientUsers);
+        else $usersFinal = $users;
+
+        if (!is_null($clientGroups))
+            $groupsFinal = array_merge_recursive($groups, $clientGroups);
+        else $groupsFinal = $groups;
+
+
+        if (is_null($users)) {
+            echo '<pre style="color:yellow;background:brown;">t3332:is_null($users);'.PHP_EOL;
+            echo json_encode(debug_backtrace(), JSON_PRETTY_PRINT);
+            echo '</pre>';
+        }
+        //echo '<pre style="color:green;">'.$username.'</pre>';
+        if (!is_null($usersFinal))
+        foreach ($usersFinal as $username1 => $userDoc) {
+            $dbg = [
+                'username1-tr' => $this->translate_plainUserName_to_couchdbUserName($username1),
+                'username' => $username
+            ];
+            //echo '<pre style="color:blue;">'; var_dump ($dbg); echo '</pre>';
+            if (
+                $this->translate_plainUserName_to_couchdbUserName($username1)===$username
+                || $username1===$username
+            ) {
+               //echo '<pre>'.$this->translate_plainUserName_to_couchdbUserName($username1).'==='.$username.'</pre>';
+                $g = [];
+                //echo '<pre>'; var_dump($userDoc); echo '</pre>';
+                foreach ($userDoc['groups'] as $idx => $gn) {
+                    $g[] = $this->translate_plainGroupName_to_couchdbGroupName($gn);
+                };
+                //echo '<pre>'; var_dump ($g); echo '</pre>';
+
+                $this->security_admin = json_encode([
+                    "admins" => [
+                        "names" => [],
+                        "roles" => $g
+                    ],
+                    "members" => [
+                        "names" => [],
+                        "roles" => $g
+                    ]
+                ]);
+
+
+                $g = [];
+                $g[] = $this->translate_plainGroupName_to_couchdbGroupName('Guests');
+
+                $this->security_guest = json_encode([
+                    "admins" => [
+                        "names" => [],
+                        "roles" => $g
+                    ],
+                    "members" => [
+                        "names" => [],
+                        "roles" => $g
+                    ]
+                ]);
+            }
+        }
+
+    }
+
     
     public function throwError ($msg, $errorLevel) {
         echo '<pre class="nicerapp_error__database">$msg='.$msg.', $errorLevel='.$errorLevel.'</pre>';
@@ -154,75 +250,74 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
         $domainName = $this->dataSetName_domainName($naWebOS->domain);
         $dataSetName = $domainName.'___'.str_replace('.','_',$dbSuffix);
         $dataSetName = strtolower($dataSetName);
-        if (preg_match('/^\d/', $dataSetName)) $dataSetName = 'number_'.$dataSetName;
         return $dataSetName;
     }
 
     public function dbName ($dbSuffix) {
         return $this->dataSetName($dbSuffix);
     }
-    
-    public function createUsers($groups=null) {
-        // $groups is defined in .../NicerAppWebOS/db_init.php
 
-
-        // create users
+    public function translate_plainUserName_to_couchdbUserName ($un) {
         global $naWebOS;
-        $uid = 'org.couchdb.user:'.$this->dataSetName_domainName($naWebOS->domain).'___Administrator';
-        //var_dump ($uid); die();
-        $got = true;
-        $this->cdb->setDatabase('_users',false);
         $dn = $this->dataSetName_domainName($naWebOS->domain);
-        try { $call = $this->cdb->get($uid); } catch (Exception $e) { $got = false; }
-        if (!$got) {
+        return $dn.'___'.str_replace('.','__',str_replace(' ', '_', $un));
+    }
+    public function translate_couchdbUserName_to_plainUserName ($un) {
+        $un = preg_replace('/.*___/','', $un);
+        return str_replace('_',' ',str_replace('__', '.', $un));
+    }
+
+    public function translate_plainGroupName_to_couchdbGroupName ($gn) {
+        global $naWebOS;
+        $dn = $this->dataSetName_domainName($naWebOS->domain);
+        return $dn.'___'.str_replace('.','__',str_replace(' ', '_', $gn));
+    }
+    public function translate_couchdbGroupName_to_plainGroupName ($gn) {
+        $gn = preg_replace('/.*___/','', $gn);
+        return str_replace('_',' ',str_replace('__', '.', $gn));
+    }
+
+
+    public function createUsers($users=null, $groups=null) {
+        // $users and $groups are defined in .../NicerAppWebOS/db_init.php (bottom of the file).
+        global $naWebOS;
+        //echo '<pre>633:'; var_dump ($users); die();
+        foreach ($users as $userName => $userDoc) {
+            $dn = $this->dataSetName_domainName($naWebOS->domain);
+            $uid = 'org.couchdb.user:'.$this->translate_plainUserName_to_couchdbUserName($userName);
+            //var_dump ($uid); die();
+            $got = true;
+            $this->cdb->setDatabase('_users',false);
+            try { $call = $this->cdb->get($uid); } catch (Exception $e) { $got = false; }
+            $g = [];
+            foreach ($userDoc['groups'] as $idx => $gn) {
+                $g[] = $this->translate_plainGroupName_to_couchdbGroupName($gn);
+            };
             try {
                 $rec = array (
                     '_id' => $uid,
-                    'name' => $dn.'___Administrator',
-                    'password' => (array_key_exists('AdministratorPassword',$_REQUEST) ? $_REQUEST['AdministratorPassword'] : 'Administrator'), 
-                    'realname' => 'NicerApp WebOS Administrator',
-                    'email' => (array_key_exists('AdministratorEmail',$_REQUEST) ? $_REQUEST['AdministratorEmail'] : 'root@localhost'), 
-                    'roles' => [ "guests", "administrators", "editors" ], 
+                    'name' => $this->translate_plainUserName_to_couchdbUserName($userName),
+                    'password' => $userDoc['password'],
+                    'realname' => $userDoc['realname'],
+                    'email' => $userDoc['email'],
+                    'roles' => $g, // a CouchDB 'role' is a SQL 'group'.
                     'type' => "user"
                 );
+                if ($got) $rec['_rev'] = $call->body->_rev;
                 $call = $this->cdb->post ($rec);
-                if ($call->body->ok) echo 'Created Administrator user record.<br/>'; else echo '<span style="color:red">Could not create Administrator user record.</span><br/>';
+                if ($call->body->ok) echo (!$got?'Created ':'Updated ').$this->translate_plainUserName_to_couchdbUserName($userName).' user document in database _users.<br/>'; else echo '<span style="color:red">Could not '.(!$got?'create ':'update ').$this->translate_plainUserName_to_couchdbUserName($userName).' user document in database _users.</span><br/>';
             } catch (Exception $e) {
                 echo '<pre style="color:red">'; var_dump ($e); echo '</pre>';
             }
-        } else {
-            echo 'Already have an Administrator user record.<br/>';
+
+
         }
 
-        $uid = 'org.couchdb.user:'.$dn.'___Guest';
-        $got = true;
-        $this->cdb->setDatabase('_users',false);
-        try { $call = $this->cdb->get($uid); } catch (Exception $e) { $got = false; }
-        if (!$got) {
-            try {
-                $rec = array (
-                    '_id' => $uid, 
-                    'name' => $dn.'___Guest',
-                    'password' => 'Guest', 
-                    'realname' => 'NicerApp WebOS Guest',
-                    'email' => 'guest@localhost', 
-                    'roles' => [ "guests" ], 
-                    'type' => "user"
-                );
-                $call = $this->cdb->post ($rec);
-                if ($call->body->ok) echo 'Created Guest user record.<br/>'; else echo '<span style="color:red">Could not create Guest user record.</span><br/>';
-            } catch (Exception $e) {
-                echo '<pre style="color:red">'; var_dump ($e); echo '</pre>';
-            }
-        } else {
-            echo 'Already have a Guest user record.<br/>';
-        }
-
+        /* not using this yet :
         $dataSetName = $this->dataSetName('cms_groups');
         try { $this->cdb->deleteDatabase ($dataSetName); } catch (Exception $e) { };
         $this->cdb->setDatabase($dataSetName, true);
-
-
+        */
 
         return true;
     }
@@ -232,11 +327,11 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
         foreach ($dbs as $dataSetName=>$mustDo) {
             $dbsArr[] = strtolower($dataSetName);
         }
-        //echo '<pre>'; var_dump ($dbs); echo '</pre>';
+        //echo '<pre style="color:red">'; var_dump ($dbs); echo '</pre>'; die();
 
         //$this->debug = true;
         $allDBs = $this->cdb->getAllDatabases();
-        if ($this->debug) echo '<pre style="color:green">'; var_dump($dbs); echo '</pre>';
+        if ($this->debug) { echo '<pre style="color:green">'; var_dump($dbs); echo '</pre>'; }
         foreach ($allDBs->body as $idx => $dataSetName) {
             $domainName = $this->dataSetName_domainName($this->cms->domain);
             $dataSetName = strtolower($dataSetName);
@@ -285,7 +380,8 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
         $dataSetName = $this->dataSetName('analytics');
         //try { $this->cdb->deleteDatabase ($dataSetName); } catch (Exception $e) { };
         $this->cdb->setDatabase($dataSetName,true);
-
+        //echo '<pre>'; var_dump ($this->security_guest); echo '</pre>'; die();
+        if (is_null($this->security_guest)) { trigger_error ('FATAL ERROR : $this->security_guest is null. see $this->setGlobals()', E_USER_ERROR); die(); }
         try { 
             $call = $this->cdb->setSecurity ($this->security_guest);
         } catch (Exception $e) {
@@ -403,7 +499,7 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
         echo 'Created database '.$dataSetName.'<br/>';
     }
 
-    public function createDataSet_cms_tree__role__guests() {
+    public function createDataSet_cms_tree___role___guests() {
         $dataSetName = $this->dataSetName('cms_tree___role___guests');
         try { $this->cdb->deleteDatabase ($dataSetName); } catch (Exception $e) { };
         $this->cdb->setDatabase($dataSetName, true);
@@ -428,7 +524,7 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
         echo 'Created database '.$dataSetName.'<br/>';
     }
 
-    public function createDataSet_cms_tree__user__administrator() {
+    public function createDataSet_cms_tree___user___administrator() {
         $dataSetName = $this->dataSetName('cms_tree___user___administrator');
         try { $this->cdb->deleteDatabase ($dataSetName); } catch (Exception $e) { };
         $this->cdb->setDatabase($dataSetName, true);
@@ -453,7 +549,7 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
         echo 'Created database '.$dataSetName.'<br/>';
     }
 
-    public function createDataSet_cms_tree__user__guest() {
+    public function createDataSet_cms_tree___user___guest() {
 
         $dataSetName = $this->dataSetName('cms_tree___user___guest');
         $dataSetName = strToLower($dataSetName);
@@ -485,7 +581,7 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
         echo 'Created database '.$dataSetName.'<br/>';
     }
 
-    public function createDataSet_cms_documents__user__administrator() {
+    public function createDataSet_cms_documents___user___administrator() {
         $dataSetName = $this->dataSetName('cms_documents___user___administrator');
         try { $this->cdb->deleteDatabase ($dataSetName); } catch (Exception $e) { };
         $this->cdb->setDatabase($dataSetName, true);
@@ -497,7 +593,7 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
         if ($this->debug) echo 'Created database '.$dataSetName.'<br/>';
     }
 
-    public function createDataSet_cms_documents__user__guest() {
+    public function createDataSet_cms_documents___user___guest() {
         $dataSetName = $this->dataSetName('cms_documents___user___guest');
         try { $this->cdb->deleteDatabase ($dataSetName); } catch (Exception $e) { };
         $this->cdb->setDatabase($dataSetName, true);
@@ -514,7 +610,7 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
         echo 'Created database '.$dataSetName.'<br/>';
     }
 
-    public function createDataSet_cms_documents__role__guests() {
+    public function createDataSet_cms_documents___role___guests() {
         $dataSetName = $this->dataSetName('cms_documents___role___guests');
         try { $this->cdb->deleteDatabase ($dataSetName); } catch (Exception $e) { };
         $this->cdb->setDatabase($dataSetName, true);
@@ -535,10 +631,10 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
         echo 'Created database '.$dataSetName.'<br/>';
     }
 
-    public function createDataSet_data_themes() {
+    public function createDataSet_themes() {
         // TODO : error handling
 
-        $dataSetName = $this->dataSetName('data_themes');
+        $dataSetName = $this->dataSetName('themes');
         try { $this->cdb->deleteDatabase ($dataSetName); } catch (Exception $e) { };
         $this->cdb->setDatabase($dataSetName, true);
         //if ($this->debug) { echo '<pre style="color:orange;background:navy;">'; var_dump ($cdb); echo '</pre>';  }
@@ -554,18 +650,22 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
             '_id' => cdb_randomString(20),
             'lastUsed' => time(),
             'orientation' => 'portrait',
-            'role' => 'guests',
+            'role' => $this->translate_plainGroupName_to_couchdbGroupName('Guests'),
             'theme' => 'default',
-            'specificityName' => 'site',
+            'specificityName' => 'site (for all viewers)',
             'menusFadingSpeed' => 400,
             'menusUseRainbowPanels'=> true,
             'textBackgroundOpacity' => 0.38,
             'lastUsed' => time(),
             'themeSettings' => array_merge_recursive(
-                            cssArray_seperate('Dialogs', [ '/\.vivid([\w]+)[\s\.\>\#\w]*/' , '/#site([\w]+)[\s\.\>\#\w]*/' ], css_to_array (file_get_contents(
-                                realpath(dirname(__FILE__).'/../../../..')
-                                .'/NicerAppWebOS/themes/nicerapp_default_siteContent-almost-transparent.css'
-                            )))
+                cssArray_seperate('Dialogs', [
+                        '/\.vivid([\w]+)[\s\.\>\#\w]*/' ,
+                        '/#site([\w]+)[\s\.\>\#\w]*/'
+                    ], css_to_array (file_get_contents(
+                        realpath(dirname(__FILE__).'/../../../..')
+                        .'/NicerAppWebOS/themes/nicerapp_default_siteContent-almost-transparent.css'
+                    ))
+                )
             )
 /*
             'dialogs' => css_to_array (file_get_contents(
@@ -584,18 +684,21 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
             '_id' => cdb_randomString(20),
             'lastUsed' => time(),
             'orientation' => 'landscape',
-            'role' => 'guests',
+            'role' => $this->translate_plainGroupName_to_couchdbGroupName('Guests'),
             'theme' => 'default',
-            'specificityName' => 'site',
+            'specificityName' => 'site (for all viewers)',
             'menusFadingSpeed' => 400,
             'menusUseRainbowPanels'=> true,
             'textBackgroundOpacity' => 0.38,
             'lastUsed' => time(),
             'themeSettings' => array_merge_recursive(
-                            cssArray_seperate('Dialogs', [ '/\.vivid([\w]+)[\s\.\>\#\w]*/' , '/#site([\w]+)[\s\.\>\#\w]*/' ], css_to_array (file_get_contents(
-                                realpath(dirname(__FILE__).'/../../../..')
-                                .'/NicerAppWebOS/themes/nicerapp_default_siteContent-almost-transparent.css'
-                            )))
+                cssArray_seperate('Dialogs', [
+                    '/\.vivid([\w]+)[\s\.\>\#\w]*/' ,
+                    '/#site([\w]+)[\s\.\>\#\w]*/' ], css_to_array (file_get_contents(
+                        realpath(dirname(__FILE__).'/../../../..')
+                        .'/NicerAppWebOS/themes/nicerapp_default_siteContent-almost-transparent.css'
+                    ))
+                )
             )
 /*
             'dialogs' => css_to_array (file_get_contents(
@@ -616,22 +719,27 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
             '_id' => cdb_randomString(20),
             'lastUsed' => time(),
             'orientation' => 'portrait',
-            'view' => '/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/musicPlayer',
-            'role' => 'guests',
+            'app' => '/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/musicPlayer',
+            'role' => $this->translate_plainGroupName_to_couchdbGroupName('Guests'),
             'theme' => 'default',
             'menusFadingSpeed' => 400,
             'menusUseRainbowPanels' => true,
             'textBackgroundOpacity' => 0.38,
             'themeSettings' => array_merge_recursive(
-                            cssArray_seperate('Dialogs', [ '/\.vivid([\w]+)[\s\.\>\#\w]*/' , '/#site([\w]+)[\s\.\>\#\w]*/' ], css_to_array (file_get_contents(
-                                realpath(dirname(__FILE__).'/../../../..')
-                                .'/NicerAppWebOS/themes/nicerapp_default_siteContent-almost-transparent.css'
-                            ))),
-                            cssArray_seperate('App', [ '/\.vivid([\w]+)[\s\.\>\#\w]*/' , '/#app__musicPlayer__([\w]+)[\s\.\>\#\w]*/' ],
-                                css_to_array (file_get_contents(
-                                    realpath(dirname(__FILE__).'/../../../..').'/NicerAppWebOS/themes/nicerapp_app.2D.musicPlayer-v2.css'
-                                ))
-                            )
+                cssArray_seperate('Dialogs', [
+                    '/\.vivid([\w]+)[\s\.\>\#\w]*/' ,
+                    '/#site([\w]+)[\s\.\>\#\w]*/' ], css_to_array (file_get_contents(
+                        realpath(dirname(__FILE__).'/../../../..')
+                        .'/NicerAppWebOS/themes/nicerapp_default_siteContent-almost-transparent.css'
+                    ))
+                ),
+                cssArray_seperate('App', [
+                    '/\.vivid([\w]+)[\s\.\>\#\w]*/' ,
+                    '/#app__musicPlayer__([\w]+)[\s\.\>\#\w]*/'
+                ], css_to_array (file_get_contents(
+                        realpath(dirname(__FILE__).'/../../../..').'/NicerAppWebOS/themes/nicerapp_app.2D.musicPlayer-v2.css'
+                    ))
+                )
             )
         );
         if ($this->debug) { echo '<pre style="color:blue">'; var_dump ($rec); var_dump ($cdb); echo '</pre>'; }
@@ -644,22 +752,27 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
             '_id' => cdb_randomString(20),
             'lastUsed' => time(),
             'orientation' => 'landscape',
-            'view' => '/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/musicPlayer',
-            'role' => 'guests',
+            'app' => '/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/musicPlayer',
+            'role' => $this->translate_plainGroupName_to_couchdbGroupName('Guests'),
             'theme' => 'default',
             'menusFadingSpeed' => 400,
             'menusUseRainbowPanels' => true,
             'textBackgroundOpacity' => 0.38,
             'themeSettings' => array_merge_recursive(
-                            cssArray_seperate('Dialogs', [ '/\.vivid([\w]+)[\s\.\>\#\w]*/' , '/#site([\w]+)[\s\.\>\#\w]*/' ], css_to_array (file_get_contents(
-                                realpath(dirname(__FILE__).'/../../../..')
-                                .'/NicerAppWebOS/themes/nicerapp_default_siteContent-almost-transparent.css'
-                            ))),
-                            cssArray_seperate('App', [ '/\.vivid([\w]+)[\s\.\>\#\w]*/' , '/#app__musicPlayer__([\w]+)[\s\.\>\#\w]*/' ],
-                                css_to_array (file_get_contents(
-                                    realpath(dirname(__FILE__).'/../../../..').'/NicerAppWebOS/themes/nicerapp_app.2D.musicPlayer-v2.css'
-                                ))
-                            )
+                cssArray_seperate('Dialogs', [
+                    '/\.vivid([\w]+)[\s\.\>\#\w]*/' ,
+                    '/#site([\w]+)[\s\.\>\#\w]*/' ], css_to_array (file_get_contents(
+                        realpath(dirname(__FILE__).'/../../../..')
+                        .'/NicerAppWebOS/themes/nicerapp_default_siteContent-almost-transparent.css'
+                    ))
+                ),
+                cssArray_seperate('App', [
+                    '/\.vivid([\w]+)[\s\.\>\#\w]*/' ,
+                    '/#app__musicPlayer__([\w]+)[\s\.\>\#\w]*/'
+                ], css_to_array (file_get_contents(
+                        realpath(dirname(__FILE__).'/../../../..').'/NicerAppWebOS/themes/nicerapp_app.2D.musicPlayer-v2.css'
+                    ))
+                )
             )
         );
         if ($this->debug) { echo '<pre style="color:blue">'; var_dump ($rec); var_dump ($cdb); echo '</pre>'; }
@@ -1171,54 +1284,59 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
             return false;
         }
         
-        $dataSetName = $this->dataSetName('data_themes');
+        $dataSetName = $this->dataSetName('themes');
         $this->cdb->setDatabase($dataSetName, false);
         $call = $this->cdb->getAllDocs();
 
-        //echo '<pre>'; //var_dump ($call);
+        //echo '<pre>'; var_dump ($call); echo '</pre>';
         foreach ($call->body->rows as $idx => $row) {
             $call2 = $this->cdb->get($row->id);
-            //var_dump ($call2);
+            //echo '<pre style="color:blue">'; var_dump ($call2); echo '</pre>';
+
             if (property_exists($call2->body,'theme')) {
                 $theme = $call2->body->theme;
+                //echo '<pre style="color:blue">'; var_dump ($theme); echo '</pre>';
                 
                 if ($call2->body->theme==$oldThemeName) {
                     $updatedData = (array)$call2->body;
                     $updatedData['theme'] = $newThemeName;
                     $response = $this->cdb->put ($call2->body->_id, $updatedData);
-                    return $response->body->ok;
+                    //echo '<pre>'; var_dump ($response); echo '</pre>'; die();
+                    if (!$response->body->ok) return false;
                 }
             }
         }
+        return true;
     }
 
     public function delete_allThemes_byName ($themeName) {
         if ($themeName=='default') {
-            echo 'ERROR : can not the delete themes which are named "default".<br/>(please use '.PHP_EOL;
+            echo 'ERROR : can not the delete themes which are named "default".<br/>'.PHP_EOL;
             return false;
         }
         
-        $dataSetName = $this->dataSetName('data_themes');
+        $dataSetName = $this->dataSetName('themes');
         $this->cdb->setDatabase($dataSetName, false);
         $call = $this->cdb->getAllDocs();
 
         //echo '<pre>'; //var_dump ($call);
         foreach ($call->body->rows as $idx => $row) {
-            $call2 = $this->cdb->get($row->id);
+            try { $call2 = $this->cdb->get($row->id); } catch (Exception $e) { return false; }
             //var_dump ($call2);
             if (property_exists($call2->body,'theme')) {
                 if ($call2->body->theme==$themeName) {
                     $response = $this->cdb->delete ($call2->body->_id, $call2->body->_rev);
-                    try { $call3 = $this->cdb->get($row->id); } catch (Exception $e) { $call3 = false; }
-                    while ($call3 && $call3->body->ok) {
-                        $this->cdb->delete ($call3->body->_id, $call3->body->_rev);
-                        try { $call3 = $this->cdb->get($row->id); } catch (Exception $e) { $call3 = false; }
-                    }
+                    //try { $call3 = $this->cdb->get($row->id); } catch (Exception $e) { $call3 = false; }
+                    //while ($call3 && $call3->body->ok) {
+                        //$this->cdb->delete ($call3->body->_id, $call3->body->_rev);
+                        //try { $call3 = $this->cdb->get($row->id); } catch (Exception $e) { $call3 = false; }
+                    //}
                     
-                    return $call3->body->ok || $response->body->ok;
+                    //if (is_bool($call3)) return $call3;
                 }
             }
         }
+        return true;
     }
 
     public function testDBconnection() {
@@ -1326,20 +1444,72 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
                 && $_POST['role']!==''
             ) $document['role'] = $_POST['role'];
 
-            try { $call = $this->cdb->get ($_POST['id']); $document['_rev'] = $call->body->_rev; } catch (Exception $e) { };
+            try {
+                $call = $this->cdb->get ($_POST['id']);
+                $document['_rev'] = $call->body->_rev;
+
+                // permissions check
+                if (!$this->permissionsCheck ($call, ['write'])) {
+                    cdb_error (403, null, 'Permission denied to update document in '.$dataSetName);
+                    exit();
+                }
+
+            } catch (Exception $e) { };
 
             try { $call = $this->cdb->post($document); } catch (Exception $e) { cdb_error (500, $e, 'Could not add/update document in '.$dataSetName); exit(); };
 
         } elseif (count($call->body->docs)===1) {
             global $toArray;
 
-            try { $call = $this->cdb->get ($call->body->docs[0]->_id); $document2 = $toArray($call->body); $document = array_merge ($document2, $overlay); } catch (Exception $e) { };
+            try {
+                $call = $this->cdb->get ($call->body->docs[0]->_id);
+                $document2 = $toArray($call->body);
+                $document = array_merge ($document2, $overlay);
+                if (!$this->permissionsCheck ($call, ['write'])) {
+                    cdb_error (403, null, 'Permission denied to update document in '.$dataSetName);
+                    exit();
+                }
+            } catch (Exception $e) { };
 
             try { $call = $this->cdb->post($document); } catch (Exception $e) { cdb_error (500, $e, 'Could not add/update document in '.$dataSetName); return false; };
 
         } elseif (count($call->body->docs) > 1) {
             $msg = $fncn.' : more than 1 document returned.';
             trigger_error ($msg, E_USER_WARNING);
+        }
+        return true;
+    }
+
+    public function permissionsCheck ($call, $permissionsRequested) {
+        if (!property_exists('body', $call)) return false;
+        foreach ($call->body as $idx => $doc) {
+            if (property_exists('na_permissions', $doc)) {
+                $p = $toArray($doc->na_permissions);
+                foreach ($permissionsRequested as $idx2 => $pr) {
+                    if (array_key_exists($pr, $p)) {
+                        $userHasPermission = false;
+                        $groupHasPermission = false;
+                        foreach ($p[$pr] as $idx2 => $pl) {
+                            $s = explode(':', $pl);
+                            switch ($s[0]) {
+                                case 'user': if ($s[1] == $this->username) $userHasPermission = true; break;
+                                case 'group':
+                                    foreach ($this->roles as $idx3 => $roleName) {
+                                        if ($s[1] == $roleName) {
+                                            $groupHasPermission = true;
+                                            break;
+                                        }
+                                    }
+                                    break;
+                            }
+                        }
+                        if (
+                            !$userHasPermission
+                            && !$groupHasPermission
+                        ) return false;
+                    }
+                }
+            }
         }
         return true;
     }

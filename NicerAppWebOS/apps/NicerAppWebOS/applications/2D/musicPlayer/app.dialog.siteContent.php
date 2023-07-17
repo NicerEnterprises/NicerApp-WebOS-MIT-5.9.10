@@ -106,7 +106,7 @@ $spacer = "\n\t\t\t\t";
 			asort ($filez);
 			foreach ($filez as $idx=>$fn) {
 				$id = 'mp3_'.$idx;
-				echo "\t\t".'<div id="'.$id.'" file="'.basename($files[$idx]).'" class="mp3 vividButton" theme="dark" style="" onclick="na.mp.selectMP3(\''.$id.'\', \''.basename($files[$idx]).'\');" style="width:220px">'.$fn.'</div>'."\n";
+				echo "\t\t".'<div id="'.$id.'" file="'.basename($files[$idx]).'" class="mp3 vividButton" theme="dark" style="" onclick="na.mp.selectMP3(\''.$id.'\', \''.basename($files[$idx]).'\');" style="width:220px"><div class="vdBackground"></div><span style="opacity:1">'.$fn.'</span></div>'.PHP_EOL;
 			}
 ?> 
 	</div>
@@ -154,8 +154,8 @@ $spacer = "\n\t\t\t\t";
 	</div>
 	
 	<div id="app__musicPlayer__description" class="vividDialog" theme="dark" style="opacity:0.001;overflow:visible;position:absolute;width:320px;height:300px;">
-        <div class="vividDialogContent">
-            <div id="mp3descText"></div>
+        <div class="vividDialogContent" style="font-size:inherit">
+            <div id="mp3descText" style="font-size:inherit"></div>
             <div id="siteIntroText">
                 
                 <?php //echo $htmlIntro?>

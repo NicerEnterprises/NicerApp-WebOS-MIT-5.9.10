@@ -89,17 +89,17 @@
     </style>
     <div class="container">
     <div class="bg">
-        <h1 id="pageTitle" style="font-size:200%;">nicer.app music collections</h1>
+        <h1 id="pageTitle" class="vt" style="font-size:200%;">nicer.app music collections</h1>
         <p>
-        <a class="contentSectionTitle3_a" href="<?php echo $naURLs['music_index__Sabaton']?>"><span class="contentSectionTitle3_span">Sabaton - 2022 recent hits</span></a>
+        <a class="contentSectionTitle3_a vt" href="<?php echo $naURLs['music_index__Sabaton']?>"><span class="contentSectionTitle3_span vt">Sabaton - 2022 recent hits</span></a>
         <br/><br/>
-        <a class="contentSectionTitle3_a" href="<?php echo $naURLs['music_index__DJ_Firesnake']?>"><span class="contentSectionTitle3_span">DJ FireSnake</span></a>
+        <a class="contentSectionTitle3_a vt" href="<?php echo $naURLs['music_index__DJ_Firesnake']?>"><span class="contentSectionTitle3_span vt">DJ FireSnake</span></a>
         <br/><br/>
-        <a class="contentSectionTitle3_a" href="<?php echo $naURLs['music_index__Deep_House']?>"><span class="contentSectionTitle3_span">Deep House</span></a>
+        <a class="contentSectionTitle3_a vt" href="<?php echo $naURLs['music_index__Deep_House']?>"><span class="contentSectionTitle3_span vt">Deep House</span></a>
         <br/><br/>
-        <a class="contentSectionTitle3_a" href="<?php echo $naURLs['music_index__Black_Horse__Mongolian_Traditional_Classical_Music_Art']?>"><span class="contentSectionTitle3_span">Black Horse - Mongolian Traditional Classical Music Art</span></a>
+        <a class="contentSectionTitle3_a vt" href="<?php echo $naURLs['music_index__Black_Horse__Mongolian_Traditional_Classical_Music_Art']?>"><span class="contentSectionTitle3_span vt">Black Horse - Mongolian Traditional Classical Music Art</span></a>
         <br/><br/>
-        <a class="contentSectionTitle3_a" href="<?php echo $naURLs['music_index__Beautiful_Chill_Mixes']?>"><span class="contentSectionTitle3_span">Beautiful Chill Mixes</span></a>
+        <a class="contentSectionTitle3_a vt" href="<?php echo $naURLs['music_index__Beautiful_Chill_Mixes']?>"><span class="contentSectionTitle3_span vt">Beautiful Chill Mixes</span></a>
         </p>
     </div>
     </div>

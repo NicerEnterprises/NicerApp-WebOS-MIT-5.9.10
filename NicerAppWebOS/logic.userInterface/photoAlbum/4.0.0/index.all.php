@@ -61,8 +61,8 @@ error_reporting(E_ALL);
         $dbList .= $dbName.'<br/>';
         
         if (
-            (strpos($dbName,'tree__role')!==false)
-            || (strpos($dbName,'tree__user')!==false)
+            (strpos($dbName,'tree___role')!==false)
+            || (strpos($dbName,'tree___user')!==false)
         ) {
             $do = true;
             try { $db = $cdb->setDatabase($dbName,false); } catch (Exception $e) { echo $e->getMessage(); echo '<br/>'; $do = false; exit(); }
@@ -76,7 +76,7 @@ error_reporting(E_ALL);
     set_time_limit(5 * 60);
                     $it = $cdb->get($docs->body->rows[$i]->id);
                     //echo '<pre style="color:red;">'; var_dump ($it); echo '</pre>'; exit();
-                    if ($it->body->type==='naMediaFolder') {
+                    if ($it->body->type==='naMediaAlbum') {
                         $j = $i;
                         $it2 = $cdb->get($docs->body->rows[$j]->id);
                         $parentsURL = $it2->body->text;
@@ -96,8 +96,8 @@ error_reporting(E_ALL);
                         }
                     }
                     if ($parentsURL!=='') {
-                        if (strpos($dbName,'tree__user')!==false) $parentsURL = 'Users/'.$parentsURL;
-                        if (strpos($dbName,'tree__role')!==false) $parentsURL = 'Groups/'.$parentsURL;
+                        if (strpos($dbName,'tree___user')!==false) $parentsURL = 'Users/'.$parentsURL;
+                        if (strpos($dbName,'tree___role')!==false) $parentsURL = 'Groups/'.$parentsURL;
                         //echo '<pre style="color:lime;font-weight:bold;">'; var_dump ($baseDir.'/'.$parentsURL); echo '</pre>';
                         if (is_string(realpath($baseDir.'/'.$parentsURL))) array_push($albums, $parentsURL);
                     }
@@ -165,7 +165,7 @@ error_reporting(E_ALL);
                     //echo '<pre style="color:black;background:white;border-radius:3px;border:1px solid black;">'; var_dump ($dbg); echo '</pre>';
                     echo '<div style="overflow:hidden;position:relative;width:500px;height:225px;margin:5px;padding:10px;padding-top:20px;border-radius:10px;border:1px solid black;background:rgba(0,0,0,0.7);box-shadow:2px 2px 2px rgba(0,0,0,0.5), inset 1px 1px 1px rgba(0,0,255,0.5), inset -1px -1px 1px rgba(0,0,255,0.5);">';
                     
-                    $onclick = 'onclick="window.top.na.blog.insertMediaFolder(\''.$albumRelativePath.'\');"';
+                    $onclick = 'onclick="window.top.na.cms.insertMediaFolder(\''.$albumRelativePath.'\');"';
                     
                     if (strpos($thumbURL,'ortrait')!==false) 
                     echo '<center><img src="'.$thumbURL.'" style="width:100px" '.$onclick.'/><br/><span class="filename">'.$albumRelativePath.'<br/>('.count($files).' files)'.'</span></center>';

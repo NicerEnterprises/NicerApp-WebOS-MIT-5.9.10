@@ -89,7 +89,8 @@ na.backgrounds = {
                     }
 
                     if (
-                        bgk.match(/\.txt$/)
+                        !bgk.match(/tiled/)
+                        && !bgk.match(/\.txt$/)
                         && (
                             $(window).width() > w
                             || $(window).height() > h
