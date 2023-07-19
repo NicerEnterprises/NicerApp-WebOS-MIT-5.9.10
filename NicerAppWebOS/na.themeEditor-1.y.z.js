@@ -658,9 +658,9 @@ na.te = na.themeEditor = {
             } else {
                 //na.te.s.c.forDialogID = null;
                 //na.te.s.c.forElements = rec.text;
-                //debugger;
+                debugger;
                 if (na.te.s.c.elementsCSS[rec.id]) {
-                    setTimeout (function () {
+                    //setTimeout (function () {
 
                         let
                         bg = $('#'+na.te.s.c.forDialogID+' > .vdBackground'),
@@ -674,7 +674,6 @@ na.te = na.themeEditor = {
                                 opacity : 1
                             });
                         else if (rec.text.match(/\s+\.newsApp__item__outer\s+>\s+.vdBackground\s*/)) {
-                            debugger;
                             $(bg3).css({
                                 background : src.match(/url\(/)
                                     ? src.match(/url\(.*\).*%/)
@@ -688,7 +687,7 @@ na.te = na.themeEditor = {
                         }
                         //console.log ('t3333:'+rec.text);
 
-                    }, 200);
+                    //}, 200);
                 };
             }
         }
@@ -1910,6 +1909,7 @@ debugger;
 
 
             var s = na.te.s.c.selectedSelector;
+            debugger;
             if (s && s.node && na.te.s.c.elementsCSS[s.node.id]) {
                 na.te.s.c.elementsCSS[s.node.id].background = 'url("'+src+'") repeat';
                 na.te.s.c.elementsCSS[s.node.id].opacity =
@@ -1927,7 +1927,8 @@ debugger;
             } else {
                 na.backgrounds.next ('#siteBackground', na.site.globals.backgroundSearchKey, src);
             }
-            /*if (na.te.s.c.fireSaveTheme) */na.site.saveTheme();
+            /*if (na.te.s.c.fireSaveTheme) */
+            setTimeout (na.site.saveTheme, 200);
         };
 
 

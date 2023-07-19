@@ -1207,7 +1207,9 @@ na.m.preventScreenLock();
                 }
             };
         }
-        na.te.reApplySelectorsTree();
+        debugger;
+        na.site.loadTheme_applySettings (na.site.globals.themes[na.site.globals.themeName]);
+        //na.te.reApplySelectorsTree();
         return true;
     },
 

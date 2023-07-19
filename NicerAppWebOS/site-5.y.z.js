@@ -3286,6 +3286,7 @@ debugger;
                         var dit = categoryItems[dID].css;
                         for (var divSel in dit) {
                             var dit2 = dit[divSel];
+                            if (divSel=='#siteToolbarThemeEditor') dit2.opacity = 1; // dirty hack
                             $(divSel).css (dit2);
                             if (dit2.background && dID == '#'+na.te.settings.current.forDialogID+' > .vdBackground') {
                                 var
@@ -3448,6 +3449,8 @@ debugger;
 
             themeData = na.site.loadTheme_fetchDialogs(themeData);
             na.site.loadTheme_applySettings (themeData); // apply changes in setTimeout() for backgroundChangeInterval
+            debugger;
+            na.site.globals.themes[na.site.globals.themeName] = $.extend({}, themeData);
             
             // ENCAPSULATE (ENCODE) json objects for HTTP transport
             themeData.themeSettings = JSON.stringify(themeData.themeSettings);
