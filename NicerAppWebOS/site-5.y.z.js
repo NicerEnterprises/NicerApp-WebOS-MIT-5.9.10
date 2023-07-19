@@ -412,6 +412,7 @@ na.site = {
                 $('body > .lds-facebook').fadeOut('normal');//css({display:'none'});
 
                 na.site.renderAllCustomHeadingsAndLinks();
+                na.themeEditor.onload ('siteContent'); // must remain HERE, or else you'll not correctly load the theme settings for 'Extras'
 
                 $('#siteContent .vividDialogContent.vividScrollpane')[0].focus();
 
@@ -3030,7 +3031,6 @@ onclick_btnFullResetOfAllThemes : function (event) {
         //if (!s) var s = { url : '[default]', role : 'guests', user : 'Guest' }; 
 
         //if (!s) var s = { url : '[default]' };
-debugger;
         if (doGetPageSpecificSettings) {
             na.site.loadTheme_doGetPageSpecificSettings (function() {
                 na.site.loadTheme_do (callback, theme);
@@ -3058,8 +3058,6 @@ debugger;
                 }
             };
         };
-
-        na.themeEditor.onload ('siteContent'); // must remain HERE, or else you'll not correctly load the theme settings for 'Extras'
     },
     loadTheme_doGetPageSpecificSettings : function(callback, doSwitchSpecificities) {
         var

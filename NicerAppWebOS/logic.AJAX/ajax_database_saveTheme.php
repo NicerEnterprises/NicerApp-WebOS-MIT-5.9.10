@@ -171,6 +171,8 @@ $cdb->setDatabase($dataSetName, false);
 
 // DONT! messes up ___themes settings horribly during updates :
 // $rec = array_merge ($rec, $rec2);
+
+// instead, use only the _id and _rev of the found document and overwrite the rest of the document with just the data that was fed into this script by the browser.
 if (array_key_exists('_rev', $rec)) $rev = $rec['_rev']; else $rev=null;
 $rec = $rec2;
 if (!is_null($rev)) $rec['_rev'] = $rev;
