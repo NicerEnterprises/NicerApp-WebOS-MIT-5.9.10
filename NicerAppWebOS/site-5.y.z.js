@@ -1215,7 +1215,7 @@ onclick_btnFullResetOfAllThemes : function (event) {
             type : 'POST',
             url : url,
             success : function (data, ts, xhr) {
-                if (data.indexOf('status : Success')!==-1) na.site.loadTheme();
+                if (data.indexOf('status : Success')!==-1) na.site.loadTheme(null, null, true, true);
             },
             error : function (xhr, textStatus, errorThrown) {
                 na.site.ajaxFail(fncn, url, xhr, textStatus, errorThrown);
@@ -3008,7 +3008,7 @@ onclick_btnFullResetOfAllThemes : function (event) {
         });
     },
 
-    loadTheme : function (callback, theme, doGetPageSpecificSettings) {
+    loadTheme : function (callback, theme, doGetPageSpecificSettings, doSwitchSpecificities) {
         var 
         fncn = 'na.site.loadTheme(callback,theme)',
         s = na.te.settings.current.specificity,
@@ -3034,7 +3034,7 @@ debugger;
         if (doGetPageSpecificSettings) {
             na.site.loadTheme_doGetPageSpecificSettings (function() {
                 na.site.loadTheme_do (callback, theme);
-            });
+            }, doSwitchSpecificities);
         } else {
             na.site.loadTheme_do (callback, theme);
         };
@@ -3061,7 +3061,7 @@ debugger;
 
         na.themeEditor.onload ('siteContent'); // must remain HERE, or else you'll not correctly load the theme settings for 'Extras'
     },
-    loadTheme_doGetPageSpecificSettings : function(callback) {
+    loadTheme_doGetPageSpecificSettings : function(callback, doSwitchSpecificities) {
         var
         state = History.getState(),
         url = state.url.replace(document.location.origin,'').replace('/view/', ''),
@@ -3076,8 +3076,7 @@ debugger;
             success : function (data2, ts2, xhr2) {
                 $('#cssPageSpecific, #jsPageSpecific').remove();
                 $('head').append(data2).delay(100);
-                debugger;
-                na.site.setSpecificity(true);
+                if (doSwitchSpecificities) na.site.setSpecificity(true); // DOESNT WORK WITH NEW THEMES
                 setTimeout(function () {
                     if (typeof callback=='function') callback(true);
                 }, 50);
@@ -3156,7 +3155,7 @@ debugger;
                     break;
                 };
 debugger;
-                na.site.setSpecificity (true);
+                //na.site.setSpecificity (true);
                 na.site.loadTheme_applySettings (dat, callback);
             },
             error : function (xhr, textStatus, errorThrown) {

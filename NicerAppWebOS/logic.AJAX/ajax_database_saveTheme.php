@@ -169,7 +169,7 @@ if (!isset($_SESSION) || !is_array($_SESSION) || !array_key_exists('selectors',$
 
 $cdb->setDatabase($dataSetName, false);
 
-$rec = array_merge ($rec, $rec2);
+$rec = $rec2;// DONT! array_merge ($rec, $rec2);
 if ($debug) { echo '<pre>$rec (merged) : '; var_dump ($rec); var_dump($_POST); var_dump(json_last_error()); echo '</pre>'.PHP_EOL.PHP_EOL; }
 try {
     $call3 = $cdb->post($rec);

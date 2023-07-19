@@ -1435,7 +1435,11 @@ class NicerAppWebOS {
         if (is_array($css) && !$hasJS && $js===true) {
                 $hasJS = true;
                 foreach ($selectors2 as $idx => $selector) {
-                    if ($selector['specificityName']!==$css['specificityName']) continue;
+                    if (
+                        array_key_exists('specificityName', $selector)
+                        && array_key_exists ('specificityName', $css)
+                        && $selector['specificityName']!==$css['specificityName']
+                    ) continue;
                     $r = '<script id="jsPageSpecific" type="text/javascript">'.PHP_EOL;
                     $r .= '// debug4'.PHP_EOL;
                     $useVividTexts = !array_key_exists('uvt',$_GET) || $_GET['uvt']=='y' ? 'true' : 'false';
@@ -1505,7 +1509,7 @@ class NicerAppWebOS {
     public function getPageCSS_permissionsList($js=true) {
         global $naDebugAll;
         global $naLAN;
-        $debug = false;
+        $debug = $this->debugThemeLoading;
         $db = $this->dbs->findConnection('couchdb');
         $cdb = $db;
 
@@ -1648,6 +1652,7 @@ class NicerAppWebOS {
             ? $_COOKIE['cdb_loginName']
             : ''
         );
+        $username101 = $db->translate_couchdbUserName_to_plainUserName ($username100);
 
 
 
@@ -1669,11 +1674,11 @@ class NicerAppWebOS {
                         'user' => $username100
                     )
                 ),
-                'specificityName' => 'site for user '.$username100,
+                'specificityName' => 'site for user '.$username101,
                 'user' => $username100,
                 'display' => true
             );
-            $selectorNames[] = 'site for user '.$username100;
+            $selectorNames[] = 'site for user '.$username101;
             //$preferredSelectorName = 'site user '.$username100;
 
             $selectors[] = array (
@@ -1685,12 +1690,12 @@ class NicerAppWebOS {
                         'user' => $username100
                     )
                 ),
-                'specificityName' => 'site for user '.$username100.' at the client',
+                'specificityName' => 'site for user '.$username101.' at the client',
                 'user' => $username100,
                 'ip' => $naIP,
                 'display' => true
             );
-            $selectorNames[] = 'site for user '.$username100.' at the client';
+            $selectorNames[] = 'site for user '.$username101.' at the client';
 
 
 
@@ -1698,6 +1703,7 @@ class NicerAppWebOS {
 
             foreach ($this->dbs->findConnection('couchdb')->roles as $roleIdx => $role) {
                 $role2 = $this->dbs->findConnection('couchdb')->translate_couchdbGroupName_to_plainGroupName($role);
+                if ($debug) { echo '<pre style="color:white;background:navy">'; var_dump ($role2); echo '</pre>'; }
                 $selectors[] = array (
                     'permissions' => array (
                         'read' => array(
@@ -1797,7 +1803,7 @@ class NicerAppWebOS {
                     ),
                     'specificityName' => 'current page for group '.$role2.' at the client',
                     'url' => $url,
-                        'app' => $viewFolder,
+                    'app' => $viewFolder,
                     'role' => $role,
                     'ip' => $naIP,
                     'display' => true
@@ -1816,12 +1822,12 @@ class NicerAppWebOS {
                             'user' => $username100
                         )
                     ),
-                    'specificityName' => 'app \''.$appName.'\' for user '.$username100,
-                    'view' => $viewFolder,
+                    'specificityName' => 'app \''.$appName.'\' for user '.$username101,
+                    'app' => $viewFolder,
                     'user' => $username100,
                     'display' => true
                 );
-                //$selectorNames[] = 'app \''.$viewFolder.'\' for user '.$username100;
+                $selectorNames[] = 'app \''.$appName.'\' for user '.$username101;
                 $selectors[] = array (
                     'permissions' => array (
                         'read' => array(
@@ -1831,13 +1837,13 @@ class NicerAppWebOS {
                             'user' => $username100
                         )
                     ),
-                    'specificityName' => 'app \''.$appName.'\' for user '.$username100.' at the client',
-                    'view' => $viewFolder,
+                    'specificityName' => 'app \''.$appName.'\' for user '.$username101.' at the client',
+                    'app' => $viewFolder,
                     'user' => $username100,
                     'ip' => $naIP,
                     'display' => true
                 );
-                //$selectorNames[] = 'app \''.$viewFolder.'\' for user '.$username100.' at the client';
+                $selectorNames[] = 'app \''.$appName.'\' for user '.$username101.' at the client';
             }
 
 
@@ -1852,12 +1858,12 @@ class NicerAppWebOS {
                         'user' => $username100
                     )
                 ),
-                'specificityName' => 'current page for user '.$username100,
+                'specificityName' => 'current page for user '.$username101,
                 'url' => $url,
                 'user' => $username100,
                 'display' => true
             );
-            $selectorNames[] = 'current page for user '.$username100;
+            $selectorNames[] = 'current page for user '.$username101;
             //$preferredSelectorName = 'current page for user '.$username100;
 
             $selectors[] = array (
@@ -1869,13 +1875,13 @@ class NicerAppWebOS {
                         'user' => $username100
                     )
                 ),
-                'specificityName' => 'current page for user '.$username100.' at the client',
+                'specificityName' => 'current page for user '.$username101.' at the client',
                 'url' => $url,
                 'user' => $username100,
                 'ip' => $naIP,
                 'display' => true
             );
-            $selectorNames[] = 'current page for user '.$username100.' at the client';
+            $selectorNames[] = 'current page for user '.$username101.' at the client';
             //$preferredSelectorName = 'current page for user '.$username100.' at the client';
         };
 
