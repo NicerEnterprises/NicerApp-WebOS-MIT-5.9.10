@@ -1217,7 +1217,28 @@ class NicerAppWebOS {
         foreach ($selectors2 as $idx => $selector) {
             //if (!$this->selectorPermissionsPass('write', $selector)) continue;
             $css = $this->getPageCSS_specific($selector);
+            if (is_array($css)) {
+                foreach ($css['themes'] as $themeName => $theme) { break; };
+                $specificityName = (
+                    array_key_exists($themeName, $css['themes'])
+                    && array_key_exists('specificityName', $css['themes'][$themeName])
+                    ? css['themes'][$themeName]['specificityName']
+                    : $selector['specificityName']
+                );
+            } else {
+                $specificityName = $selector['specificityName'];
+            }
             //{ echo '<pre>667 : $idx='.$idx; echo '$selector='; var_dump($selector); var_dump($css); echo '</pre>'; };
+            if ($debug) {
+                echo '<h1>'.$specificityName.'</h1>'; echo PHP_EOL;
+                if (
+                    is_array($css)
+                    && array_key_exists ($themeName, $css['themes'])
+                    //&& array_key_exists ('specificityName', $css['themes'][$themeName])
+                ) var_dump ($css['themes'][$themeName]);
+                echo '<pre style="color:yellow;background:navy;">'; var_dump ($selector); echo '</pre>';
+            }
+
             //if (is_array($css)) $css = json_encode($css, JSON_PRETTY_PRINT);
             if ($debug && is_array($css)) { echo '<pre>$selector='; var_dump($selector); var_dump($css); echo '</pre>'; };
             if (false && is_string($css) && $debug) {
@@ -1246,7 +1267,6 @@ class NicerAppWebOS {
 
                 //echo '<pre style="color:green">'; var_dump ($css); echo '</pre>'; die();
 
-                foreach ($css['themes'] as $themeName => $theme) { break; };
                 $_SESSION['themeName'] = $themeName;
                 $_SESSION['specificityName'] = $selector['specificityName'];
                 if ($debug) { echo '<pre style="color:green">'; var_dump ($css); echo '</pre>'; die(); }
@@ -1260,7 +1280,8 @@ class NicerAppWebOS {
                     $r .= "\tthemeName : '".$themeName."',".PHP_EOL;
                     //$r .= "\tspecificityName : \"".$specificityName."\",".PHP_EOL;
                     //$r .= "\tspecificityName_revert : \"".$specificityName."\",".PHP_EOL;
-                    $r .= "\tspecificityName : \"".$selector['specificityName']."\",".PHP_EOL;
+                    //echo '<pre style="background:navy;color:lime;border-radius:10px;">'; var_dump ($css); echo '</pre>';
+                    $r .= "\tspecificityName : \"".$specificityName."\",".PHP_EOL;
                     //$r .= "\tspecificityNames : ".json_encode($selectorNames).",".PHP_EOL;
                     $r .= "\tthemesDBkeys : ".json_encode($selectors2).",".PHP_EOL;
                     $r .= "\tnaLAN : ".($naLAN ? 'true' : 'false').','.PHP_EOL;
@@ -1429,7 +1450,7 @@ class NicerAppWebOS {
                         $r .= "\tbackgroundSearchKey : '".$theme['backgroundSearchKey']."',".PHP_EOL;
                         $r .= "\tthemes : ".json_encode($css['themes']).",".PHP_EOL;
                         $r .= "\tthemeName : '".$themeName."',".PHP_EOL;
-                        $r .= "\tspecificityName : \"".$selector['specificityName']."\",".PHP_EOL;
+                        $r .= "\tspecificityName : \"".$specificityName."\",".PHP_EOL;
                         //$r .= "\tspecificityName : \"".$specificityName."\",".PHP_EOL;
                         //$r .= "\tspecificityName_revert : \"".$specificityName."\",".PHP_EOL;
                         //$r .= "\tspecificityNames : ".json_encode($selectorNames).",".PHP_EOL;
@@ -1727,7 +1748,7 @@ class NicerAppWebOS {
                         'role' => $role,
                         'display' => true
                     );
-                    $selectorNames[] = 'app \''.$viewFolder.'\' for group '.$role2;
+                    $selectorNames[] = 'app \''.$appName.'\' for group '.$role2;
                     $selectors[] = array (
                         'permissions' => array (
                             'read' => array(
@@ -1743,7 +1764,7 @@ class NicerAppWebOS {
                         'ip' => $naIP,
                         'display' => true
                     );
-                    $selectorNames[] = 'app \''.$viewFolder.'\' for group '.$role2.' at the client';
+                    $selectorNames[] = 'app \''.$appName.'\' for group '.$role2.' at the client';
                 }
 
 
@@ -1898,9 +1919,12 @@ class NicerAppWebOS {
         
         $permissions = $selector['permissions'];
         if ($debug) {
-            echo '<pre>$selector='; var_dump ($selector); echo '</pre><br/>'.PHP_EOL.PHP_EOL;
+            echo '<pre style="color:purple">$selector='; var_dump ($selector); echo '</pre><br/>'.PHP_EOL.PHP_EOL;
         }
 
+        unset ($selector['display']);
+        unset ($selector['hasWritePermission']);
+        unset ($selector['permissions']);
 
         /*
         if (array_key_exists('worksWithoutDatabase',$selector) && $selector['worksWithoutDatabase']===true) {

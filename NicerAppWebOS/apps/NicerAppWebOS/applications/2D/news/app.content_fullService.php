@@ -55,8 +55,8 @@ $pageTitle = str_replace('_', '&nbsp;', $pageTitle);
                         <img id="newsApp_searchbar__enterQuery" title="search the entire news database (up to 14 days into the past)" src="/NicerAppWebOS/siteMedia/na.question-mark.svg.png" style="height:30px;vertical-align:middle" onclick="na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/news'].onSearch(event)"/>
                         <img id="newsApp_searchbar__abandonQuery" title="abandon the current search query and display the very latest news again" src="/NicerAppWebOS/siteMedia/na.reset.png" style="height:30px;vertical-align:middle" onclick="na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/news'].clearSearch(event)"/>
                     </div>
-                    <div id="div_newsApp_info" class="content_containerDiv_item newsApp_header backdropped" style="order:2;margin-right:7px;">
-                        <span id="newsApp_info" class="contentSectionTitle1_span">This app will load up older news-items whenever needed</span>
+                    <div id="div_newsApp_info" class="content_containerDiv_item backdropped" style="order:2;margin-right:7px;">
+                        <span id="newsApp_info" class="contentSectionTitle1_span newsApp_header">This app will load up older news-items whenever needed</span>
                     </div>
                     <div class="content_containerDiv_item" style="order:3;margin-right:7px;">
                         <span id="newsApp_timer" class="backdropped newsApp_header" style="font-weight:bold;"></span>                    

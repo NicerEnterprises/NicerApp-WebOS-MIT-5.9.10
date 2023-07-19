@@ -508,6 +508,7 @@ na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/musicPlayer'] 
                     'style',
                     $(dragged).attr('style').replace(/;margin-left:30px;/,'')+';margin-left:30px;'
                 );
+                $(dragged).css({ background : '', color : '' });
                 dragged.evt = evt;
                 $(dragged).attr('class', 'mp3 vividButton');// ui-draggable ui-draggable-handle');
                 $(dragged).attr('file', original.attr('file'));
@@ -552,6 +553,8 @@ na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/musicPlayer'] 
                         return true;
                     }
                 });
+debugger;
+                na.site.loadTheme_applySettings(na.site.globals.themes[na.site.globals.themeName]);
 
                 return dragged;
 			}

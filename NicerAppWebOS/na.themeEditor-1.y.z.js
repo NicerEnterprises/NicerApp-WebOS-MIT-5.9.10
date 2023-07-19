@@ -463,8 +463,12 @@ na.te = na.themeEditor = {
         }, 750);
         
 
-        var s = na.site.globals.themeDBkeys;
-        na.te.s.c.specificity = s;
+
+        if (!na.te.s.c.specificity) {
+            na.te.s.c.specificity = na.site.globals.themeDBkeys;
+        }
+
+        var s = na.te.s.c.specificity;
         if (!s || (!s.role && !s.user)) {
             na.site.settings.buttons['#btnDeleteSpecificity'].disable();
         } else {
@@ -718,8 +722,16 @@ na.te = na.themeEditor = {
     transform_siteGlobalsThemes_to_jsTree : function(specifier) {
         var
         themeName = na.site.globals.themeName,
-        inputData = na.site.globals.themes[themeName].themeSettings,
-        outputData = na.te.transform_siteGlobalsThemes_to_jsTree__recurse({dat:inputData,did:null}, {dat:[],did:null}, 'Selectors', '#', 'naSelectorSet');
+        inputData = na.site.globals.themes[themeName];
+        if (!inputData) inputData = na.site.globals.themes.default;
+        inputData = inputData.themeSettings;
+
+        var
+        outputData = na.te.transform_siteGlobalsThemes_to_jsTree__recurse(
+            {dat:inputData,did:null},
+            {dat:[],did:null},
+            'Selectors', '#', 'naSelectorSet'
+        );
         return outputData;
     },
 

@@ -670,7 +670,7 @@ echo $naWebOS->html_vividButton (
 
         </div>
         <div id="nate_selectorSet" class="themeEditorComponent_containerDiv2" style="order:8;display:block;width:100%;height:auto;display:none;justify-content:space-between">
-            <div class="naNavBar_darkenedBG" style="width:calc(100% - 14px);position:relative;display:flex;align-items:center;justify-content:space-between;border-radius:10px;box-shadow:inset 0px 0px 4px 2px rgba(0,0,0,0.6);">
+            <div class="naNavBar_darkenedBG" style="position:relative;display:flex;align-items:center;justify-content:space-between;border-radius:10px;box-shadow:inset 0px 0px 4px 2px rgba(0,0,0,0.6);">
 <?php
 /*
 echo $naWebOS->html_vividButton (
@@ -1278,7 +1278,7 @@ echo $naWebOS->html_vividButton (
             </div>
 
         </div>
-        <div id="themePermissions" class="themeEditorComponent" style="position:absolute;top:auto;display:none;">
+        <div id="themePermissions" class="themeEditorComponent" style="top:auto;display:none;">
             <div class="themeEditor_input_containerDiv">
             <div class="themePermissions_label_containerDiv">
                 <label id="labelThemeControls" class="themePermissions_label" for="themePermissionsControls">Themes</label>

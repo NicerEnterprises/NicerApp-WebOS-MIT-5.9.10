@@ -104,17 +104,21 @@ if (array_key_exists('url',$_POST) && !is_null($_POST['url'])) $rec2['url'] = $_
 if (array_key_exists('role',$_POST) && !is_null($_POST['role'])) $rec2['role'] = $_POST['role'];
 if (array_key_exists('user',$_POST) && !is_null($_POST['user'])) $rec2['user'] = $_POST['user'];
 
-if (!preg_match('/Client$/i', $rec2['specificityName'])) {
+if (preg_match('/at the client/', $rec2['specificityName'])!==1) {
     unset ($rec2['ip']);
     unset ($rec2['ua']);
 };
 
+$dbg = [
+    '1' => preg_match('/at the client/', $rec2['specificityName']),
+    '2' => $rec2
+];
 
 /*if (session_status() === PHP_SESSION_NONE) {
     ini_set('session.gc_maxlifetime', 3600);
     session_start();
 };*/
-//echo '<pre>'; var_dump ($_SESSION); die();
+//echo '<pre>'; var_dump ($dbg); die();
 if (!isset($_SESSION) || !is_array($_SESSION) || !array_key_exists('selectors',$_SESSION)) {
     echo 'Session does not contain required "selectors" data.'; exit();
 } else {

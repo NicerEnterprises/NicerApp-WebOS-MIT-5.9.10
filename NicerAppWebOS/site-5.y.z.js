@@ -930,7 +930,7 @@ na.site = {
         };
     },
     
-    setSpecificity : function() {
+    setSpecificity : function(simple) {
         $('.na_themes_dropdown').html('<div class="vividDropDownBox_selected vividScrollpane" style="white-space:normal;"></div><div class="vividDropDownBox_selector"><div class="vividScrollpane" style="padding:0px;"></div></div>').delay(50);
         $('.vividDropDownBox_selected, .vividDropDownBox_selector').each(function(idx,el) {
             var w = 0;
@@ -974,11 +974,13 @@ na.site = {
             var
             b = na.ui.vb.settings.buttons['#btnLockSpecificity'],
             selectMe = (
-                b && b.state == b.btnCode.selectedState
-                ? na.site.globals.specificityName === na.site.globals.themesDBkeys[i].specificityName
-                : i == l
+                simple
+                    ? na.site.globals.specificityName === na.site.globals.themesDBkeys[i].specificityName
+                    : b && b.state == b.btnCode.selectedState
+                        ? na.site.globals.specificityName === na.site.globals.themesDBkeys[i].specificityName
+                        : i == l
             );
-//debugger;
+
             if (selectMe) {
                 //debugger;
                 $(divEl).addClass('selected');
@@ -1036,6 +1038,7 @@ na.site = {
         });
 
         $('.na_themes_dropdown__specificity > .vividDropDownBox_selector > div').click(function(evt) {
+            debugger;
             na.site.globals.specificityName = $(this).html();
             //debugger;
             $('.na_themes_dropdown__specificity > .vividDropDownBox_selected').html($(this).html());
@@ -1212,7 +1215,7 @@ onclick_btnFullResetOfAllThemes : function (event) {
             type : 'POST',
             url : url,
             success : function (data, ts, xhr) {
-                if (data.indexOf('status : Success+')!==-1) na.site.loadTheme();
+                if (data.indexOf('status : Success')!==-1) na.site.loadTheme();
             },
             error : function (xhr, textStatus, errorThrown) {
                 na.site.ajaxFail(fncn, url, xhr, textStatus, errorThrown);
@@ -3072,7 +3075,9 @@ debugger;
             },
             success : function (data2, ts2, xhr2) {
                 $('#cssPageSpecific, #jsPageSpecific').remove();
-                $('head').append(data2);
+                $('head').append(data2).delay(100);
+                debugger;
+                na.site.setSpecificity(true);
                 setTimeout(function () {
                     if (typeof callback=='function') callback(true);
                 }, 50);
@@ -3151,6 +3156,7 @@ debugger;
                     break;
                 };
 debugger;
+                na.site.setSpecificity (true);
                 na.site.loadTheme_applySettings (dat, callback);
             },
             error : function (xhr, textStatus, errorThrown) {
@@ -3163,6 +3169,10 @@ debugger;
     },
 
     loadTheme_applySettings : function (dat, callback) {
+        if (!dat) {
+            na.m.log (1, 'Error : loadTheme_applySettings() called with dat=undefined/false', false);
+            return false;
+        };
         //if (dat.specificityName) {
             $('.na_themes_dropdown__specificity > .vividDropDownBox_selector > div')
                 .removeClass('selected')
@@ -3171,6 +3181,7 @@ debugger;
                         $(el).addClass('selected');
                         na.te.settings.current.specificity = na.site.globals.themesDBkeys[$(el).attr('value')];
                     };*/
+                    /*
                     var l = Object.keys(na.site.globals.themesDBkeys).length - 1;
                     if (el.innerHTML === na.site.globals.themesDBkeys[l].specificityName) {
                         $(el).parent().find('.vividDropDownBox_selected').html(el.innerHTML);
@@ -3178,6 +3189,7 @@ debugger;
                         na.site.globals.specificityName = el.innerHTML;
                         na.te.settings.current.specificity = na.site.globals.themesDBkeys[$(el).attr('value')];
                     };
+                    */
 
                 });
         //};
@@ -3334,12 +3346,10 @@ debugger;
                     break;
                 case 'Extras' :
                     for (var btnAddGraphics_jsTreeText in categoryItems) {
-                        debugger;
                         var it = categoryItems[btnAddGraphics_jsTreeText];
                         for (var divSel in it) {
                             var dit = it[divSel];
                             $(divSel).css(dit);
-debugger;
                             /*
                             if (dit.background && dID == '#'+na.te.settings.current.forDialogID+' > .vdBackground') {
                                 var
@@ -3387,12 +3397,12 @@ debugger;
         
         clearTimeout (na.site.settings.current.saveThemeTimeout);
         na.site.settings.current.saveThemeTimeout = setTimeout(function() {
-            var tApp = null, tn = $('.na_themes_dropdown__themes > .vividDropDownBox_selected').html();
+            var tApp = null;
             if (
                 na.site.globals.themes
-                && na.site.globals.themes[tn]
-                && na.site.globals.themes[tn].apps
-            ) tApp = na.site.globals.themes[tn].apps;
+                && na.site.globals.themes[theme]
+                && na.site.globals.themes[theme].apps
+            ) tApp = na.site.globals.themes[theme].apps;
 
             var
             themeData = {
@@ -3416,6 +3426,7 @@ debugger;
             if (s.user) themeData.user = s.user;
             if (app) themeData.app = app;
             if (s.specificityName) themeData.specificityName = s.specificityName;
+            debugger;
             if (
                 typeof s.specificityName=='string'
                 && s.specificityName.match(/site /)
