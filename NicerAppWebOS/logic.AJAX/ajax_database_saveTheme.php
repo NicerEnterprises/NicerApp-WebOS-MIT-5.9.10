@@ -169,16 +169,14 @@ if (!isset($_SESSION) || !is_array($_SESSION) || !array_key_exists('selectors',$
 
 $cdb->setDatabase($dataSetName, false);
 
-$rev = $rec['_rev'];
-$rec = $rec2;//array_merge ($rec, $rec2);
-// causes
-// $rec = $rec2;
-
 // DONT! messes up ___themes settings horribly during updates :
 // $rec = array_merge ($rec, $rec2);
-
+if (array_key_exists('_rev', $rec)) $rev = $rec['_rev']; else $rev=null;
+$rec = $rec2;
 if (!is_null($rev)) $rec['_rev'] = $rev;
 $rec['_id'] = $id;
+
+
 if ($debug) { echo '<pre>$rec (merged) : '; var_dump ($rec); var_dump($_POST); var_dump(json_last_error()); echo '</pre>'.PHP_EOL.PHP_EOL; }
 try {
     $call3 = $cdb->post($rec);
