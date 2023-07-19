@@ -3559,6 +3559,10 @@ debugger;
             +$(selector).css("borderBottomLeftRadius")+' ';
 
 
+
+
+
+        // TODO : only apply these in this block of code if there isn't a $(selector+' > .vdBackground')[0]
         if ($(selector).css('opacity')!=='') {
             ret[selector].opacity = $(selector).css('opacity');
         };
@@ -3576,6 +3580,9 @@ debugger;
         } else if ($(selector).css('background-color') !== '') {
             ret[selector].background = $(selector).css('background-color');
         }
+
+
+
 
 
 
