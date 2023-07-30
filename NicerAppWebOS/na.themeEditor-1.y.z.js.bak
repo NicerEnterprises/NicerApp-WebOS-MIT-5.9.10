@@ -1105,7 +1105,7 @@ na.te = na.themeEditor = {
     
     cbSelected : function (event) {
         $('input.specificityCB').each(function(idx,el){ el.checked = el === event.currentTarget });
-        var theme = $('.na_themes_dropdown__themes > .vividDropDownBox_selected').html();
+        var theme = $('.na_themes_dropdown__themes > .vividDropDownBox_selected > .vividScrollpane').html();
         na.site.loadTheme(function() {
             var btn = $('#'+na.te.s.c.selectedButtonID)[0];
             if (btn) na.te.onclick(btn, false);
@@ -1120,8 +1120,8 @@ na.te = na.themeEditor = {
             type : 'GET',
             url : url,
             success : function (data, ts, xhr) {
-                $('.na_themes_dropdown__themes > .vividDropDownBox_selector').html(data);
-                var t = $('.na_themes_dropdown__themes > .vividDropDownBox_selector > div');
+                $('.na_themes_dropdown__themes > .vividDropDownBox_selector > .vividScrollpane').html(data);
+                var t = $('.na_themes_dropdown__themes > .vividDropDownBox_selector > .vividScrollpane > div');
                 for (var i=0; i<t.length; i++) {
                     if ((!themeName || themeName=='default') && $(t[i]).attr('value')==na.site.globals.themeName) { $(t[i]).addClass('selected'); break; }
                     if (themeName && $(t[i]).attr('value')==themeName) { $(t[i]).addClass('selected'); break; }
@@ -1139,14 +1139,10 @@ na.te = na.themeEditor = {
         };
         $.ajax(ac);
     },    
-    themeSelected : function (evt) {
-        var
-        theme = $(evt.currentTarget).val();
-        //$('#themeName').val(theme);
+    themeSelected : function (event) {
+        var theme = $(event.currentTarget).val();
+        $('#themeName').val(theme);
         na.site.saveTheme(function() {
-            var
-            theme = $('.na_themes_dropdown__themes > .vividDropDownBox_selected').html();
-
             na.te.s.c.selectedThemeName = theme;
             na.site.globals.themeName = theme;
 
@@ -1162,8 +1158,10 @@ na.te = na.themeEditor = {
         var
         fncn = 'na.themeEditor.deleteTheme(event)',
         url = '/NicerAppWebOS/logic.AJAX/ajax_database_deleteAllThemes_byName.php';
+        debugger;
         var
-        themeName = $('.themeItem.onfocus input')[0].value,
+        themeName = $('.themeItem.onfocus')[0].value;
+        var
         ajaxCmd = {
             type : 'POST',
             url : url,
@@ -1172,10 +1170,10 @@ na.te = na.themeEditor = {
             },
             success : function (data, textStatus, xhr) {
                 if (data == 'status : Success.') {
-                    $('.na_themes_dropdown__themes > .vividDropDownBox_selector > .vividScrollpane > div').each(function(idx,optEl){
+                    $('.na_themes_dropdown__themes > .vividDropDownBox_selector > div').each(function(idx,optEl){
                         if ($(optEl).html() === themeName) $(optEl).remove();
                     });
-                    $('.themeItem input').each(function(idx,inputEl){
+                    $('.themeItem').each(function(idx,inputEl){
                         if ($(inputEl).val() === themeName) $(inputEl).parent().remove();
                     });
                 } else na.site.fail(fncn+' : '+url+' : '+data, xhr, textStatus, null);
@@ -1188,18 +1186,15 @@ na.te = na.themeEditor = {
         
     },
     themeNameSelected : function (themeID) {
-        var themeName = $('#'+themeID).val();
-        if (themeName === na.site.globals.themeName) return false;
         na.site.saveTheme (function() {
-            na.site.globals.themeName = themeName;
-            na.te.s.c.selectedThemeName = themeName;
+            na.site.globals.themeName = $('#'+themeID).val();
+            na.te.s.c.selectedThemeName = na.site.globals.themeName;
             
             $('.themeItem').removeClass('onfocus');
             setTimeout(function() {
-                //var themeName = $('.na_themes_dropdown__themes > .vividDropDownBox_selected').html(); // JUST DONT
-                $('.na_themes_dropdown__themes > .vividDropDownBox_selected').html(themeName); // much better idea
+                var themeName = $('.na_themes_dropdown__themes > .vividDropDownBox_selected > .vividScrollpane').html();
                 $('.themeItem').each(function(idx,ti) {
-                    if ($('input', ti).val()==themeName)
+                    if ($(ti).val()==na.site.globals.themeName)
                         $(ti).addClass('onfocus');
                 });
 
@@ -1216,9 +1211,8 @@ na.te = na.themeEditor = {
         fncn = 'na.themeEditor.themeNameChanged()',
         oldThemeName = null,
         newThemeName = $(event.currentTarget).val();
-        debugger;
-        $('.na_themes_dropdown__themes > .vividDropDownBox_selector > .vividScrollpane > div').each(function(idx,optEl) {
-            if (themeIdx===idx) oldThemeName=$(optEl).html();
+        $('.na_themes_dropdown__themes > .vividDropDownBox_selector > div').each(function(idx,optEl) {
+            if ($(optEl).html()==themeNameID) oldThemeName=$(optEl).html();
         });
         
         var
@@ -1232,12 +1226,10 @@ na.te = na.themeEditor = {
             },
             success : function (data, ts, xhr) {
                 if (data == 'status : Success.') {
-                    $('.na_themes_dropdown__themes > .vividDropDownBox_selector > .vividScrollpane > div').each(function(idx,optEl){
+                    $('.na_themes_dropdown__themes > .vividDropDownBox_selector > div').each(function(idx,optEl){
+                        debugger;
                         if ($(optEl)[0].innerText === oldThemeName) $(optEl).html(newThemeName);
-                    });
-                    $('.na_themes_dropdown__themes > .vividDropDownBox_selector').html(newThemeName);
-                    na.site.globals.themeName = newThemeName;
-                    na.te.s.c.selectedThemeName = newThemeName;
+                    })
                 };                    
             },
             error : function (xhr, textStatus, errorThrown) {
@@ -1247,7 +1239,6 @@ na.te = na.themeEditor = {
         $.ajax(ajaxCmd);            
     },
     setPermissionsForTheme : function (event) {
-        debugger;
         $('.themeEditorComponent, .themeEditorComponent_containerDiv2').not('#themePermissions').fadeOut('fast');
         $('.themeEditor_colorPicker').next().fadeOut('fast');
         $('#themePermissions').fadeIn('fast', 'swing', function () {
@@ -1256,50 +1247,33 @@ na.te = na.themeEditor = {
             var 
             t = $('#btnOptions_menu__themes_dropdown > .vividDropDownBox_selector > .vividScrollpane > div'),
             html = '';
+            debugger;
             for (var i=0; i<t.length; i++) {
-                var
-                sel = (
-                    $('#btnOptions_menu__themes_dropdown > .vividDropDownBox_selected').html() === $(t[i])[0].innerText
-                    ? ' selected'
-                    : ''
-                );
-                html += '<div id="theme_'+i+'_div" class="themeItem'+sel+'"><input id="theme_'+i+'" type="text" onclick="na.te.themeNameSelected(\'theme_'+i+'\')" onchange="na.te.themeNameChanged('+i+', \'theme_'+i+'\')" value="'+$(t[i])[0].innerText+'"/></div>';
-                //if ($(t[i]).is('.selected')) $('#themeName').val($(t[i]).html());
+                html += '<div id="theme_'+i+'_div"><input id="theme_'+i+'" class="themeItem" type="text" onclick="na.te.themeNameSelected(\''+$(t[i])[0].innerText+'\')" onchange="na.te.themeNameChanged('+i+', \''+$(t[i])[0].innerText+'\')" value="'+$(t[i])[0].innerText+'"/></div>';
+                if ($(t[i]).is('.selected')) $('#themeName').val($(t[i]).html());
                 na.te.s.c.oldThemeNames.push ($(t[i]).html());
             }
             $('#themePermissionsControls').append(html);
         });        
     },
     addTheme : function (event) {
-        debugger;
         var 
         opt = document.createElement('div'),
-        i = $('#btnOptions_menu__themes_dropdown > .vividDropDownBox_selector > .vividScrollpane > div').length;
+        i = $('#btnOptions_menu__themes_dropdown > .vividDropDownBox_selector > div').length;
         
         opt.id = 'div_theme_'+i;
         $(opt).html('new theme');
         $(opt).addClass('selected');
         
-        $('.na_themes_dropdown__themes > .vividDropDownBox_selector > .vividScrollpane > div').removeClass('selected');
-        $('.na_themes_dropdown__themes > .vividDropDownBox_selector > .vividScrollpane').append(opt);
+        $('.na_themes_dropdown__themes > .vividDropDownBox_selector > div').append(opt);
         na.te.s.c.oldThemeNames.push (opt.text);
         
-        var html = '<div id="theme_'+i+'_div" class="themeItem"><input id="theme_'+i+'" type="text" onclick="na.te.themeNameSelected(\'theme_'+i+'\')" onchange="na.te.themeNameChanged('+i+', \'theme_'+i+'\')" value="new theme"></div>';
+        
+        var html = '<div id="theme_'+i+'_div"><input id="theme_'+i+'" class="themeItem" type="text" onclick="na.te.themeNameSelected(\'theme_'+i+'\')" onchange="na.te.themeNameChanged('+i+', \'theme_'+i+'\')" value="new theme"></div>';
         $('#themePermissionsControls').append(html);
-        $('#theme_'+i).focus();
         
         var evt = { currentTarget : opt };
         na.te.themeSelected (evt);
-
-        $('.na_themes_dropdown__themes > .vividDropDownBox_selected').html('new theme'); // much better idea
-        $('.themeItem').removeClass('onfocus');
-        $('.themeItem').each(function(idx,ti) {
-            if ($('input', ti).val()=='new theme')
-                $(ti).addClass('onfocus');
-        });
-
-
-
     },
     deleteCurrentTheme_bySpecificity : function (removeFromThemesList, callback) {
         var

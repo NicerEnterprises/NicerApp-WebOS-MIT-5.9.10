@@ -688,7 +688,9 @@ na.site = {
             width : 330,
             zIndex : 700000
         }).fadeIn('slow');
-        setTimeout (na.site.setSpecificity, 200);
+        setTimeout (function() {
+            na.site.setSpecificity ($('#btnLockSpecificity').is('.disabled'));
+        }, 200);
         //debugger;
         //na.site.setSpecificity();
     },
@@ -992,7 +994,7 @@ na.site = {
                 na.te.settings.current.specificity = na.site.globals.themeDBkeys;
             };
 
-            $('.na_themes_dropdown__specificity > .vividDropDownBox_selector').append($(divEl).clone(true,true));
+            $('.na_themes_dropdown__specificity > .vividDropDownBox_selector > .vividScrollpane').append($(divEl).clone(true,true));
         };
 
         na.te.s.c.selectedThemeName = na.site.globals.themeName;
@@ -1014,7 +1016,7 @@ na.site = {
                         $(divEl2).addClass('selected');
                         $('.na_themes_dropdown__themes > .vividDropDownBox_selected').html(themeName);
                     }
-                    $('.na_themes_dropdown__themes > .vividDropDownBox_selector').append($(divEl2).clone(true,true));
+                    $('.na_themes_dropdown__themes > .vividDropDownBox_selector > .vividScrollpane').append($(divEl2).clone(true,true));
                     break;
                 }
             };
@@ -1038,7 +1040,7 @@ na.site = {
             clearTimeout(na.site.settings.current.timeout_onmouseout_specificity);
         });
 
-        $('.na_themes_dropdown__specificity > .vividDropDownBox_selector > div').click(function(evt) {
+        $('.na_themes_dropdown__specificity > .vividDropDownBox_selector > .vividScrollpane > div').click(function(evt) {
             debugger;
             na.site.globals.specificityName = $(this).html();
             //debugger;
@@ -1074,7 +1076,7 @@ na.site = {
             $('.na_themes_dropdown__themes > .vividDropDownBox_selector').mouseover(function() {
                 clearTimeout(na.site.settings.current.timeout_onmouseout_themes);
             });
-            $('.na_themes_dropdown__themes > .vividDropDownBox_selector > div').click(function(evt) {
+            $('.na_themes_dropdown__themes > .vividDropDownBox_selector > .vividScrollpane > div').click(function(evt) {
                 $('.na_themes_dropdown__themes > .vividDropDownBox_selected').html($(this).html());
                 $('.na_themes_dropdown__themes > .vividDropDownBox_selector > .vividScrollpane > div').removeClass('selected');
                 $(this).addClass('selected');
@@ -1201,7 +1203,7 @@ onclick_btnFullResetOfAllThemes : function (event) {
             type : 'POST',
             url : url,
             success : function (data, ts, xhr) {
-                if (data.indexOf('status : Success+')!==-1) na.site.loadTheme();
+                if (data.indexOf('status : Success')!==-1) na.site.loadTheme();
             },
             error : function (xhr, textStatus, errorThrown) {
                 na.site.ajaxFail(fncn, url, xhr, textStatus, errorThrown);
@@ -1320,7 +1322,7 @@ onclick_btnFullResetOfAllThemes : function (event) {
             ec = na.m.newEventChain(dt, {
                 root : {
                     labels : { marker : {
-                        whatsThis : 'na.m.site.loadContent() : url='+state.url,
+                        whatsThis : 'na.site.stateChange() : url='+state.url,
                         stacktrace : na.m.stacktrace(),
                         HTMLevent : event
                     }},
@@ -3017,6 +3019,8 @@ onclick_btnFullResetOfAllThemes : function (event) {
         apps = na.site.globals.app;
         for (var app in apps) break;
 
+        na.site.settings.current.running_loadTheme = true;
+
         na.m.log (10, 'na.site.loadTheme() : STARTING.');
 
         if (
@@ -3377,6 +3381,7 @@ debugger;
         };
 
         na.m.log (10, 'na.site.loadTheme_applySettings() : FINISHED.', false);
+        na.site.settings.current.running_loadTheme = false;
         if (typeof callback=='function') callback(true);
     },
     
@@ -3386,12 +3391,20 @@ debugger;
         s = na.themeEditor.settings.current.specificity,
         apps = na.site.globals.app;
 
+        if (!theme) theme = na.site.globals.themeName;
+        if ($('#'+theme)[0]) {
+            theme = $('#'+theme).val();
+        };
+
+        na.site.settings.current.running_saveTheme = true;
+
         for (var app in apps) break;
 
         na.m.log (10, 'na.site.saveTheme() : STARTING.', false);
 
         if (!s) return false;        
-        if (!theme) theme = $('.na_themes_dropdown__themes > .vividDropDownBox_selected').html();
+        debugger;
+        if (!theme) theme = $('.na_themes_dropdown__themes > .vividDropDownBox_selected > .vividScrollpane').html();
         
         clearTimeout (na.site.settings.current.saveThemeTimeout);
         na.site.settings.current.saveThemeTimeout = setTimeout(function() {
@@ -3404,8 +3417,9 @@ debugger;
 
             var
             themeData = {
-                orientation : na.site.settings.current.orientation,
+                specificityName : $('.na_themes_dropdown__specificity > .vividDropDownBox_selected').html(),
                 theme : theme,
+                orientation : na.site.settings.current.orientation,
                 backgroundSearchKey : na.site.globals.backgroundSearchKey,
                 background : na.site.globals.background,
                 changeBackgroundsAutomatically : $('#changeBackgroundsAutomatically')[0].checked?'true':'false',
@@ -3478,6 +3492,7 @@ debugger;
                         //na.site.loadTheme(null, null, false); //REPLACED with .loadTheme_applySettings() in the block above this AJAX call.
 
                         na.m.log (10, 'na.site.saveTheme() : FINISHED.', false);
+                        na.site.settings.current.running_saveTheme = false;
                         if (typeof callback=='function') callback (themeData, data);
                     }
                 },
@@ -3534,8 +3549,8 @@ debugger;
             fontSize : $(selector).css('fontSize'),
             fontWeight : $(selector).css('fontWeight'),
             fontFamily : $(selector).css('fontFamily'),
-            textShadow : $(selector+' > .vividDialogContent').css('textShadow'),
-            opacity : $(selector).css('opacity')
+            textShadow : $(selector+' > .vividDialogContent').css('textShadow')//,
+            //opacity : $(selector).css('opacity')
         };
         ret[selector].border = // firefox work-around
             $(selector).css('borderTopWidth')+' '
@@ -3560,24 +3575,25 @@ debugger;
 
 
 
-        // TODO : only apply these in this block of code if there isn't a $(selector+' > .vdBackground')[0]
-        if ($(selector).css('opacity')!=='') {
-            ret[selector].opacity = $(selector).css('opacity');
-        };
-        if ($(selector).css('backgroundSize')!=='') {
-            ret[selector].backgroundSize = $(selector).css('backgroundSize');
-        };
+        if (!$(selector+' > .vdBackground')[0]) {
+            if ($(selector).css('opacity')!=='') {
+                ret[selector].opacity = $(selector).css('opacity');
+            };
+            if ($(selector).css('backgroundSize')!=='') {
+                ret[selector].backgroundSize = $(selector).css('backgroundSize');
+            };
 
-        if ($(selector).css('backgroundImage') && $(selector).css('backgroundImage')!=='') {
-            ret[selector].background =
-                $(selector).css('backgroundImage').match(/url\(.*\).*%/)
-                    ? $(selector).css('backgroundImage')
-                    : $(selector).css('backgroundImage').replace(')',') 0% 0% / ')
-                +$(selector).css('backgroundSize')+' '
-                +$(selector).css('backgroundRepeat');
-        } else if ($(selector).css('background-color') !== '') {
-            ret[selector].background = $(selector).css('background-color');
-        }
+            if ($(selector).css('backgroundImage') && $(selector).css('backgroundImage')!=='') {
+                ret[selector].background =
+                    $(selector).css('backgroundImage').match(/url\(.*\).*%/)
+                        ? $(selector).css('backgroundImage')
+                        : $(selector).css('backgroundImage').replace(')',') 0% 0% / ')
+                    +$(selector).css('backgroundSize')+' '
+                    +$(selector).css('backgroundRepeat');
+            } else if ($(selector).css('background-color') !== '') {
+                ret[selector].background = $(selector).css('background-color');
+            }
+        };
 
 
 

@@ -281,6 +281,7 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
     public function createUsers($users=null, $groups=null) {
         // $users and $groups are defined in .../NicerAppWebOS/db_init.php (bottom of the file).
         global $naWebOS;
+        $g2 = [];
         //echo '<pre>633:'; var_dump ($users); die();
         foreach ($users as $userName => $userDoc) {
             $dn = $this->dataSetName_domainName($naWebOS->domain);
@@ -291,7 +292,9 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
             try { $call = $this->cdb->get($uid); } catch (Exception $e) { $got = false; }
             $g = [];
             foreach ($userDoc['groups'] as $idx => $gn) {
-                $g[] = $this->translate_plainGroupName_to_couchdbGroupName($gn);
+                $gn1 = $this->translate_plainGroupName_to_couchdbGroupName($gn);
+                if (!in_array($gn1, $g2)) $g2[] = $gn1;
+                $g[] = $gn1;
             };
             try {
                 $rec = array (
@@ -309,15 +312,24 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
             } catch (Exception $e) {
                 echo '<pre style="color:red">'; var_dump ($e); echo '</pre>';
             }
-
-
         }
 
-        /* not using this yet :
-        $dataSetName = $this->dataSetName('cms_groups');
+
+
+        $dataSetName = $this->dataSetName('groups');
         try { $this->cdb->deleteDatabase ($dataSetName); } catch (Exception $e) { };
         $this->cdb->setDatabase($dataSetName, true);
-        */
+        foreach ($groups as $gn => $groupRec) {
+            $gn1 = $this->translate_plainGroupName_to_couchdbGroupName($gn);
+            $got = true;
+            try { $call = $this->cdb->get($gn); } catch (Exception $e) { $got = false; }
+            if ($got) $groupRec['_rev'] = $call->body->_rev;
+            $groupRec['_id'] = $gn;
+            $call = $this->cdb->post ($groupRec);
+            //echo '<pre style="background:purple;color:white;border-radius:10px;">'; var_dump ($call); echo '</pre>';
+            if ($call->body->ok) echo (!$got?'Created ':'Updated ').'\''.$gn.'\' group document in database '.$dataSetName.'.<br/>'; else echo '<span style="color:red">Could not '.(!$got?'create ':'update ').'\''.$gn.'\' group document in database '.$dataSetName.'.</span><br/>';
+
+        }
 
         return true;
     }

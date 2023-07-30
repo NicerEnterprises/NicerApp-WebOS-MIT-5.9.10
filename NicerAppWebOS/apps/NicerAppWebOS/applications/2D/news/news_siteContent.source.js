@@ -1207,9 +1207,19 @@ na.m.preventScreenLock();
                 }
             };
         }
-        debugger;
-        na.site.loadTheme_applySettings (na.site.globals.themes[na.site.globals.themeName]);
-        //na.te.reApplySelectorsTree();
+
+        clearTimeout (c.timeout_onresize_loadTheme);
+        c.timeout_onresize_loadTheme = setTimeout (function() {
+            na.m.waitForCondition('na1.onresize() : safe to call na.site.loadTheme_applySettings?', function() {
+                return (
+                    !na.site.settings.current.running_loadTheme
+                    && !na.site.settings.current.running_saveTheme
+                );
+            }, function () {
+                na.site.loadTheme_applySettings (na.site.globals.themes[na.site.globals.themeName]);
+                //na.te.reApplySelectorsTree();
+            }, 100);
+        }, 50);
         return true;
     },
 
@@ -1596,11 +1606,10 @@ na.m.preventScreenLock();
             html += '<div id="newsApp__item__'+it.idx+'__bg___2" class="newsApp__item__outer__bgFile2" style="">';
             html += '&nbsp;</div>';
         html += '</div>';
-
         if (typeof it.de=='string' && it.de.trim()!=='') {
-            if (typeof it.t=='string' && it.t!='' && it.de.indexOf(it.t)===-1) html+= '<p class="newsApp__item__title"><a class="nomod" target="newsAppItem_'+it.idx+'" href="' + it._id+'">' + it.t.replace(/\&#39;/g, '\'').replace(/#39;/g, '\'')+ '</a></p>';
+            if (typeof it.t=='string' && it.t!='' && it.de.indexOf(it.t)===-1) html+= '<div class="newsApp__item__title newsApp__item__noPaint"><div class="newsApp__item__title_bg">&nbsp;</div><a class="nomod" target="newsAppItem_'+it.idx+'" href="' + it._id+'">' + it.t.replace(/\&#39;/g, '\'').replace(/#39;/g, '\'')+ '</a></div>';
         } else {
-            if (typeof it.t=='string' && it.t!='') html+= '<p class="newsApp__item__title newsApp__item__noPaint"><a class="nomod" target="newsAppItem_'+it.idx+'" href="' + it._id+'">' + it.t.replace(/\&#39;/g, '\'').replace(/#39;/g, '\'') + '</a></p>';
+            if (typeof it.t=='string' && it.t!='') html+= '<div class="newsApp__item__title newsApp__item__noPaint"><div class="newsApp__item__title_bg">&nbsp;</div><a class="nomod" target="newsAppItem_'+it.idx+'" href="' + it._id+'">' + it.t.replace(/\&#39;/g, '\'').replace(/#39;/g, '\'') + '</a></div>';
         }
         if (typeof it.de=='string' && it.de.trim()!=='') html+= '<div class="newsApp__item__contentContainer"><div class="newsApp__item__mediaSingle"></div><div id="newsApp_item_'+it.idx+'__scrollpane" class="newsApp__item__desc vividScrollpane" style="width:100%;"><div>' + it.de.replace(/\&#39;/g, '\'').replace(/#39;/g, '\'').replace(/\<a/g, '<a target="_new" ') + '</div></div></td></tr></table><div class="newsApp__item__noPaint" style="height:5px;overflow:hidden;"></div></div>';
         var appSettings = na.site.globals.app[na.site.globals.appPrefix+'applications/2D/news'];
@@ -1612,7 +1621,7 @@ na.m.preventScreenLock();
             var seov = appSettings.section.replace(/.*__/,'').replace('__','-').replace('_','-').toLowerCase();
         };
         html += '<div class="newsApp__item__footer"><span class="newsApp__item__date"><a class="nomod noPushState" target="_new"  target="newsAppItem_'+it.idx+'" href="' + it.rssURL+'">' + na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/news'].formatDate(it)+'</a></span><br/>';
-        html += '<span class="newsApp__item__copy"><a class="nomod noPushState" href="javascript:var el = $(\'#newsApp__item__'+it.idx+'\')[0], textarea = $(\'#siteContent__textareaCopy\')[0]; if (!textarea) { var el2=document.createElement(\'textarea\'); window.top.document.append(el2); textarea=el2 }; el_html = el.innerHTML; el.innerHTML = el.innerHTML.replace(\/<span class..newsApp__item__copy.>.*<.a><.span>\/,\'\') + \'Found via <a href=\\\'https://nicer.app/'+seov+'\\\' target=\\\'_new\\\'>https://nicer.app/'+seov+'</a>\'; const type = \'text/html\'; const blob = new Blob([el.innerHTML], { type }); const data = [new ClipboardItem({ [type]: blob })]; navigator.clipboard.write(data).then( () => {/* success */}, () => {/* failure */} ); var selection = window.getSelection(); var range = document.createRange(); range.selectNodeContents(el); selection.removeAllRanges(); selection.addRange(range); window.top.document.execCommand(\'copy\');setTimeout(function(){selection.removeAllRanges(); el.innerHTML=el_html;},1000);">Copy to clipboard</a></span></div> ';
+        html += '<span class="newsApp__item__copy"><a class="nomod noPushState" href="javascript:var el = $(\'#newsApp__item__'+it.idx+'\')[0], textarea = $(\'#siteContent__textareaCopy\')[0]; if (!textarea) { var el2=document.createElement(\'textarea\'); window.top.document.append(el2); textarea=el2 }; el_html = el.innerHTML; el.innerHTML = el.innerHTML.replace(\/<span class..newsApp__item__copy.>.*<.a><.span>\/,\'\') + \'Found via <a href=\\\'https://nicer.app/'+seov+'\\\' target=\\\'_new\\\'>https://nicer.app/'+seov+'</a>\'; var type = \'text/html\'; var blob = new Blob([el.innerHTML], { type }); var data = [new ClipboardItem({ [type]: blob })]; navigator.clipboard.write(data).then( () => {/* success */}, () => {/* failure */} ); var selection = window.getSelection(); var range = document.createRange(); range.selectNodeContents(el); selection.removeAllRanges(); selection.addRange(range); window.top.document.execCommand(\'copy\');setTimeout(function(){selection.removeAllRanges(); el.innerHTML=el_html;},1000);">Copy to clipboard</a></span></div> ';
         html+= '</div>';
 
         // tooltipster HTML
@@ -1642,9 +1651,9 @@ na.m.preventScreenLock();
         $('.newsApp__item__contentContainer',el).css({maxHeight:mh});
 
         $(el).find('div, p, span')
-            .not('.vividScrollpane, .newsApp__item__outer__bg, .newsApp__item__outer__bgFile1, .newsApp__item__outer__bgFile2, .newsApp__item__noPaint')
+            .not('.vividScrollpane, .newsApp__item__title_bg, .newsApp__item__outer__bg, .newsApp__item__outer__bgFile1, .newsApp__item__outer__bgFile2, .newsApp__item__noPaint')
             .each(function(idx,el2) {
-                if (!$(el2).find('*')[0]) /*if (!$(el2).parent().is('div, p, cite'))*/ $(el2).addClass('newsApp__item__paint');
+                if (!$(el2).find('*')[1]) /*if (!$(el2).parent().is('div, p, cite'))*/ $(el2).addClass('newsApp__item__paint');
                 if ($(el2).html().trim()=='') $(el2).remove();
             });
         $('.newsApp__item__title > p > a', el).each(function(idx,el) {

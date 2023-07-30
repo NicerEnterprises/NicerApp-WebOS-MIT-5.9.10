@@ -50,6 +50,7 @@ function safeLoadJSONfile($filePath, $mustExist=true, $flush=true) {
         }
     } catch (Exception $e) { }
     //exit();
+    //echo '<pre style="color:blue">'; var_dump ($textData); echo '</pre>';
     //if (json_last_error()!==JSON_ERROR_NONE) trigger_error ('Error during JSON decoding of file content for file "'.$filePath.'" : '.json_last_error_msg(), E_USER_ERROR);
     return $jsonData;
 }
@@ -263,6 +264,8 @@ function checkForJSONerrors($rawData, $filepath, $exampleFilepath) {
 
 function cdb_login($cdb, $cRec, $username) {
     //echo '$_COOKIE=<pre>';var_dump($_COOKIE);echo '</PRE>';
+    $fncn = '.../NicerAppWebOS/functions.php::cdb_login()';
+
     $done = false;
     if ($username=='admin') {
         try {
@@ -349,7 +352,7 @@ function cdb_login($cdb, $cRec, $username) {
             //echo '<pre>'; var_dump ($cdb->getSession()); exit();
             $cdb_session = $cdb->getSession();
         } catch (Exception $e) {
-            trigger_error ($fncn.' : could not login using credentials '.json_encode($cRec).'.', E_USER_WARNING);
+            trigger_error ($fncn.' : could not login using credentials '.json_encode($cRec).', $e->getMessage()='.$e->getMessage(), E_USER_WARNING);
         }
         if (is_object($cdb_session) && $cdb_session->body->ok) {
             if ($cdb_session->body->userCtx->name!=='admin') $_SESSION['cdb_loginName'] = $cdb_session->body->userCtx->name;

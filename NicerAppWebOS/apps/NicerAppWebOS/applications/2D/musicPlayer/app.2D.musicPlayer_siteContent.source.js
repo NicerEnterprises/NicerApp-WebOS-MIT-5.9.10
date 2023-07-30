@@ -455,7 +455,7 @@ na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/musicPlayer'] 
             if (this.id===na.mp.settings.resortedItem) return false;
             var div = document.createElement('div');
             $('body').append(div);
-            $(this).clone(false,false).appendTo(div).css({position:'relative',zIndex:1100, color:'yellow', margin : 5, marginLeft:40});
+            $(this).clone(false,false).appendTo(div).css({position:'relative',zIndex:1100, margin : 5, marginLeft:40});
             //$(document.body).append(div);
             return div;
         }

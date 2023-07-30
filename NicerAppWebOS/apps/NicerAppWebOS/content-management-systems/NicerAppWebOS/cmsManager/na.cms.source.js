@@ -693,7 +693,7 @@ na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/Nic
         */
     },
     
-    refresh : function (callback) {
+    refresh : function (callback, setSelected) {
         $('#siteToolbarLeft .lds-facebook').fadeIn('slow');
         var 
         fncn = 'na.cms.refresh(callback)',
@@ -712,6 +712,7 @@ na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/Nic
                 jt.refresh(false, false);
 
                 setTimeout (function (dat, jfu) {
+                    if (setSelected)
                     for (var i=0; i<dat.length; i++) {
                         var dit = dat[i];
                         if (dit.state.selected) {
@@ -1067,21 +1068,25 @@ na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/Nic
                     na.site.fail (fncn+' : AJAX decode error in data returned for url='+url1+', error='+error.message+', in data='+data, xhr);
                     return false;
                 }
-                    
+
+                debugger;
                 na.cms.refresh(function(nodes) {
+                    debugger;
                     for (var i=0; i<c.db.length; i++) {
                         if (c.db[i].text === dat.recordAdded.text) {
                             $('#jsTree').jstree('deselect_all');
                             $('#jsTree').jstree('select_node', c.db[i].id);
                         }
                     }
+                    debugger;
                     na.cms.onclick_btnUpload();
-                });
+                }, false);
             },
             error : function (xhr, textStatus, errorThrown) {
                 na.site.ajaxFail(fncn, url, xhr, textStatus, errorThrown);
             }                
         };
+        debugger;
         $.ajax(ac);
     },
     
@@ -1434,6 +1439,6 @@ na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/Nic
                 };
             };
             na.cms.onclick_btnViewMedia();
-        });
+        }, false);
     }
 }

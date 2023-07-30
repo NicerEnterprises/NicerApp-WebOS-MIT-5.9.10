@@ -1135,48 +1135,53 @@ class NicerAppWebOS {
 
         $selectors2 = &$d['selectors'];
         $selectorNames = &$d['selectorNames'];
-
+        //$debug = true;
         foreach ($selectors2 as $idx => $selector) {
             if ($debug) { echo $idx.'<br/>'.PHP_EOL; };
 
             $permissions = $selector['permissions'];
 
             $hasPermission = false;
-            foreach ($permissions as $permissionType => $accounts) {
+            foreach ($permissions as $permissionType => $permissionsRec) {
                 if ($permissionType=='write') {
-                    foreach ($accounts as $accountType => $userOrGroupID) {
-                        if ($accountType == 'user') {
-                            $adjustedUserOrGroupID = $db->translate_plainUserName_to_couchdbUserName($userOrGroupID);
-                        } else {
-                            $adjustedUserOrGroupID = $db->translate_plainGroupName_to_couchdbGroupName($userOrGroupID);
-                        }
-                        //$adjustedUserOrGroupID = $userOrGroupID; // TODO : check if this is necessary
-
-                        //if ($debug) { echo 't666='; var_dump($accountType); var_dump ($this->dbs->username); echo PHP_EOL; var_dump ($userOrGroupID); echo PHP_EOL; var_dump ($adjustedUserOrGroupID); }
-                        if ($accountType == 'role') {
-                            //if ($debug) { echo '$this->dbs->roles='; var_dump($this->dbs->roles); };
-                            if (is_string($this->dbs)) {
-                                echo $fncn.' : WARNING : invalid database connection ($this->dbs='.json_encode($this->dbs).').';
-                                die(); // or exit();
+                    foreach ($permissionsRec as $accountType => $accountsList) {
+                        foreach ($accountsList as $idx2 => $userOrGroupID) {
+                            if ($accountType == 'users') {
+                                $adjustedUserOrGroupID = $db->translate_plainUserName_to_couchdbUserName($userOrGroupID);
+                            } else {
+                                $adjustedUserOrGroupID = $db->translate_plainGroupName_to_couchdbGroupName($userOrGroupID);
                             }
-                            foreach ( $this->dbs->findConnection('couchdb')->roles
-                                as $roleIdx => $groupID
-                            ) {
-                                if ($debug) { echo 't667='; var_dump($groupID); };
-                                if ($userOrGroupID==$groupID) {
-                                    $hasPermission = true;
+                            //$adjustedUserOrGroupID = $userOrGroupID; // TODO : check if this is necessary
+
+                            //if ($debug) { echo 't666='; var_dump($accountType); var_dump ($this->dbs->username); echo PHP_EOL; var_dump ($userOrGroupID); echo PHP_EOL; var_dump ($adjustedUserOrGroupID); }
+                            if ($accountType == 'roles') {
+                                //if ($debug) { echo '$this->dbs->roles='; var_dump($this->dbs->roles); };
+                                if (is_string($this->dbs)) {
+                                    echo $fncn.' : WARNING : invalid database connection ($this->dbs='.json_encode($this->dbs).').';
+                                    die(); // or exit();
+                                }
+                                foreach ( $this->dbs->findConnection('couchdb')->roles
+                                    as $roleIdx => $groupID
+                                ) {
+                                    if ($debug) { echo 't667='; var_dump($groupID); };
+                                    if ($userOrGroupID==$groupID) {
+                                        $hasPermission = true;
+                                    }
                                 }
                             }
-                        }
-                        if ($accountType == 'user' && $this->dbs->findConnection('couchdb')->username == $adjustedUserOrGroupID) {
-                            $hasPermission = true;
-                            if ($debug) { echo 't777 $username='.$this->dbs->findConnection('couchdb')->username.PHP_EOL; }
+                            if ($accountType == 'users' && $this->dbs->findConnection('couchdb')->username == $adjustedUserOrGroupID) {
+                                $hasPermission = true;
+                                if ($debug) { echo 't777 $username='.$this->dbs->findConnection('couchdb')->username.PHP_EOL; }
+                            }
                         }
                     }
                 }
             }
+            //echo '<pre style="background:purple;color:white;font-weight:bold;">'.$idx.'</pre>'.PHP_EOL;
             $selectors2[$idx]['hasWritePermission'] = $hasPermission;
         }
+
+        if ($debug) {echo '<pre style="color:lime;background:blue;border-radius:10px;">'; var_dump ($selectors2); echo '</pre>'; }
 
         return [
             'selectors' => $selectors2//,
@@ -1204,6 +1209,7 @@ class NicerAppWebOS {
         //echo '<pre>'; var_dump ($_SESSION);
         
         $selectors2 = array_reverse($selectors, true);
+        //echo '<pre>'; var_dump ($selectors2); echo '</pre>'; die();
         //$selectorNames2 = array_reverse($selectorNames, true);
 
         $ret = '';
@@ -1536,18 +1542,24 @@ class NicerAppWebOS {
             $viewFolder = '[front page]';
             $url = '/';
         }
+        $appName = preg_replace('/.*\//','',$viewFolder);
         //if ($debug) { echo '<pre>'; var_dump ($url); echo PHP_EOL; var_dump ($this->view); echo '</pre>'.PHP_EOL; }
-        if ($viewFolder!=='') {
+        /*if ($viewFolder!=='') {
             $appName = preg_replace('/.*\//','',$viewFolder);
             $selectors = array (
                 0 => array (
-                    'permissions' => array (
-                        'read' => array(
-                            'role' => $db->translate_plainGroupName_to_couchdbGroupName('Guests')
-                        ),
-                        'write' => array(
-                        )
-                    ),
+                    'permissions' => [
+                        'read' => [
+                            'roles' => [
+                                $db->translate_plainGroupName_to_couchdbGroupName('Guests')
+                            ]
+                        ],
+                        'write' => [
+                            'roles' => [
+                                $db->translate_plainGroupName_to_couchdbGroupName('Owners'),
+                                $db->translate_plainGroupName_to_couchdbGroupName('Chief Officers')
+                        ]
+                    ],
                     'specificityName' => 'site (for all viewers)',
                     'role' => $db->translate_plainGroupName_to_couchdbGroupName('Guests'),
                     'display' => true,
@@ -1555,13 +1567,19 @@ class NicerAppWebOS {
                 ),
 
                 1 => array (
-                    'permissions' => array (
-                        'read' => array(
-                            'role' => $db->translate_plainGroupName_to_couchdbGroupName('Guests')
-                        ),
-                        'write' => array(
-                        )
-                    ),
+                    'permissions' => [
+                        'read' => [
+                            'roles' => [
+                                $db->translate_plainGroupName_to_couchdbGroupName('Guests')
+                            ]
+                        ],
+                        'write' => [
+                            'roles' => [
+                                $db->translate_plainGroupName_to_couchdbGroupName('Owners'),
+                                $db->translate_plainGroupName_to_couchdbGroupName('Chief Officers')
+                            ]
+                        ]
+                    ],
                     'specificityName' => 'view \''.$viewFolder.'\' (for all viewers)',
                     'view' => $viewFolder,
                     //'url' => $url,
@@ -1570,37 +1588,50 @@ class NicerAppWebOS {
                 ),
 
                 2 => array (
-                    'permissions' => array (
-                        'read' => array(
-                            'role' => $db->translate_plainGroupName_to_couchdbGroupName('Guests')
-                        ),
-                        'write' => array(
-                        )
-                    ),
+                    'permissions' => [
+                        'read' => [
+                            'roles' => [
+                                $db->translate_plainGroupName_to_couchdbGroupName('Guests')
+                            ]
+                        ],
+                        'write' => [
+                            'roles' => [
+                                $db->translate_plainGroupName_to_couchdbGroupName('Owners'),
+                                $db->translate_plainGroupName_to_couchdbGroupName('Chief Officers')
+                            ]
+                        ]
+                    ],
                     'specificityName' => 'current page (for all viewers)',
                     'url' => $url,
                     'role' => $db->translate_plainGroupName_to_couchdbGroupName('Guests'),
                     'display' => true
                 )
             );
-            /*
+
             $selectorNames = array (
                 0 => 'site (for all viewers)',
                 1 => 'app \''.$viewFolder.'\' (for all viewers)',
                 2 => 'current page (for all viewers)'
             );
-            $preferredSelectorName = 'site (for all viewers)';
-            */
-        } else {
+            //$preferredSelectorName = 'site (for all viewers)';
+
+        } else {*/
             $selectors = array (
                 0 => array (
-                    'permissions' => array (
-                        'read' => array(
-                            'role' => $db->translate_plainGroupName_to_couchdbGroupName('Guests')
-                        ),
-                        'write' => array(
-                        )
-                    ),
+                    'permissions' => [
+                        'read' => [
+                            'roles' => [
+                                $db->translate_plainGroupName_to_couchdbGroupName('Guests')
+                            ]
+                        ],
+                        'write' => [
+                            'roles' => [
+                                $db->translate_plainGroupName_to_couchdbGroupName('Owners'),
+                                $db->translate_plainGroupName_to_couchdbGroupName('Chief Officers'),
+                                $db->translate_plainGroupName_to_couchdbGroupName('Moderators')
+                            ]
+                        ]
+                    ],
                     'specificityName' => 'site (for all viewers)',
                     'role' => $db->translate_plainGroupName_to_couchdbGroupName('Guests'),
                     'display' => true,
@@ -1608,26 +1639,33 @@ class NicerAppWebOS {
                 ),
 
                 1 => array (
-                    'permissions' => array (
-                        'read' => array(
-                            'role' => $db->translate_plainGroupName_to_couchdbGroupName('Guests')
-                        ),
-                        'write' => array(
-                        )
-                    ),
+                    'permissions' => [
+                        'read' => [
+                            'roles' => [
+                                $db->translate_plainGroupName_to_couchdbGroupName('Guests')
+                            ]
+                        ],
+                        'write' => [
+                            'roles' => [
+                                $db->translate_plainGroupName_to_couchdbGroupName('Owners'),
+                                $db->translate_plainGroupName_to_couchdbGroupName('Chief Officers'),
+                                $db->translate_plainGroupName_to_couchdbGroupName('Moderators')
+                            ]
+                        ]
+                    ],
                     'specificityName' => 'current page (for all viewers)',
                     'url' => $url,
                     'role' => $db->translate_plainGroupName_to_couchdbGroupName('Guests'),
                     'display' => true
                 )
             );
-            /*
+
             $selectorNames = array (
                 0 => 'site (for all viewers)',
                 1 => 'current page (for all viewers)'
             );
-            $preferredSelectorName = 'site (for all viewers)';*/
-        }
+            //$preferredSelectorName = 'site (for all viewers)';so
+        //}
 
         //echo '<pre>';var_dump ($_SESSION); var_dump ($_COOKIE); echo '</pre>';
         if (
@@ -1666,14 +1704,10 @@ class NicerAppWebOS {
             )
         ) {
             $selectors[] = array (
-                'permissions' => array (
-                    'read' => array(
-                        'user' => $username100
-                    ),
-                    'write' => array(
-                        'user' => $username100
-                    )
-                ),
+                'permissions' => [
+                    'read' => [ 'users' => [ $username100 ] ],
+                    'write' => [ 'users' => [ $username100 ] ]
+                ],
                 'specificityName' => 'site for user '.$username101,
                 'user' => $username100,
                 'display' => true
@@ -1682,14 +1716,10 @@ class NicerAppWebOS {
             //$preferredSelectorName = 'site user '.$username100;
 
             $selectors[] = array (
-                'permissions' => array (
-                    'read' => array(
-                        'user' => $username100
-                    ),
-                    'write' => array(
-                        'user' => $username100
-                    )
-                ),
+                'permissions' => [
+                    'read' => [ 'users' => [ $username100 ] ],
+                    'write' => [ 'users' => [ $username100 ] ]
+                ],
                 'specificityName' => 'site for user '.$username101.' at the client',
                 'user' => $username100,
                 'ip' => $naIP,
@@ -1706,13 +1736,13 @@ class NicerAppWebOS {
                 if ($debug) { echo '<pre style="color:white;background:navy">'; var_dump ($role2); echo '</pre>'; }
                 $selectors[] = array (
                     'permissions' => array (
-                        'read' => array(
-                            'user' => $username100,
-                            'role' => $db->translate_plainGroupName_to_couchdbGroupName('Guests')
-                        ),
-                        'write' => array(
-                            'role' => $role
-                        )
+                        'read' => [
+                            'users' => [ $username100 ],
+                            'roles' => [ $db->translate_plainGroupName_to_couchdbGroupName('Guests'), $role ]
+                        ],
+                        'write' => [
+                            'roles' => [ $role ]
+                        ]
                     ),
                     'specificityName' => 'site for group '.$role2,
                     'role' => $role,
@@ -1722,14 +1752,10 @@ class NicerAppWebOS {
                 //$preferredSelectorName = 'site for group '.$role;
 
                 $selectors[] = array (
-                    'permissions' => array (
-                        'read' => array(
-                            'user' => $username100
-                        ),
-                        'write' => array(
-                            'role' => $role
-                        )
-                    ),
+                    'permissions' => [
+                        'read' => [ 'users' => [ $username100 ] ],
+                        'write' => [ 'roles' => [ $role ] ]
+                    ],
                     'specificityName' => 'site for group '.$role2.' at the client',
                     'role' => $role,
                     'ip' => $naIP,
@@ -1741,14 +1767,10 @@ class NicerAppWebOS {
                     && $viewFolder!=='/'
                 ) {
                     $selectors[] = array (
-                        'permissions' => array (
-                            'read' => array(
-                                'role' => $role
-                            ),
-                            'write' => array(
-                                'role' => $role
-                            )
-                        ),
+                        'permissions' => [
+                            'read' => [ 'roles' => [ $role ] ],
+                            'write' => [ 'roles' => [ $role ] ]
+                        ],
                         'specificityName' => 'app \''.$appName.'\' for group '.$role2,
                         'app' => $viewFolder,
                         'role' => $role,
@@ -1756,14 +1778,10 @@ class NicerAppWebOS {
                     );
                     $selectorNames[] = 'app \''.$appName.'\' for group '.$role2;
                     $selectors[] = array (
-                        'permissions' => array (
-                            'read' => array(
-                                'role' => $role
-                            ),
-                            'write' => array(
-                                'role' => $role
-                            )
-                        ),
+                        'permissions' => [
+                            'read' => [ 'roles' => [ $role ] ],
+                            'write' => [ 'roles' => [ $role ] ]
+                        ],
                         'specificityName' => 'app \''.$appName.'\' for group '.$role2.' at the client',
                         'app' => $viewFolder,
                         'role' => $role,
@@ -1776,14 +1794,10 @@ class NicerAppWebOS {
 
 
                 $selectors[] = array (
-                    'permissions' => array (
-                        'read' => array(
-                            'role' => $role
-                        ),
-                        'write' => array(
-                            'role' => $role
-                        )
-                    ),
+                    'permissions' => [
+                        'read' => [ 'roles' => [ $role ] ],
+                        'write' => [ 'roles' => [ $role ] ]
+                    ],
                     'specificityName' => 'current page for group '.$role2,
                     'url' => $url,
                     'app' => $viewFolder,
@@ -1793,14 +1807,10 @@ class NicerAppWebOS {
                 //$selectorNames[] = 'current page for group '.$role;
 
                 $selectors[] = array (
-                    'permissions' => array (
-                        'read' => array(
-                            'role' => $role
-                        ),
-                        'write' => array(
-                            'role' => $role
-                        )
-                    ),
+                    'permissions' => [
+                        'read' => [ 'roles' => [ $role ] ],
+                        'write' => [ 'roles' => [ $role ] ]
+                    ],
                     'specificityName' => 'current page for group '.$role2.' at the client',
                     'url' => $url,
                     'app' => $viewFolder,
@@ -1814,14 +1824,10 @@ class NicerAppWebOS {
 
             if ($viewFolder!=='') {
                 $selectors[] = array (
-                    'permissions' => array (
-                        'read' => array(
-                            'user' => $username100
-                        ),
-                        'write' => array(
-                            'user' => $username100
-                        )
-                    ),
+                    'permissions' => [
+                        'read' => [ 'users' => [ $username100 ] ],
+                        'write' => [ 'users' => [ $username100 ] ]
+                    ],
                     'specificityName' => 'app \''.$appName.'\' for user '.$username101,
                     'app' => $viewFolder,
                     'user' => $username100,
@@ -1829,14 +1835,10 @@ class NicerAppWebOS {
                 );
                 $selectorNames[] = 'app \''.$appName.'\' for user '.$username101;
                 $selectors[] = array (
-                    'permissions' => array (
-                        'read' => array(
-                            'user' => $username100
-                        ),
-                        'write' => array(
-                            'user' => $username100
-                        )
-                    ),
+                    'permissions' => [
+                        'read' => [ 'users' => [ $username100 ] ],
+                        'write' => [ 'users' => [ $username100 ] ]
+                    ],
                     'specificityName' => 'app \''.$appName.'\' for user '.$username101.' at the client',
                     'app' => $viewFolder,
                     'user' => $username100,
@@ -1850,14 +1852,10 @@ class NicerAppWebOS {
 
 
             $selectors[] = array (
-                'permissions' => array (
-                    'read' => array(
-                        'user' => $username100
-                    ),
-                    'write' => array(
-                        'user' => $username100
-                    )
-                ),
+                'permissions' => [
+                    'read' => [ 'users' => [ $username100 ] ],
+                    'write' => [ 'users' => [ $username100 ] ]
+                ],
                 'specificityName' => 'current page for user '.$username101,
                 'url' => $url,
                 'user' => $username100,
@@ -1867,14 +1865,10 @@ class NicerAppWebOS {
             //$preferredSelectorName = 'current page for user '.$username100;
 
             $selectors[] = array (
-                'permissions' => array (
-                    'read' => array(
-                        'user' => $username100
-                    ),
-                    'write' => array(
-                        'user' => $username100
-                    )
-                ),
+                'permissions' => [
+                    'read' => [ 'users' => [ $username100 ] ],
+                    'write' => [ 'users' => [ $username100 ] ]
+                ],
                 'specificityName' => 'current page for user '.$username101.' at the client',
                 'url' => $url,
                 'user' => $username100,
@@ -1955,35 +1949,40 @@ class NicerAppWebOS {
             if ($cdbFunctional1a) {
                 // check permissions
                 $hasPermission = false;
-                foreach ($permissions as $permissionType => $accounts) {
+                foreach ($permissions as $permissionType => $permissionsRec) {
                     if ($permissionType=='read') {
-                        foreach ($accounts as $accountType => $userOrGroupID) {
-                        if ($accountType == 'user') {
-                            $adjustedUserOrGroupID = $db->translate_plainUserName_to_couchdbUserName($userOrGroupID);
-                        } else {
-                            $adjustedUserOrGroupID = $db->translate_plainGroupName_to_couchdbGroupName($userOrGroupID);
-                        }
-                        $adjustedUserOrGroupID = $userOrGroupID; // TODO : check if this is necessary
-
-                        //if ($debug) { echo 't666='; var_dump($accountType); var_dump ($this->dbs->username); echo PHP_EOL; var_dump ($userOrGroupID); echo PHP_EOL; var_dump ($adjustedUserOrGroupID); }
-                            if ($accountType == 'role') {
-                                //if ($debug) { echo '$this->dbs->roles='; var_dump($this->dbs->roles); };
-                                if (is_string($this->dbs)) {
-                                    echo $fncn.' : WARNING : invalid database connection ($this->dbs="'.json_encode($this->dbs).'")- this database server, or even the entire webserver, has been hacked by hostiles.';
-                                    die(); // or exit();
+                        foreach ($permissionsRec as $accountType => $accountsList) {
+                            foreach ($accountsList as $idx => $userOrGroupID) {
+                                if ($accountType == 'users') {
+                                    $adjustedUserOrGroupID = $db->translate_plainUserName_to_couchdbUserName($userOrGroupID);
+                                } else {
+                                    $adjustedUserOrGroupID = $db->translate_plainGroupName_to_couchdbGroupName($userOrGroupID);
                                 }
-                                foreach ( $this->dbs->findConnection('couchdb')->roles
-                                    as $roleIdx => $groupID
-                                ) {
-                                    if ($debug) { echo 't667A='; var_dump($groupID); var_dump ($adjustedUserOrGroupID);};
-                                    if ($adjustedUserOrGroupID==$groupID) {
-                                        $hasPermission = true;
+                                $adjustedUserOrGroupID = $userOrGroupID;
+
+
+                                //if ($debug) { echo 't666='; var_dump($accountType); var_dump ($this->dbs->findConnection('couchdb')->username); echo '<br/>'.PHP_EOL; var_dump ($userOrGroupID); echo '<br/>$adjustedUserOrGroupID='; var_dump ($adjustedUserOrGroupID); }
+
+                                if ($accountType == 'roles') {
+                                    //$adjustedUserOrGroupID = $db->translate_plainGroupName_to_couchdbGroupName($userOrGroupID);
+                                    //if ($debug) { echo '$this->dbs->roles='; var_dump($this->dbs->roles); };
+                                    if (is_string($this->dbs)) {
+                                        echo $fncn.' : WARNING : invalid database connection ($this->dbs="'.json_encode($this->dbs).'")- this database server, or even the entire webserver, has been hacked by hostiles.';
+                                        die(); // or exit();
+                                    }
+                                    foreach ( $this->dbs->findConnection('couchdb')->roles
+                                        as $roleIdx => $groupID
+                                    ) {
+                                        if ($debug) { echo 't667A='; var_dump($groupID); var_dump ($adjustedUserOrGroupID);};
+                                        if ($adjustedUserOrGroupID==$groupID) {
+                                            $hasPermission = true;
+                                        }
                                     }
                                 }
-                            }
-                            if ($accountType == 'user' && $this->dbs->findConnection('couchdb')->username == $adjustedUserOrGroupID) {
-                                $hasPermission = true;
-                                if ($debug) { echo 't777 $username='.$this->dbs->findConnection('couchdb')->username.PHP_EOL; }
+                                if ($accountType == 'users' && $this->dbs->findConnection('couchdb')->username == $adjustedUserOrGroupID) {
+                                    $hasPermission = true;
+                                    if ($debug) { echo 't777 $username='.$this->dbs->findConnection('couchdb')->username.PHP_EOL; }
+                                }
                             }
                         }
                     }
@@ -2091,6 +2090,7 @@ class NicerAppWebOS {
                     //break;
                     //return json_decode(json_encode($ret),true);
                 }
+                /* RETURN ALL THEMES, NOT JUST 1
                 if (count($rets)>0) {
                     if ($debug) {
                         echo '<pre>info : $findCommand2='; var_dump ($findCommand); echo '.<br/>'.PHP_EOL;
@@ -2101,13 +2101,13 @@ class NicerAppWebOS {
                         'sel' => $sel,
                         'themes' => $rets
                     ];
-                }
+                }*/
             }
             if ($debug) echo '</pre>';
         //}
         if ($hasRecord) {
             return [
-                'sel' => $sel,
+                'sel' => $sel, // doesn't get used. for logging purposes only - and probably not set correctly.
                 'themes' => $rets
             ];
         }

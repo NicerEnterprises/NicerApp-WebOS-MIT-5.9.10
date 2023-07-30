@@ -123,7 +123,19 @@ if (!isset($_SESSION) || !is_array($_SESSION) || !array_key_exists('selectors',$
     echo 'Session does not contain required "selectors" data.'; exit();
 } else {
     $selectors = json_decode ($_SESSION['selectors'],true);
-    foreach ($selectors as $idx => $selector) if ($selector['specificityName']===$_SESSION['specificityName']) $sel = $selector;
+
+
+    foreach ($selectors as $idx => $selector) {
+        $dbg2 = [
+            '1' => $selector['specificityName'],
+            '2' => $_POST['specificityName']
+        ];
+        //echo '<pre style="margin:5px;border-radius:10px;padding:5px;background:navy;color:lime">'; var_dump ($dbg2); echo '</pre>';
+
+        if ($selector['specificityName']===$_POST['specificityName']) $sel = $selector;
+    }
+    //die();
+
     if ($debug) { echo '$sel='; var_dump ($sel); }
     if (!array_key_exists('permissions',$sel)) {
         echo 'SESSION selector does not contain a "permissions" entry.'; exit();
@@ -142,25 +154,26 @@ if (!isset($_SESSION) || !is_array($_SESSION) || !array_key_exists('selectors',$
         $hasPermission = false;
         $roles = $naWebOS->dbs->findConnection('couchdb')->roles;
         if ($debug) { echo '<pre>$permissions='; var_dump ($permissions); echo '</pre>'.PHP_EOL.PHP_EOL; };
-        foreach ($permissions as $permissionType => $accounts) {
-            if ($debug) { echo '<pre>$accounts='; var_dump ($accounts); echo '</pre>'.PHP_EOL.PHP_EOL; };
+        foreach ($permissions as $permissionType => $permissionRec) {
             if ($permissionType=='write') {
-                foreach ($accounts as $accountType => $userOrGroupID) {
-                    if ($accountType == 'role') {
-                        foreach ($roles as $roleIdx => $groupID) {
-                            if ($userOrGroupID==$groupID) {
-                                $hasPermission = true;
+                foreach ($permissionRec as $accountType => $permissionsList) {
+                    foreach ($permissionsList as $idx321 => $userOrGroupID) {
+                        if ($accountType == 'roles') {
+                            foreach ($roles as $roleIdx => $groupID) {
+                                if ($userOrGroupID==$groupID) {
+                                    $hasPermission = true;
+                                }
                             }
                         }
-                    }
-                    if ($accountType == 'user' && $_COOKIE['cdb_loginName'] == $userOrGroupID) {
-                        $hasPermission = true;
+                        if ($accountType == 'users' && $_COOKIE['cdb_loginName'] == $userOrGroupID) {
+                            $hasPermission = true;
+                        }
                     }
                 }
             }
         }
         if (!$hasPermission) {
-            if ($debug) echo 'User '.$username.' has no permission to write this data into the database.'.PHP_EOL;
+            if ($debug) echo 'You have no permission to write this data into the database.'.PHP_EOL;
             echo 'status : Failed.';
             exit();
         }        

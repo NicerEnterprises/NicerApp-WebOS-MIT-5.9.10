@@ -196,6 +196,7 @@ $users = safeLoadJSONfile(dirname(__FILE__).'/domainConfigs/'.$naWebOS->domain.'
 //echo '<pre style="color:black;background:skyblue;">'; var_dump ($users); die();
 //$users = json_decode($usersJSON, true);
 $groups = safeLoadJSONfile(dirname(__FILE__).'/domainConfigs/'.$naWebOS->domain.'/database.groups.json.php', true);
+//echo '<pre>'; var_dump ($groups); die();
 //$groups = json_decode($groupsJSON, true);
 
 $clientUsersJSONfn = dirname(__FILE__).'/domainConfigs/'.$naWebOS->domain.'/database.users.CLIENT.json.php';
@@ -213,9 +214,9 @@ if (!is_null($clientGroups))
     $groupsFinal = array_merge_recursive($groups, $clientGroups);
 else $groupsFinal = $groups;
 
+$naWebOS->dbsAdmin->clearOutDatabases ($dbs2);
 $naWebOS->dbsAdmin->createUsers($users, $groupsFinal);
 
-$naWebOS->dbsAdmin->clearOutDatabases ($dbs2);
 $naWebOS->dbsAdmin->createDatabases ($dbs);
 $naWebOS->dbsAdmin->resetDatabases ($dbsReset);
 ?>
