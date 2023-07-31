@@ -196,95 +196,97 @@ na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/Nic
                     na.cms.onchange_rename_node(e, data);
 
                 }).on('changed.jstree', function (e, data) {
+
                     if (
-                        /*data.action!=='ready'
-                        && */
+                        data.action!=='ready'
+                        &&
                         /*data.action!=='model'
                         && */data.action!=='select_node'
                     ) return false;
 
                     $('#siteContent .vividTabPage').fadeOut('fast');
+                    clearTimeout(na.cms.settings.timeout_changed);
+                    na.cms.settings.timeout_changed = setTimeout (function(data) {
+                        var l = data.selected.length, rec = null;
+                        for (var i=0; i<l; i++) {
+                            var d = data.selected[i], rec2 = data.instance.get_node(d);
+                            if (rec2 && rec2.original) rec = rec2;
+                        }
 
-                    var l = data.selected.length, rec = null;
-                    for (var i=0; i<l; i++) {
-                        var d = data.selected[i], rec2 = data.instance.get_node(d);
-                        if (rec2 && rec2.original) rec = rec2;
-                    }
-
-                    if (
-                        na.cms.settings.current.selectedTreeNode
-                        && rec
-                        && na.cms.settings.current.selectedTreeNode.id!==rec.id
-                        && na.cms.settings.current.selectedTreeNode.type=='naDocument'
-                    ) na.cms.saveEditorContent(na.cms.settings.current.selectedTreeNode, function(){
-                        na.cms.settings.current.selectedTreeNode = rec;
-                        na.cms.onchange_selectedNode (settings, data, rec, function() {
-                            na.cms.refresh();//function() {
-                          //      na.cms.onchange_jsTreeNode(settings, data,rec);
+                        if (
+                            na.cms.settings.current.selectedTreeNode
+                            && rec
+                            && na.cms.settings.current.selectedTreeNode.id!==rec.id
+                            && na.cms.settings.current.selectedTreeNode.type=='naDocument'
+                        ) na.cms.saveEditorContent(na.cms.settings.current.selectedTreeNode, function(){
+                            na.cms.settings.current.selectedTreeNode = rec;
+                            //na.cms.onchange_selectedNode (settings, data, rec, function() {
+                                //na.cms.refresh(function() {
+                            //      na.cms.onchange_jsTreeNode(settings, data,rec);
+                                //});
                             //});
-                        });
-                    })
-                    else if (rec) na.cms.onchange_jsTreeNode(settings, data, rec);
+                        })
+                        else if (rec) na.cms.onchange_jsTreeNode(settings, data, rec);
 
-                    if (rec && rec.type=='naDocument') $('#document').fadeIn('slow');
-                    if (rec && rec.type=='naMediaAlbum') $('#upload').fadeIn('slow');
+                        if (rec && rec.type=='naDocument') $('#document').fadeIn('slow');
+                        if (rec && rec.type=='naMediaAlbum') $('#upload').fadeIn('slow');
+                        if (
+                            rec
+                            && (
+                                rec.type=='naDocument'
+                                || rec.type=='naMediaAlbum'
+                            )
+                        ) {
+                            if ($(window).width() < 400) {
+                                na.cms.settings.current.activeDialog = '#siteContent';
+                                na.desktop.settings.visibleDivs.remove('#siteToolbarLeft');
+                                na.desktop.settings.visibleDivs.push('#siteContent');
+                                na.desktop.resize();
+                            };
+                        }
 
+                        na.site.settings.buttons['#btnAddUser'].disable();
+                        na.site.settings.buttons['#btnAddGroup'].disable();
+                        na.site.settings.buttons['#btnAddFolder'].disable();
+                        na.site.settings.buttons['#btnAddDocument'].disable();
+                        na.site.settings.buttons['#btnAddMediaAlbum'].disable();
+                        na.site.settings.buttons['#btnDeleteRecord'].disable();
 
-                    if (
-                        rec
-                        && (
-                            rec.type=='naDocument'
-                            || rec.type=='naMediaAlbum'
-                        )
-                    ) {
-                        if ($(window).width() < 400) {
-                            na.cms.settings.current.activeDialog = '#siteContent';
-                            na.desktop.settings.visibleDivs.remove('#siteToolbarLeft');
-                            na.desktop.settings.visibleDivs.push('#siteContent');
-                            na.desktop.resize();
-                        };
-                    }
-
-                    na.site.settings.buttons['#btnAddUser'].disable();
-                    na.site.settings.buttons['#btnAddGroup'].disable();
-                    na.site.settings.buttons['#btnAddFolder'].disable();
-                    na.site.settings.buttons['#btnAddDocument'].disable();
-                    na.site.settings.buttons['#btnAddMediaAlbum'].disable();
-                    na.site.settings.buttons['#btnDeleteRecord'].disable();
-
-                    if (rec && rec.type=='naSystemFolder' && rec.text=='Users')
-                        na.site.settings.buttons['#btnAddUser'].enable();
+                        if (rec && rec.type=='naSystemFolder' && rec.text=='Users')
+                            na.site.settings.buttons['#btnAddUser'].enable();
 
 
-                    if (rec && rec.type=='naSystemFolder' && rec.text=='Groups')
-                        na.site.settings.buttons['#btnAddGroup'].enable();
+                        if (rec && rec.type=='naSystemFolder' && rec.text=='Groups')
+                            na.site.settings.buttons['#btnAddGroup'].enable();
 
 
-                    if (rec &&
-                        (
-                            rec.type=='naUserRootFolder'
-                            || rec.type=='naGroupRootFolder'
-                            || rec.type=='naFolder'
-                        )
-                    ) na.site.settings.buttons['#btnAddFolder'].enable();
+                        if (rec &&
+                            (
+                                rec.type=='naUserRootFolder'
+                                || rec.type=='naGroupRootFolder'
+                                || rec.type=='naFolder'
+                            )
+                        ) na.site.settings.buttons['#btnAddFolder'].enable();
 
 
-                    if (rec &&
-                        (
-                            rec.type=='naFolder'
-                        )
-                    ) {
-                        na.site.settings.buttons['#btnAddDocument'].enable();
-                        na.site.settings.buttons['#btnAddMediaAlbum'].enable();
-                    }
+                        if (rec &&
+                            (
+                                rec.type=='naFolder'
+                            )
+                        ) {
+                            na.site.settings.buttons['#btnAddDocument'].enable();
+                            na.site.settings.buttons['#btnAddMediaAlbum'].enable();
+                        }
 
-                    if (rec &&
-                        (
-                            rec.type=='naFolder'
-                            || rec.type=='naDocument'
-                            || rec.type=='naMediaAlbum'
-                        )
-                    ) na.site.settings.buttons['#btnDeleteRecord'].enable();
+                        if (rec &&
+                            (
+                                rec.type=='naFolder'
+                                || rec.type=='naDocument'
+                                || rec.type=='naMediaAlbum'
+                            )
+                        ) na.site.settings.buttons['#btnDeleteRecord'].enable();
+                    }, 250, data);
+
                     //clearTimeout (na.cms.settings.current.timeoutRefresh);
                     //na.cms.settings.current.timeoutRefresh = setTimeout(na.cms.refresh,1000);
 
@@ -471,7 +473,7 @@ na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/Nic
                         : '/NicerAppWebOS/logic.userInterface/photoAlbum/4.0.0/index.php?basePath='+path+'&photoAlbum_emptyFolderPage=/NicerAppWebOS/logic.userInterface/photoAlbum/4.0.0/jquery_ui_widget.2.3.7.php'
                     ),
                     el = $('#jQueryFileUpload')[0];
-                    //el.onload = na.cms.onresize;
+                    el.onload = na.cms.onresize;
                     el.src = src;
 
                 } else {
@@ -693,7 +695,7 @@ na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/Nic
         */
     },
     
-    refresh : function (callback) {
+    refresh : function (callback, setSelected) {
         $('#siteToolbarLeft .lds-facebook').fadeIn('slow');
         var 
         fncn = 'na.cms.refresh(callback)',
@@ -712,6 +714,7 @@ na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/Nic
                 jt.refresh(false, false);
 
                 setTimeout (function (dat, jfu) {
+                    if (setSelected)
                     for (var i=0; i<dat.length; i++) {
                         var dit = dat[i];
                         if (dit.state.selected) {
@@ -1067,21 +1070,25 @@ na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/Nic
                     na.site.fail (fncn+' : AJAX decode error in data returned for url='+url1+', error='+error.message+', in data='+data, xhr);
                     return false;
                 }
-                    
+
+                debugger;
                 na.cms.refresh(function(nodes) {
+                    debugger;
                     for (var i=0; i<c.db.length; i++) {
                         if (c.db[i].text === dat.recordAdded.text) {
                             $('#jsTree').jstree('deselect_all');
                             $('#jsTree').jstree('select_node', c.db[i].id);
                         }
                     }
+                    debugger;
                     na.cms.onclick_btnUpload();
-                });
+                }, false);
             },
             error : function (xhr, textStatus, errorThrown) {
                 na.site.ajaxFail(fncn, url, xhr, textStatus, errorThrown);
             }                
         };
+        debugger;
         $.ajax(ac);
     },
     
@@ -1434,6 +1441,6 @@ na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/Nic
                 };
             };
             na.cms.onclick_btnViewMedia();
-        });
+        }, false);
     }
 }

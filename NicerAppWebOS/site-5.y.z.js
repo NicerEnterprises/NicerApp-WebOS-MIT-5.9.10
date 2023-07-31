@@ -2372,7 +2372,7 @@ onclick_btnFullResetOfAllThemes : function (event) {
                         na.m.log (210, 'DONE RE-INITIALIZING #siteMenu', false);
                         var topLevelItemCount = $('.vividMenu_mainUL > li', menu).length;
                         //debugger;
-                        $('#siteMenu').attr('fontSize', na.site.settings.current.menuFontSize);
+                        $('#siteMenu').css({height:50}).attr('fontSize', na.site.settings.current.menuFontSize);
 
                         if (settings) settings.naVividMenu_menuInitialized = menu;
                         if (typeof callback3x=='function') callback3x (settings);
