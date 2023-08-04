@@ -10,7 +10,8 @@
     $baseURL = '/NicerAppWebOS/siteData/'.$naWebOS->domain.'/';
     $baseDir = $root.'/NicerAppWebOS/siteData/'.$naWebOS->domain.'/';
     $targetDir = $baseDir.$_GET['basePath'];
-    $thumbDir = $targetDir.'/thumbs';
+    $thumbDir = $targetDir.'/thumbs/300';
+    if (!file_exists($thumbDir)) $thumbDir = $targetDir.'/thumbs';
 //var_dump ($targetDir);exit();
     $imgStyle = ''; // boxShadow perhaps
 
