@@ -71,7 +71,7 @@
     </div></li>
 
 
-    <li class="todoList"><div>(2023 June-Aug) Start work on a custom HTML WYSIWYG rich-text editor component of my own, that ties into the UWTE.<br/>
+    <li class="todoList"><div>(2023 Aug) Create a custom HTML WYSIWYG rich-text editor component of my own, that ties into the UWTE.<br/>
         <ol class="todoList_l1">
             <li class="todoList_l1"><div>supply data from a HTML+CSS form into <a href="https://github.com/NicerEnterprises/NicerApp-WebOS/blob/main/NicerAppWebOS/logic.business/class.core.WebsiteOperatingSystem-5.y.z.php#L1353" class="noPushState" target="naGH_wos1088">css_keyframes_to_array() and css_animation_template_to_animation()</a>.</div></li>
         </ol>
