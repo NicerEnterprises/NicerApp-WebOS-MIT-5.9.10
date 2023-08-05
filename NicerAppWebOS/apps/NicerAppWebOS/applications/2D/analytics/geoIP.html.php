@@ -5,7 +5,7 @@
 session_start();
 
 if (!array_key_exists('geoIP',$_SESSION)) $_SESSION['geoIP'] = array();
-if (!array_key_exists($_GET['IP'],$_SESSION['geoIP'])) {
+//if (!array_key_exists($_GET['IP'],$_SESSION['geoIP'])) {
     //$reader = new Reader(realpath(dirname(__FILE__).'/../../../../').'/NicerAppWebOS/3rd-party/geoLite2/GeoLite2-City.mmdb');
     //$record = $reader->city($_GET['IP']);
     $apiKey = trim(file_get_contents(dirname(__FILE__).'/api.geolocation.io.APIKEY.txt'));
@@ -13,10 +13,11 @@ if (!array_key_exists($_GET['IP'],$_SESSION['geoIP'])) {
     exec ($xec, $output, $result);
 //var_dump ($xec); var_dump ($output); die();
     $_SESSION['geoIP'][$_GET['IP']] = json_decode($output[0], true);
-};
+//};
 
 $record = $_SESSION['geoIP'][$_GET['IP']];
-//echo '<pre>'; var_dump ($record); die();
+//
+//echo '<pre>'; var_dump ($_GET); var_dump ($record); die();
 $html = 
     '<table>'
         .'<tr><th>Continent</th><td>'.$record['continent_name'].'</td></tr>'
