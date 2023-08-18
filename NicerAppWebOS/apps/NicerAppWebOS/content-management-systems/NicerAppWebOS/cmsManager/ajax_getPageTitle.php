@@ -12,10 +12,13 @@ $acdb = $adb->cdb;
 $dataSetName = $_REQUEST['database']; // i know, couchdb calls a 'table' a 'database'. and that sux.
 $cdb->setDatabase ($dataSetName, false);
 
+$id = $_POST['id'];
+//echo '<pre style="color:purple">'; var_dump ($id); echo '</pre>';
+
     $findCommand = [
         'selector' => [
-            'database' => $_REQUEST['database'],//str_replace('_tree_','_document_',$_REQUEST['database']),
-            'id' => $_REQUEST['id']
+            'database' => $_POST['database'],//str_replace('_tree_','_document_',$_REQUEST['database']),
+            'id' => $_POST['id']
         ],
         'fields' => [ '_id' ]
     ];

@@ -3,7 +3,7 @@ require_once (realpath(dirname(__FILE__).'/../../../../../../').'/NicerAppWebOS/
 require_once (dirname(__FILE__).'/functions.php');
 require_once (dirname(__FILE__).'/sources-list.php');
 global $naWebOS;
-var_dump ($naWebOS->view);die();
+//var_dump ($naWebOS->view);die();
 foreach ($naWebOS->view as $viewPath => $viewRec) {
     $section = $viewRec['section'];
 
@@ -14,7 +14,7 @@ foreach ($naWebOS->view as $viewPath => $viewRec) {
         $op = 'on nicer.app';
     }
     if (strpos($section, 'Nieuws')!==false) {
-        $op = 'on nicer.app';
+        $op = 'op nicer.app';
     }
     if (strpos($section, 'Deutsche')!==false) {
         $op = 'auf nicer.app';

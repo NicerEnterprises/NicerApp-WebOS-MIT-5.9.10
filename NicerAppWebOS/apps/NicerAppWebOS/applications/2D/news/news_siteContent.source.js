@@ -1216,7 +1216,7 @@ na.m.preventScreenLock();
                     && !na.site.settings.current.running_saveTheme
                 );
             }, function () {
-                na.site.loadTheme_applySettings (na.site.globals.themes[na.site.globals.themeName]);
+                na.site.loadTheme_applySettings (na.site.globals.themes[na.site.globals.themeName], null, false);
                 //na.te.reApplySelectorsTree();
             }, 100);
         }, 50);
@@ -1621,7 +1621,7 @@ na.m.preventScreenLock();
             var seov = appSettings.section.replace(/.*__/,'').replace('__','-').replace('_','-').toLowerCase();
         };
         html += '<div class="newsApp__item__footer"><span class="newsApp__item__date"><a class="nomod noPushState" target="_new"  target="newsAppItem_'+it.idx+'" href="' + it.rssURL+'">' + na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/news'].formatDate(it)+'</a></span><br/>';
-        html += '<span class="newsApp__item__copy"><a class="nomod noPushState" href="javascript:var el = $(\'#newsApp__item__'+it.idx+'\')[0], textarea = $(\'#siteContent__textareaCopy\')[0]; if (!textarea) { var el2=document.createElement(\'textarea\'); window.top.document.append(el2); textarea=el2 }; el_html = el.innerHTML; el.innerHTML = el.innerHTML.replace(\/<span class..newsApp__item__copy.>.*<.a><.span>\/,\'\') + \'Found via <a href=\\\'https://nicer.app/'+seov+'\\\' target=\\\'_new\\\'>https://nicer.app/'+seov+'</a>\'; var type = \'text/html\'; var blob = new Blob([el.innerHTML], { type }); var data = [new ClipboardItem({ [type]: blob })]; navigator.clipboard.write(data).then( () => {/* success */}, () => {/* failure */} ); var selection = window.getSelection(); var range = document.createRange(); range.selectNodeContents(el); selection.removeAllRanges(); selection.addRange(range); window.top.document.execCommand(\'copy\');setTimeout(function(){selection.removeAllRanges(); el.innerHTML=el_html;},1000);">Copy to clipboard</a></span></div> ';
+        html += '<span class="newsApp__item__copy"><a class="nomod noPushState" href="javascript:var el = $(\'#newsApp__item__'+it.idx+'\')[0], textarea = $(\'#siteContent__textareaCopy\')[0]; if (!textarea) { var el2=document.createElement(\'textarea\'); window.top.document.append(el2); textarea=el2 }; el_html = el.innerHTML; el.innerHTML = el.innerHTML.replace(\/<span class..newsApp__item__copy.*>.*<.a><.span>\/,\'\') + \'Found via <a href=\\\'https://nicer.app/'+seov+'\\\' target=\\\'_new\\\'>https://nicer.app/'+seov+'</a>\'; var type = \'text/html\'; var blob = new Blob([el.innerHTML], { type }); var data = [new ClipboardItem({ [type]: blob })]; navigator.clipboard.write(data).then( () => {/* success */}, () => {/* failure */} ); var selection = window.getSelection(); var range = document.createRange(); range.selectNodeContents(el); selection.removeAllRanges(); selection.addRange(range); window.top.document.execCommand(\'copy\');setTimeout(function(){selection.removeAllRanges(); el.innerHTML=el_html;},1000);">Copy to clipboard</a></span></div> ';
         html+= '</div>';
 
         // tooltipster HTML

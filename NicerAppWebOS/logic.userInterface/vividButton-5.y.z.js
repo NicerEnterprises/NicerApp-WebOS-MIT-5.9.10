@@ -282,6 +282,8 @@ class naVividButton_icon {
         t.gradientRadius = 10;
         t.grayScale = 0;
         //if (t.el.id=='btnSelectBoxShadowSettings') debugger;
+        console.log ('t333:' + t.el.id);
+        if (t.el.id=='btnPlayPause') debugger;
         $(t.p.iconComponents, el).add(t.elText).hover(function () { t.hoverStarts(t) }, function () { t.hoverEnds(t) });
     }
     
@@ -499,15 +501,19 @@ class naVividButton_icon_svg {
 
         if (t.globals.debug) debugger;
         ato.step = 0;
-        l.animDirection = 'increase';
         if (
             !$(b.el).is('.disabled')
-            && !$(b.el).is('.selected')
+            //&& !$(b.el).is('.selected')
+            //&& !$(b.el).is('.hover')
         ) {
-            if (t.globals.debug) debugger;
+            l.animDirection = 'increase';
             t.anim_increaseGradient(b, l, ato);
-        }
-
+        } else if (!$(b.el).is('.hover')) {
+            l.animDirection = 'decrease';
+            b.circumstance = 'hover';
+            b.to.circumstance = 'normal';
+            t.anim_decreaseGradient(b, l, ato);
+        };
 
         if (t.globals.debug) debugger;
         var l2 = b.btnCode.layers.circleIcon_svg;
@@ -517,8 +523,8 @@ class naVividButton_icon_svg {
     hoverOut (b) {
         var
         t = this;
-        if ($(b.el).is('.selected')) return false;
-        if ($(b.el).is('.recentlyClicked')) return false;
+       // if ($(b.el).is('.selected')) return false;
+        //if ($(b.el).is('.recentlyClicked')) return false;
         b.circumstance = 'hover';
         b.to.circumstance = 'normal';
 
@@ -542,8 +548,8 @@ class naVividButton_icon_svg {
         if (
             (
                 !$(b.el).is('.disabled')
-                && !$(b.el).is('.selected')
-                && !$(b.el).is('.recentlyClicked')
+                //&& !$(b.el).is('.selected')
+//                 //&& !$(b.el).is('.recentlyClicked')
                 //&& !$(b.el).is('.'+b.btnCode.selectedState)
                 //&& !$(b.el).is('.'+b.btnCode.startupState)
             )
@@ -559,7 +565,7 @@ class naVividButton_icon_svg {
             typeof l2.onmouseout == 'function'
             && (
                 !$(b.el).is('.disabled')
-                || $(b.el).is('.'+b.btnCode.startupState)
+                //|| $(b.el).is('.'+b.btnCode.startupState)
             )
             && $(b.el).is('.hover')
 
@@ -599,7 +605,7 @@ class naVividButton_icon_svg {
 
         if (t.globals.debug) debugger;
         if (selected) {
-            if ( !$(b.el).is('.hover') ) {
+            //if ( !$(b.el).is('.hover') ) {
                 b.circumstance = 'normal';
                 b.to.circumstance = 'hover';
 
@@ -607,7 +613,7 @@ class naVividButton_icon_svg {
                 l.animDirection = 'increase';
                 if (t.globals.debug) debugger;
                 t.anim_increaseGradient(b, l, ato);
-            }
+            //}
         } else {
             ato.step = 0;
             l.animDirection = 'decrease';

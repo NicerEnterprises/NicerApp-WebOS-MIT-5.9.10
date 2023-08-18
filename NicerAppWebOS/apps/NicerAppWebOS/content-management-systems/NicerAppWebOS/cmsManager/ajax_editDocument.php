@@ -4,6 +4,8 @@ require_once (realpath(dirname(__FILE__).'/../../../../..').'/boot.php');
 global $naWebOS;
 $db = $naWebOS->dbs->findConnection('couchdb');
 $cdb = $db->cdb;
+//echo '<pre>'; var_dump ($cdb); echo '</pre>';
+//trigger_error (json_encode($cdb), E_USER_NOTICE);
 
 $adb = $naWebOS->dbsAdmin->findConnection('couchdb');
 $acdb = $adb->cdb;

@@ -14,7 +14,7 @@ foreach ($naWebOS->view as $viewPath => $viewRec) {
         $op = 'on nicer.app';
     }
     if (strpos($section, 'Nieuws')!==false) {
-        $op = 'on nicer.app';
+        $op = 'op nicer.app';
     }
     if (strpos($section, 'Deutsche')!==false) {
         $op = 'auf nicer.app';
@@ -22,6 +22,7 @@ foreach ($naWebOS->view as $viewPath => $viewRec) {
     if (strpos($section, 'Headlines')===false) {
         $hl = ' headlines';
     }
+    //var_dump ($section); die();
 
     $section2 = preg_replace('/.*__/','',$section);
     $section2 = preg_replace('/_/',' ',$section2);

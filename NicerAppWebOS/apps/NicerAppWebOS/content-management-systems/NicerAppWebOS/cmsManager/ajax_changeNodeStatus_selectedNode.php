@@ -43,6 +43,7 @@ if (!property_exists($call->body,'state') || !is_object($call->body->state))
         'state' => [ 'selected' => true ]
     ]));
 $call->body->state->selected = true;
+$call->body->state->opened = true;
 if ($debug) { echo '$call='; var_dump ($call); echo PHP_EOL.PHP_EOL; }
 
 try { $call = $cdb->post($call->body); } catch (Exception $e) {

@@ -3556,7 +3556,7 @@ var modern = (function (domGlobals) {
       }
     }
     function addRemove(add, ctrl) {
-      var i, zIndex = FloatPanel.zIndex || 65535, topModal;
+      var i, zIndex = FloatPanel.zIndex || 850000, topModal;
       if (add) {
         zOrder.push(ctrl);
       } else {

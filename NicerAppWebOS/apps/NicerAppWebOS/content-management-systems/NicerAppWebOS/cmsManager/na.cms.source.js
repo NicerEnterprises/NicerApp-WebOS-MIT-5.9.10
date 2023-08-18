@@ -1323,6 +1323,11 @@ na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/Nic
         };
 
         //debugger;
+        na.m.waitForCondition('.floatpanel?', function() {
+            return $('.mce-floatpanel').length > 0;
+        }, function() {
+            $('.mce-floatpanel').css({background:'rgba(0,0,0,0.55)', zIndex:900000});
+        },50);
         success(r);
     },
     

@@ -172,6 +172,9 @@ na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/musicPlayer'] 
         
         $('.mp3').removeClass('selected').removeClass('vividButtonSelected').addClass('vividButton');
         $('#'+id).addClass('selected').removeClass('vividButton').addClass('vividButtonSelected');
+        $('#btnPlayPause').addClass('selected');
+        $('#line2').addClass('atPlay');
+        $('#from_pause_to_play')[0].beginElement();
 
         var ajaxCommand = {
 			type : 'GET',
@@ -496,7 +499,7 @@ na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/musicPlayer'] 
                 div = $(ui.helper),
                 dragged = $(ui.helper[0].children[0]).clone(false,false)[0],
                 pc = na.mp.playlistCount;
-  debugger;
+
                 let 
                 oldID = ui.helper[0].children[0].id,
                 original = $('#'+oldID),

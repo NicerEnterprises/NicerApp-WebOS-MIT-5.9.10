@@ -31,7 +31,7 @@ na.site = {
             $.cookie('agreedToPolicies')!=='true'
             ? '<table style="width:99%;"><tr><td><a href="/" style="padding:0;text-shadow:0px 0px 5px rgba(0,0,0,0.8);">said.by</a> only uses cookies for remembering user settings.</td>'
                 + '<td style="width:66px;"><div class="vividButton" theme="dark" style="position:relative;color:white;width:40px;height:20px;" onclick="na.site.dismissCookieWarning();">Ok</div></td></table>'
-            : '<table style="height:100%;"><tr><td><a href="https://opensource.org/license/mit/" target="_new" class="nomod noPushState">MIT-Licensed</a>, Opensourced <a href="https://github.com/NicerEnterprises/NicerApp-WebOS" target="_new" class="nomod noPushState">here</a>, Copyright 2023 by <a href="mailto:rene.veerman.netherlands@gmail.com" class ="contentSectionTitle3_a"><span class="contentSectionTitle3_span">Rene A.J.M. Veerman</span></a></td><td style="width:40px;"><div class="vividButton" theme="dark" style="position:relative;color:white;height:20px;width:40px;" onclick="na.site.dismissCopyrightMessage();">Ok</div></td></table>'
+            : '<table style="height:100%;"><tr><td><a href="https://nicer.app/docs-license" target="_new" class="nomod noPushState contentSectionTitle1_a"><span class="contentSectionTitle1_span">MIT-Licensed</span></a>, Opensourced <a href="https://github.com/NicerEnterprises/NicerApp-WebOS" target="_new" class="nomod noPushState contentSectionTitle1_a"><span class="contentSectionTitle1_span">here</span></a>, Copyright 2023 by <a href="mailto:rene.veerman.netherlands@gmail.com" class ="contentSectionTitle3_a"><span class="contentSectionTitle3_span">Rene A.J.M. Veerman</span></a></td><td style="width:40px;"><div class="vividButton" theme="dark" style="position:relative;color:white;height:20px;width:40px;" onclick="na.site.dismissCopyrightMessage();">Ok</div></td></table>'
         ),
         dialogs : {},
         buttons : {},
@@ -3046,7 +3046,8 @@ onclick_btnFullResetOfAllThemes : function (event) {
     loadTheme_initializeExtras : function () {
         // gets called at the end of a chain started by onload_phase2()
         if (
-            na.site.globals.themes.default.themeSettings
+            na.site.globals.themes.default
+            && na.site.globals.themes.default.themeSettings
             && (
                 typeof na.site.globals.themes.default.themeSettings['Extras']!=='object'
                 || typeof na.site.globals.themes.default.themeSettings['Extras'].length==='number'
@@ -3055,7 +3056,8 @@ onclick_btnFullResetOfAllThemes : function (event) {
             for (var themeID in na.site.globals.themes) break;
             na.site.globals.themes.default.themeSettings.Extras = {
                 'texts' : {
-                    '#siteContent > .vividDialogContent > li > a, p, h1, h2, h3' : { opacity : na.site.globals.themes[themeID].textBackgroundOpacity, backgroundClip:'text' }
+                    '#siteContent > .vividDialogContent > li > a, p, h1, h2, h3' : { opacity : na.site.globals.themes[themeID].textBackgroundOpacity, backgroundClip:'text' },
+                    '#siteContent .newsApp__item__outer p' : { opacity : 1, backgroundClip:'none' }
                 },
                 'menus' : {
                     '.vividMenu_item' : { opacity : 1 }
@@ -3093,7 +3095,6 @@ onclick_btnFullResetOfAllThemes : function (event) {
     },
 
     loadTheme_do : function (callback, theme) {
-        debugger;
         var
         fncn = 'na.site.loadTheme_do(callback,theme)',
         s = na.te.settings.current.specificity,
@@ -3122,7 +3123,6 @@ onclick_btnFullResetOfAllThemes : function (event) {
             url : url,
             data : acData,
             success : function (data, ts, xhr) {
-                debugger;
                 // reload #cssPageSpecific and #jsPageSpecific
 
                 if (data=='status : Failed.') {
@@ -3156,7 +3156,6 @@ onclick_btnFullResetOfAllThemes : function (event) {
                     na.site.settings.current.theme = dat;
                     break;
                 };
-debugger;
                 //na.site.setSpecificity (true);
                 na.site.loadTheme_applySettings (dat, callback);
             },
@@ -3169,7 +3168,8 @@ debugger;
         $.ajax(ac);
     },
 
-    loadTheme_applySettings : function (dat, callback) {
+    loadTheme_applySettings : function (dat, callback, setTimers) {
+        if (typeof setTimers === 'undefined') setTimers = true;
         if (!dat) {
             na.m.log (1, 'Error : loadTheme_applySettings() called with dat=undefined/false', false);
             return false;
@@ -3221,44 +3221,46 @@ debugger;
             );
         }
 
-        clearInterval (na.site.settings.current.backgroundChangeInterval);
-        if (dat.changeBackgroundsAutomatically=='true') {
-            $('#changeBackgroundsAutomatically')[0].checked = true;
-            /*
-            var m = $('#backgroundChange_minutes').val();
-            var h = $('#backgroundChange_hours').val();
-            var ms = ((h * 60)+1) * (m * 60) * 1000;
-            na.site.settings.current.backgroundChangeInterval = setInterval (function() {
+        if (setTimers) {
+            clearInterval (na.site.settings.current.backgroundChangeInterval);
+            if (dat.changeBackgroundsAutomatically=='true') {
+                $('#changeBackgroundsAutomatically')[0].checked = true;
+                /*
+                var m = $('#backgroundChange_minutes').val();
+                var h = $('#backgroundChange_hours').val();
+                var ms = ((h * 60)+1) * (m * 60) * 1000;
+                na.site.settings.current.backgroundChangeInterval = setInterval (function() {
+                    na.backgrounds.next (
+                        '#siteBackground',
+                        na.site.globals.backgroundSearchKey,
+                        null,
+                        true
+                    );
+                }, ms);
+                */
+            }
+            if (dat.backgroundChange_hours) $('#backgroundChange_hours').val(dat.backgroundChange_hours);
+            if (dat.backgroundChange_minutes) $('#backgroundChange_minutes').val(dat.backgroundChange_minutes);
+
+            var
+            h = parseInt($('#backgroundChange_hours').val()),
+            m = parseInt($('#backgroundChange_minutes').val()),
+            ms = (
+                ( h > 0 ? (h * 60) : 1) // 60 minutes in an hour
+                * (m > 0 ? (m * 60) : 1) // 60 seconds in a minute
+                * 1000 // 1000 milliseconds in a second
+            );
+            clearInterval (na.site.settings.current.backgroundChangeInterval);
+            if ($('#changeBackgroundsAutomatically')[0].checked) na.site.settings.current.backgroundChangeInterval = setInterval (function() {
                 na.backgrounds.next (
                     '#siteBackground',
                     na.site.globals.backgroundSearchKey,
                     null,
-                    true
+                    true,
+                    "na.site.settings.current.backgroundChangeInterval() : this website's backgroundChangeInterval is currently turned on to occur every "+(ms/1000)+" seconds."
                 );
             }, ms);
-            */
         }
-        if (dat.backgroundChange_hours) $('#backgroundChange_hours').val(dat.backgroundChange_hours);
-        if (dat.backgroundChange_minutes) $('#backgroundChange_minutes').val(dat.backgroundChange_minutes);
-
-        var
-        h = parseInt($('#backgroundChange_hours').val()),
-        m = parseInt($('#backgroundChange_minutes').val()),
-        ms = (
-            ( h > 0 ? (h * 60) : 1) // 60 minutes in an hour
-            * (m > 0 ? (m * 60) : 1) // 60 seconds in a minute
-            * 1000 // 1000 milliseconds in a second
-        );
-        clearInterval (na.site.settings.current.backgroundChangeInterval);
-        if ($('#changeBackgroundsAutomatically')[0].checked) na.site.settings.current.backgroundChangeInterval = setInterval (function() {
-            na.backgrounds.next (
-                '#siteBackground',
-                na.site.globals.backgroundSearchKey,
-                null,
-                true,
-                "na.site.settings.current.backgroundChangeInterval() : this website's backgroundChangeInterval is currently turned on to occur every "+(ms/1000)+" seconds."
-            );
-        }, ms);
 
         if (dat.textBackgroundOpacity) {
             na.te.s.c.textBackgroundOpacity = dat.textBackgroundOpacity;
@@ -3273,6 +3275,7 @@ debugger;
                 var bg = na.m.adjustColorOpacity(el, dat.textBackgroundOpacity);
                 if (bg) $(el).css({background:bg});
             });
+            $('.newsApp__item__outer p').css ({ opacity : 1 });
         }
         if (dat.themeSettings && dat.themeSettings['.vividDialog']) {
             $('.vividDialog').css(dat.themeSettings['.vividDialog']);
@@ -3403,7 +3406,6 @@ debugger;
         na.m.log (10, 'na.site.saveTheme() : STARTING.', false);
 
         if (!s) return false;        
-        debugger;
         if (!theme) theme = $('.na_themes_dropdown__themes > .vividDropDownBox_selected > .vividScrollpane').html();
         
         clearTimeout (na.site.settings.current.saveThemeTimeout);
@@ -3438,7 +3440,6 @@ debugger;
             if (s.user) themeData.user = s.user;
             if (app) themeData.app = app;
             if (s.specificityName) themeData.specificityName = s.specificityName;
-            debugger;
             if (
                 typeof s.specificityName=='string'
                 && s.specificityName.match(/site /)
@@ -3461,7 +3462,6 @@ debugger;
 
             themeData = na.site.loadTheme_fetchDialogs(themeData);
             na.site.loadTheme_applySettings (themeData); // apply changes in setTimeout() for backgroundChangeInterval
-            debugger;
             na.site.globals.themes[na.site.globals.themeName] = $.extend({}, themeData);
             
             // ENCAPSULATE (ENCODE) json objects for HTTP transport
