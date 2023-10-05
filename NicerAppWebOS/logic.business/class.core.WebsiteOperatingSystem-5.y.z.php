@@ -1355,7 +1355,7 @@ class NicerAppWebOS {
                 //$r .= "});".PHP_EOL;
                 $r .= '$(document).ready(function() {'.PHP_EOL;
                     //$r .= "\tsetTimeout(function() {".PHP_EOL;
-                    $r .= "\t\tna.site.setSpecificity();".PHP_EOL;
+                    $r .= "\t\tna.site.setSpecificity(true);".PHP_EOL;
                     //$r .= "\t}, 4000); // wait 4 secs to allow for initial theme loading".PHP_EOL;
                 $r .= "});".PHP_EOL;
                 $r .= '</script>'.PHP_EOL;
@@ -1552,7 +1552,7 @@ class NicerAppWebOS {
                     };
                     $r .= '$(document).ready(function() {'.PHP_EOL;
                         //$r .= "\tsetTimeout(function() {".PHP_EOL;
-                        $r .= "\t\tna.site.setSpecificity();".PHP_EOL;
+                        $r .= "\t\tna.site.setSpecificity(true);".PHP_EOL;
                         //$r .= "\t}, 4000); // wait 4 secs to allow for initial theme loading".PHP_EOL;
                     $r .= "});".PHP_EOL;
                     $r .= '</script>'.PHP_EOL;

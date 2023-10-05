@@ -992,14 +992,20 @@ na.site = {
             b = na.ui.vb.settings.buttons['#btnLockSpecificity'],
             selectMe = (
                 simple
-                    ? na.site.globals.themeSpecificityName === na.site.globals.themesDBkeys[i].specificityName
+                    ? (
+                        na.site.globals.themeSpecificityName === na.site.globals.themesDBkeys[i].specificityName
+                        || na.site.globals.specificityName === na.site.globals.themesDBkeys[i].specificityName
+                    )
                     : b && b.state == b.btnCode.selectedState
-                        ? na.site.globals.themeSpecificityName === na.site.globals.themesDBkeys[i].specificityName
+                        ? (
+                            na.site.globals.themeSpecificityName === na.site.globals.themesDBkeys[i].specificityName
+                            || na.site.globals.specificityName === na.site.globals.themesDBkeys[i].specificityName
+                        )
                         : i == l
             );
 
             if (selectMe) {
-                //debugger;
+                debugger;
                 $(divEl).addClass('selected');
                 //$('.na_themes_dropdown__specificity > .vividDropDownBox_selected').html (na.site.globals.specificityName);
                 na.site.globals.themeDBkeys = na.site.globals.themesDBkeys[i];
@@ -1008,6 +1014,7 @@ na.site = {
                 na.te.settings.current.specificity = na.site.globals.themeDBkeys;
             };
 
+            debugger;
             $('.na_themes_dropdown__specificity > .vividDropDownBox_selector > .vividScrollpane').append($(divEl).clone(true,true));
         };
 
@@ -3124,7 +3131,7 @@ onclick_btnFullResetOfAllThemes : function (event) {
                     $('#cssPageSpecific, #jsPageSpecific').remove();
                     $('head').append(data2).delay(100);
                 }
-                if (doSwitchSpecificities) na.site.setSpecificity(true); // DOESNT WORK WITH NEW THEMES
+                //if (doSwitchSpecificities) na.site.setSpecificity(true); // DOESNT WORK WITH NEW THEMES
                 setTimeout(function () {
                     if (typeof callback=='function') callback(true);
                 }, 50);
