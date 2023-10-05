@@ -213,7 +213,11 @@ na.backgrounds = {
                 } else if (saveTheme) {
                     na.site.saveTheme();
                 }*/
-                if (saveTheme) na.site.saveTheme();
+                if (saveTheme) {
+                    debugger;
+                    na.site.saveTheme();
+                }
+
 
                 if (!url.match(/cracked-surface/)) na.analytics.logMetaEvent ('background set to '+url, false);
                 

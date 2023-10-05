@@ -27,6 +27,9 @@ if (
 global $naWebOS;
 //echo '<pre>'; var_dump ($naWebOS); exit();
 
+$un1 = strtolower(trim($naWebOS->ownerInfo['OWNER_NAME']));
+$un1 = str_replace(' ', '_', $un1);
+$un1 = str_replace('.', '__', $un1);
 
 $dbs = [
     'analytics',
@@ -36,10 +39,10 @@ $dbs = [
     'views',
     'cms_tree',
     'cms_tree___role___guests',
-    'cms_tree___user___administrator',
+    'cms_tree___user___'.$un1,
     'cms_tree___user___guest',
     'cms_documents___role___guests',
-    'cms_documents___user___administrator',
+    'cms_documents___user___'.$un1,
     'cms_documents___user___guest',
     'themes',
     'api_wallpaperscraper__plugin_bingImages',
@@ -63,10 +66,10 @@ $dbsReset = [
     'views',
     'cms_tree',
     'cms_tree___role___guests',
-    'cms_tree___user___administrator',
+    'cms_tree___user___'.$un1,
     'cms_tree___user___guest',
     'cms_documents___role___guests',
-    'cms_documents___user___administrator',
+    'cms_documents___user___'.$un1,
     'cms_documents___user___guest',
     'themes',
     'api_wallpaperscraper__plugin_bingImages',
@@ -147,13 +150,16 @@ if (mustDo('urlRedirection')) {
 
 //echo '<pre style="color:red">'; var_dump (mustDo('cms')); echo '</pre>';
 if (mustDo('cms')) {
+    $un1 = strtolower(trim($naWebOS->ownerInfo['OWNER_NAME']));
+    $un1 = str_replace(' ', '_', $un1);
+    $un1 = str_replace('.', '__', $un1);
     $dbs = goDo ($dbs, [
         'cms_tree',
         'cms_tree___role___guests',
-        'cms_tree___user___administrator',
+        'cms_tree___user___'.$un1,
         'cms_tree___user___guest',
         'cms_documents___role___guests',
-        'cms_documents___user___administrator',
+        'cms_documents___user___'.$un1,
         'cms_documents___user___guest'
     ]);
 };

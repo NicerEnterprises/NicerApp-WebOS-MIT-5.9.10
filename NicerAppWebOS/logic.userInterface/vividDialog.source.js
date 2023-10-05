@@ -35,8 +35,11 @@ class naVividDialog {
             if (
                 t.el.id!=='#siteToolbarThemeEditor' 
                 && !$('.vdSettings',t.el)[0]
-            ) $(t.el).prepend(html).delay(20);
+            ) $(t.el).prepend(html).delay(200);
             $('.vdSettings', t.el).fadeIn('slow');
+            setTimeout(function() {
+                $(t.el).css({overflow:'visible'});
+            }, 800);
         } else {
             $(t.el).find('.vdSettings').remove();
             $(t.el).prepend(html);

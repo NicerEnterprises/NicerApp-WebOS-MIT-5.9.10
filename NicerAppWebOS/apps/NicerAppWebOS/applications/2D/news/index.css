@@ -9,7 +9,10 @@
     /*display : block;*/
 }
 
-
+#div_newsApp_info, #newsApp_timer {
+    background : rgba(0,0,0,0.5);
+    border-radius : 8px;
+}
 .newsApp_header {
     box-shadow : 0px 0px 7px rgba(0,255,0,0.555), 0px 0px 4px rgba(255,255,255,0.555), 3px 3px 4px rgba(0,0,0,0.7), inset 0px 0px 4px rgba(0,0,0,0.555);
 }
@@ -32,6 +35,7 @@
     box-shadow: inset 2px 2px 4px 2px rgba(230, 255, 255, 0.7), 3px 3px 2px 1px rgba(0,0,0,0.7);
     animation : anim_itemOuter_normal 1s forwards;
 }
+
 .newsApp__item__outer:hover {
     animation : anim_itemOuter_hover 1s forwards;
 }
@@ -110,6 +114,7 @@
     bottom : 0;
     width : 100%;
 }
+
 
 .newsApp__item__outer .newsApp__item__outer__bgFile1 {
     animation : anim_itemOuter_bgFile1_normal 1s forwards;
@@ -203,6 +208,7 @@ p > .newsApp__item__paint {
   text-shadow : 2px 2px 2px rgba(0,0,0,0.8);
   position : relative;
 }
+
 .newsApp__item__title a:hover, .newsApp__item__desc a:hover {
   --bg-size: 400%;
   --color-one-green: #50FF50;
@@ -220,6 +226,7 @@ p > .newsApp__item__paint {
   text-shadow : 2px 2px 2px rgba(0,0,0,0.8);
   position : relative;
 }
+
 
 .newsApp__item__title {
     position : relative;
@@ -268,7 +275,7 @@ p > .newsApp__item__paint {
     opacity : 1;
 }
 
-.newsApp__item__title:hover,
+/*.newsApp__item__title:hover,*/
 .newsApp__item__desc a:hover {
     animation : anim_titleDesc_hover 1s forwards;
 }
@@ -399,7 +406,6 @@ p > .newsApp__item__paint {
 
 #newsApp_info, #newsApp_title, #newsApp_timer {
     padding : 7px !important;
-    margin : 5px !important;
     border-radius : 10px !important;
 }
 #newsApp_timer {

@@ -70,12 +70,28 @@
         </ol>
     </div></li>
 
+    <li class="todoList"><div>Full server backup facilities within NicerApp WebOS. Currently this is only needed for couchdb data and cms data from the server file system, to other servers on the LAN or even outside the LAN of the web server, <b>and</b> to zip files (by using the php7.4-zip ubuntu OS library), <b>with</b> progress bar for the zip file creation processes, and also with restore functionality built right into the browser.</div></li>
 
-    <li class="todoList"><div>(2023 Aug) Create a custom HTML WYSIWYG rich-text editor component of my own, that ties into the UWTE.<br/>
+
+    <li class="todoList"><div>(STALLED) Create a custom HTML WYSIWYG rich-text editor component of my own, that ties into the UWTE.<br/>
+    This is stalled because browser makers need to start supporting a window.getSelection() that returns a .anchorOffset and .extentOffset that works on the .innerHTML instead of the .innerText of any given element (usually the .commonAncestorElement).
         <ol class="todoList_l1">
             <li class="todoList_l1"><div>supply data from a HTML+CSS form into <a href="https://github.com/NicerEnterprises/NicerApp-WebOS/blob/main/NicerAppWebOS/logic.business/class.core.WebsiteOperatingSystem-5.y.z.php#L1353" class="noPushState" target="naGH_wos1088">css_keyframes_to_array() and css_animation_template_to_animation()</a>.</div></li>
         </ol>
     </li>
+
+    <li class="todoList"><div>Slightly remodel the page loading mechanism and in doing so get theme loading to work again.</div></li>
+
+    <li class="todoList"><div>Work my WebOS to be more Windows(tm)(r) compatible in terms of it's user-interface.<br/>
+    Specifically, i want to move the date-time indicator on my web-pages to the bottom-right of the screen.<br/>
+    The only downside of this is that i'll lose pixel space for content/apps. But there's ways around that, like only showing the time indicator when the page is F11-ed, shown fullscreen without browser menus.
+    </div>
+    </li>
+
+    <li class="todoList"><div>Build a comments engine and user-interface (again).</div></li>
+
+    <li class="todoList"><div>Make the musicPlayer app work on smartphone vertical screens as well.</div></li>
+
 
     <li class="todoList"><div>Build an extension of the Sag library that i'm using for communication between PHP and couchdb that allows one to log events and calls into and from the Sag library to /var/logs/apache2/error.PORT.log and a seperate database in PHP.</div></li>
 
@@ -101,8 +117,6 @@ rewrite the backgrounds analysis and automatic resizing routines;
         </ol>
     </div>
     </li>
-
-    <li class="todoList"><div>Full server backup facilities within NicerApp WebOS. Currently this is only needed for couchdb data and IMAP Maildir data), to other servers on the LAN or even outside the LAN of the web server, <b>and</b> to zip files (by using the php7.4-zip ubuntu OS library), <b>with</b> progress bar for the zip file creation processes, and also with restore functionality built right into the browser.</div></li>
 
 
     <li class="todoList"><div>Figure out a way to store the width and height of each background found in the filesystem in the output of .../NicerAppWebOS/domainConfigs/DOMAIN.TLD/ajax_backgrounds_recursive.php and .../NicerAppWebOS/domainConfigs/DOMAIN.TLD/ajax_backgrounds.php.<br/>

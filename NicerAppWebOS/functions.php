@@ -270,6 +270,9 @@ function cdb_login($cdb, $cRec, $username) {
     if ($username=='admin') {
         try {
             $cdb->login ($cRec['username'], $cRec['password']);
+        } catch (Throwable $e) {
+            trigger_error ($fncn.' : could not login using credentials '.json_encode($cRec).'.', E_USER_ERROR);
+            return false;
         } catch (Exception $e) {
             trigger_error ($fncn.' : could not login using credentials '.json_encode($cRec).'.', E_USER_ERROR);
             return false;
@@ -293,7 +296,11 @@ function cdb_login($cdb, $cRec, $username) {
             //if (!is_null($r)) {
                 //echo '<pre>'; var_dump ($cdb->getSession()); exit();
                 $cdb_session = $cdb->getSession();
-                if (is_object($cdb_session) && $cdb_session->body->ok) {
+                if (
+                    is_object($cdb_session)
+                    && $cdb_session->body->ok
+                    && !is_null($cdb_session->body->userCtx->name)
+                ) {
                     $done = true;
                     $_SESSION['cdb_loginName'] = $cdb_session->body->userCtx->name;
                                 //var_dump ('t1:'.$_SESSION['cdb_loginName']);
@@ -302,6 +309,16 @@ function cdb_login($cdb, $cRec, $username) {
                         'username' => $cdb_session->body->userCtx->name,
                         'roles' => $cdb_session->body->userCtx->roles
                     ];
+                } else {
+                    $cdb->login ($cRec['username'], $cRec['password']);
+                    //if ($cRec['username']!=='Guest') trigger_error ('Session cookie expired. You have been logged in as \''.$cRec['username'].'\'', E_USER_WARNING);
+                    //echo '<pre>'; var_dump ($cdb->getSession()); exit();
+                    $cdb_session = $cdb->getSession();
+                    return [
+                        'username' => $cdb_session->body->userCtx->name,
+                        'roles' => $cdb_session->body->userCtx->roles
+                    ];
+
                 }
             //}
         }
@@ -457,14 +474,19 @@ function execPHP ($file, $flush=true) {
 
 function require_return ($file, $flush=false) {
 // used by .../domainConfigs/DOMAIN.EXT/mainmenu.php
-    if ($flush) {
-        ob_flush(); // NOT WISE AT ALL (nested calls to execPHP() will crash JSON decoding in the browser due to HTML inserted in AJAX response before the JSON data.
-        $c = '';
-    } else {
-        $c = ob_get_contents();
-        if ($c===false) $c = '';
+    //trigger_error ('require_return() : $file='.$file, E_USER_NOTICE);
+    $c = '';
+    try {
+        if ($flush) {
+            if (ob_get_contents()!==false) ob_flush(); // NOT WISE AT ALL (nested calls to execPHP() will crash JSON decoding in the browser due to HTML inserted in AJAX response before the JSON data.
+        } else {
+            $c = ob_get_contents();
+            if ($c===false) $c = '';
+        }
+        if (ob_get_contents()!==false) ob_end_clean();
+    } catch (Throwable $e) {
+    } catch (Exception $e) {
     }
-    ob_end_clean();
     ob_start();
     include ($file);
     $c .= ob_get_contents();
@@ -515,7 +537,7 @@ function css_array_to_css2($rules, $indent = 0) {
         //echo '<pre style="color:green">'; var_dump ($key); echo '</pre>';
         if (is_array($value) && $key=='css') {
             $css .= $prefix . css_array_to_css($value, $indent + 1);
-        } else {
+        } elseif (is_array($value)) {
             $css .= $prefix . css_array_to_css2 ($value, $indent);
         }
     }
@@ -540,6 +562,8 @@ function css_array_to_css($rules, $indent = 0) {
             $property = $key;
             $selector2 = '';
             for ($i=0; $i<strlen($property); $i++) {
+
+                // translate Hungarian notation to dashed notation :
                 $c = substr($property, $i, 1);
                 if ($c === strtolower($c)) {
                     $selector2 .= $c;
@@ -548,7 +572,13 @@ function css_array_to_css($rules, $indent = 0) {
                 }
             }
             $property = $selector2;
-            $css .= $prefix . "$property: $value;\n";
+            $suffix = (
+                strpos($value, '!important')!=false
+                    ?preg_replace('/\s\s/',' ',str_replace('!important','',$value))." !important;\n"
+                    :$value." !important;\n"
+            );
+            $suffix = $value.";".PHP_EOL;
+            $css .= $prefix.$property.': '.$suffix;
         }
     }
 

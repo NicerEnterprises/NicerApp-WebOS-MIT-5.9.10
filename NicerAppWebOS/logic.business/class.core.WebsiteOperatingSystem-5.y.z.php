@@ -3,11 +3,11 @@ $rootPath_na = realpath(dirname(__FILE__).'/../..'); global $rootPath_na;
 
 class NicerAppWebOS {
     public $cn = '.../NicerAppWebOS/logic.business/class.core.WebsiteOperatingSystem-5.y.z.php::class NicerAppWebOS';
-    public $version = '5.5.0';
+    public $version = '5.5.3';
     public $about = array(
         'whatsThis' => 'NicerApp Content Management System PHP class',
-        'version' => '5.5.0',
-        'lastModified' => 'Sunday, 9 July, 2023, 19:07 CEST (Amsterdam.NL timezone)',
+        'version' => '5.5.3',
+        'lastModified' => 'Monday, 25 Sept, 2023, 08:39 CEST (Amsterdam.NL timezone)',
         'copyright' => 'Copyright 2002-2023 by Rene A.J.M. Veerman <rene.veerman.netherlandsd@gmail.com>'
     );
 
@@ -28,8 +28,8 @@ class NicerAppWebOS {
     public $showAllErrors = false;
     
     //--- business logic level 1 NicerApp from Nicer Enterprises core entry point variables
-    public $cts; // code translation system of the NicerApp WCS (Websites Control System) as a whole
-    public $comments; // comments system for pages on NicerApp WCS (Websites Control System).
+    public $cts;
+    public $comments;
     
     public function __construct () {
         $fncn = $this->cn.'->__construct()';
@@ -163,7 +163,8 @@ class NicerAppWebOS {
             $this->dbsAdmin = 'initializing';
             // logged in as $cdbConfig['adminUsername']!
             //$this->dbAdmin = new class_NicerAppWebOS_database_API_couchdb_3_2 (clone $this, true);
-            $this->dbsAdmin = new class_NicerAppWebOS_database_API ('admin');
+            //echo '<pre>'; var_dump($this->ownerInfo); echo '</pre>'; die();
+            $this->dbsAdmin = new class_NicerAppWebOS_database_API ($this->ownerInfo['OWNER_NAME']);
             try {
                 //q$this->dbsAdmin = new class_NicerAppWebOS_database_API ('admin');
 
@@ -185,7 +186,7 @@ class NicerAppWebOS {
                 exit;
             }
         }
-        $this->dbs->setGlobals($this->dbs->findConnection('couchdb')->username);
+        //$this->dbs->setGlobals($this->dbs->findConnection('couchdb')->username);
         $this->dbsAdmin->setGlobals($this->dbsAdmin->findConnection('couchdb')->username);
 
         $this->initialized = true;
@@ -215,7 +216,7 @@ class NicerAppWebOS {
                 ];
             } else {
                 // request view settings from database
-                //echo '<pre>';var_dump ($_GET);
+                //echo '<pre>';var_dump ($_GET); die();
                 $decoded = json_decode(base64_decode_url($_GET['viewID']), true);
                 //var_dump (json_last_error());
                 if (json_last_error()!==0) {
@@ -271,7 +272,7 @@ class NicerAppWebOS {
 
                             $view = json_decode(json_encode($call->body->view), true);
                         } else {
-                            $msg = $fncn.' : views count inconsistent for seoValue='.$_GET['seoValue'].'.<br/>'."\n".'<pre>$call->headers->_HTTP->status='.$call->headers->_HTTP->status.', $call->body='.json_encode($call->body,JSON_PRETTY_PRINT).'</pre>';
+                            $msg = $fncn.' : views count inconsistent for viewID='.$_GET['viewID'].'.<br/>'."\n".'<pre>$call->headers->_HTTP->status='.$call->headers->_HTTP->status.', $call->body='.json_encode($call->body,JSON_PRETTY_PRINT).'</pre>';
                             trigger_error($msg, E_USER_WARNING);
                             error_log($msg);
                             $this->view = $msg;
@@ -348,7 +349,10 @@ class NicerAppWebOS {
                 } else {
                     $this->view = $decoded;
                 }
+        } else {
+            $this->view = 'front page';
         }
+        //echo '<pre>'; var_dump ($_GET); var_dump($this->view); echo '</pre>'; die();
         return is_array($this->view);
     }
 
@@ -379,6 +383,9 @@ class NicerAppWebOS {
             } else foreach ($view as $viewFolder => $viewSettings) {
                 $titleFile = realpath(dirname(__FILE__).'/../..').'/'.$viewFolder.'/app.title.site.php';
             }
+        } elseif (array_key_exists('app-wikipedia_org-search', $_GET)) {
+            $viewFolder = '/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/3rd-party-site.wikipedia.org';
+            $titleFile = realpath(dirname(__FILE__).'/../..').'/'.$viewFolder.'/app.title.site.php';
         } elseif (array_key_exists('app-wikipedia_org', $_GET)) {
             $viewFolder = '/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/3rd-party-site.wikipedia.org';
             $titleFile = realpath(dirname(__FILE__).'/../..').'/'.$viewFolder.'/app.title.site.php';
@@ -628,6 +635,9 @@ class NicerAppWebOS {
 
             elseif ($this->nonEmptyStringField('app-wikipedia_org', $_GET))
                 return $this->getContent__view_wikipedia ($_GET['app-wikipedia_org']);
+
+            elseif ($this->nonEmptyStringField('app-wikipedia_org-search', $_GET))
+                return $this->getContent__view_wikipedia ($_GET['app-wikipedia_org-search']);
 
             elseif ( $this->nonEmptyStringField('viewID',$_GET) )
                 return $this->getContent__view ($_GET['viewID']); // this handles the front page of a website too.
@@ -1193,7 +1203,7 @@ class NicerAppWebOS {
     public function getPageCSS($js=true) {
         global $naDebugAll;
         global $naLAN;
-        $debug = false;
+        $debug = $this->debugThemeLoading;
         
         $viewFolder = '[UNKNOWN VIEW]';
         $db = $this->dbs->findConnection('couchdb');
@@ -1221,8 +1231,21 @@ class NicerAppWebOS {
 
         
         foreach ($selectors2 as $idx => $selector) {
+            // echo '<pre style="color:lime;background:navy;">1 $selector='; var_dump ($selector); echo '</pre>';
+            $specificityName = $selector['specificityName'];
+
             //if (!$this->selectorPermissionsPass('write', $selector)) continue;
             $css = $this->getPageCSS_specific($selector);
+            if ($debug) {
+                echo '<h1>'.$specificityName.'</h1>'; echo PHP_EOL;
+                if (
+                    is_array($css)
+                    && array_key_exists ($themeName, $css['themes'])
+                    //&& array_key_exists ('specificityName', $css['themes'][$themeName])
+                ) {
+                    echo '<pre style="color:yellow;background:navy;">2 $selector='; var_dump ($selector); var_dump ($css); echo '</pre>';
+                }
+            }
             if (is_array($css)) {
                 foreach ($css['themes'] as $themeName => $theme) { break; };
                 $specificityName = (
@@ -1231,20 +1254,8 @@ class NicerAppWebOS {
                     ? css['themes'][$themeName]['specificityName']
                     : $selector['specificityName']
                 );
-            } else {
-                $specificityName = $selector['specificityName'];
             }
             //{ echo '<pre>667 : $idx='.$idx; echo '$selector='; var_dump($selector); var_dump($css); echo '</pre>'; };
-            if ($debug) {
-                echo '<h1>'.$specificityName.'</h1>'; echo PHP_EOL;
-                if (
-                    is_array($css)
-                    && array_key_exists ($themeName, $css['themes'])
-                    //&& array_key_exists ('specificityName', $css['themes'][$themeName])
-                ) var_dump ($css['themes'][$themeName]);
-                echo '<pre style="color:yellow;background:navy;">'; var_dump ($selector); echo '</pre>';
-            }
-
             //if (is_array($css)) $css = json_encode($css, JSON_PRETTY_PRINT);
             if ($debug && is_array($css)) { echo '<pre>$selector='; var_dump($selector); var_dump($css); echo '</pre>'; };
             if (false && is_string($css) && $debug) {
@@ -1275,7 +1286,7 @@ class NicerAppWebOS {
 
                 $_SESSION['themeName'] = $themeName;
                 $_SESSION['specificityName'] = $selector['specificityName'];
-                if ($debug) { echo '<pre style="color:green">'; var_dump ($css); echo '</pre>'; die(); }
+                if ($debug) { echo '<pre style="color:green">'; var_dump ($css); echo '</pre>';  }
                 $r .= 'na.site.globals = $.extend(na.site.globals, {'.PHP_EOL;
                     //$r .= "\tdebug : ".json_encode($dbg).",".PHP_EOL;
                     $r .= "\tuseVividTexts : ".$useVividTexts.",".PHP_EOL;
@@ -1288,13 +1299,42 @@ class NicerAppWebOS {
                     //$r .= "\tspecificityName_revert : \"".$specificityName."\",".PHP_EOL;
                     //echo '<pre style="background:navy;color:lime;border-radius:10px;">'; var_dump ($css); echo '</pre>';
                     $r .= "\tspecificityName : \"".$specificityName."\",".PHP_EOL;
+                    $r .= "\tonloadSpecificityName : \"".$specificityName."\",".PHP_EOL;
                     //$r .= "\tspecificityNames : ".json_encode($selectorNames).",".PHP_EOL;
                     $r .= "\tthemesDBkeys : ".json_encode($selectors2).",".PHP_EOL;
                     $r .= "\tnaLAN : ".($naLAN ? 'true' : 'false').','.PHP_EOL;
                     $r .= "\tnaHasErrors : ".((array_key_exists('naErrors',$_SESSION) && is_string ($_SESSION['naErrors']) && $_SESSION['naErrors']!=='') ? 'true' : 'false').','.PHP_EOL;
                     $r .= "\thasDB : ".($this->hasDB ? 'true' : 'false').PHP_EOL;
                 $r .= '});'.PHP_EOL;
-                  //  $r .= 'debugger;'.PHP_EOL;
+                $r .= 'na.te.settings.current.specificity = $.extend(na.te.settings.current.specificity, {'.PHP_EOL;
+                $r .= "\tspecificityName : \"$specificityName\",".PHP_EOL;
+                $r .= "\turl : \"$this->url\",".PHP_EOL;
+                if (array_key_exists('view',$selector)) {
+                    $r .= "\tview : \"".$selector['view']."\",".PHP_EOL;
+                } else {
+                    $r .= "\tview : null,".PHP_EOL;
+                }
+                if (array_key_exists('role',$selector)) {
+                    $r .= "\trole : \"".$selector['role']."\",".PHP_EOL;
+                } else {
+                    $r .= "\trole : null,".PHP_EOL;
+                }
+
+                if (array_key_exists('user',$selector)) {
+                    $r .= "\tuser : \"".$selector['user']."\",".PHP_EOL;
+                } else {
+                    $r .= "\tuser : null,".PHP_EOL;
+                }
+
+                if (array_key_exists('app',$selector)) {
+                    $r .= "\tapp : \"".$selector['app']."\",".PHP_EOL;
+                } else {
+                    $r .= "\tapp : null,".PHP_EOL;
+                }
+                $r .= "});".PHP_EOL;
+
+
+                    //  $r .= 'debugger;'.PHP_EOL;
                 if (
                     strpos($_SERVER['SCRIPT_NAME'], '/index.php')!==false
                     || strpos($_SERVER['SCRIPT_NAME'], '/ajax_get_content.php')!==false
@@ -1309,16 +1349,15 @@ class NicerAppWebOS {
                 };
 
 
-                $r .= '$(document).ready(function() {'.PHP_EOL;
+                //$r .= '$(document).ready(function() {'.PHP_EOL;
                 //$r .= "\tna.m.waitForCondition('HTML BODY : document.ready -> na.site.setSpecificity', na.m.HTMLidle, na.site.setSpecificity, 50);".PHP_EOL;
-                $r .= "\tna.site.setSpecificity();".PHP_EOL;
-                $r .= "});".PHP_EOL;
-                /*
+                //$r .= "\tna.site.setSpecificity();".PHP_EOL;
+                //$r .= "});".PHP_EOL;
                 $r .= '$(document).ready(function() {'.PHP_EOL;
-                    $r .= "\t//setTimeout(function() {".PHP_EOL;
+                    //$r .= "\tsetTimeout(function() {".PHP_EOL;
                     $r .= "\t\tna.site.setSpecificity();".PHP_EOL;
-                    $r .= "\t//}, 10);".PHP_EOL;
-                $r .= "});".PHP_EOL;*/
+                    //$r .= "\t}, 4000); // wait 4 secs to allow for initial theme loading".PHP_EOL;
+                $r .= "});".PHP_EOL;
                 $r .= '</script>'.PHP_EOL;
                 $ret = $r.$ret;
             };
@@ -1333,7 +1372,9 @@ class NicerAppWebOS {
                 //$r .= "\t\tthemeName : '".$css['theme']."'".PHP_EOL;
                 //$r .= "\t});".PHP_EOL;
                 //$r .= '</script>'.PHP_EOL;
-                $r = '<style id="cssPageSpecific" type="text/css" theme="'.$theme['theme'].'" sel=\''.(json_encode($css['sel'])).'\' csn="'.$selector['specificityName'].'" dbID="'.$theme['dbID'].'">'.PHP_EOL;
+
+                //$r = '<style id="cssPageSpecific" type="text/css" theme="'.$theme['theme'].'" sel=\''.(str_replace('\'','\\\'',json_encode($css['sel']))).'\' csn="'.$selector['specificityName'].'" dbID="'.$theme['dbID'].'">'.PHP_EOL;
+                $r = '<style id="cssPageSpecific" type="text/css" theme="'.$theme['theme'].'" csn="'.$selector['specificityName'].'" dbID="'.$theme['dbID'].'">'.PHP_EOL;
                 //echo '<pre style="color:green">'; var_dump ($theme); echo '</pre>'; die();
                 $r .= css_array_to_css2($theme['themeSettings']).PHP_EOL;
 
@@ -1344,8 +1385,9 @@ class NicerAppWebOS {
                 //$r .= 'h1::before, h2::before, h3::before {'."\r\n".PHP_EOL;
                     //$r .= "\t".'content : \'\''."\r\n".PHP_EOL;
                 //$r .= '}'."\r\n".PHP_EOL;
-                $r .= '#divFor_neCompanyLogo, #headerSiteDiv, li span, .backdropped, p, h1::before, h2::before, h3::before {'."\r\n".PHP_EOL;
+                $r .= '#divFor_neCompanyLogo, #headerSiteDiv, li span, p, h1::before, h2::before, h3::before {'."\r\n".PHP_EOL;
                     $r .= "\t".'background : rgba(0,0,0,'.$theme['textBackgroundOpacity'].');'."\r\n".PHP_EOL;
+                    $r .= "\t".'padding : 4px !important;'."\r\n".PHP_EOL;
                     $r .= "\t".'border-radius : 10px !important;'."\r\n".PHP_EOL;
                 $r .= '}'."\r\n".PHP_EOL;
 
@@ -1469,7 +1511,33 @@ class NicerAppWebOS {
                         $r .= "\tnaHasErrors : ".((array_key_exists('naErrors',$_SESSION) && is_string ($_SESSION['naErrors']) && $_SESSION['naErrors']!=='') ? 'true' : 'false').','.PHP_EOL;
                         $r .= "\thasDB : ".($this->hasDB ? 'true' : 'false').PHP_EOL;
                     $r .= '});'.PHP_EOL;
-                    //var_dump (strpos($_SERVER['SCRIPT_NAME'], '/index.php')); var_dump (strpos($_SERVER['SCRIPT_NAME'], '/ajax_get_content.php')); var_dump ($_SERVER); 
+                    $r .= 'na.te.settings.current.specificity = $.extend(na.te.settings.current.specificity, {'.PHP_EOL;
+                    $r .= "\tspecificityName : \"$specificityName\",".PHP_EOL;
+                    $r .= "\turl : \"$this->url\",".PHP_EOL;
+                    if (array_key_exists('view',$selector)) {
+                        $r .= "\tview : \"".$selector['view']."\",".PHP_EOL;
+                    } else {
+                        $r .= "\tview : null,".PHP_EOL;
+                    }
+                    if (array_key_exists('role',$selector)) {
+                        $r .= "\trole : \"".$selector['role']."\",".PHP_EOL;
+                    } else {
+                        $r .= "\trole : null,".PHP_EOL;
+                    }
+
+                    if (array_key_exists('user',$selector)) {
+                        $r .= "\tuser : \"".$selector['user']."\",".PHP_EOL;
+                    } else {
+                        $r .= "\tuser : null,".PHP_EOL;
+                    }
+
+                    if (array_key_exists('app',$selector)) {
+                        $r .= "\tapp : \"".$selector['app']."\",".PHP_EOL;
+                    } else {
+                        $r .= "\tapp : null,".PHP_EOL;
+                    }
+                    $r .= "});".PHP_EOL;
+                    //var_dump (strpos($_SERVER['SCRIPT_NAME'], '/index.php')); var_dump (strpos($_SERVER['SCRIPT_NAME'], '/ajax_get_content.php')); var_dump ($_SERVER);
                     //var_dump ($_GET); exit();
                     if (
                         strpos($_SERVER['SCRIPT_NAME'], '/index.php')!==false
@@ -1483,9 +1551,9 @@ class NicerAppWebOS {
                         $r .= '});'.PHP_EOL;
                     };
                     $r .= '$(document).ready(function() {'.PHP_EOL;
-                        $r .= "\t//setTimeout(function() {".PHP_EOL;
+                        //$r .= "\tsetTimeout(function() {".PHP_EOL;
                         $r .= "\t\tna.site.setSpecificity();".PHP_EOL;
-                        $r .= "\t//}, 10);".PHP_EOL;
+                        //$r .= "\t}, 4000); // wait 4 secs to allow for initial theme loading".PHP_EOL;
                     $r .= "});".PHP_EOL;
                     $r .= '</script>'.PHP_EOL;
                     $ret = $r.$ret;
@@ -1539,10 +1607,11 @@ class NicerAppWebOS {
                 $url = $uri;
             }
         } */else {
-            $viewFolder = '[front page]';
-            $url = '/';
+            $viewFolder = 'front page';
+            $url = $_SERVER['REQUEST_URI'];
         }
         $appName = preg_replace('/.*\//','',$viewFolder);
+        //var_dump ($appName); die();
         //if ($debug) { echo '<pre>'; var_dump ($url); echo PHP_EOL; var_dump ($this->view); echo '</pre>'.PHP_EOL; }
         /*if ($viewFolder!=='') {
             $appName = preg_replace('/.*\//','',$viewFolder);
@@ -1763,6 +1832,9 @@ class NicerAppWebOS {
                 );
                 $selectorNames[] = 'site for group '.$role2.' at the client';
                 //$preferredSelectorName = 'site for group '.$role.' at the client';
+                if ($debug) {
+                    echo '<pre style="color:darkred;">'; var_dump ($viewFolder); echo '</pre>';
+                }
                 if ($viewFolder!==''
                     && $viewFolder!=='/'
                 ) {
@@ -1804,7 +1876,7 @@ class NicerAppWebOS {
                     'role' => $role,
                     'display' => true
                 );
-                //$selectorNames[] = 'current page for group '.$role;
+                $selectorNames[] = 'current page for group '.$role;
 
                 $selectors[] = array (
                     'permissions' => [
@@ -1818,6 +1890,7 @@ class NicerAppWebOS {
                     'ip' => $naIP,
                     'display' => true
                 );
+                $selectorNames[] = 'current page for group '.$role.' at the client';
                 //$preferredSelectorName = $selectorNames[] = 'current page for group '.$role.' at the client';
             }
 
@@ -1829,7 +1902,7 @@ class NicerAppWebOS {
                         'write' => [ 'users' => [ $username100 ] ]
                     ],
                     'specificityName' => 'app \''.$appName.'\' for user '.$username101,
-                    'app' => $viewFolder,
+                    //'app' => $viewFolder,
                     'user' => $username100,
                     'display' => true
                 );
@@ -1840,7 +1913,7 @@ class NicerAppWebOS {
                         'write' => [ 'users' => [ $username100 ] ]
                     ],
                     'specificityName' => 'app \''.$appName.'\' for user '.$username101.' at the client',
-                    'app' => $viewFolder,
+                    //'app' => $viewFolder,
                     'user' => $username100,
                     'ip' => $naIP,
                     'display' => true
@@ -1897,8 +1970,9 @@ class NicerAppWebOS {
         $hasJS = false;
         $hasCSS = false;
 
-        //if ($debug)
-        //echo '<pre>';var_dump ($selectors); exit();
+        if ($debug) {
+           // echo '<pre>';var_dump ($selectors); exit();
+        }
         return [
             //'selectorNames' => $selectorNames,
             'selectors' => $selectors//,
@@ -1967,7 +2041,7 @@ class NicerAppWebOS {
                                     //$adjustedUserOrGroupID = $db->translate_plainGroupName_to_couchdbGroupName($userOrGroupID);
                                     //if ($debug) { echo '$this->dbs->roles='; var_dump($this->dbs->roles); };
                                     if (is_string($this->dbs)) {
-                                        echo $fncn.' : WARNING : invalid database connection ($this->dbs="'.json_encode($this->dbs).'")- this database server, or even the entire webserver, has been hacked by hostiles.';
+                                        echo $fncn.' : WARNING : invalid database connection ($this->dbs="'.json_encode($this->dbs).'")- this database server, or even the entire webserver, is suffering from technical difficulties.';
                                         die(); // or exit();
                                     }
                                     foreach ( $this->dbs->findConnection('couchdb')->roles
@@ -2057,7 +2131,7 @@ class NicerAppWebOS {
             if ($call->headers->_HTTP->status==='200') {
                 foreach ($call->body->docs as $idx => $d) {
                     $hasRecord = true;
-                    if ($debug) { echo '$d='; var_dump ($d); }
+                    if ($debug) { echo '$d='; var_dump (json_decode(json_encode($d), true)); }
                     $tn = ( isset($d->theme) ? $d->theme : 'default' );
                     $ret = [
                         $tn => [

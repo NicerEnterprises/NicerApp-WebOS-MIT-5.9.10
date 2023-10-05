@@ -30,9 +30,9 @@ if (file_exists($fnLock)) {
     $doo = file_exists($fnLock);
     //while ($doo) {
         startDuration('fetch');
-        $logstr = '\033[42;1;4m'.$fncn.' : Fetching news for '.file_get_contents(dirname(__FILE__).'/mainmenu.valueCount.txt').' RSS pages, '.file_get_contents(dirname(__FILE__).'/mainmenu.keyCount.txt').' menu-items.\033[37;49m'.PHP_EOL;
-        echo $logstr;
-        error_log ($logstr);
+        //$logstr = '\033[42;1;4m'.$fncn.' : Fetching news for '.file_get_contents(dirname(__FILE__).'/mainmenu.valueCount.txt').' RSS pages, '.file_get_contents(dirname(__FILE__).'/mainmenu.keyCount.txt').' menu-items.\033[37;49m'.PHP_EOL;
+        //echo $logstr;
+        //error_log ($logstr);
         $newCount = $newsApp3->fetch();
         //echo '<pre style="color:blue">'; var_dump ($newsApp3->d); echo '</pre>'.PHP_EOL; exit();
         $doo = file_exists($fnLock);
@@ -86,8 +86,8 @@ if (file_exists($fnLock)) {
             //$logstr = 'Sleeping for '.$minutes.' minutes, '.$secs.' seconds, to fetch news about every '.$fetchIntervalInMinutes.' minutes.'.PHP_EOL;
             //echo $logstr;
             //error_log ($logstr);
-            echo '\x1b[42;1;4m'.$fncn.' : Done.\x1b[37;49m'.PHP_EOL;
-            error_log ('\x1b[42;1;4m'.$fncn.' : Done.\x1b[37;49m'.PHP_EOL);
+            echo '\e[42;1;4m '.$fncn.' : Done.\e[0m '.PHP_EOL;
+            error_log ('\e[42;1;4m '.$fncn.' : Done.\e[0m '.PHP_EOL);
             
             //sleep ($waitTime);
         //}

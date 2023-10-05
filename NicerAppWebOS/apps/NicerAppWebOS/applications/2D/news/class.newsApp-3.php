@@ -331,7 +331,7 @@ class newsApp3_class {
             };
         }
 		
-        if ($ctMenuFile < $ctRSSlist) {
+        if (true || $ctMenuFile < $ctRSSlist) {
             //$htmlMenu = '<ul style="display:none;">'.PHP_EOL."\t".'<li><a href="#">News</a>'.PHP_EOL."\t".'<ul>'.PHP_EOL;
             $htmlMenu = '<ul style="display:none;"><li><a href="/news">News</a><ul>'.PHP_EOL;
             $rewriteRules = '';
@@ -463,8 +463,8 @@ class newsApp3_class {
 
 
     public static function writeOutMenuIfNeeded_walk_value ($cd) {
-        /*
         $cd['params']['valueCount'] = $cd['params']['valueCount'] + 1;
+        /*
         $path = substr($cd['path'],1);
         //echo substr($path.'/'.$cd['k'],1).PHP_EOL; die();
         $path2 = str_replace (' ', '_', $path);
@@ -583,8 +583,9 @@ class newsApp3_class {
             if (curl_errno($curlOp['ch'])) {
                 //$responses[$key] = ['data' => null, 'info' => null, 'error' => curl_error($curlOp['ch'])];
                 $curlOp['error'] = curl_error($curlOp['ch']);
-                $msg = 'CURL operation (path='.$curlOp['cd']['path'].', url='.$curlOp['url'].') ERROR : '.$curlOp['error'];
+                $msg = 'CURL operation (path='.$curlOp['cd']['path'].', url='.$curlOp['url'].') \e[1;33mERROR : '.$curlOp['error'].'\e[0m';
                 echo $msg.PHP_EOL;
+                error_log ($msg);
                 //trigger_error ($msg, E_USER_WARNING);
             } else {
                 // save successful response
@@ -1010,23 +1011,22 @@ class newsApp3_class {
             }
             
             $callData = json_encode($callData);
+            if (!$callData) continue;
 
 
             startDuration ('bulkDocs_batch');
 
             try {
-                /*
-                echo PHP_EOL;
-                var_dump ($callData);
-                echo PHP_EOL;
-                */
+                //echo PHP_EOL;
+                //var_dump ($callData);
+                //echo PHP_EOL;
                 $ret = $this->cdb->bulkDocs ($callData);
             } catch (Throwable $e) {
-                echo '<pre style="color:red">$this->cdb->bulkDocs($callData) : '; var_dump ($e->getMessage()); echo '</pre>';
-                error_log ('$this->cdb->bulkDocs($callData) : '.json_encode($e,JSON_PRETTY_PRINT));
+                echo '<pre style="color:red">$this->cdb->bulkDocs($callData) : '; var_dump ($e->getMessage()); var_dump ($callData);  echo '</pre>';
+                error_log ('Throwable $this->cdb->bulkDocs($callData) : '.$e->getMessage().PHP_EOL.json_encode($e,JSON_PRETTY_PRINT));
             } catch (Exception $e) {
                 echo '<pre style="color:red">$this->cdb->bulkDocs($callData) : '; var_dump ($e->getMessage()); echo '</pre>';
-                error_log ('$this->cdb->bulkDocs($callData) : '.json_encode($e,JSON_PRETTY_PRINT));
+                error_log ('Exception $this->cdb->bulkDocs($callData) : '.json_encode($e,JSON_PRETTY_PRINT));
             }
             
             $updateConflictsMark = $updateConflicts;
@@ -1041,13 +1041,12 @@ class newsApp3_class {
             } else $updateConflicts += $j;
 
             $msg = displayDuration('bulkDocs').' ('.displayDuration('bulkDocs_batch').') : '.($i+$j).' documents (attempted to upload '.$j.' RSS documents, '.($updateConflicts-$updateConflictsMark).' duplicates in this batch) ('.$updateConflicts.' total duplicates so far).'.PHP_EOL;
-            echo $msg;
-            error_log ($msg);
+            //echo $msg;
+            //error_log ($msg);
         }
             
         $msg =
-            'Duplicates : '.$updateConflicts.PHP_EOL
-            .'New items : '.(count($this->d)-$updateConflicts).PHP_EOL;
+            '\e[1;32mDuplicates : '.$updateConflicts.', New items : '.(count($this->d)-$updateConflicts).'\e[0m'.PHP_EOL;
         echo $msg;
         error_log($msg);
     }

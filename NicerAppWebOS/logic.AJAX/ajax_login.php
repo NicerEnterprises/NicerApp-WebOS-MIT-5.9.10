@@ -29,8 +29,9 @@ $cdb = $naWebOS->dbs->findConnection('couchdb')->cdb;
 
 
 $username = $_POST['loginName'];
-$username = str_replace(' ', '__', $username);
-$username = str_replace('.', '_', $username);
+$username = str_replace(' ', '_', $username);
+$username = str_replace('.', '__', $username);
+//echo $cdbDomain.'___'.$username.'<br/>';
 
 try {
     $cdb_authSession_cookie = $cdb->login($cdbDomain.'___'.$username, $_POST['pw'], Sag::$AUTH_COOKIE);
@@ -40,7 +41,7 @@ try {
     exit();
 }
 
-$dbName = $cdbDomain.'___cms_tree__user___'.strtolower($username);
+$dbName = $cdbDomain.'___cms_tree___user___'.strtolower($username);
 //var_dump ($dbName); var_dump($_POST);
 $cdb->setDatabase($dbName, false);
 try {
@@ -72,7 +73,7 @@ if ($callOK) {
     $_SESSION['cdb_loginName'] = $_POST['loginName'];
     //setcookie("cbd_loginName", "", time() - 3600);
     //usleep(50);
-    //setcookie('cdb_loginName', $_POST['loginName'], time() + 604800, '/');
+    setcookie('cdb_loginName', $_POST['loginName'], time() + 604800, '/');
 
     /*
     ENCRYPTED DATA IS ALWAYS STORED IN 2 FLAVORS :

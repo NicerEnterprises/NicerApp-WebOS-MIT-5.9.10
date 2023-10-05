@@ -146,27 +146,33 @@ Options +FollowSymLinks
     RewriteRule ^(.*)/during/(.*)$ NicerAppWebOS/index.php?username=$1&url1=during&dataID=$2 [L]
 
 
+    RewriteCond %{REQUEST_METHOD} ^(GET)$
+    RewriteCond %{HTTP:X-Requested-With} XMLHttpRequest
+    RewriteRule ^wiki-search/(.*)$ NicerAppWebOS/logic.AJAX/ajax_get_content.php?app-wikipedia.org-search=$1&%{QUERY_STRING} [L]
+
+    RewriteCond %{REQUEST_METHOD} ^(GET)$
+    RewriteRule ^wiki-search/(.*)$ NicerAppWebOS/index.php?app-wikipedia.org-search=$1&%{QUERY_STRING} [L]
 
     RewriteCond %{REQUEST_METHOD} ^(GET)$
     RewriteCond %{HTTP:X-Requested-With} XMLHttpRequest
-    RewriteRule ^/wiki/(.*)$ NicerAppWebOS/logic.AJAX/ajax_get_content.php?app-wikipedia.org=$1 [L]
+    RewriteRule ^wiki/(.*)$ NicerAppWebOS/logic.AJAX/ajax_get_content.php?app-wikipedia.org=$1 [L]
 
     RewriteCond %{REQUEST_METHOD} ^(GET)$
-    RewriteRule ^/wiki/(.*)$ NicerAppWebOS/index.php?app-wikipedia.org=$1 [L]
-
-    RewriteCond %{REQUEST_METHOD} ^(GET)$
-    RewriteCond %{HTTP:X-Requested-With} XMLHttpRequest
-    RewriteRule ^/wikipedia/(.*)$ NicerAppWebOS/logic.AJAX/ajax_get_content.php?app-wikipedia.org=$1 [L]
-
-    RewriteCond %{REQUEST_METHOD} ^(GET)$
-    RewriteRule ^/wikipedia/(.*)$ NicerAppWebOS/index.php?app-wikipedia.org=$1 [L]
+    RewriteRule ^wiki/(.*)$ NicerAppWebOS/index.php?app-wikipedia.org=$1 [L]
 
     RewriteCond %{REQUEST_METHOD} ^(GET)$
     RewriteCond %{HTTP:X-Requested-With} XMLHttpRequest
-    RewriteRule ^/wikipedia.org/(.*)$ NicerAppWebOS/logic.AJAX/ajax_get_content.php?app-wikipedia.org=$1 [L]
+    RewriteRule ^wikipedia/(.*)$ NicerAppWebOS/logic.AJAX/ajax_get_content.php?app-wikipedia.org=$1 [L]
 
     RewriteCond %{REQUEST_METHOD} ^(GET)$
-    RewriteRule ^/wikipedia.org/(.*)$ NicerAppWebOS/index.php?app-wikipedia.org=$1 [L]
+    RewriteRule ^wikipedia/(.*)$ NicerAppWebOS/index.php?app-wikipedia.org=$1 [L]
+
+    RewriteCond %{REQUEST_METHOD} ^(GET)$
+    RewriteCond %{HTTP:X-Requested-With} XMLHttpRequest
+    RewriteRule ^wikipedia.org/(.*)$ NicerAppWebOS/logic.AJAX/ajax_get_content.php?app-wikipedia.org=$1 [L]
+
+    RewriteCond %{REQUEST_METHOD} ^(GET)$
+    RewriteRule ^wikipedia.org/(.*)$ NicerAppWebOS/index.php?app-wikipedia.org=$1 [L]
 
 
     # /*--Front page--*/

@@ -30,6 +30,7 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
         $admin = (
             $username==$this->translate_plainUserName_to_couchdbUserName($naWebOS->ownerInfo['OWNER_NAME'])
         );
+        $this->admin = $admin;
 
         $this->cdb = new Sag($cRec['host'], $cRec['port']);
         $this->cdb->setHTTPAdapter($cRec['httpAdapter']);
@@ -37,9 +38,9 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
 
     //if (php_sapi_name() === 'cli') return 'php_sapi_name()='.php_sapi_name(); // BAD!
         //echo 't77;<pre style="color:navy">'; var_dump ($cRec); var_dump ($username); echo '</pre>';
-        if (!is_null($cRec)) $naLoginResult = cdb_login ($this->cdb, $cRec, $username); else cdb_login ($this->cdb, null, null);
+        if (!is_null($cRec)) $naLoginResult = cdb_login ($this->cdb, $cRec, $cRec['username']); else cdb_login ($this->cdb, null, null);
     //var_dump ($naLoginResult); die();
-        //echo '<pre style="background:blue;color:lime">'; echo '<h1>class.couchdb.3.2.2_1.0.1.php</h1><br/>';var_dump ($_COOKIE); var_dump ($cdb_slr); var_dump ($this->cdb->getSession()); var_dump ($naLoginResult); echo '</pre>'; die();
+        //echo '<pre style="background:blue;color:lime">'; echo '<h1>class.couchdb.3.2.2_1.0.1.php</h1><br/>';var_dump ($this->cdb->getSession()); var_dump ($naLoginResult); echo '</pre>'; die();
 
 
         // test db connection quality
@@ -158,6 +159,7 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
 
         $clientUsersJSON = (!file_exists($clientUsersJSONfn) ? '' : require_return($clientUsersJSONfn));
         $clientUsers = json_decode ($clientUsersJSON, true);
+        //echo '<pre style="color:skyblue;background:rgba(0,50,0,0.7);">'; var_dump ($clientUsers); echo '</pre>'; die();
 
         $clientGroupsJSONfn = //dirname(__FILE__).'/domainConfigs/'.$naWebOS->domain.'/database.groups.CLIENT.json.php';
             realpath(dirname(__FILE__).'/../../../..')
@@ -170,6 +172,7 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
         if (!is_null($clientUsers))
             $usersFinal = array_merge_recursive($users, $clientUsers);
         else $usersFinal = $users;
+        //echo '<pre style="color:skyblue;background:rgba(0,50,0,0.7);">'; var_dump ($usersFinal); echo '</pre>'; die();
 
         if (!is_null($clientGroups))
             $groupsFinal = array_merge_recursive($groups, $clientGroups);
@@ -561,9 +564,9 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
         echo 'Created database '.$dataSetName.'<br/>';
     }
 
-    public function createDataSet_cms_tree___user___guest() {
+    public function createDataSet_cms_tree___user___guest($un1) {
 
-        $dataSetName = $this->dataSetName('cms_tree___user___guest');
+        $dataSetName = $this->dataSetName('cms_tree___user___'.$un1);
         $dataSetName = strToLower($dataSetName);
         try { $this->cdb->deleteDatabase ($dataSetName); } catch (Exception $e) { };
         $this->cdb->setDatabase($dataSetName, true);
@@ -605,8 +608,8 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
         if ($this->debug) echo 'Created database '.$dataSetName.'<br/>';
     }
 
-    public function createDataSet_cms_documents___user___guest() {
-        $dataSetName = $this->dataSetName('cms_documents___user___guest');
+    public function createDataSet_cms_documents___user___guest($un1) {
+        $dataSetName = $this->dataSetName('cms_documents___user___'.$un1);
         try { $this->cdb->deleteDatabase ($dataSetName); } catch (Exception $e) { };
         $this->cdb->setDatabase($dataSetName, true);
         try { 
@@ -1530,7 +1533,8 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
         global $naWebOS;
         $db = $naWebOS->dbs->findConnection('couchdb');
         $cdb = $db->cdb;
-
+        //echo '<pre style="color:blue">'; var_dump ($_POST); echo '</pre>';
+        //echo '<pre style="color:purple">'; var_dump ($cdb); echo '</pre>';
         $cdb->setDatabase($_POST['database'],false);
         $dataID = array_key_exists('dataID',$_POST) ? $_POST['dataID'] : $naWebOS->getDataID($_POST['database'], 'dataID');
         $url1 = array_key_exists('url1',$_POST) ? $_POST['url1'] : 'in';
@@ -1545,6 +1549,7 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
             'pageTitle' => $_POST['pageTitle'],
             'document' => $_POST['document']
         );
+        //echo '<pre style="color:blue">'; var_dump ($document); echo '</pre>';
         if (
             array_key_exists('user',$_POST)
             && $_POST['user']!==''
@@ -1561,7 +1566,7 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
 
         };
         $documentToPost = array_merge(isset($documentFromDB)?$documentFromDB:[], $document);
-        try { $call = $cdb->post($documentToPost); } catch (Exception $e) { cdb_error (500, $e, 'Could not add/update record in '.$_POST['database']); exit(); };
+        try { $call = $cdb->post($documentToPost); } catch (Exception $e) { cdb_error (500, $e, 'Could not add/update record '.json_encode($_POST)); exit(); };
 //got : number_192_168_178_29___cms_documents__user__guest
 //q   : number_192_168_178_29___cms_documents__user__guest
 //id  : dbb

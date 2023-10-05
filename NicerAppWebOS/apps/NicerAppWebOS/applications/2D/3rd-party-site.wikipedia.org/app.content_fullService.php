@@ -6,31 +6,51 @@ require_once (realpath(dirname(__FILE__).'/../../../../../../').'/NicerAppWebOS/
 global $naWebOS;
 $view = $naWebOS->view;
 global $wiki_url;
-$wiki_url = 'https://'.$_GET['app-wikipedia_org'];
-if ($wiki_url=='https://frontpage') $wiki_url = 'https://www.wikipedia.org';
-if ($wiki_url=='https://') $wiki_url = 'https://www.wikipedia.org/search-redirect.php';
+if (array_key_exists('app-wikipedia_org', $_GET)) {
+    $wiki_url = 'https://en.wikipedia.org/wiki/'.urlencode($_GET['app-wikipedia_org']);
+    //var_dump ($wiki_url); die();
+    if (
+        $wiki_url=='https://en.wikipedia.org/wiki/en.wikipedia.org/frontpage'
+        || $wiki_url=='https://en.wikipedia.org/wiki/frontpage'
+        || $wiki_url=='https://en.wikipedia.org/wiki/en.wikipedia.org'
+    ) $wiki_url = 'https://www.wikipedia.org';
+    if (
+        strpos($_GET['app-wikipedia_org'], 'en.wikipedia.org/')!==false
+    ) $wiki_url = 'https://en.wikipedia.org/wiki/'.urlencode(str_ireplace('wiki/','',str_ireplace('en.wikipedia.org/','',$_GET['app-wikipedia_org'])));
+} else {
+    $wiki_url = 'https://www.wikipedia.org/search-redirect.php';
+}
 
-
-$xec = 'curl -L '.$wiki_url.' -H "X-NA-Forwarded-For: '.$naIP.'" -H "X-NA-IS: https://nicer.app/wiki/frontpage"';
+global $naIP;
 //var_dump ($xec);
-if (array_key_exists('search',$_GET)) $xec .= '?search='.$_GET['search'];
-if (array_key_exists('family',$_GET)) $xec .= '&family='.$_GET['family'];
-if (array_key_exists('language',$_GET)) $xec .= '&language='.$_GET['language'];
+//echo '<pre>'; var_dump ($_GET); echo '</pre>'; //die();
+if (array_key_exists('search',$_GET)) $wiki_url .= '?search='.$_GET['search'];
+if (array_key_exists('family',$_GET)) $wiki_url .= '&family='.$_GET['family'];
+if (array_key_exists('language',$_GET)) $wiki_url .= '&language='.$_GET['language'];
+$xec = 'curl -L '.$wiki_url.' -H "X-NA-Forwarded-For: '.$naIP.'" -H "X-NA-IS: https://nicer.app/wiki/frontpage"';
 //var_dump ($xec); //die();
 
 exec ($xec, $output, $result);
 $output2 = join ("\n", $output);
 //$output2 = preg_replace ('/\s+/', '  ', $output2); // essential for multi-line replaces
-//echo $output2;
-//die();
+//echo $output2; die();
 //
 
-$output2 = str_replace('<body class="', '<body class="vividScrollpane ', $output2);
+//$output2 = str_replace('<body class="', '<body class="vividScrollpane ', $output2);
+
+//$output2 = preg_replace('/<html.*head>/','',$output2);
+//$output2 = preg_replace('/<body.*content<\/a>/','',$output2);
+//$output2 = preg_replace('/<\/body>/','', $output2);
+//$output2 = preg_replace('/<\/html>/','', $output2);
 
 preg_match_all('/<form (.*?)action="(.*?)"/', $output2, $m, PREG_PATTERN_ORDER);
 //var_dump ($m); die();
 foreach ($m[0] as $idx => $str) {
-    $rf = '/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/3rd-party-site.wikipedia.org/search_redirect.php';
+    //$rf = '/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/3rd-party-site.wikipedia.org/search_redirect.php';
+    $rf =
+        '/wiki-search/'.(array_key_exists('search',$_GET)?$_GET['search']:'frontpage')
+        .'/'.(array_key_exists('title',$_GET)?$_GET['title']:'title')
+        .'/'.(array_key_exists('family',$_GET)?$_GET['family']:'family');
     $r2 = '<form '.$m[1][$idx].' action="'.$rf.'"';
     $output2 = str_replace ($str, $r2, $output2);
 
@@ -127,7 +147,7 @@ foreach ($m[0] as $idx => $str) {
     $output2 = str_replace ($str, $r1, $output2);
 }
 //die();
-
+$output2 = preg_replace('/\.mw\-parser\-output \#mp\-left \{.*?\}/','',$output2);
 
 //echo '<pre>';
 //die();

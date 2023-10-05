@@ -1,15 +1,18 @@
  html, body, .vector-header-container, .vector-feature-zebra-design-disabled, .mw-page-container, .vector-feature-zebra-design-disabled body, .vector-feature-zebra-design-disabled .mw-page-container, .vector-feature-zebra-design-disabled .vector-header-container, .mw-body, .parsoid-body, #mw-page-base {
      background : transparent;
  }
+html, body {
+    left : 3px !important;
+}
  .central-featured-lang, .other-project-link, .footer-sidebar-content, .footer-sidebar-text, .app-badges .footer-sidebar-content, .vector-feature-zebra-design-disabled .vector-toc { border-radius : 8px; background : rgba(255,255,255,0.5);}
 .central-featured-lang :hover {background-color:transparent;}
 .central-featured-lang:hover, .other-project-link:hover {background-color:rgba(0,0,100,0.5);}
  .mw-parser-output #mp-topbanner {
-     background : rgba(200,200,255,0.555);
+     /*background : rgba(200,200,255,0.555);*/
  }
 
 .mw-parser-output #mp-right, .infobox td, .infobox th {
-    background : rgba(100,100,255,0.4);
+    /*background : rgba(100,100,255,0.4);*/
 }
 .infobox td, .infobox th, .mw-parser-output p {
     border-radius : 5px;
@@ -22,14 +25,14 @@
 }
 
 .mw-parser-output #mp-left, .mw-parser-output p {
-    background : rgba(100,255,100,0.4);
+    /*background : rgba(100,255,100,0.4);*/
 }
 
 .infobox, .vector-pinned-container, .vector-body-before-content, .vector-page-toolbar-container, .vector-toc, .hatnote {
     background : transparent;
     position : relative;
 }
-.infobox::before, .vector-pinned-container::before, .vector-body-before-content::before, .vector-page-toolbar-container::before, .hatnote::before, p::before:not(.jsl10n), .mw-parser-output > ul > li::before {
+.infobox::before, .vector-pinned-container::before, .vector-body-before-content::before, .vector-page-toolbar-container::before, .hatnote::before, .mw-parser-output p::before:not(.jsl10n), .mw-parser-output > ul > li::before {
     content : '';
     background : rgba(255,255,255,0.5);
     border-radius : 10px;
@@ -42,7 +45,7 @@
     z-index : -1;
 }
 
-a {
+.mw-parser-output a {
     text-shadow : 2px 2px 3px rgba(0,0,0,0.555);
     padding : 0px !important;
 }
@@ -69,7 +72,7 @@ a {
 input {
     color : fieldtext;
 }
-li, ul > li {
+.mw-parser-output li, ul > li {
     background : rgba(255,255,255,0.5);
     border-radius : 10px;
     padding : 5px;
@@ -79,14 +82,14 @@ li, ul > li {
     border : 0px solid black;
     box-shadow : none;
 }
-p {
+.mw-parser-output p {
     color : black;
     opacity : 1;
     z-index : 2;
     display : block;
     position: relative;
 }
-li > div {
+.mw-parser-output li > div {
     background : rgba(0,0,50,0.5);
     border-radius : 8px;
     margin : 8px;
@@ -95,6 +98,11 @@ li > div {
 .mw-parser-output .mp-box {
     border : none;
 }
-.vector-feature-zebra-design-disabled body {
+.mw-parser-output {
     color : black;
+}
+
+#mp-topbanner, #mp-left, #mp-right, #mp-middle, #mp-lower {
+    margin : 10px !important;
+    padding : 10px !important;
 }

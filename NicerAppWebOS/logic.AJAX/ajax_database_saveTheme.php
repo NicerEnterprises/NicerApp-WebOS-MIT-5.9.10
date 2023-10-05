@@ -43,7 +43,7 @@ $findCommand = array (
     )
 );
 
-//if (array_key_exists('specificityName',$_POST) && !is_null($_POST['specificityName'])) $findCommand['selector']['specificityName'] = $_POST['specificityName'];
+if (array_key_exists('specificityName',$_POST) && !is_null($_POST['specificityName'])) $findCommand['selector']['specificityName'] = $_POST['specificityName'];
 if (array_key_exists('orientation',$_POST) && !is_null($_POST['orientation'])) $findCommand['selector']['orientation'] = $_POST['orientation'];
 if (array_key_exists('app',$_POST) && !is_null($_POST['app'])) $findCommand['selector']['app'] = $_POST['app'];
 if (array_key_exists('view',$_POST) && !is_null($_POST['view'])) $findCommand['selector']['view'] = $_POST['view'];
@@ -135,6 +135,7 @@ if (!isset($_SESSION) || !is_array($_SESSION) || !array_key_exists('selectors',$
         if ($selector['specificityName']===$_POST['specificityName']) $sel = $selector;
     }
     //die();
+    //var_dump ($selector);    var_dump ($sel);    var_dump ($_POST);    die();
 
     if ($debug) { echo '$sel='; var_dump ($sel); }
     if (!array_key_exists('permissions',$sel)) {

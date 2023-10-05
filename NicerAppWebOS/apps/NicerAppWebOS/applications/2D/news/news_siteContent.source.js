@@ -1573,7 +1573,7 @@ na.m.preventScreenLock();
         h2 =
             !c.lastEl
             ? $('#newsApp_content').height() - 20
-            : $('#newsApp_content').height() - c.lastEl.position().top - 20;
+            : $('#newsApp_content').height() - 20;//c.lastEl.position().top - 20;
         //console.log (el2.id+' - '+h+' - '+hA+' - '+h2+' - '+w+' - '+w1);
         //if (w > tw) w = tw;
         if (w > w1) w = w1;
@@ -1644,7 +1644,7 @@ na.m.preventScreenLock();
         ph = $('p, div', el).height(),
         ph2 = 20 * $('p, div', el).length,
         //mh = Math.round((th?parseInt(th):0) + (fh?parseInt(fh):0) + (ph?parseInt(ph):0) + (ph2?parseInt(ph2):0) + 60);
-        mh = hf - Math.round((th?parseInt(th)+20:0) + (fh?parseInt(fh)+20:0) + 120);
+        mh = hf - Math.round((th?parseInt(th)+5:0) + (fh?parseInt(fh)+125:0) + 0);
 
         $(el).css({maxHeight:hf,height:''});
         $('.newsApp__item__desc',el).css({maxHeight:mh});
@@ -1979,7 +1979,7 @@ na.m.preventScreenLock();
                     });
 
                     $('#newsApp_content_shadow, #newsApp_content, #siteContent__content').css({
-                        height : $('#siteContent__content').height() - 14,
+                        height : $('#siteContent__content').height(),
                         width : ow
                     });
 
@@ -2004,7 +2004,7 @@ na.m.preventScreenLock();
                                     na1.onresize_do(s.dnf?s.dnf.id:undefined);
                                     var doCountDown = false;
                                     $('.newsApp__item__outer').each(function(idx3, el3) {
-                                        if ($(window).width() < 400) $(el3).css({marginLeft:0});
+                                        //if ($(window).width() < 400) $(el3).css({marginLeft:0});
                                         if (
                                             (
                                                 $(el3).offset().top + $(el3).height()
@@ -2032,7 +2032,7 @@ na.m.preventScreenLock();
                             }, 200);
                     if (typeof settings=='object' && settings!==null && typeof settings.callback=='function') settings.callback (settings);
             }, 200);
-        }, 1000);
+        }, 200);
     },
 
     onresize_do : function (sel) {
