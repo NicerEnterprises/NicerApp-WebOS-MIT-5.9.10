@@ -1159,7 +1159,7 @@ na.te = na.themeEditor = {
                 na.site.loadTheme(function() {
                     var btn = $('#'+na.te.s.c.selectedButtonID)[0];
                     if (btn) na.te.onclick(btn, false);
-                }, theme, false, false);
+                }, theme, true, true);
             //}, 500, theme);
         },na.site.globals.themeName);
     },

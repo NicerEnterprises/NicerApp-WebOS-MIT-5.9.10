@@ -55,7 +55,8 @@ if ($_POST['type'] == 'naMediaAlbum') {
 
 //$children = $cdb->find (...)
 // check if children already have ->text==$text
-$findCommand = array (
+/*
+ * $findCommand = array (
     'selector' => array ( 'parent' => $_POST['parent'] ),
     'fields' => array ( '_id', 'text' )    
 );
@@ -73,7 +74,16 @@ while ($found) {
             break;
         }
     }
-}
+}*/
+$d =
+    date('Y-m-d(l)_H:i:s_')
+    .str_replace('-','min',
+        str_replace('+','plus',
+        preg_replace('/.*\s/','',date(DATE_RFC2822)
+    )));
+$textFinal = $d;
+
+
 $id = array_key_exists('id',$_POST) && !is_bool($_POST['id']) && is_string($_POST['id']) && $_POST['id']!=='' ? $_POST['id'] : cdb_randomString(50);
 $recordToAdd = array (
     '_id' => $id,
@@ -89,9 +99,39 @@ $recordToAdd = array (
 try { $call = $cdb->post($recordToAdd); } catch (Exception $e) {
     if ($debug) {
         //echo '<pre>'; var_dump ($recordToAdd); echo '</pre>';
-        cdb_error (500, $e, 'Could not add dbName='.$dbName.', record='.json_encode($recordToAdd)); exit();
+        cdb_error (500, $e, 'Could not add dbName='.$dbName.', record='.json_encode($recordToAdd));
     }
+    exit();
 }
+
+$u = array_key_exists('cdb_loginName',$_SESSION) ? $_SESSION['cdb_loginName'] : $cdbConfig['username'];
+$u = preg_replace('/.*___/','',$u);
+$u = preg_replace('/__/',' ',$u);
+$u2 = str_replace(' ', '-', $u);
+$uid = '';
+if (strpos($_POST['database'], '_user')!==false) {
+    $uid = ' -F \'user='.$u2.'\'';
+}
+if (strpos($_POST['database'], '_role')!==false) {
+    $role = preg_replace('/.*___/','', $_POST['database']);
+    $uid = ' -F \'role='.$role.'\'';
+}
+$exec = 'curl -X POST "https://'.$naWebOS->domain.'/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/NicerAppWebOS/cmsManager/ajax_editDocument.php"';
+$exec2 = ' -F \'database='.str_replace('_tree','_documents',$_POST['database']).'\' -F \'id='.$id.'\' -F \'parent='.$_POST['parent'].'\' '.$uid.' -F \'document=<h1>Heading 1</h1><p>Enter your text here.</p>\' -F \'url1=on\' -F \'seoValue='.$d.'\' -F \'pageTitle=Said.by/'.$u2.'/on/'.$d.'\'';
+$exec2 = str_replace('>', '\\>', $exec2);
+$exec2 = str_replace('<', '\\<', $exec2);
+$exec2 = str_replace('(', '\\(', $exec2);
+$exec2 = str_replace(')', '\\)', $exec2);
+$exec2 = str_replace('/', '\\/', $exec2);
+$exec = $exec.$exec2;
+$r = exec ($exec, $output, $result);
+$dbg = [
+    'exec' => $exec,
+    'output' => $output,
+    'result' => $result,
+    'r' => $r
+];
+
 
 
 $folder = $rootPath.'/siteData/'.$naWebOS->domain.'/'.$_POST['relFilePath'].'/'.$textFinal;
@@ -109,7 +149,8 @@ $dbg = array (
     'folder' => $folder,
     'success' => true,
     'msg' => 'Record added',
-    'recordAdded' => $recordToAdd
+    'recordAdded' => $recordToAdd,
+    'record2added' => $dbg
 );
 echo json_encode($dbg);
 ?>

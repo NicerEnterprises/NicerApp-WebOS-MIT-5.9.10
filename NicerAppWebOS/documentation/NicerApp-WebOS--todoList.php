@@ -4,6 +4,9 @@
 ?>
 
 <h1 class="contentSectionTitle2"><span class="contentSectionTitle2_span">NicerApp WebOS Development Direction</span></h1><br/><br/>
+
+<p>FYI : major release time is Christmas Day each year.</p>
+
 <ol class="todoList">
 
 <li class="todoList"><div>
@@ -18,8 +21,6 @@
     <li class="todoList_l1"><div>5.0.0 : bugfixes and efficiency improvements in the core code
         <ul class="todoList_l2">
         <li class="todoList_l2"><div>Lots of changes and standarization of the entire code convention or naming structure for variables, Server-side PHP class names, Browser-side Javascript root level objects, and all the other root-level variable names used in NicerApp WebOS</li>
-        <li class="todoList_l2"><div>MySQL and PostgreSQL added to the list of supported database architectures (via .../NicerAppWebOS/3rd-party/adodb5), currently only couchdb is supported.<br/>
-        Why? because upon installation of a new version of the operating system (around every 2 years), all of the OS component maintainers are likely taking a holiday of some sorts.<br/></li>
         </ul>
     </li>
 </ul>
@@ -34,8 +35,6 @@
 
     <li class="todoList"><div>(DONE) (2022-Sept) Restore the old links, like the 3D WebGL (component) demos.</div></li>
 
-    <li class="todoList"><div>(DONE) (2022-Sept) Improve the database access diversity.</div></li>
-
     <li class="todoList releaseDate"><div>(DONE) (2022 Nov 7th) : the emerging of <a href="https://said.by" class="nomod noPushState noVividText contentSectionTitle2_a" target="saidDotBy" style="margin:0 !important;"><span class="contentSectionTitle2_span">https://said.by</span></a> as an online blogging platform for end-users</a>.</li>
 
     <li class="todoList releaseDate"><div>(DONE) (2023 June 22nd) Release <a href="https://github.com/NicerEnterprises/NicerApp-WebOS" class="nomod noPushState noVividText contentSectionTitle2_a" target="ghNA"><span class="contentSectionTitle2_span">version 5.5.0</span></a> : Theme Editor upgrade released.
@@ -43,34 +42,21 @@
 
     <li class="todoList"><div>(DONE) (2023 May) Build a <a href="/wiki/frontpage">view port</a> into <a href="https://wikipedia.org" target="wikipedia">https://wikipedia.org</a> data, whose content one may re-use without legal consequences, and which is *great*. :D</li>
 
-    <li class="todoList"><div>
-        <ol class="todoList_l1">
-            <li class="todoList_l1"><div>(DONE) (2023 Apr) Rewrite the page loading.
-            </div></li>
+    <li class="todoList"><div>(DONE) (2023 July) Transform the Theme Editor (that was restricted to NicerApp vividDialogs) into a Universal Web Theme Editor that can work on any HTML selector.</div></li>
 
-            <li class="todoList_l1"><div>(DONE) (2023 May) Rework the 'vividButton' user-interface components of NicerApp WebOS.
-            </div></li>
+    <li class="todoList"><div>(CURRENT) (2023 Oct) Upgrade the blogging features.</div></li>
 
-            <li class="todoList_l1"><div>(DONE) (2023 May) Allow users (and Guests) to specify which theme a new end-user should initially see for a page managed by them on a NicerApp website.</div></li>
+    <li class="todoList"><div>(CURRENT) (2023) Build an extension of the Sag library that i'm using for communication between PHP and couchdb that allows one to log events and calls into and from the Sag library to /var/logs/apache2/error.PORT.log and a seperate database in PHP.</div></li>
 
-            <li class="todoList_l1"><div>(DONE) (2023 July) Transform the Theme Editor (that was restricted to NicerApp vividDialogs) into a Universal Web Theme Editor that can work on any HTML selector.<br/>
-            </div></li>
+    <li class="todoList"><div>(CURRENT) (2023) Allow users (and Guests) to specify which theme a new end-user should initially see for a page managed by them on a NicerApp website.</div></li>
 
-            <li class="todoList_l1"><div>(CURRENT) (2023) Establish a proper permissions system and add users and groups editing capabilities to <a href="/cms" class="nomod noPushState contentSectionTitle3_a" target="_new"><span class="contentSectionTitle3_span">/cms</span></a> and the Theme Editor.<br/>
-            The last thing you wanna do in software development is replicate other people's work that you can work with (or <a href="https://github.com/apache/couchdb/pull/4139" class="nomod noPushState contentSectionTitle2_a" target="_new"><span class="contentSectionTitle2_span">soon</span></a> can), but since i was advised by the couchdb developers on 2023-06-30 to "not wait for implementation of this functionality by couchdb staff", i'll go ahead and work on implementing these per-doc permissions features in my own new PHP business logic that sits between the PHP 'Sag' library and the rest of my database PHP business logic, as a plugin.</div></li>
+    <li class="todoList"><div>Add a checkbox in the Theme Editor to select backgrounds and stretch instead of tile them for any DIV.</div></li>
 
-            <li class="todoList_l1"><div>(2023) Add a checkbox in the Theme Editor to select backgrounds and stretch instead of tile them for any DIV.</div></li>
+    <li class="todoList"><div>write 'vividRangeFinder' (a percentage bar with 2 percentage stops)</div></li>
 
+    <li class="todoList"><div>Show a small error window for a short time when a page can't load.</div></li>
 
-            <li class="todoList_l1"><div>(2023) write 'vividRangeFinder' (a percentage bar with 2 percentage stops)</div></li>
-
-
-
-            <!--<li class="todoList_l1"><div>Show a small error window for a short time when a page can't load.</div></li>-->
-        </ol>
-    </div></li>
-
-    <li class="todoList"><div>Full server backup facilities within NicerApp WebOS. Currently this is only needed for couchdb data and cms data from the server file system, to other servers on the LAN or even outside the LAN of the web server, <b>and</b> to zip files (by using the php7.4-zip ubuntu OS library), <b>with</b> progress bar for the zip file creation processes, and also with restore functionality built right into the browser.</div></li>
+    <li class="todoList"><div>(DONE) Configure my LAN to do full backups every few hours of both the nicer.app data and databases.</div></li>
 
 
     <li class="todoList"><div>(STALLED) Create a custom HTML WYSIWYG rich-text editor component of my own, that ties into the UWTE.<br/>
@@ -79,8 +65,6 @@
             <li class="todoList_l1"><div>supply data from a HTML+CSS form into <a href="https://github.com/NicerEnterprises/NicerApp-WebOS/blob/main/NicerAppWebOS/logic.business/class.core.WebsiteOperatingSystem-5.y.z.php#L1353" class="noPushState" target="naGH_wos1088">css_keyframes_to_array() and css_animation_template_to_animation()</a>.</div></li>
         </ol>
     </li>
-
-    <li class="todoList"><div>Slightly remodel the page loading mechanism and in doing so get theme loading to work again.</div></li>
 
     <li class="todoList"><div>Work my WebOS to be more Windows(tm)(r) compatible in terms of it's user-interface.<br/>
     Specifically, i want to move the date-time indicator on my web-pages to the bottom-right of the screen.<br/>
@@ -93,8 +77,6 @@
     <li class="todoList"><div>Make the musicPlayer app work on smartphone vertical screens as well.</div></li>
 
 
-    <li class="todoList"><div>Build an extension of the Sag library that i'm using for communication between PHP and couchdb that allows one to log events and calls into and from the Sag library to /var/logs/apache2/error.PORT.log and a seperate database in PHP.</div></li>
-
     <li class="todoList"><div>Restore the automatic retrieval of new backgrounds download routines for nicerapp via free to use methods of delivery at Google image search and (TODO :)Bing image search.</div></li>
 
     <li class="todoList">
@@ -104,6 +86,11 @@ rewrite the backgrounds analysis and automatic resizing routines;
 - let users search for backgrounds based on filepath, then save those searches in their account settings and make them viewable as photoalbums.
 </pre></div>
     </li>
+
+
+    <li class="todoList"><div>Establish a proper permissions system and add users and groups editing capabilities to <a href="/cms" class="nomod noPushState contentSectionTitle3_a" target="_new"><span class="contentSectionTitle3_span">/cms</span></a> and the Theme Editor.<br/>
+    The last thing you wanna do in software development is replicate other people's work that you can work with (or <a href="https://github.com/apache/couchdb/pull/4139" class="nomod noPushState contentSectionTitle2_a" target="_new"><span class="contentSectionTitle2_span">soon</span></a> can), but since i was advised by the couchdb developers on 2023-06-30 to "not wait for implementation of this functionality by couchdb staff", i'll go ahead and work on implementing these per-doc permissions features in my own new PHP business logic that sits between the PHP 'Sag' library and the rest of my database PHP business logic, as a plugin.</div></li>
+
 
     <li class="todoList"><div>Upgrade the news app and vividDialog : add siteToolbarLeft functionality :<br/>
         <ol class="todoList_l1">
@@ -125,6 +112,11 @@ rewrite the backgrounds analysis and automatic resizing routines;
     <li class="todoList"><div>Integration of payment platforms (as plugins) for paypal.com, creditcards, and the Dutch banking system iDeal.</div></li>
 
     <li class="todoList"><div>Music production app via linux commandline app sonic-pi, integration of that app with payment modules and musicPlayer.</div></li>
+
+    <li class="todoList"><div>Add MySQL and PostgreSQL to the list of supported database architectures (via .../NicerAppWebOS/3rd-party/adodb5), currently only couchdb is supported.<br/>
+    </div></li>
+
+
 </ol>
 <script type="text/javascript">
                         na.site.bindTodoListAnimations (

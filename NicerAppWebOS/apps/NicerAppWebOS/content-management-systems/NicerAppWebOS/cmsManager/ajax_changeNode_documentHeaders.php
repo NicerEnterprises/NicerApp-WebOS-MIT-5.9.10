@@ -8,8 +8,8 @@ if (!array_key_exists('database',$_POST)) {
     ];
     cdb_error (403, null, 'Hacking attempt detected (attempt to access database with '.json_encode($dbg).'). Event logged.');
 }
-if (strpos($_POST['database'], '_tree')===false)
-    cdb_error (403, null, 'Hacking attempt detected (attempt to access database '.$_POST['database'].'). Event logged.');
+//if (strpos($_POST['database'], '_tree')===false)
+    //cdb_error (403, null, 'Hacking attempt detected (attempt to access database '.$_POST['database'].'). Event logged.');
 
 
 

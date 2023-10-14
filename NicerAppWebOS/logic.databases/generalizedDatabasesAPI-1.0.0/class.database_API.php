@@ -308,7 +308,6 @@ class class_NicerAppWebOS_database_API {
     }
 
     public function setGlobals ($username) {
-        //echo '<pre style="color:green;">'; var_dump (debug_backtrace()); echo '</pre>';
         return $this->callAllDataSets ('setGlobals', [$username]);
     }
 
@@ -322,29 +321,8 @@ class class_NicerAppWebOS_database_API {
         foreach ($this->connections as $idx => $c) {
             foreach ($dbs as $dbName => $mustDo) {
                 if ($mustDo) {
-
-
-                    global $naWebOS;
-                    //echo '<pre>'; var_dump ($naWebOS); exit();
-
-                    $un1 = strtolower(trim($naWebOS->ownerInfo['OWNER_NAME']));
-                    $un1 = str_replace(' ', '_', $un1);
-                    $un1 = str_replace('.', '__', $un1);
-                    //echo $un1.'<br/>';
-
-
-                    if ($dbName=='cms_tree___user___'.$un1) {
-                        $fncName = 'createDataSet_cms_tree___user___guest';
-                    } elseif ($dbName=='cms_documents___user___'.$un1) {
-                        $fncName = 'createDataSet_cms_documents___user___guest';
-                    } else {
-                        $fncName = 'createDataSet_'.$dbName;
-                        $un1 = 'guest';
-                    }
-
-                    //echo $dbName.'<br/>';
-                    //echo $fncName.'<br/>';
-                    $params = [$un1];
+                    $fncName = 'createDataSet_'.$dbName;
+                    $params = [];
                     $x = call_user_func_array ( [ $c['conn'], $fncName ], $params );
                     $localCheck = $this->standardResultHandling($c, $x);
                     $r = array_merge ($r, [$localCheck]);
@@ -411,7 +389,7 @@ class class_NicerAppWebOS_database_API {
         foreach ($this->connections as $idx => $c) {
             $x = call_user_func_array ( [ $c['conn'], $functionName ], $params );
             $localCheck = $this->standardResultHandling($c, $x);
-            $r = array_merge ($r, [$functionName => $localCheck]);
+            $r = array_merge ($r, [$localCheck]);
             if ($localCheck['result']!==true) {
                 $failedAtLeastOne = true;
                 $err = $naErr->addStandardResults ($r);

@@ -947,7 +947,7 @@ na.site = {
     },
     
     setSpecificity : function(simple) {
-        debugger;
+        //debugger;
         $('.na_themes_dropdown').html('<div class="vividDropDownBox_selected vividScrollpane" style="white-space:normal;"></div><div class="vividDropDownBox_selector"><div class="vividScrollpane" style="padding:0px;"></div></div>').delay(50);
         $('.vividDropDownBox_selected, .vividDropDownBox_selector').each(function(idx,el) {
             var w = 0;
@@ -1005,7 +1005,7 @@ na.site = {
             );
 
             if (selectMe) {
-                debugger;
+                //debugger;
                 $(divEl).addClass('selected');
                 //$('.na_themes_dropdown__specificity > .vividDropDownBox_selected').html (na.site.globals.specificityName);
                 na.site.globals.themeDBkeys = na.site.globals.themesDBkeys[i];
@@ -1014,7 +1014,7 @@ na.site = {
                 na.te.settings.current.specificity = na.site.globals.themeDBkeys;
             };
 
-            debugger;
+            //debugger;
             $('.na_themes_dropdown__specificity > .vividDropDownBox_selector > .vividScrollpane').append($(divEl).clone(true,true));
         };
 

@@ -2099,6 +2099,7 @@ class NicerAppWebOS {
             if (array_key_exists('specificityName', $selector)) $sel['specificityName'] = $selector['specificityName'];
             if (array_key_exists('theme', $selector)) $sel['theme'] = $selector['theme']; //else $sel['theme'] = [ '$exists' => false ];
             if (array_key_exists('ip', $selector)) $sel['ip'] = $selector['ip']; else $sel['ip'] = [ '$exists' => false ];
+            $sel['lastUsed'] = [ '$gt' => 0 ];
             global $naIP;
             //$selector['ip'] = $naIP;
             //$selector['ua'] = $_SERVER['HTTP_USER_AGENT'];
@@ -2110,9 +2111,12 @@ class NicerAppWebOS {
             $findCommand = array (
                 'selector' => $sel,
                 'fields' => [ '_id', 'user', 'view', 'role', 'lastUsed', 'theme', 'url', 'themeSettings', 'apps', 'background', 'backgroundSearchKey', 'textBackgroundOpacity', 'changeBackgroundsAutomatically', 'backgroundChange_hours', 'backgroundChange_minutes' ],
-                'sort' => [['lastUsed'=>'asc']],
-                'use_index' => 'sortIndex'
+                //'sort' => [['lastUsed'=>'asc']],
+                //'use_index' => 'sortIndex'
             );
+            if ($debug)     {
+                echo '<pre>info : $findCommand2='.PHP_EOL; echo json_encode($findCommand, JSON_PRETTY_PRINT); echo '.<br/>'.PHP_EOL;
+            }
             try {
                 $call = $this->dbs->findConnection('couchdb')->cdb->find ($findCommand);
             } catch (Exception $e) {
@@ -2121,7 +2125,6 @@ class NicerAppWebOS {
                 exit();
             }
             if ($debug)     {
-                echo '<pre>info : $findCommand2='; var_dump ($findCommand); echo '.<br/>'.PHP_EOL;
                 echo 'info : $call='; var_dump ($call); echo '.</pre>'.PHP_EOL;
                 //exit();
             }

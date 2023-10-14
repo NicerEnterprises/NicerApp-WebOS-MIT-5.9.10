@@ -812,7 +812,28 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
 
         $rec = [
             'index' => [
-                'fields' => [ 'lastUsed' ]
+                //'fields' => [ '_id', 'lastUsed', 'app', 'user', 'role', 'view', 'theme', 'url', 'themeSettings', 'apps', 'background', 'backgroundSearchKey', 'textBackgroundOpacity', 'changeBackgroundsAutomatically', 'backgroundChange_hours', 'backgroundChange_minutes']
+                //'fields' => [ '_id', 'lastUsed', 'app', 'user', 'role', 'view', 'theme', 'url', 'ip', 'specificityName']
+                'fields' => [
+                    "_id",
+                    "user",
+                    "view",
+                    "role",
+                    "lastUsed",
+                    "theme",
+                    "url",
+                    "themeSettings",
+                    "app",
+                    "apps",
+                    "background",
+                    "backgroundSearchKey",
+                    "textBackgroundOpacity",
+                    "changeBackgroundsAutomatically",
+                    "backgroundChange_hours",
+                    "backgroundChange_minutes",
+                    "specificityName",
+                    "ip"
+                ]
             ],
             'name' => 'sortIndex',
             'type' => 'json'
@@ -1545,9 +1566,9 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
             'id' => $_POST['id'],
             'dataID' => $dataID,
             'url1' => $url1,
-            'seo_value' => $seoValue,
-            'pageTitle' => $_POST['pageTitle'],
-            'document' => $_POST['document']
+            'seo_value' => str_replace('\\','',$seoValue),
+            'pageTitle' => str_replace('\\','',$_POST['pageTitle']),
+            'document' => str_replace('&lt;','<',str_replace('&gt;','>',str_replace('\\','',$_POST['document'])))
         );
         //echo '<pre style="color:blue">'; var_dump ($document); echo '</pre>';
         if (
@@ -1567,14 +1588,13 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
         };
         $documentToPost = array_merge(isset($documentFromDB)?$documentFromDB:[], $document);
         try { $call = $cdb->post($documentToPost); } catch (Exception $e) { cdb_error (500, $e, 'Could not add/update record '.json_encode($_POST)); exit(); };
-//got : number_192_168_178_29___cms_documents__user__guest
-//q   : number_192_168_178_29___cms_documents__user__guest
-//id  : dbb
 
         $dataSet2Name = str_replace('_documents', '_tree', $_POST['database']);
         $cdb->setDatabase($dataSet2Name,false);
         $document = null;
         try { $call = $cdb->get ($_POST['id']); $documentFromDB = (array)$call->body; } catch (Exception $e) { };// cdb_error (500, $e, 'Could not find record (id='.$_POST['id'].') in '.$dataSetName); exit(); };
+
+        //var_dump ($documentFromDB); die();
 
         //$data = '{ "database" : "'.$dataSet2Name.'", "_id" : "dba", "id" : "dba", "parent" : "dab", "text" : "Blog", "state" : { "opened" : true }, "type" : "naFolder" }';
         $data2 = [
@@ -1585,9 +1605,9 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
             'parent' => $_POST['parent'],
             'dataID' => $dataID,
             'url1' => $url1,
-            'seo_value' => $seoValue,
-            'pageTitle' => $_POST['pageTitle'],
-            'text' => isset($documentFromDB) ? $documentFromDB['text'] : 'New'
+            'seo_value' => str_replace('\\','',$seoValue),
+            'pageTitle' => str_replace('\\','',$_POST['pageTitle']),
+            'text' => isset($documentFromDB) && array_key_exists('text', $documentFromDB) && is_string($documentFromDB['text']) && $documentFromDB['text']!=='' ? $documentFromDB['text'] : 'New'
         ];
         /*
         $document = array (

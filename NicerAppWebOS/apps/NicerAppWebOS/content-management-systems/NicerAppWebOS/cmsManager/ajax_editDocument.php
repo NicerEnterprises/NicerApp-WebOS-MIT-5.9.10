@@ -4,14 +4,12 @@ require_once (realpath(dirname(__FILE__).'/../../../../..').'/boot.php');
 global $naWebOS;
 $db = $naWebOS->dbs->findConnection('couchdb');
 $cdb = $db->cdb;
-//echo '<pre>'; var_dump ($cdb); echo '</pre>';
-//trigger_error (json_encode($cdb), E_USER_NOTICE);
 
 $adb = $naWebOS->dbsAdmin->findConnection('couchdb');
 $acdb = $adb->cdb;
 
 
-$html = $_POST['document'];
+$html = str_replace('&lt;','<',str_replace('&gt;','>',$_POST['document']));
 if (
     strpos ($html, '<script') !== false
     || strpos ($html, '<link') !== false
@@ -91,9 +89,9 @@ if ($illegal) {
                     'database' => $_POST['database'],
                     'id' => $_POST['id']
                 ],
-                "seo_value" => $_POST['seoValue']
+                "seo_value" => str_replace('\\','',$_POST['seoValue'])
             ],
-            'seo_value' => $_POST['seoValue']
+            'seo_value' => str_replace('\\','',$_POST['seoValue'])
         ];
         if ( array_key_exists('url1',$_POST) && $_POST['url1']!=='' ) $document['url1'] = $_POST['url1'];
         if ( array_key_exists('user',$_POST) && $_POST['user']!=='' ) $document['user'] = $_POST['user'];
