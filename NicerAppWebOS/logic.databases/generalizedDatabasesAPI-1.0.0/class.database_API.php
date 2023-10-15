@@ -392,6 +392,7 @@ class class_NicerAppWebOS_database_API {
             $r = array_merge ($r, [$localCheck]);
             if ($localCheck['result']!==true) {
                 $failedAtLeastOne = true;
+                $r['origin'] = $functionName;
                 $err = $naErr->addStandardResults ($r);
                 $naLog->add ( [ $err ] );
             }
@@ -413,6 +414,7 @@ class class_NicerAppWebOS_database_API {
                 $r = array_merge ($r, [$localCheck]);
                 if ($localCheck['result']!==true) {
                     $failedAtLeastOne = true;
+                    $r['origin'] = $functionName;
                     $err = $naErr->addStandardResults ($r);
                     $naLog->add ( [ $err ] );
                 }

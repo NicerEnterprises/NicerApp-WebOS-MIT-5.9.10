@@ -232,6 +232,7 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
             }
         }
 
+        return true;
     }
 
     
@@ -1221,9 +1222,11 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
             $cdb->post($rec);
         } catch (Exception $e) {
             global $naLog; global $naWebOS;
+            /*
             $naLog->addTo_phpOutput( SEID,
                 $fncn.' : Error while trying to $cdb->post() : $e->getMessage()='.$e->getMessage().', $cdb->getSession()='.json_encode($cdb->getSession()).', $naWebOS->dbs->findConnection(\'couchdb\')->username='.$naWebOS->dbs->findConnection('couchdb')->username
             );
+            */
             return false;
         }
         return true;

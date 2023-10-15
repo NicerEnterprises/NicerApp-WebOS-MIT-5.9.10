@@ -139,9 +139,11 @@ class class_NicerAppWebOS__errorHandler {
         $classErrorType = 'phpErrorType_E_WARNING';
 
         $errstr = '';
+        //echo '<pre>'; var_dump ($res);
         foreach ($res as $rIdx => $rec) {
+            if (is_string($rIdx)) continue;
             $className = array_key_exists('useSSL', $rec['c']['cRec']) && $rec['c']['cRec']['useSSL'] ? 'naUsesSSL' : '';
-            $host = '<span class="'.$className.'">'.$rec['c']['ct'].' : '.$rec['c']['cRec']['username'].':*****@'.$rec['c']['cRec']['host'].':'.$rec['c']['cRec']['port'].'</span> : <span class="naResultValue">'.json_encode($rec['resultValue'], JSON_PRETTY_PRINT).'</span><br/>'.PHP_EOL;
+            $host = '<span class="'.$className.'">'.$rec['c']['ct'].' : '.$rec['c']['cRec']['username'].':*****@'.$rec['c']['cRec']['host'].':'.$rec['c']['cRec']['port'].'</span> : <span class="naResultValue">'.json_encode($rec['resultValue'], JSON_PRETTY_PRINT).(is_array($res) && array_key_exists('origin',$res)?' ('.$res['origin'].')':'').'</span><br/>'.PHP_EOL;
             $errstr .= $host;
         };
         $errHTML =
@@ -171,6 +173,7 @@ class class_NicerAppWebOS__errorHandler {
 
         $errstr = '';
         foreach ($res as $rIdx => $rec) {
+            if (is_string($rIdx)) continue;
             $cNormal = "\x1b[39;49m";
             $cUsesSSL = array_key_exists('useSSL', $rec['c']['cRec']) && $rec['c']['cRec']['useSSL'] ? "\x1b[32;44m" : "\x1b[36;44m";
             $host = $cUsesSSL.$rec['c']['ct'].' : '.$rec['c']['cRec']['username'].':*****@'.$rec['c']['cRec']['host'].':'.$rec['c']['cRec']['port'].$cNormal.' : '.json_encode($rec['resultValue'],JSON_PRETTY_PRINT).PHP_EOL;
@@ -180,6 +183,7 @@ class class_NicerAppWebOS__errorHandler {
 
         $errstr = '';
         foreach ($res as $rIdx => $rec) {
+            if (is_string($rIdx)) continue;
             $host = $rec['c']['ct'].' : '.$rec['c']['cRec']['username'].':*****@'.$rec['c']['cRec']['host'].':'.$rec['c']['cRec']['port'].' : '.json_encode($rec['resultValue'],JSON_PRETTY_PRINT);
             if ($errstr!=='') $errstr.=', ';
             $errstr .= $host;

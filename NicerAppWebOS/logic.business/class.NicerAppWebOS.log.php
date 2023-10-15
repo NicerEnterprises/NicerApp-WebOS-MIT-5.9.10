@@ -168,22 +168,41 @@ class class_NicerAppWebOS_log {
                 echo $this->cn.'->add($entries) : $e->getMessage()='.$e->getMessage();
             }
 
+            /*
             try {
-                if ($this->addTo_phpOutput($entries, 'naWebOS_errors_startup'))
-                    $r[] = ['$_SESSION::naWebOS_errors_startup' => true];
+                if ($this->addTo_phpOutput('NicerApp_WebOS_errors_startup', $entries))
+                    $r[] = ['$_SESSION::NicerApp_WebOS_errors_startup' => true];
             } catch (Throwable $e) {
                 echo $this->cn.'->add($entries) : $e->getMessage()='.$e->getMessage();
             } catch (Exception $e) {
                 echo $this->cn.'->add($entries) : $e->getMessage()='.$e->getMessage();
             }
+            */
         }
 
         global $naLAN;
-        if ($naLAN || (isset($naWebOS) && $naWebOS->showAllErrors)) {
-            $fncn = '.../NicerAppWebOS/logic.business/class.NicerAppWebOS.log.php::class_NicerAppWebOS_log->add()';
-            $html = '<h2>'.$fncn.'</h2>'.PHP_EOL;
-            $html .= '<link type="text/css" rel="StyleSheet" href="/NicerAppWebOS/errors.css?c='.date('Ymd_His').'">'.PHP_EOL;
-            $html .= '<pre class="naWebOS_phpTrace">'.str_replace("\n",'<br/>'.PHP_EOL,$e->getTraceAsString()).'</pre>'.PHP_EOL;
+        $fncn = '.../NicerAppWebOS/logic.business/class.NicerAppWebOS.log.php::class_NicerAppWebOS_log->add()';
+        $html = '<h2>'.$fncn.'</h2>'.PHP_EOL;
+        $html .=
+            '<pre class="naWebOS_phpTrace">'
+            .str_replace("\n",'<br/>'.PHP_EOL, $e->getTraceAsString())
+            .'</pre>'.PHP_EOL;
+
+        if (
+            isset($naWebOS)
+            && session_status() === PHP_SESSION_ACTIVE
+            && isset($_SESSION['na_error_log_filepath_html'])
+            && is_object($naWebOS->dbs)
+            && $naWebOS->dbs->findConnection('couchdb')->username=='said_by___Rene__AJM__Veerman'
+        ) {
+            foreach ($entries as $entryIdx => $entry) {
+                $it = $entry['ENTRY:add_PHPerror'];
+                $html .= '<div class="addLogEntries" style="margin-left:20px;opacity:0.75;"><span class="addLogEntry_idx">'.$entryIdx.'</span><div class="addLogEntry_data">'.$it['html'].'</div></div>'.PHP_EOL;
+            }
+            file_put_contents ($_SESSION['na_error_log_filepath_html'], $html, FILE_APPEND);
+
+        } elseif ($naLAN || (isset($naWebOS) && $naWebOS->showAllErrors)) {
+
             foreach ($entries as $entryIdx => $entry) {
                 $it = $entry['ENTRY:add_PHPerror'];
                 $html .= '<div class="addLogEntries" style="margin-left:20px;opacity:0.75;"><span class="addLogEntry_idx">'.$entryIdx.'</span><div class="addLogEntry_data">'.$it['html'].'</div></div>'.PHP_EOL;
@@ -205,7 +224,7 @@ class class_NicerAppWebOS_log {
         return $r;
     }
 
-    public function addTo_phpOutput ($val, $sk) {
+    public function addTo_phpOutput ($sk, $val) {
         $key = date(DATE_ATOM);
         if (php_sapi_name()!=='cli') {
             if (!array_key_exists($sk, $_SESSION)) $_SESSION[$sk] = [];
@@ -254,7 +273,7 @@ class class_NicerAppWebOS_log {
                 'txt' =>
                     'CALL to '.$url.PHP_EOL
                     .$this->displayHTTPcall_debugInfo('txt', $debugInfo).PHP_EOL
-                    .$this->displayHTTPcall_output('txt', $output).PHP_EOL
+                    .$this->displayHTTPcall_output('txt', $debugInfo).PHP_EOL
                     .PHP_EOL
             ]
         ];
