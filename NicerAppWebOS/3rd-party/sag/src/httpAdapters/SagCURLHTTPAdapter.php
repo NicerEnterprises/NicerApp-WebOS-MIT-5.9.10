@@ -97,18 +97,23 @@ class SagCURLHTTPAdapter extends SagHTTPAdapter {
 
     curl_reset($this->ch);
     curl_setopt_array($this->ch, $opts);
-    if ($this->debug) {
-      $dbgTxt = 'curl options = '.json_encode($opts, JSON_PRETTY_PRINT).PHP_EOL;
-    }
     $chResponse = curl_exec($this->ch);
-    if ($this->debug) {
-      $dbgTxt = 'curl response = '.json_encode($chResponse, JSON_PRETTY_PRINT).PHP_EOL;
-    }
-    if (is_string($this->debugFilePath) && $this->debugFilePath!=='') {
-      $f = fopen ($this->debugFilePath, 'a');
-      fwrite ($f, $dbgTxt.PHP_EOL);
-      fclose ($f);
 
+    global $naWebOS;
+    if (
+      $this->debug // declared in SagHTTPAdapter.php::__construct()
+      && is_object($naWebOS->dbs)
+      && $naWebOS->dbs->findConnection('couchdb')->username=='said_by___Rene_AJM_Veerman'
+    ) {
+
+      global $naIP;
+      $now = DateTime::createFromFormat('U.u', microtime(true));
+      $date = $now->format("Y-m-d_H:i:s.u");
+      $this->debugFilePath = '/var/www/said.by/NicerAppWebOS/siteLogs/curl-'.$naIP.'-'.$date.'.txt';
+
+      $dbgTxt = 'curl options = '.json_encode($opts, JSON_PRETTY_PRINT).PHP_EOL;
+      $dbgTxt .= 'curl response = '.json_encode($chResponse, JSON_PRETTY_PRINT).PHP_EOL;
+      file_put_contents ($this->debugFilePath, $dbgTxt);
     }
 
 
