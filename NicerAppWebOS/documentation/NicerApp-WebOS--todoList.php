@@ -44,19 +44,16 @@
 
     <li class="todoList"><div>(DONE) (2023 July) Transform the Theme Editor (that was restricted to NicerApp vividDialogs) into a Universal Web Theme Editor that can work on any HTML selector.</div></li>
 
-    <li class="todoList"><div>(CURRENT) (2023 Oct) Upgrade the blogging features.</div></li>
+    <li class="todoList"><div>(DONE) Establish a proper permissions system and add users and groups editing capabilities to <a href="/cms" class="nomod noPushState contentSectionTitle3_a" target="_new"><span class="contentSectionTitle3_span">/cms</span></a> and the Theme Editor.<br/>
+    The last thing you wanna do in software development is replicate other people's work that you can work with (or <a href="https://github.com/apache/couchdb/pull/4139" class="nomod noPushState contentSectionTitle2_a" target="_new"><span class="contentSectionTitle2_span">soon</span></a> can), but since i was advised by the couchdb developers on 2023-06-30 to "not wait for implementation of this functionality by couchdb staff", i'll go ahead and work on implementing these per-doc permissions features in my own new PHP business logic that sits between the PHP 'Sag' library and the rest of my database PHP business logic, as a plugin.</div></li>
+
+    <li class="todoList"><div>(DONE) Configure my LAN to do full backups every few hours of both the nicer.app and said.by data and databases.</div></li>
 
     <li class="todoList"><div>(CURRENT) (2023) Build an extension of the Sag library that i'm using for communication between PHP and couchdb that allows one to log events and calls into and from the Sag library to /var/logs/apache2/error.PORT.log and a seperate database in PHP.</div></li>
 
     <li class="todoList"><div>(CURRENT) (2023) Allow users (and Guests) to specify which theme a new end-user should initially see for a page managed by them on a NicerApp website.</div></li>
 
-    <li class="todoList"><div>Add a checkbox in the Theme Editor to select backgrounds and stretch instead of tile them for any DIV.</div></li>
-
-    <li class="todoList"><div>write 'vividRangeFinder' (a percentage bar with 2 percentage stops)</div></li>
-
-    <li class="todoList"><div>Show a small error window for a short time when a page can't load.</div></li>
-
-    <li class="todoList"><div>(DONE) Configure my LAN to do full backups every few hours of both the nicer.app data and databases.</div></li>
+    <li class="todoList"><div>(CURRENT) (2023 Oct) Upgrade the blogging features.</div></li>
 
 
     <li class="todoList"><div>(STALLED) Create a custom HTML WYSIWYG rich-text editor component of my own, that ties into the UWTE.<br/>
@@ -65,6 +62,10 @@
             <li class="todoList_l1"><div>supply data from a HTML+CSS form into <a href="https://github.com/NicerEnterprises/NicerApp-WebOS/blob/main/NicerAppWebOS/logic.business/class.core.WebsiteOperatingSystem-5.y.z.php#L1353" class="noPushState" target="naGH_wos1088">css_keyframes_to_array() and css_animation_template_to_animation()</a>.</div></li>
         </ol>
     </li>
+
+    <li class="todoList"><div>Add a checkbox in the Theme Editor to select backgrounds and stretch instead of tile them for any DIV.</div></li>
+
+    <li class="todoList"><div>Show a small error window for a short time when a page can't load.</div></li>
 
     <li class="todoList"><div>Work my WebOS to be more Windows(tm)(r) compatible in terms of it's user-interface.<br/>
     Specifically, i want to move the date-time indicator on my web-pages to the bottom-right of the screen.<br/>
@@ -88,18 +89,17 @@ rewrite the backgrounds analysis and automatic resizing routines;
     </li>
 
 
-    <li class="todoList"><div>Establish a proper permissions system and add users and groups editing capabilities to <a href="/cms" class="nomod noPushState contentSectionTitle3_a" target="_new"><span class="contentSectionTitle3_span">/cms</span></a> and the Theme Editor.<br/>
-    The last thing you wanna do in software development is replicate other people's work that you can work with (or <a href="https://github.com/apache/couchdb/pull/4139" class="nomod noPushState contentSectionTitle2_a" target="_new"><span class="contentSectionTitle2_span">soon</span></a> can), but since i was advised by the couchdb developers on 2023-06-30 to "not wait for implementation of this functionality by couchdb staff", i'll go ahead and work on implementing these per-doc permissions features in my own new PHP business logic that sits between the PHP 'Sag' library and the rest of my database PHP business logic, as a plugin.</div></li>
+    <li class="todoList"><div>Write 'vividRangeFinder' (a percentage bar with 2 percentage stops)</div></li>
 
 
     <li class="todoList"><div>Upgrade the news app and vividDialog : add siteToolbarLeft functionality :<br/>
         <ol class="todoList_l1">
-            <li><div>add/enable/disable/remove any URL to a combination of lists that are each given a name, which get stored in several database-stored dataSubSets (records/documents) inside a dataSet (table/couchdb-database).<br/>
+            <li class="todoList_l1"><div>add/enable/disable/remove any URL to a combination of lists that are each given a name, which get stored in several database-stored dataSubSets (records/documents) inside a dataSet (table/couchdb-database).<br/>
             </li>
-            <li><div>the ability to assign specific 'theme' and 'sub-theme' settings to such a URL.</div></li>
-            <li><div>the ability to do keyphrase searches (perhaps later with 'or' and 'and' logic support) on the news content gatered, and paint that content with specific 'theme' and/or 'sub-theme' settings.<br/>
+            <li class="todoList_l1"><div>the ability to assign specific 'theme' and 'sub-theme' settings to such a URL.</div></li>
+            <li class="todoList_l1"><div>the ability to do keyphrase searches (perhaps later with 'or' and 'and' logic support) on the news content gatered, and paint that content with specific 'theme' and/or 'sub-theme' settings.<br/>
             (putting all of this in siteToolbarLeft and the rest in the siteThemeEditor, and that those can already be shown at the same time, means you can edit *all* user-interface settings for *any* app or service on any HD screen or pad screen.</div></li>
-            <li><div>let vividDialog have a vividMenu, with vividButton icons that will lead to vividMenus and vividDialogs and vividDialogPopups, at the top-right of it's borders.<br/>
+            <li class="todoList_l1"><div>let vividDialog have a vividMenu, with vividButton icons that will lead to vividMenus and vividDialogs and vividDialogPopups, at the top-right of it's borders.<br/>
             the contents of this menu should be defined in a &lt;UL&gt; structure (that can, if needed, get loaded with fresh content via AJAX), much like the vividMenu already is today.</div></li>
         </ol>
     </div>
