@@ -49,7 +49,7 @@
 
     <li class="todoList"><div>(DONE) Configure my LAN to do full backups every few hours of both the nicer.app and said.by data and databases.</div></li>
 
-    <li class="todoList"><div>(CURRENT) (2023) Build an extension of the Sag library that i'm using for communication between PHP and couchdb that allows one to log events and calls into and from the Sag library to /var/logs/apache2/error.PORT.log and a seperate database in PHP.</div></li>
+    <li class="todoList"><div>(DONE) (2023) Build an extension of the Sag library that i'm using for communication between PHP and couchdb that allows one to log events and calls into and from the Sag library to /var/logs/apache2/error.PORT.log and a seperate database in PHP.</div></li>
 
     <li class="todoList"><div>(CURRENT) (2023) Allow users (and Guests) to specify which theme a new end-user should initially see for a page managed by them on a NicerApp website.</div></li>
 
