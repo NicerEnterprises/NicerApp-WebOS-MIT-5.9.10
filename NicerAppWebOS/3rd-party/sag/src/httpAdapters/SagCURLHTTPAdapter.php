@@ -165,9 +165,14 @@ class SagCURLHTTPAdapter extends SagHTTPAdapter {
         }
       }
 
-      $dbgTxt = 'curl options = '.json_encode($optsTranslated, JSON_PRETTY_PRINT).PHP_EOL;
-      $dbgTxt .= 'curl response = '.json_encode(json_decode($response->body), JSON_PRETTY_PRINT).PHP_EOL;
-      file_put_contents ($this->debugFilePath, $dbgTxt);
+      $dbgTxt =
+        'curl options = '
+        .str_replace('\/','/',json_encode($optsTranslated, JSON_PRETTY_PRINT)).PHP_EOL;
+      $dbgTxt .=
+        'curl response = '
+        .json_encode(json_decode($response->body), JSON_PRETTY_PRINT).PHP_EOL.PHP_EOL
+        .'----------------------'.PHP_EOL.PHP_EOL;
+      file_put_contents ($this->debugFilePath, $dbgTxt, FILE_APPEND);
     }
 
     // in the event cURL can't follow and we got a Location header w/ a 3xx
