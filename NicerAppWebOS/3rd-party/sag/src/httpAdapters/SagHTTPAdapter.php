@@ -35,7 +35,11 @@ abstract class SagHTTPAdapter {
     $this->debug = true;
     $this->debugShowCurlBash = true;
     $this->debugShowHTML = true;
-    $this->debugFilePath = '/var/www/said.by/NicerAppWebOS/siteLogs/curl-'.$naIP.'-'.date('Y-m-d_H:i:s').'.txt';
+    //echo '<pre>'; var_dump ($_SESSION); die();
+    $now = DateTime::createFromFormat('U.u', $_SESSION['started']);
+    //$date = $now->format("Y-m-d_H:i:s.u");
+    $date = $now->format("Y-m-d_H:i:s");
+    $this->debugFilePath = '/var/www/said.by/NicerAppWebOS/siteLogs/curl-'.$naIP.'-'.$date.'.txt';
 
     $fn = $this->debugFilePath;
     if (file_exists($fn)) unlink ($fn);

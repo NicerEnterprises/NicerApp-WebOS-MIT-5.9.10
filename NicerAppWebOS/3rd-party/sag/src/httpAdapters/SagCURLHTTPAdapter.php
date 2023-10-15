@@ -99,23 +99,6 @@ class SagCURLHTTPAdapter extends SagHTTPAdapter {
     curl_setopt_array($this->ch, $opts);
     $chResponse = curl_exec($this->ch);
 
-    global $naWebOS;
-    if (
-      $this->debug // declared in SagHTTPAdapter.php::__construct()
-      && is_object($naWebOS->dbs)
-      && $naWebOS->dbs->findConnection('couchdb')->username=='said_by___Rene_AJM_Veerman'
-    ) {
-
-      global $naIP;
-      $now = DateTime::createFromFormat('U.u', microtime(true));
-      $date = $now->format("Y-m-d_H:i:s.u");
-      $this->debugFilePath = '/var/www/said.by/NicerAppWebOS/siteLogs/curl-'.$naIP.'-'.$date.'.txt';
-
-      $dbgTxt = 'curl options = '.json_encode($opts, JSON_PRETTY_PRINT).PHP_EOL;
-      $dbgTxt .= 'curl response = '.json_encode($chResponse, JSON_PRETTY_PRINT).PHP_EOL;
-      file_put_contents ($this->debugFilePath, $dbgTxt);
-    }
-
 
     if($chResponse !== false) {
       // prepare the response object
@@ -157,6 +140,34 @@ class SagCURLHTTPAdapter extends SagHTTPAdapter {
     }
     else {
       throw new SagException('cURL returned false without providing an error.');
+    }
+
+    global $naWebOS;
+    //if (is_object($naWebOS->dbs)) { echo '<pre>'; var_dump ($naWebOS->dbs->findConnection('couchdb')->username); echo '</pre>'; }
+    if (
+      $this->debug // declared in SagHTTPAdapter.php::__construct()
+      && is_object($naWebOS->dbs)
+      && $naWebOS->dbs->findConnection('couchdb')->username=='said_by___Rene__AJM__Veerman'
+    ) {
+      $optsTranslated = [];
+      foreach ($opts as $k => $v) {
+        switch ($k) {
+          case CURLOPT_URL : $optsTranslated['CURLOPT_URL'] = $v; break;
+          case CURLOPT_PORT : $optsTranslated['CURLOPT_PORT'] = $v; break;
+          case CURLOPT_FOLLOWLOCATION : $optsTranslated['CURLOPT_FOLLOWLOCATION'] = $v; break;
+          case CURLOPT_HEADER : $optsTranslated['CURLOPT_HEADER'] = $v; break;
+          case CURLOPT_RETURNTRANSFER : $optsTranslated['CURLOPT_RETURNTRANSFER'] = $v; break;
+          case CURLOPT_NOBODY : $optsTranslated['CURLOPT_NOBODY'] = $v; break;
+          case CURLOPT_HTTP_VERSION : $optsTranslated['CURLOPT_HTTP_VERSION'] = 'CURL_HTTP_VERSION_1_1'; break;
+          case CURLOPT_CUSTOMREQUEST : $optsTranslated['CURLOPT_CUSTOMREQUEST'] = $v; break;
+          case CURLOPT_HTTPHEADER : $optsTranslated['CURLOPT_HTTPHEADER'] = $v; break;
+          case CURLOPT_POSTFIELDS : $optsTranslated['CURLOPT_POSTFIELDS'] = json_decode($v); break;
+        }
+      }
+
+      $dbgTxt = 'curl options = '.json_encode($optsTranslated, JSON_PRETTY_PRINT).PHP_EOL;
+      $dbgTxt .= 'curl response = '.json_encode(json_decode($response->body), JSON_PRETTY_PRINT).PHP_EOL;
+      file_put_contents ($this->debugFilePath, $dbgTxt);
     }
 
     // in the event cURL can't follow and we got a Location header w/ a 3xx

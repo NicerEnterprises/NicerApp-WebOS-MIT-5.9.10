@@ -79,7 +79,7 @@ NicerApp WCS (Website Control System) from Nicer Enterprises
     }
     ini_set ('log_errors', true);
     global $error_log_filepath;
-//echo '<pre>'; var_dump ($_SERVER); die();
+    //echo '<pre>'; var_dump ($_SERVER); die();
     if (
         isset($_SERVER)
         && is_array($_SERVER)
@@ -95,6 +95,8 @@ NicerApp WCS (Website Control System) from Nicer Enterprises
         if (session_status() === PHP_SESSION_NONE) {
             ini_set('session.gc_maxlifetime', 3600 * 24 * 7);
             session_start();
+            $_SESSION['started'] = microtime(true);
+
             /*
             if (isset($_COOKIE) && is_array($_COOKIE) && array_key_exists('cdb_loginName', $_COOKIE) && array_key_exists('cdb_authSession_cookie', $_COOKIE)) {
                 $_SESSION['cdb_authSession_cookie'] = $_COOKIE['cdb_authSession_cookie'];
@@ -103,7 +105,11 @@ NicerApp WCS (Website Control System) from Nicer Enterprises
                 $_SESSION['cdb_authSession_cookie'] = null;
                 $_SESSION['cdb_loginName'] = 'Guest';
             }*/
-        } else session_start();
+        } else {
+            session_start();
+        }
+        $_SESSION[SEID] = [];
+        $_SESSION['naWebOS_errors_startup'] = [];
 
         if ($_SERVER['SCRIPT_NAME']=='/NicerAppWebOS/index.php') {
             $_SESSION['naErrors'] = [];
