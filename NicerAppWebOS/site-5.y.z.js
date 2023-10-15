@@ -27,12 +27,6 @@ na.site = {
     },
     
     settings : {
-        defaultStatusMsg : (
-            $.cookie('agreedToPolicies')!=='true'
-            ? '<table style="width:99%;"><tr><td><a href="/" style="padding:0;text-shadow:0px 0px 5px rgba(0,0,0,0.8);">nicer.app</a> only uses cookies for remembering user settings.</td>'
-                + '<td style="width:66px;"><div class="vividButton" theme="dark" style="position:relative;color:white;width:40px;height:20px;" onclick="na.site.dismissCookieWarning();">Ok</div></td></table>'
-            : '<table style="height:100%;"><tr><td><a href="https://opensource.org/license/mit/" target="_new" class="nomod noPushState contentSectionTitle1_a"><span class="contentSectionTitle1_span">MIT-Licensed</span></a>, Opensourced <a href="https://github.com/NicerEnterprises/NicerApp-WebOS" target="_new" class="nomod noPushState contentSectionTitle1_a"><span class="contentSectionTitle1_span">here</span></a>, Copyright 2023 by <a href="mailto:rene.veerman.netherlands@gmail.com" class ="contentSectionTitle3_a"><span class="contentSectionTitle3_span">Rene A.J.M. Veerman</span></a></td><td style="width:40px;"><div class="vividButton" theme="dark" style="position:relative;color:white;height:20px;width:40px;" onclick="na.site.dismissCopyrightMessage();">Ok</div></td></table>'
-        ),
         dialogs : {},
         buttons : {},
         menus : {},
@@ -77,6 +71,14 @@ na.site = {
         var startTime = new Date();
         na.m.settings.startTime = startTime.getTime();
         na.apps.mustHaveAtLeast_number = 0;
+
+        na.site.settings.defaultStatusMsg = (
+            $.cookie('agreedToPolicies')!=='true'
+            ? '<table style="width:99%;"><tr><td><a href="/" style="padding:0;text-shadow:0px 0px 5px rgba(0,0,0,0.8);">'+na.site.globals.domain+'</a> only uses cookies for remembering user settings.</td>'
+                + '<td style="width:66px;"><div class="vividButton" theme="dark" style="position:relative;color:white;width:40px;height:20px;" onclick="na.site.dismissCookieWarning();">Ok</div></td></table>'
+            : '<table style="height:100%;"><tr><td><a href="https://opensource.org/license/mit/" target="_new" class="nomod noPushState contentSectionTitle1_a"><span class="contentSectionTitle1_span">MIT-Licensed</span></a>, Opensourced <a href="https://github.com/NicerEnterprises/NicerApp-WebOS" target="_new" class="nomod noPushState contentSectionTitle1_a"><span class="contentSectionTitle1_span">here</span></a>, Copyright 2023 by <a href="mailto:rene.veerman.netherlands@gmail.com" class ="contentSectionTitle3_a"><span class="contentSectionTitle3_span">Rene A.J.M. Veerman</span></a></td><td style="width:40px;"><div class="vividButton" theme="dark" style="position:relative;color:white;height:20px;width:40px;" onclick="na.site.dismissCopyrightMessage();">Ok</div></td></table>'
+        );
+
 
         /*if ($('#siteToolbarTop > .vividDialogContent').html().trim()==='{$div_siteToolbarTop}') {
             na.d.s.visibleDivs.remove('#siteToolbarTop'); $.cookie('visible_siteToolbarTop','', na.m.cookieOptions());

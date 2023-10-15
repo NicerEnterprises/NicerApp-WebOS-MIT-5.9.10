@@ -168,7 +168,7 @@ na.te = na.themeEditor = {
         */
 
         var 
-        url = '/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/NicerAppWebOS/blogEditor/ajax_getTreeNodes.php',
+        url = '/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/NicerAppWebOS/cmsManager/ajax_getTreeNodes.php',
         ac = {
             type : 'GET',
             url : url,
@@ -653,10 +653,12 @@ na.te = na.themeEditor = {
                 //na.te.s.c.forElements = null;
             } else if (rec.text.match(regExApps)) {
                 //na.te.s.c.forDialogID = rec.text.match(regExApps);
+                debugger;
                 //na.te.s.c.forElements = null;
             } else {
                 //na.te.s.c.forDialogID = null;
                 //na.te.s.c.forElements = rec.text;
+                debugger;
                 if (na.te.s.c.elementsCSS[rec.id]) {
                     //setTimeout (function () {
 
@@ -775,7 +777,7 @@ na.te = na.themeEditor = {
                 });
                 for (var cssText in value) {
                     if (cssText.match(/\> .vdBackground/)) continue;
-                    var vdata = value[cssText].css;
+                    var vdata = value[cssText];
                     var newID2 = na.m.randomString();
                     outputData.dat.push ({
                         id : newID2,
@@ -856,21 +858,17 @@ na.te = na.themeEditor = {
             case 'naElement' :
                 var
                 parent = $('#themeEditor_jsTree_selectors').jstree(true).get_node(it.parent),
-                grandParent = $('#themeEditor_jsTree_selectors').jstree(true).get_node(parent.parent),
                 regExDialogs = /#site(.*)[\s\w\.\#\d\>]*/,
                 regExApps = /#app__(.*)__(.*)$/;
 
                 if (
-                    (
-                        !it.text.match(regExDialogs)
-                        && !it.text.match(regExApps)
-                        && !it.text.match(/Dialog/)
-                    )
+                    !it.text.match(regExDialogs)
+                    && !it.text.match(regExApps)
+                    && !it.text.match(/Dialog/)
                 ) {
-                    if (!themeSettings[parent.text]) themeSettings[parent.text] = { css : {} };
-                    if (!themeSettings[parent.text].css) themeSettings[parent.text].css = {};
-                    themeSettings[parent.text].css = $.extend (
-                        themeSettings[parent.text].css, na.site.fetchTheme(it.text)
+                    if (!themeSettings[parent.text]) themeSettings[parent.text] = {};
+                    themeSettings[parent.text] = $.extend (
+                        themeSettings[parent.text], na.site.fetchTheme(it.text)
                     );
                 }
                 break;
@@ -1014,7 +1012,6 @@ na.te = na.themeEditor = {
         for (var idx in na.site.globals.themesDBkeys)
             if (na.site.globals.themesDBkeys[idx].specificityName === sn) break;
         if (na.site.globals.themesDBkeys[idx].specificityName !== sn) idx = null;
-        debugger;
         if (idx) {
            var s = na.te.s.c.specificity = na.site.globals.themesDBkeys[idx];
            na.site.globals.themeSpecificityName = sn;
@@ -1027,7 +1024,7 @@ na.te = na.themeEditor = {
             na.site.loadTheme (function () { // **POSSIBLY** NOT NEEDED
                 var btn = $('#'+na.te.s.c.selectedButtonID)[0];
                 if (btn) na.te.onclick(btn, false);
-            }, na.site.globals.themeName, true, true, sn);
+            });
 
             na.site.setSiteLoginLogout();
         }
@@ -1144,24 +1141,22 @@ na.te = na.themeEditor = {
     },    
     themeSelected : function (evt) {
         var
-        theme = $(evt.currentTarget).html();
+        theme = $(evt.currentTarget).val();
         //$('#themeName').val(theme);
-        debugger;
         na.site.saveTheme(function() {
             var
             theme = $('.na_themes_dropdown__themes > .vividDropDownBox_selected').html();
-            debugger;
 
             na.te.s.c.selectedThemeName = theme;
             na.site.globals.themeName = theme;
 
-            //setTimeout (function(theme) {
+            setTimeout (function(theme) {
                 na.site.loadTheme(function() {
                     var btn = $('#'+na.te.s.c.selectedButtonID)[0];
                     if (btn) na.te.onclick(btn, false);
-                }, theme, true, true);
-            //}, 500, theme);
-        },na.site.globals.themeName);
+                }, theme);
+            }, 100, theme);
+        },theme);
     },
     deleteTheme : function (event) {
         var
@@ -1208,7 +1203,6 @@ na.te = na.themeEditor = {
                         $(ti).addClass('onfocus');
                 });
 
-                debugger;
                 na.site.loadTheme(function() {
                     var btn = $('#'+na.te.s.c.selectedButtonID)[0];
                     if (btn) na.te.onclick(btn, false);
@@ -1562,7 +1556,6 @@ na.te = na.themeEditor = {
         if (updateHTML!==false) updateHTML = true;
         var ct = $('#btnSelectBoxShadowSettings')[0];
         if ($(ct).is('.disabled')) return false;
-        debugger;
         na.te.onclick(ct);
         na.te.s.c.selectedSetting = 'boxShadow';
         $('.themeEditor_colorPicker').next().css ({ width : 230, zIndex : 1100  });
@@ -1659,10 +1652,7 @@ na.te = na.themeEditor = {
                 if (bs.match('inset')) $('#boxShadowInset')[0].checked = true; else $('#boxShadowInset')[0].checked = false;
 
                 var 
-                cssExtract =
-                    na.te.s.c.forDialogID
-                    ? na.te.cssExtract(na.te.s.c.forDialogID)
-                    : na.te.cssExtract(na.te.s.c.forElements.replace('#','').trim()),
+                cssExtract = na.te.cssExtract(na.te.s.c.forDialogID),
                 ctI = parseInt($(event.currentTarget).attr('i'));
                 
                 na.te.s.c.boxShadowColor = cssExtract.boxShadowColor[ctI];
@@ -1677,10 +1667,9 @@ na.te = na.themeEditor = {
         };
         
         na.te.s.c.boxShadowColor = cssExtract.boxShadowColor[ctI];
-        if ($('#boxShadowSettings .sp-container').length > 0) {
+        if ($('#boxShadowSettings .sp-container').length > 0)
             $('#boxShadowColorpicker').spectrum('set', na.te.s.c.boxShadowColor);
-            $('#boxShadowColorpicker').next().fadeIn('normal');
-        } else $('#boxShadowColorpicker').spectrum ({
+        else $('#boxShadowColorpicker').spectrum ({
             color : na.te.s.c.boxShadowColor, 
             type: "flat", 
             showAlpha : true,
@@ -1734,19 +1723,7 @@ na.te = na.themeEditor = {
             if (newBoxSetting!=='') newBoxSetting += ', ';
             newBoxSetting += $('#'+el.id+' div').css('boxShadow');
         });
-
-        if (na.te.s.c.forDialogID) {
-            var
-            div = $('#'+na.te.s.c.forDialogID),
-            bg = $('#'+na.te.s.c.forDialogID+' > .vdBackground');
-        } else {
-            var
-            div = $(na.te.s.c.forElements),
-            bg = $(na.te.s.c.forElements);
-        };
-
-
-        $(div).add(bg).css ({ boxShadow : newBoxSetting });
+        $('#'+na.te.s.c.forDialogID).css ({ boxShadow : newBoxSetting });
 
         na.site.saveTheme();
         
@@ -1765,18 +1742,7 @@ na.te = na.themeEditor = {
         var
         div = $('#'+na.te.s.c.forDialogID),
         bg =  $('#'+na.te.s.c.forDialogID+' > .vdBackground'),
-        div2 = $(na.te.s.c.forElements),
-        bg2 =  $(na.te.s.c.forElements+' > .vdBackground'),
-        bgS = (
-            bg.css('background')
-            ? bg.css('background')
-            : div.css('background')
-                ? div.css('background')
-                : div2.css('background')
-                    ? div2.css('background')
-                    : bg2.css('background')
-        ),
-        bg1 = bgS.replace(/\'/g, '\\\'').replace(/"/g, '\''),
+        bg1 = bg.css('background').replace(/\'/g, '\\\'').replace(/"/g, '\''),
         opacity = bg1.indexOf('url(')!==-1 ? bg.css('opacity') : 1,
         border = div.css('border'),
         borderRadius = bg.css('borderRadius'),
@@ -1969,6 +1935,7 @@ debugger;
 
 
             var s = na.te.s.c.selectedSelector;
+            debugger;
             if (s && s.node && na.te.s.c.elementsCSS[s.node.id]) {
                 na.te.s.c.elementsCSS[s.node.id].background = 'url("'+src+'") repeat';
                 na.te.s.c.elementsCSS[s.node.id].opacity =
@@ -2452,29 +2419,11 @@ debugger;
     },
 
     onclick_btnAddElement : function () {
-        if (
-            $('div, p, span, li, ol, ul, h1, h2, h3, h4')
-                .add(
-                    'div, p, span, li, ol, ul, h1, h2, h3, h4',
-                     $('iframe')[0].contentWindow.document
-                ).css('cursor').match(/grab/)
-        ) {
-            $('div, p, span, li, ol, ul, h1, h2, h3, h4')
-                .add('div, p, span, li, ol, ul, h1, h2, h3, h4', // DO NOT REMOVE!
-                     $('iframe')[0].contentWindow.document
-                ).css({cursor:'inherit'})
-                .each (function(){
-                    this.removeEventListener('click',na.te.btnAddElement_clickElement)
-                });
+        if ($('div, p, span, li, ol, ul, h1, h2, h3, h4').css('cursor').match(/grab/)) {
+            $('div, p, span, li, ol, ul, h1, h2, h3, h4').css({cursor:'inherit'}).each (function(){debugger; this.removeEventListener('click',na.te.btnAddElement_clickElement)});
         } else {
             na.te.s.c.addingElements = true;
-            $('div, p, span, li, ol, ul, h1, h2, h3, h4')
-                .add('div, p, span, li, ol, ul, h1, h2, h3, h4', // DO NOT REMOVE!
-                     $('iframe')[0].contentWindow.document
-                ).css({cursor:'url(/NicerAppWebOS/siteMedia/btnSettings2.32x32.png) 16 16, grab'})
-                .each (function(idx,el) {
-                    this.addEventListener('click',na.te.btnAddElement_clickElement,{capture:true})
-                });
+            $('div, p, span, li, ol, ul, h1, h2, h3, h4').css({cursor:'url(/NicerAppWebOS/siteMedia/btnSettings2.32x32.png) 16 16, grab'}).each (function(idx,el) { this.addEventListener('click',na.te.btnAddElement_clickElement,{capture:true})});
         }
     },
 
@@ -2537,7 +2486,7 @@ debugger;
             });
             $('#siteToolbarThemeEditor__elementPicker > .vividListSelector').append(divEl);
 
-            //na.m.log (110, msg);
+            na.m.log (110, msg);
             var br = event.target.getBoundingClientRect();
             $('#siteToolbarThemeEditor__elementPicker').css({position:'absolute',left:br.left,top:br.top+br.height,zIndex:900000}).fadeIn('slow');
             event.preventDefault();
@@ -2549,9 +2498,7 @@ debugger;
                 type : 'naElement',
             }, 'last');
             na.te.s.c.elementsCSS[na.te.s.c.newElementID] = {
-                css : {
-                    background : $(ev.currentTarget).css('background')
-                }
+                background : $(ev.currentTarget).css('background')
             };
 
             //$('#themeEditor_jsTree_selectors').jstree('deselect_all').jstree('select_node', na.te.s.c.newElementID);
@@ -2583,38 +2530,21 @@ debugger;
     },
 
     onclick_btnDeleteGraphics : function (event) {
-        var jsonNodes =
-            $('#themeEditor_jsTree_selectors')
-                .jstree(true)
-                .get_json(na.te.s.c.selectedSelector.node.id, { flat: true });
-
+        var jsonNodes = $('#themeEditor_jsTree_selectors').jstree(true).get_json(na.te.s.c.selectedSelector.node.id, { flat: true });
         for (var i=0; i<jsonNodes.length; i++) {
             var nit = jsonNodes[i];
             if (nit.type=='naElement') na.te.deleteElement (nit);
         };
 
-        var node =
-            $('#themeEditor_jsTree_selectors')
-                .jstree()
-                .get_node(na.te.s.c.selectedSelector.node.id);
+        var node = $('#themeEditor_jsTree_selectors').jstree().get_node(na.te.s.c.selectedSelector.node.id);
         $('#themeEditor_jsTree_selectors').jstree('delete_node', node);
         na.site.saveTheme ();
     },
-    onclick_btnDeleteElement : function (evt) {
-        var node =
-            $('#themeEditor_jsTree_selectors')
-                .jstree()
-                .get_node(na.te.s.c.selectedSelector.node.id);
-        na.te.deleteElement(node);
 
-        $('#themeEditor_jsTree_selectors').jstree('delete_node', node);
-        na.site.saveTheme ();
-    },
     deleteElement : function (nit) {
         $(nit.text).css ({
             color : '',
-            background : '',
-            borderRadius : 0
+            background : ''
         });
     }
 
