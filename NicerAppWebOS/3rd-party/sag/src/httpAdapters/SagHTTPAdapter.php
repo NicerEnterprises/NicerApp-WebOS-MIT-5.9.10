@@ -32,19 +32,9 @@ abstract class SagHTTPAdapter {
     $this->port = $port;
 
     global $naIP;
+    global $naWebOS;
+    global $naDebugAll;
     $this->debug = true;
-    $this->debugShowCurlBash = true;
-    $this->debugShowHTML = true;
-    //echo '<pre>'; var_dump ($_SESSION); die();
-    $now = DateTime::createFromFormat('U.u', $_SESSION['started']);
-    //$date = $now->format("Y-m-d_H:i:s.u");
-    $date = $now->format("Y-m-d_H:i:s");
-    $this->debugFilePath = '/var/www/said.by/NicerAppWebOS/siteLogs/curl-'.$naIP.'-'.$date.'.txt';
-
-    $fn = $this->debugFilePath;
-    if (file_exists($fn)) unlink ($fn);
-    $fn = str_replace('.txt','.html', $this->debugFilePath);
-    if (file_exists($fn)) unlink ($fn);
   }
 
   /**
@@ -92,44 +82,6 @@ abstract class SagHTTPAdapter {
 
       if(isset($json) && $json !== FALSE) {
         if(!empty($json->error)) {
-
-            if (false) {
-                $dbgTxt2 = '';
-                $dbgCurlCmd = 'curl -X '.$method.' ';
-                $opts[10015] = '';
-                $response->body = '';
-                if ($this->debugShowHTML) {
-                  $dbgTxt = '<p>METHOD2 : '.$method.'</p>'.PHP_EOL;
-                  $dbgTxt .= '<pre style="color:blue">';
-                  $dbgTxt2 .= $dbgTxt;
-                  echo $dbgTxt;
-                }
-                if ($this->debugShowVarDump) var_dump ($opts);
-                if ($this->debugShowCurlBash) {
-                  foreach ($opts as $k => $v) {
-                    $dbgCurlCmd .= ' -H "'.$k.'='.json_encode($v).'"';
-                  }
-                }
-                $dbgCurlCmd.= ' ';
-
-                if ($this->debugShowHTML) {
-                  $dbgTxt = '</pre>'.PHP_EOL;
-                  $dbgTxt .= '<pre style="color:red">';
-                  $dbgTxt2 .= $dbgTxt;
-                }
-                if ($this->debugShowVarDump) var_dump ($response);
-                if ($this->debugShowHTML) echo '</pre>'.PHP_EOL;
-
-                if (is_string($this->debugFilePath) && $this->debugFilePath!=='') {
-                  $f = fopen ($this->debugFilePath, 'a');
-                  fwrite ($f, $dbgCurlCmd.PHP_EOL);
-                  fclose ($f);
-
-                  $f = fopen (str_replace('.txt', '.html', $this->debugFilePath), 'a');
-                  fwrite ($f, $dbgTxt2.PHP_EOL);
-                  fclose ($f);
-                }
-            }
           throw new SagCouchException("{$json->error} ({$json->reason})", $response->headers->_HTTP->status);
         }
 
@@ -139,21 +91,6 @@ abstract class SagHTTPAdapter {
       }
     }
 
-    if (false) {
-        $opts[10015] = '';
-        //$response->body = '';
-        if ($this->debugShowHTML) {
-          echo '<p>METHOD : '.$method.'</p>'.PHP_EOL;
-          echo '<pre style="color:blue">';
-        }
-        if ($this->debugShowVarDump) var_dump ($opts);
-        if ($this->debugShowHTML) {
-          echo '</pre>'.PHP_EOL;
-          echo '<pre style="color:red">';
-        }
-        if ($this->debugShowVarDump) var_dump ($response);
-        if ($this->debugShowHTML) echo '</pre>'.PHP_EOL;
-    }
     return $response;
   }
 

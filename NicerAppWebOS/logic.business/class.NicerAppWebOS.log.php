@@ -169,7 +169,7 @@ class class_NicerAppWebOS_log {
             }
 
             try {
-                if ($this->addTo_phpOutput('naWebOS_errors_startup', $entries))
+                if ($this->addTo_phpOutput($entries, 'naWebOS_errors_startup'))
                     $r[] = ['$_SESSION::naWebOS_errors_startup' => true];
             } catch (Throwable $e) {
                 echo $this->cn.'->add($entries) : $e->getMessage()='.$e->getMessage();
@@ -205,7 +205,7 @@ class class_NicerAppWebOS_log {
         return $r;
     }
 
-    public function addTo_phpOutput ($sk, $val) {
+    public function addTo_phpOutput ($val, $sk) {
         $key = date(DATE_ATOM);
         if (php_sapi_name()!=='cli') {
             if (!array_key_exists($sk, $_SESSION)) $_SESSION[$sk] = [];
@@ -254,7 +254,7 @@ class class_NicerAppWebOS_log {
                 'txt' =>
                     'CALL to '.$url.PHP_EOL
                     .$this->displayHTTPcall_debugInfo('txt', $debugInfo).PHP_EOL
-                    .$this->displayHTTPcall_output('txt', $debugInfo).PHP_EOL
+                    .$this->displayHTTPcall_output('txt', $output).PHP_EOL
                     .PHP_EOL
             ]
         ];

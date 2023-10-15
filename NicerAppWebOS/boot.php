@@ -78,18 +78,6 @@ NicerApp WCS (Website Control System) from Nicer Enterprises
         */
     }
     ini_set ('log_errors', true);
-    global $error_log_filepath;
-    //echo '<pre>'; var_dump ($_SERVER); die();
-    if (
-        isset($_SERVER)
-        && is_array($_SERVER)
-        && array_key_exists('SERVER_NAME', $_SERVER)
-        && array_key_exists('SERVER_PORT', $_SERVER)
-    )   $error_log_filepath = '/var/log/apache2/NicerEnterprises-NicerApp-WebOS-'.$_SERVER['SERVER_NAME'].':'.$_SERVER['SERVER_PORT'].'.log';
-    else
-        $error_log_filepath = '/var/log/apache2/NicerEnterprises-NicerApp-WebOS-cli.log';
-    ini_set ('error_log', $error_log_filepath);
-
 
     if (php_sapi_name() !== 'cli') {
         if (session_status() === PHP_SESSION_NONE) {
@@ -108,11 +96,14 @@ NicerApp WCS (Website Control System) from Nicer Enterprises
         } else {
             session_start();
         }
-        $_SESSION[SEID] = [];
-        $_SESSION['naWebOS_errors_startup'] = [];
 
         if ($_SERVER['SCRIPT_NAME']=='/NicerAppWebOS/index.php') {
             $_SESSION['started'] = microtime(true);
+            $_SESSION['logsInitialized'] = false;
+            $_SESSION[SEID] = [];
+            $_SESSION['naWebOS_errors_startup'] = [];
+
+            // outdated?
             $_SESSION['naErrors'] = [];
             $_SESSION['naErrors_startup'] = [];
             $_SESSION['naErrors_js'] = [ 'bootup' => [] ];
@@ -138,32 +129,54 @@ NicerApp WCS (Website Control System) from Nicer Enterprises
         $naWebOS->initializeDatabases();
         $naWebOS->initializeGlobals();
     }
-
-    // at the *bottom* of this file (that's for good reasons), 
-    // you will find : require_once(dirname(__FILE__).'/apps/nicer.app/api.paymentSystems/boot.php');
-    
-    
-    ini_set('memory_limit','2G');
-    set_time_limit(2 * (60 * 60)); // 2 hours, in seconds
-    
-
-    //echo '<pre>'; var_dump ($_SERVER); exit();
-    
+    if ($_SERVER['SCRIPT_NAME']=='/NicerAppWebOS/index.php') {
+        $now = DateTime::createFromFormat('U.u', $_SESSION['started']);
+        //$date = $now->format("Y-m-d_H:i:s.u");
+        $date = $now->format("Y-m-d_H:i:s");
+        $_SESSION['na_error_log_filepath_html'] =
+            '/var/www/'.$naWebOS->domain.'/NicerAppWebOS/siteLogs/'
+            .$naIP.'-'.$date.'.html';
+        $_SESSION['na_error_log_filepath_txt'] =
+            '/var/www/'.$naWebOS->domain.'/NicerAppWebOS/siteLogs/'
+            .$naIP.'-'.$date.'.txt';
+    }
+    //echo '<pre>'; var_dump ($_SERVER); die();
 
     $lanConfigFilepath = realpath(dirname(__FILE__)).'/domainConfigs/'.$naWebOS->domain.'/naLAN.json';
     $lanConfigExampleFilepath = realpath(dirname(__FILE__)).'/domainConfigs/'.$naWebOS->domain.'/naLAN.EXAMPLE.json';
-    if (!file_exists($lanConfigFilepath)) 
+    if (!file_exists($lanConfigFilepath))
         trigger_error ('"'.$lanConfigFilepath.'" does not exist. See "'.$lanConfigExampleFilepath.'" for a template.', E_USER_ERROR);
     $lanConfigRaw = file_get_contents($lanConfigFilepath);
     $lanConfig = json_decode($lanConfigRaw, true);
     checkForJSONerrors($lanConfigRaw, $lanConfigFilepath, $lanConfigExampleFilepath);
-    
+
     global $naLAN;
     $naLAN = (
         $naIP === '::1'
         || $naIP === '127.0.0.1'
         || in_array($naIP, $lanConfig)
     );
+    if ($naLAN && array_key_exists('logsInitialized', $_SESSION) && !$_SESSION['logsInitialized']) {
+        file_put_contents (
+            $_SESSION['na_error_log_filepath_html'],
+            PHP_EOL.$naWebOS->getLinks($naWebOS->cssFiles)
+            .PHP_EOL.$naWebOS->getLinks($naWebOS->javascriptFiles).PHP_EOL,
+            FILE_APPEND
+        );
+
+        $_SESSION['logsInitialized'] = true;
+    }
+
+    ini_set ('error_log', $na_error_log_filepath_txt);
+
+    // at the *bottom* of this file (that's for good reasons),
+    // you will find : require_once(dirname(__FILE__).'/apps/nicer.app/api.paymentSystems/boot.php');
+    
+    ini_set('memory_limit','16M');
+    set_time_limit(20); // 20 seconds
+
+    //echo '<pre>'; var_dump ($_SERVER); exit();
+    
 
     // make globals variable holding the version number
     $naVersionNumber = file_get_contents(dirname(__FILE__).'/VERSION.txt');

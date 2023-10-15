@@ -29,6 +29,8 @@ class SagCURLHTTPAdapter extends SagHTTPAdapter {
     $this->followLocation = !ini_get('open_basedir');
 
     $this->ch = curl_init();
+
+    $this->dbgNum = 0;
   }
 
   public function procPacket($method, $url, $data = null, $reqHeaders = array(), $specialHost = null, $specialPort = null) {
@@ -143,12 +145,23 @@ class SagCURLHTTPAdapter extends SagHTTPAdapter {
     }
 
     global $naWebOS;
+    global $na_error_log_filepath_html;
+    global $na_error_log_filepath_txt;
     //if (is_object($naWebOS->dbs)) { echo '<pre>'; var_dump ($naWebOS->dbs->findConnection('couchdb')->username); echo '</pre>'; }
+    $dbg = [
+      1 => (isset($_SESSION['na_error_log_filepath_html'])),
+      2 => (is_object($naWebOS->dbs)),
+      3 => (is_object($naWebOS->dbs) ? $naWebOS->dbs->findConnection('couchdb')->username : 'NOTSETYET')
+    ];
+    //echo '<pre>'.PHP_EOL; var_dump ($dbg); echo '</pre>'.PHP_EOL;
     if (
       $this->debug // declared in SagHTTPAdapter.php::__construct()
+      && session_status() === PHP_SESSION_ACTIVE
+      && isset($_SESSION['na_error_log_filepath_html'])
       && is_object($naWebOS->dbs)
       && $naWebOS->dbs->findConnection('couchdb')->username=='said_by___Rene__AJM__Veerman'
     ) {
+
       $optsTranslated = [];
       foreach ($opts as $k => $v) {
         switch ($k) {
@@ -165,14 +178,41 @@ class SagCURLHTTPAdapter extends SagHTTPAdapter {
         }
       }
 
+
+      //var_dump ($na_error_log_filepath_html); die();
+      $now = DateTime::createFromFormat('U.u', $_SESSION['started']);
+      $date = $now->format("Y-m-d_H:i:s.u").' GMT';
+      //$date = $now->format("Y-m-d_H:i:s");
+
+      $dbgOpts = json_encode($optsTranslated, JSON_PRETTY_PRINT);
+      $dbgOpts = str_replace('\/','/',$dbgOpts);
+      $dbgOpts = str_replace("\n",'<br/>',$dbgOpts);
+      $dbgOpts = str_replace(" ",'&nbsp;',$dbgOpts);
+
+      $ret = json_encode(json_decode($response->body), JSON_PRETTY_PRINT);
+      $ret = str_replace('\/','/',$ret);
+      $ret = str_replace("\n",'<br/>',$ret);
+      $ret = str_replace(" ",'&nbsp;',$ret);
+
+      $dbgHTML =
+        '<div class="naLogHeader_curlOptions" style="display:flex;align-items:center;">'.$this->buttonExpand().'curl options '.$date.'</div>'
+        .'<div id="expandData_'.($this->dbgNum-1).'" class="naLogCurlOptions">'
+        .$dbgOpts
+        .'</div>'
+        .'<div class="naLogHeader_curlResponse" style="display:flex;align-items:center;">'.$this->buttonExpand().'curl response '.$date.'</div>'
+        .'<div id="expandData_'.($this->dbgNum-1).'" class="naLogCurlResponse">'
+        .$ret
+        .'</div>';
+      file_put_contents ($_SESSION['na_error_log_filepath_html'], $dbgHTML, FILE_APPEND);
+
       $dbgTxt =
         'curl options = '
-        .str_replace('\/','/',json_encode($optsTranslated, JSON_PRETTY_PRINT)).PHP_EOL;
-      $dbgTxt .=
-        'curl response = '
+        .str_replace('\/','/',json_encode($optsTranslated, JSON_PRETTY_PRINT)).PHP_EOL
+        .'curl response = '
         .json_encode(json_decode($response->body), JSON_PRETTY_PRINT).PHP_EOL.PHP_EOL
         .'----------------------'.PHP_EOL.PHP_EOL;
-      file_put_contents ($this->debugFilePath, $dbgTxt, FILE_APPEND);
+      file_put_contents ($_SESSION['na_error_log_filepath_txt'], $dbgTxt, FILE_APPEND);
+
     }
 
     // in the event cURL can't follow and we got a Location header w/ a 3xx
@@ -203,6 +243,39 @@ class SagCURLHTTPAdapter extends SagHTTPAdapter {
 
     return self::makeResult($opts, $response, $method);
   }
+
+
+  private function buttonExpand () {
+    global $naWebOS;
+    $r = $naWebOS->html_vividButton(
+      0, 'display:inline-block;margin:5px;',
+
+      'expand_'.$this->dbgNum,
+      'vividButton_icon_50x50', '_50x50', 'grouped',
+      '',
+      'if (!$(this).is(\'.disabled\')) { $(\'#expandData_'.$this->dbgNum.'\').show(); }',
+      '',
+      '',
+
+      7, 'Expand',
+
+      'btnCssVividButton_outerBorder.png',
+      'btnCssVividButton.png',
+      null,//'btnCssVividButton.grey2a.png',
+      'btnPlus.png',
+
+      '',
+      '',
+
+      null,
+      null,
+      null
+    );
+    $this->dbgNum++;
+    return $r;
+  }
+
+
 
   /**
    * Used when we need to create a new adapter to follow a redirect because
