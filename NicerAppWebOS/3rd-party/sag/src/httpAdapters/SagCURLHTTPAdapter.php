@@ -187,22 +187,25 @@ class SagCURLHTTPAdapter extends SagHTTPAdapter {
 
       //var_dump ($na_error_log_filepath_html); die();
       $now = DateTime::createFromFormat('U.u', $_SESSION['started']);
-      $date = $now->format("Y-m-d_H:i:s.u").' GMT';
+      $now->setTimezone(new DateTimeZone(system('date +%z')));
+      $date = $now->format("Y-m-d H:i:s.u ").preg_replace('/.*\s/','',date(DATE_RFC2822));
       //$date = $now->format("Y-m-d_H:i:s");
 
       $dbgOpts = json_encode($optsTranslated, JSON_PRETTY_PRINT);
       $dbgOpts = str_replace('\/','/',$dbgOpts);
       $dbgOpts = str_replace("\n",'<br/>',$dbgOpts);
+      $dbgOpts = str_replace('\n','<br/>',$dbgOpts);
       $dbgOpts = str_replace(" ",'&nbsp;',$dbgOpts);
 
       $ret = json_encode(json_decode($response->body), JSON_PRETTY_PRINT);
       $ret = str_replace('\/','/',$ret);
       $ret = str_replace("\n",'<br/>',$ret);
+      $ret = str_replace('\n','<br/>',$ret);
       $ret = str_replace(" ",'&nbsp;',$ret);
 
       $dbgHTML =
-        '<div class="naLogEntry">'
-        .'<div class="naLogEntry_header">'.$date.'&nbsp;<span class="naLogHeader_curlOptions_url">'.$opts[CURLOPT_URL].'</span></div>'
+        '<div id="entry_'.$_SESSION['dbgNum2'].'" class="naLogEntry">'
+        .'<div class="naLogEntry_header"><span class="naLogHeader_curlOptions_datetime">'.$date.'</span><br/><span class="naLogHeader_curlOptions_url">'.$opts[CURLOPT_URL].'</span></div>'
         .'<div class="naLogHeader_curlOptions" style="display:flex;align-items:center;">'.$this->buttonExpand().'curl options</div>'
         .'<div id="expandData_'.($_SESSION['dbgNum']-1).'" class="naLogCurlOptions">'
         .$dbgOpts
@@ -212,6 +215,7 @@ class SagCURLHTTPAdapter extends SagHTTPAdapter {
         .$ret
         .'</div>'
         .'</div>';
+      $_SESSION['dbgNum2']++;
       file_put_contents ($_SESSION['na_error_log_filepath_html'], $dbgHTML, FILE_APPEND);
 
       $dbgTxt =
@@ -262,7 +266,7 @@ class SagCURLHTTPAdapter extends SagHTTPAdapter {
       'expand_'.$_SESSION['dbgNum'],
       'vividButton_icon_50x50', '_50x50', 'grouped',
       '',
-      'if (!$(this).is(\'.disabled\')) { var $el = $(\'#expandData_'.$_SESSION['dbgNum'].'\'); if ($el.css(\'display\')==\'none\') { $el.slideDown(); window.location.hash=\''.$_SESSION['dbgNum'].'\' } else { $el.slideUp(); window.location.hash = \'\'; }}',
+      'if (!$(this).is(\'.disabled\')) { var $el = $(\'#expandData_'.$_SESSION['dbgNum'].'\'), $el2 = $(\'#entry_'.$_SESSION['dbgNum2'].'\'), $btn = $(\'#expand_'.$_SESSION['dbgNum'].'\'); if ($el.css(\'display\')==\'none\') { $(\'.vividButton_icon_imgButtonIcon_50x50\', $btn)[0].src = \'/NicerAppWebOS/siteMedia/btnCheckmark_green.png\'; $el2.animate({width:\'90%\'}); $el.slideDown(); window.location.hash=\''.$_SESSION['dbgNum2'].'\' } else { $(\'.vividButton_icon_imgButtonIcon_50x50\', $btn)[0].src = \'/NicerAppWebOS/siteMedia/btnPlus.png\'; $el2.animate({ width : $(window).width() / 4 }); $el.slideUp(); window.location.hash = \'\'; }}',
       '',
       '',
 
