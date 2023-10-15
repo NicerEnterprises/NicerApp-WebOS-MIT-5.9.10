@@ -30,7 +30,6 @@ class SagCURLHTTPAdapter extends SagHTTPAdapter {
 
     $this->ch = curl_init();
 
-    $this->dbgNum = 0;
   }
 
   public function procPacket($method, $url, $data = null, $reqHeaders = array(), $specialHost = null, $specialPort = null) {
@@ -160,6 +159,8 @@ class SagCURLHTTPAdapter extends SagHTTPAdapter {
       && isset($_SESSION['na_error_log_filepath_html'])
       && is_object($naWebOS->dbs)
       && $naWebOS->dbs->findConnection('couchdb')->username=='said_by___Rene__AJM__Veerman'
+      && strpos($opts[CURLOPT_URL], 'log_entries')===false
+      && strpos($opts[CURLOPT_URL], '_session')===false
     ) {
 
       $optsTranslated = [];
@@ -175,6 +176,7 @@ class SagCURLHTTPAdapter extends SagHTTPAdapter {
           case CURLOPT_CUSTOMREQUEST : $optsTranslated['CURLOPT_CUSTOMREQUEST'] = $v; break;
           case CURLOPT_HTTPHEADER : $optsTranslated['CURLOPT_HTTPHEADER'] = $v; break;
           case CURLOPT_POSTFIELDS : $optsTranslated['CURLOPT_POSTFIELDS'] = json_decode($v); break;
+          default : $optsTranslated[$k] = $v; break;
         }
       }
 
@@ -196,11 +198,11 @@ class SagCURLHTTPAdapter extends SagHTTPAdapter {
 
       $dbgHTML =
         '<div class="naLogHeader_curlOptions" style="display:flex;align-items:center;">'.$this->buttonExpand().'curl options '.$date.'</div>'
-        .'<div id="expandData_'.($this->dbgNum-1).'" class="naLogCurlOptions">'
+        .'<div id="expandData_'.($_SESSION['dbgNum']-1).'" class="naLogCurlOptions">'
         .$dbgOpts
         .'</div>'
         .'<div class="naLogHeader_curlResponse" style="display:flex;align-items:center;">'.$this->buttonExpand().'curl response '.$date.'</div>'
-        .'<div id="expandData_'.($this->dbgNum-1).'" class="naLogCurlResponse">'
+        .'<div id="expandData_'.($_SESSION['dbgNum']-1).'" class="naLogCurlResponse">'
         .$ret
         .'</div>';
       file_put_contents ($_SESSION['na_error_log_filepath_html'], $dbgHTML, FILE_APPEND);
@@ -250,10 +252,10 @@ class SagCURLHTTPAdapter extends SagHTTPAdapter {
     $r = $naWebOS->html_vividButton(
       0, 'display:inline-block;margin:5px;',
 
-      'expand_'.$this->dbgNum,
+      'expand_'.$_SESSION['dbgNum'],
       'vividButton_icon_50x50', '_50x50', 'grouped',
       '',
-      'if (!$(this).is(\'.disabled\')) { $(\'#expandData_'.$this->dbgNum.'\').show(); }',
+      'if (!$(this).is(\'.disabled\')) { var $el = $(\'#expandData_'.$_SESSION['dbgNum'].'\'); if ($el.css(\'display\')==\'none\') $el.show(); else $el.slideUp(); }',
       '',
       '',
 
@@ -271,7 +273,7 @@ class SagCURLHTTPAdapter extends SagHTTPAdapter {
       null,
       null
     );
-    $this->dbgNum++;
+    $_SESSION['dbgNum']++;
     return $r;
   }
 
