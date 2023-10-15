@@ -1,0 +1,1976 @@
+<pre style="color:white;background:rgba(255,0,0,0.8);border-radius:10px;padding:8px;box-shadow:inset 1px 1px 3px 2px rgba(0,0,0,0.7), 2px 2px 2px 1px rgba(0,0,0,0.8);">{
+    "errno": 8,
+    "errstr": "ob_flush(): Failed to flush buffer. No buffer to flush",
+    "errfile": "\/var\/www\/nicer.app\/NicerAppWebOS\/functions.php",
+    "errline": 458
+}<pre style="color:white;background:rgba(50,0,0,0.5);border-radius:10px;padding:8px;box-shadow:inset 1px 1px 3px 2px rgba(0,0,0,0.7), 2px 2px 2px 1px rgba(0,0,0,0.8);">[
+    {
+        "function": "mainErrorHandler",
+        "args": [
+            8,
+            "ob_flush(): Failed to flush buffer. No buffer to flush",
+            "\/var\/www\/nicer.app\/NicerAppWebOS\/functions.php",
+            458
+        ]
+    },
+    {
+        "file": "\/var\/www\/nicer.app\/NicerAppWebOS\/functions.php",
+        "line": 458,
+        "function": "ob_flush",
+        "args": []
+    },
+    {
+        "file": "\/var\/www\/nicer.app\/NicerAppWebOS\/functions.php",
+        "line": 34,
+        "function": "require_return",
+        "args": [
+            "\/var\/www\/nicer.app\/NicerAppWebOS\/domainConfigs\/nicer.app\/database.users.json.php",
+            true
+        ]
+    },
+    {
+        "file": "\/var\/www\/nicer.app\/NicerAppWebOS\/logic.databases\/generalizedDatabasesAPI-1.0.0\/connectors\/class.couchdb-3.2.2_1.0.1.php",
+        "line": 145,
+        "function": "safeLoadJSONfile",
+        "args": [
+            "\/var\/www\/nicer.app\/NicerAppWebOS\/domainConfigs\/nicer.app\/database.users.json.php"
+        ]
+    },
+    {
+        "file": "\/var\/www\/nicer.app\/NicerAppWebOS\/logic.databases\/generalizedDatabasesAPI-1.0.0\/class.database_API.php",
+        "line": 390,
+        "function": "setGlobals",
+        "class": "class_NicerAppWebOS_database_API_couchdb_3_2",
+        "object": {
+            "cn": "class_NicerAppWebOS_database_API_couchdb_3_2",
+            "connectionType": "couchdb",
+            "debug": false,
+            "ip": null,
+            "security_admin": null,
+            "security_guest": null,
+            "naWebOS": null,
+            "cdb": {},
+            "cdb_slr": null,
+            "username": "nicer_app___Guest",
+            "roles": [
+                "nicer_app___Guests"
+            ],
+            "cms": {
+                "cn": "...\/NicerAppWebOS\/logic.business\/class.core.WebsiteOperatingSystem-5.y.z.php::class NicerAppWebOS",
+                "version": "5.5.0",
+                "about": {
+                    "whatsThis": "NicerApp Content Management System PHP class",
+                    "version": "5.5.0",
+                    "lastModified": "Sunday, 9 July, 2023, 19:07 CEST (Amsterdam.NL timezone)",
+                    "copyright": "Copyright 2002-2023 by Rene A.J.M. Veerman <rene.veerman.netherlandsd@gmail.com>"
+                },
+                "initialized": false,
+                "baseIndentLevel": 2,
+                "cssTheme": "dark",
+                "ip": null,
+                "domain": "nicer.app",
+                "basePath": "\/var\/www\/nicer.app",
+                "selfHealer": null,
+                "view": null,
+                "dbs": "initializing",
+                "dbsAdmin": null,
+                "hasDB": false,
+                "showAllErrors": false,
+                "cts": null,
+                "comments": null,
+                "debugThemeLoading": false,
+                "browserDebug": false,
+                "domainForDB": "nicer_app",
+                "ownerInfo": {
+                    "OWNER_NAME": "Rene AJM Veerman",
+                    "OWNER_EMAIL": "rene.veerman.netherlands@gmail.com",
+                    "OWNER_PASSWORD": "dontGoBitingMee,Pups"
+                },
+                "viewsMIDpath": "\/var\/www\/nicer.app\/NicerAppWebOS\/apps\/\/var\/www\/NicerAppWebOS\/NicerAppWebOS\/apps\/manufacturerNameForDomainName_NicerAppWebOS_val.txt",
+                "viewsMID": "NicerAppWebOS",
+                "cssFiles": [
+                    {
+                        "indexFile": "\/var\/www\/nicer.app\/NicerAppWebOS\/domainConfigs\/nicer.app\/index.css.json",
+                        "type": "css"
+                    },
+                    {
+                        "files": [
+                            "\/NicerAppWebOS\/logic.userInterface\/vividButton-4.1.0\/themes.css",
+                            "\/NicerAppWebOS\/logic.userInterface\/vividButton-4.1.0\/btn_audioVideo_playPause.css"
+                        ],
+                        "type": "css"
+                    }
+                ],
+                "javascriptFiles": [
+                    {
+                        "indexFile": "\/var\/www\/nicer.app\/NicerAppWebOS\/domainConfigs\/nicer.app\/index.javascripts.json",
+                        "type": "javascript"
+                    }
+                ]
+            },
+            "connectionSettings": {
+                "host": "127.0.0.1",
+                "port": "5984",
+                "useSSL": false,
+                "httpAdapter": "HTTP_CURL",
+                "dbName": "analytics",
+                "username": "nicer_app___Guest",
+                "password": "Guest"
+            }
+        },
+        "type": "->",
+        "args": [
+            "nicer_app___Guest"
+        ]
+    },
+    {
+        "file": "\/var\/www\/nicer.app\/NicerAppWebOS\/logic.databases\/generalizedDatabasesAPI-1.0.0\/class.database_API.php",
+        "line": 311,
+        "function": "callAllDataSets",
+        "class": "class_NicerAppWebOS_database_API",
+        "object": {
+            "cn": "class_NicerAppWebOS_database_API",
+            "settings": {
+                "databases": {
+                    "couchdb": {
+                        "host": "127.0.0.1",
+                        "port": "5984",
+                        "useSSL": false,
+                        "httpAdapter": "HTTP_CURL",
+                        "dbName": "analytics",
+                        "username": "nicer_app___Guest",
+                        "password": "Guest"
+                    }
+                }
+            },
+            "connections": [
+                {
+                    "ct": "couchdb",
+                    "cRec": {
+                        "host": "127.0.0.1",
+                        "port": "5984",
+                        "useSSL": false,
+                        "httpAdapter": "HTTP_CURL",
+                        "dbName": "analytics",
+                        "username": "nicer_app___Guest",
+                        "password": "Guest"
+                    },
+                    "conn": {
+                        "cn": "class_NicerAppWebOS_database_API_couchdb_3_2",
+                        "connectionType": "couchdb",
+                        "debug": false,
+                        "ip": null,
+                        "security_admin": null,
+                        "security_guest": null,
+                        "naWebOS": null,
+                        "cdb": {},
+                        "cdb_slr": null,
+                        "username": "nicer_app___Guest",
+                        "roles": [
+                            "nicer_app___Guests"
+                        ],
+                        "cms": {
+                            "cn": "...\/NicerAppWebOS\/logic.business\/class.core.WebsiteOperatingSystem-5.y.z.php::class NicerAppWebOS",
+                            "version": "5.5.0",
+                            "about": {
+                                "whatsThis": "NicerApp Content Management System PHP class",
+                                "version": "5.5.0",
+                                "lastModified": "Sunday, 9 July, 2023, 19:07 CEST (Amsterdam.NL timezone)",
+                                "copyright": "Copyright 2002-2023 by Rene A.J.M. Veerman <rene.veerman.netherlandsd@gmail.com>"
+                            },
+                            "initialized": false,
+                            "baseIndentLevel": 2,
+                            "cssTheme": "dark",
+                            "ip": null,
+                            "domain": "nicer.app",
+                            "basePath": "\/var\/www\/nicer.app",
+                            "selfHealer": null,
+                            "view": null,
+                            "dbs": "initializing",
+                            "dbsAdmin": null,
+                            "hasDB": false,
+                            "showAllErrors": false,
+                            "cts": null,
+                            "comments": null,
+                            "debugThemeLoading": false,
+                            "browserDebug": false,
+                            "domainForDB": "nicer_app",
+                            "ownerInfo": {
+                                "OWNER_NAME": "Rene AJM Veerman",
+                                "OWNER_EMAIL": "rene.veerman.netherlands@gmail.com",
+                                "OWNER_PASSWORD": "dontGoBitingMee,Pups"
+                            },
+                            "viewsMIDpath": "\/var\/www\/nicer.app\/NicerAppWebOS\/apps\/\/var\/www\/NicerAppWebOS\/NicerAppWebOS\/apps\/manufacturerNameForDomainName_NicerAppWebOS_val.txt",
+                            "viewsMID": "NicerAppWebOS",
+                            "cssFiles": [
+                                {
+                                    "indexFile": "\/var\/www\/nicer.app\/NicerAppWebOS\/domainConfigs\/nicer.app\/index.css.json",
+                                    "type": "css"
+                                },
+                                {
+                                    "files": [
+                                        "\/NicerAppWebOS\/logic.userInterface\/vividButton-4.1.0\/themes.css",
+                                        "\/NicerAppWebOS\/logic.userInterface\/vividButton-4.1.0\/btn_audioVideo_playPause.css"
+                                    ],
+                                    "type": "css"
+                                }
+                            ],
+                            "javascriptFiles": [
+                                {
+                                    "indexFile": "\/var\/www\/nicer.app\/NicerAppWebOS\/domainConfigs\/nicer.app\/index.javascripts.json",
+                                    "type": "javascript"
+                                }
+                            ]
+                        },
+                        "connectionSettings": {
+                            "host": "127.0.0.1",
+                            "port": "5984",
+                            "useSSL": false,
+                            "httpAdapter": "HTTP_CURL",
+                            "dbName": "analytics",
+                            "username": "nicer_app___Guest",
+                            "password": "Guest"
+                        }
+                    }
+                }
+            ]
+        },
+        "type": "->",
+        "args": [
+            "setGlobals",
+            [
+                "nicer_app___Guest"
+            ]
+        ]
+    },
+    {
+        "file": "\/var\/www\/nicer.app\/NicerAppWebOS\/logic.business\/class.core.WebsiteOperatingSystem-5.y.z.php",
+        "line": 188,
+        "function": "setGlobals",
+        "class": "class_NicerAppWebOS_database_API",
+        "object": {
+            "cn": "class_NicerAppWebOS_database_API",
+            "settings": {
+                "databases": {
+                    "couchdb": {
+                        "host": "127.0.0.1",
+                        "port": "5984",
+                        "useSSL": false,
+                        "httpAdapter": "HTTP_CURL",
+                        "dbName": "analytics",
+                        "username": "nicer_app___Guest",
+                        "password": "Guest"
+                    }
+                }
+            },
+            "connections": [
+                {
+                    "ct": "couchdb",
+                    "cRec": {
+                        "host": "127.0.0.1",
+                        "port": "5984",
+                        "useSSL": false,
+                        "httpAdapter": "HTTP_CURL",
+                        "dbName": "analytics",
+                        "username": "nicer_app___Guest",
+                        "password": "Guest"
+                    },
+                    "conn": {
+                        "cn": "class_NicerAppWebOS_database_API_couchdb_3_2",
+                        "connectionType": "couchdb",
+                        "debug": false,
+                        "ip": null,
+                        "security_admin": null,
+                        "security_guest": null,
+                        "naWebOS": null,
+                        "cdb": {},
+                        "cdb_slr": null,
+                        "username": "nicer_app___Guest",
+                        "roles": [
+                            "nicer_app___Guests"
+                        ],
+                        "cms": {
+                            "cn": "...\/NicerAppWebOS\/logic.business\/class.core.WebsiteOperatingSystem-5.y.z.php::class NicerAppWebOS",
+                            "version": "5.5.0",
+                            "about": {
+                                "whatsThis": "NicerApp Content Management System PHP class",
+                                "version": "5.5.0",
+                                "lastModified": "Sunday, 9 July, 2023, 19:07 CEST (Amsterdam.NL timezone)",
+                                "copyright": "Copyright 2002-2023 by Rene A.J.M. Veerman <rene.veerman.netherlandsd@gmail.com>"
+                            },
+                            "initialized": false,
+                            "baseIndentLevel": 2,
+                            "cssTheme": "dark",
+                            "ip": null,
+                            "domain": "nicer.app",
+                            "basePath": "\/var\/www\/nicer.app",
+                            "selfHealer": null,
+                            "view": null,
+                            "dbs": "initializing",
+                            "dbsAdmin": null,
+                            "hasDB": false,
+                            "showAllErrors": false,
+                            "cts": null,
+                            "comments": null,
+                            "debugThemeLoading": false,
+                            "browserDebug": false,
+                            "domainForDB": "nicer_app",
+                            "ownerInfo": {
+                                "OWNER_NAME": "Rene AJM Veerman",
+                                "OWNER_EMAIL": "rene.veerman.netherlands@gmail.com",
+                                "OWNER_PASSWORD": "dontGoBitingMee,Pups"
+                            },
+                            "viewsMIDpath": "\/var\/www\/nicer.app\/NicerAppWebOS\/apps\/\/var\/www\/NicerAppWebOS\/NicerAppWebOS\/apps\/manufacturerNameForDomainName_NicerAppWebOS_val.txt",
+                            "viewsMID": "NicerAppWebOS",
+                            "cssFiles": [
+                                {
+                                    "indexFile": "\/var\/www\/nicer.app\/NicerAppWebOS\/domainConfigs\/nicer.app\/index.css.json",
+                                    "type": "css"
+                                },
+                                {
+                                    "files": [
+                                        "\/NicerAppWebOS\/logic.userInterface\/vividButton-4.1.0\/themes.css",
+                                        "\/NicerAppWebOS\/logic.userInterface\/vividButton-4.1.0\/btn_audioVideo_playPause.css"
+                                    ],
+                                    "type": "css"
+                                }
+                            ],
+                            "javascriptFiles": [
+                                {
+                                    "indexFile": "\/var\/www\/nicer.app\/NicerAppWebOS\/domainConfigs\/nicer.app\/index.javascripts.json",
+                                    "type": "javascript"
+                                }
+                            ]
+                        },
+                        "connectionSettings": {
+                            "host": "127.0.0.1",
+                            "port": "5984",
+                            "useSSL": false,
+                            "httpAdapter": "HTTP_CURL",
+                            "dbName": "analytics",
+                            "username": "nicer_app___Guest",
+                            "password": "Guest"
+                        }
+                    }
+                }
+            ]
+        },
+        "type": "->",
+        "args": [
+            "nicer_app___Guest"
+        ]
+    },
+    {
+        "file": "\/var\/www\/nicer.app\/NicerAppWebOS\/boot.php",
+        "line": 131,
+        "function": "initializeDatabases",
+        "class": "NicerAppWebOS",
+        "object": {
+            "cn": "...\/NicerAppWebOS\/logic.business\/class.core.WebsiteOperatingSystem-5.y.z.php::class NicerAppWebOS",
+            "version": "5.5.0",
+            "about": {
+                "whatsThis": "NicerApp Content Management System PHP class",
+                "version": "5.5.0",
+                "lastModified": "Sunday, 9 July, 2023, 19:07 CEST (Amsterdam.NL timezone)",
+                "copyright": "Copyright 2002-2023 by Rene A.J.M. Veerman <rene.veerman.netherlandsd@gmail.com>"
+            },
+            "initialized": false,
+            "baseIndentLevel": 2,
+            "cssTheme": "dark",
+            "ip": null,
+            "domain": "nicer.app",
+            "basePath": "\/var\/www\/nicer.app",
+            "selfHealer": null,
+            "view": null,
+            "dbs": {
+                "cn": "class_NicerAppWebOS_database_API",
+                "settings": {
+                    "databases": {
+                        "couchdb": {
+                            "host": "127.0.0.1",
+                            "port": "5984",
+                            "useSSL": false,
+                            "httpAdapter": "HTTP_CURL",
+                            "dbName": "analytics",
+                            "username": "nicer_app___Guest",
+                            "password": "Guest"
+                        }
+                    }
+                },
+                "connections": [
+                    {
+                        "ct": "couchdb",
+                        "cRec": {
+                            "host": "127.0.0.1",
+                            "port": "5984",
+                            "useSSL": false,
+                            "httpAdapter": "HTTP_CURL",
+                            "dbName": "analytics",
+                            "username": "nicer_app___Guest",
+                            "password": "Guest"
+                        },
+                        "conn": {
+                            "cn": "class_NicerAppWebOS_database_API_couchdb_3_2",
+                            "connectionType": "couchdb",
+                            "debug": false,
+                            "ip": null,
+                            "security_admin": null,
+                            "security_guest": null,
+                            "naWebOS": null,
+                            "cdb": {},
+                            "cdb_slr": null,
+                            "username": "nicer_app___Guest",
+                            "roles": [
+                                "nicer_app___Guests"
+                            ],
+                            "cms": {
+                                "cn": "...\/NicerAppWebOS\/logic.business\/class.core.WebsiteOperatingSystem-5.y.z.php::class NicerAppWebOS",
+                                "version": "5.5.0",
+                                "about": {
+                                    "whatsThis": "NicerApp Content Management System PHP class",
+                                    "version": "5.5.0",
+                                    "lastModified": "Sunday, 9 July, 2023, 19:07 CEST (Amsterdam.NL timezone)",
+                                    "copyright": "Copyright 2002-2023 by Rene A.J.M. Veerman <rene.veerman.netherlandsd@gmail.com>"
+                                },
+                                "initialized": false,
+                                "baseIndentLevel": 2,
+                                "cssTheme": "dark",
+                                "ip": null,
+                                "domain": "nicer.app",
+                                "basePath": "\/var\/www\/nicer.app",
+                                "selfHealer": null,
+                                "view": null,
+                                "dbs": "initializing",
+                                "dbsAdmin": null,
+                                "hasDB": false,
+                                "showAllErrors": false,
+                                "cts": null,
+                                "comments": null,
+                                "debugThemeLoading": false,
+                                "browserDebug": false,
+                                "domainForDB": "nicer_app",
+                                "ownerInfo": {
+                                    "OWNER_NAME": "Rene AJM Veerman",
+                                    "OWNER_EMAIL": "rene.veerman.netherlands@gmail.com",
+                                    "OWNER_PASSWORD": "dontGoBitingMee,Pups"
+                                },
+                                "viewsMIDpath": "\/var\/www\/nicer.app\/NicerAppWebOS\/apps\/\/var\/www\/NicerAppWebOS\/NicerAppWebOS\/apps\/manufacturerNameForDomainName_NicerAppWebOS_val.txt",
+                                "viewsMID": "NicerAppWebOS",
+                                "cssFiles": [
+                                    {
+                                        "indexFile": "\/var\/www\/nicer.app\/NicerAppWebOS\/domainConfigs\/nicer.app\/index.css.json",
+                                        "type": "css"
+                                    },
+                                    {
+                                        "files": [
+                                            "\/NicerAppWebOS\/logic.userInterface\/vividButton-4.1.0\/themes.css",
+                                            "\/NicerAppWebOS\/logic.userInterface\/vividButton-4.1.0\/btn_audioVideo_playPause.css"
+                                        ],
+                                        "type": "css"
+                                    }
+                                ],
+                                "javascriptFiles": [
+                                    {
+                                        "indexFile": "\/var\/www\/nicer.app\/NicerAppWebOS\/domainConfigs\/nicer.app\/index.javascripts.json",
+                                        "type": "javascript"
+                                    }
+                                ]
+                            },
+                            "connectionSettings": {
+                                "host": "127.0.0.1",
+                                "port": "5984",
+                                "useSSL": false,
+                                "httpAdapter": "HTTP_CURL",
+                                "dbName": "analytics",
+                                "username": "nicer_app___Guest",
+                                "password": "Guest"
+                            }
+                        }
+                    }
+                ]
+            },
+            "dbsAdmin": {
+                "cn": "class_NicerAppWebOS_database_API",
+                "settings": {
+                    "databases": {
+                        "couchdb": {
+                            "host": "127.0.0.1",
+                            "port": "5984",
+                            "useSSL": false,
+                            "httpAdapter": "HTTP_CURL",
+                            "username": "admin",
+                            "password": "ABiNi3ceElaisaDeserveMiGold"
+                        }
+                    }
+                },
+                "connections": [
+                    {
+                        "ct": "couchdb",
+                        "cRec": {
+                            "host": "127.0.0.1",
+                            "port": "5984",
+                            "useSSL": false,
+                            "httpAdapter": "HTTP_CURL",
+                            "username": "admin",
+                            "password": "ABiNi3ceElaisaDeserveMiGold"
+                        },
+                        "conn": {
+                            "cn": "class_NicerAppWebOS_database_API_couchdb_3_2",
+                            "connectionType": "couchdb",
+                            "debug": false,
+                            "ip": null,
+                            "security_admin": null,
+                            "security_guest": null,
+                            "naWebOS": null,
+                            "cdb": {},
+                            "cdb_slr": null,
+                            "username": "admin",
+                            "roles": [
+                                "_admin"
+                            ],
+                            "cms": {
+                                "cn": "...\/NicerAppWebOS\/logic.business\/class.core.WebsiteOperatingSystem-5.y.z.php::class NicerAppWebOS",
+                                "version": "5.5.0",
+                                "about": {
+                                    "whatsThis": "NicerApp Content Management System PHP class",
+                                    "version": "5.5.0",
+                                    "lastModified": "Sunday, 9 July, 2023, 19:07 CEST (Amsterdam.NL timezone)",
+                                    "copyright": "Copyright 2002-2023 by Rene A.J.M. Veerman <rene.veerman.netherlandsd@gmail.com>"
+                                },
+                                "initialized": false,
+                                "baseIndentLevel": 2,
+                                "cssTheme": "dark",
+                                "ip": null,
+                                "domain": "nicer.app",
+                                "basePath": "\/var\/www\/nicer.app",
+                                "selfHealer": null,
+                                "view": null,
+                                "dbs": {
+                                    "cn": "class_NicerAppWebOS_database_API",
+                                    "settings": {
+                                        "databases": {
+                                            "couchdb": {
+                                                "host": "127.0.0.1",
+                                                "port": "5984",
+                                                "useSSL": false,
+                                                "httpAdapter": "HTTP_CURL",
+                                                "dbName": "analytics",
+                                                "username": "nicer_app___Guest",
+                                                "password": "Guest"
+                                            }
+                                        }
+                                    },
+                                    "connections": [
+                                        {
+                                            "ct": "couchdb",
+                                            "cRec": {
+                                                "host": "127.0.0.1",
+                                                "port": "5984",
+                                                "useSSL": false,
+                                                "httpAdapter": "HTTP_CURL",
+                                                "dbName": "analytics",
+                                                "username": "nicer_app___Guest",
+                                                "password": "Guest"
+                                            },
+                                            "conn": {
+                                                "cn": "class_NicerAppWebOS_database_API_couchdb_3_2",
+                                                "connectionType": "couchdb",
+                                                "debug": false,
+                                                "ip": null,
+                                                "security_admin": null,
+                                                "security_guest": null,
+                                                "naWebOS": null,
+                                                "cdb": {},
+                                                "cdb_slr": null,
+                                                "username": "nicer_app___Guest",
+                                                "roles": [
+                                                    "nicer_app___Guests"
+                                                ],
+                                                "cms": {
+                                                    "cn": "...\/NicerAppWebOS\/logic.business\/class.core.WebsiteOperatingSystem-5.y.z.php::class NicerAppWebOS",
+                                                    "version": "5.5.0",
+                                                    "about": {
+                                                        "whatsThis": "NicerApp Content Management System PHP class",
+                                                        "version": "5.5.0",
+                                                        "lastModified": "Sunday, 9 July, 2023, 19:07 CEST (Amsterdam.NL timezone)",
+                                                        "copyright": "Copyright 2002-2023 by Rene A.J.M. Veerman <rene.veerman.netherlandsd@gmail.com>"
+                                                    },
+                                                    "initialized": false,
+                                                    "baseIndentLevel": 2,
+                                                    "cssTheme": "dark",
+                                                    "ip": null,
+                                                    "domain": "nicer.app",
+                                                    "basePath": "\/var\/www\/nicer.app",
+                                                    "selfHealer": null,
+                                                    "view": null,
+                                                    "dbs": "initializing",
+                                                    "dbsAdmin": null,
+                                                    "hasDB": false,
+                                                    "showAllErrors": false,
+                                                    "cts": null,
+                                                    "comments": null,
+                                                    "debugThemeLoading": false,
+                                                    "browserDebug": false,
+                                                    "domainForDB": "nicer_app",
+                                                    "ownerInfo": {
+                                                        "OWNER_NAME": "Rene AJM Veerman",
+                                                        "OWNER_EMAIL": "rene.veerman.netherlands@gmail.com",
+                                                        "OWNER_PASSWORD": "dontGoBitingMee,Pups"
+                                                    },
+                                                    "viewsMIDpath": "\/var\/www\/nicer.app\/NicerAppWebOS\/apps\/\/var\/www\/NicerAppWebOS\/NicerAppWebOS\/apps\/manufacturerNameForDomainName_NicerAppWebOS_val.txt",
+                                                    "viewsMID": "NicerAppWebOS",
+                                                    "cssFiles": [
+                                                        {
+                                                            "indexFile": "\/var\/www\/nicer.app\/NicerAppWebOS\/domainConfigs\/nicer.app\/index.css.json",
+                                                            "type": "css"
+                                                        },
+                                                        {
+                                                            "files": [
+                                                                "\/NicerAppWebOS\/logic.userInterface\/vividButton-4.1.0\/themes.css",
+                                                                "\/NicerAppWebOS\/logic.userInterface\/vividButton-4.1.0\/btn_audioVideo_playPause.css"
+                                                            ],
+                                                            "type": "css"
+                                                        }
+                                                    ],
+                                                    "javascriptFiles": [
+                                                        {
+                                                            "indexFile": "\/var\/www\/nicer.app\/NicerAppWebOS\/domainConfigs\/nicer.app\/index.javascripts.json",
+                                                            "type": "javascript"
+                                                        }
+                                                    ]
+                                                },
+                                                "connectionSettings": {
+                                                    "host": "127.0.0.1",
+                                                    "port": "5984",
+                                                    "useSSL": false,
+                                                    "httpAdapter": "HTTP_CURL",
+                                                    "dbName": "analytics",
+                                                    "username": "nicer_app___Guest",
+                                                    "password": "Guest"
+                                                }
+                                            }
+                                        }
+                                    ]
+                                },
+                                "dbsAdmin": "initializing",
+                                "hasDB": true,
+                                "showAllErrors": false,
+                                "cts": null,
+                                "comments": null,
+                                "debugThemeLoading": false,
+                                "browserDebug": false,
+                                "domainForDB": "nicer_app",
+                                "ownerInfo": {
+                                    "OWNER_NAME": "Rene AJM Veerman",
+                                    "OWNER_EMAIL": "rene.veerman.netherlands@gmail.com",
+                                    "OWNER_PASSWORD": "dontGoBitingMee,Pups"
+                                },
+                                "viewsMIDpath": "\/var\/www\/nicer.app\/NicerAppWebOS\/apps\/\/var\/www\/NicerAppWebOS\/NicerAppWebOS\/apps\/manufacturerNameForDomainName_NicerAppWebOS_val.txt",
+                                "viewsMID": "NicerAppWebOS",
+                                "cssFiles": [
+                                    {
+                                        "indexFile": "\/var\/www\/nicer.app\/NicerAppWebOS\/domainConfigs\/nicer.app\/index.css.json",
+                                        "type": "css"
+                                    },
+                                    {
+                                        "files": [
+                                            "\/NicerAppWebOS\/logic.userInterface\/vividButton-4.1.0\/themes.css",
+                                            "\/NicerAppWebOS\/logic.userInterface\/vividButton-4.1.0\/btn_audioVideo_playPause.css"
+                                        ],
+                                        "type": "css"
+                                    }
+                                ],
+                                "javascriptFiles": [
+                                    {
+                                        "indexFile": "\/var\/www\/nicer.app\/NicerAppWebOS\/domainConfigs\/nicer.app\/index.javascripts.json",
+                                        "type": "javascript"
+                                    }
+                                ]
+                            },
+                            "connectionSettings": {
+                                "host": "127.0.0.1",
+                                "port": "5984",
+                                "useSSL": false,
+                                "httpAdapter": "HTTP_CURL",
+                                "username": "admin",
+                                "password": "ABiNi3ceElaisaDeserveMiGold"
+                            }
+                        }
+                    }
+                ]
+            },
+            "hasDB": true,
+            "showAllErrors": false,
+            "cts": null,
+            "comments": null,
+            "debugThemeLoading": false,
+            "browserDebug": false,
+            "domainForDB": "nicer_app",
+            "ownerInfo": {
+                "OWNER_NAME": "Rene AJM Veerman",
+                "OWNER_EMAIL": "rene.veerman.netherlands@gmail.com",
+                "OWNER_PASSWORD": "dontGoBitingMee,Pups"
+            },
+            "viewsMIDpath": "\/var\/www\/nicer.app\/NicerAppWebOS\/apps\/\/var\/www\/NicerAppWebOS\/NicerAppWebOS\/apps\/manufacturerNameForDomainName_NicerAppWebOS_val.txt",
+            "viewsMID": "NicerAppWebOS",
+            "cssFiles": [
+                {
+                    "indexFile": "\/var\/www\/nicer.app\/NicerAppWebOS\/domainConfigs\/nicer.app\/index.css.json",
+                    "type": "css"
+                },
+                {
+                    "files": [
+                        "\/NicerAppWebOS\/logic.userInterface\/vividButton-4.1.0\/themes.css",
+                        "\/NicerAppWebOS\/logic.userInterface\/vividButton-4.1.0\/btn_audioVideo_playPause.css"
+                    ],
+                    "type": "css"
+                }
+            ],
+            "javascriptFiles": [
+                {
+                    "indexFile": "\/var\/www\/nicer.app\/NicerAppWebOS\/domainConfigs\/nicer.app\/index.javascripts.json",
+                    "type": "javascript"
+                }
+            ]
+        },
+        "type": "->",
+        "args": []
+    },
+    {
+        "file": "\/var\/www\/nicer.app\/NicerAppWebOS\/apps\/NicerAppWebOS\/applications\/2D\/news\/crontabEntry_manageDatabase.php",
+        "line": 2,
+        "args": [
+            "\/var\/www\/nicer.app\/NicerAppWebOS\/boot.php"
+        ],
+        "function": "require_once"
+    }
+]</pre></pre>[OS commandline probably : 2023-07-25 18:35:03] PHP E_NOTICE error in "/var/www/nicer.app/NicerAppWebOS/functions.php":458 : ob_flush(): Failed to flush buffer. No buffer to flush, backtrace = 
+CLASS class_NicerAppWebOS__errorHandler -> add
+Location : /var/www/nicer.app/NicerAppWebOS/functions.php, lineNum=177
+Arguments : 
+8,
+"ob_flush(): Failed to flush buffer. No buffer to flush",
+"\/var\/www\/nicer.app\/NicerAppWebOS\/functions.php",
+458,
+[37;49m<pre style="color:white;background:rgba(255,0,0,0.8);border-radius:10px;padding:8px;box-shadow:inset 1px 1px 3px 2px rgba(0,0,0,0.7), 2px 2px 2px 1px rgba(0,0,0,0.8);">{
+    "errno": 8,
+    "errstr": "ob_end_clean(): Failed to delete buffer. No buffer to delete",
+    "errfile": "\/var\/www\/nicer.app\/NicerAppWebOS\/functions.php",
+    "errline": 464
+}<pre style="color:white;background:rgba(50,0,0,0.5);border-radius:10px;padding:8px;box-shadow:inset 1px 1px 3px 2px rgba(0,0,0,0.7), 2px 2px 2px 1px rgba(0,0,0,0.8);">[
+    {
+        "function": "mainErrorHandler",
+        "args": [
+            8,
+            "ob_end_clean(): Failed to delete buffer. No buffer to delete",
+            "\/var\/www\/nicer.app\/NicerAppWebOS\/functions.php",
+            464
+        ]
+    },
+    {
+        "file": "\/var\/www\/nicer.app\/NicerAppWebOS\/functions.php",
+        "line": 464,
+        "function": "ob_end_clean",
+        "args": []
+    },
+    {
+        "file": "\/var\/www\/nicer.app\/NicerAppWebOS\/functions.php",
+        "line": 34,
+        "function": "require_return",
+        "args": [
+            "\/var\/www\/nicer.app\/NicerAppWebOS\/domainConfigs\/nicer.app\/database.users.json.php",
+            true
+        ]
+    },
+    {
+        "file": "\/var\/www\/nicer.app\/NicerAppWebOS\/logic.databases\/generalizedDatabasesAPI-1.0.0\/connectors\/class.couchdb-3.2.2_1.0.1.php",
+        "line": 145,
+        "function": "safeLoadJSONfile",
+        "args": [
+            "\/var\/www\/nicer.app\/NicerAppWebOS\/domainConfigs\/nicer.app\/database.users.json.php"
+        ]
+    },
+    {
+        "file": "\/var\/www\/nicer.app\/NicerAppWebOS\/logic.databases\/generalizedDatabasesAPI-1.0.0\/class.database_API.php",
+        "line": 390,
+        "function": "setGlobals",
+        "class": "class_NicerAppWebOS_database_API_couchdb_3_2",
+        "object": {
+            "cn": "class_NicerAppWebOS_database_API_couchdb_3_2",
+            "connectionType": "couchdb",
+            "debug": false,
+            "ip": null,
+            "security_admin": null,
+            "security_guest": null,
+            "naWebOS": null,
+            "cdb": {},
+            "cdb_slr": null,
+            "username": "nicer_app___Guest",
+            "roles": [
+                "nicer_app___Guests"
+            ],
+            "cms": {
+                "cn": "...\/NicerAppWebOS\/logic.business\/class.core.WebsiteOperatingSystem-5.y.z.php::class NicerAppWebOS",
+                "version": "5.5.0",
+                "about": {
+                    "whatsThis": "NicerApp Content Management System PHP class",
+                    "version": "5.5.0",
+                    "lastModified": "Sunday, 9 July, 2023, 19:07 CEST (Amsterdam.NL timezone)",
+                    "copyright": "Copyright 2002-2023 by Rene A.J.M. Veerman <rene.veerman.netherlandsd@gmail.com>"
+                },
+                "initialized": false,
+                "baseIndentLevel": 2,
+                "cssTheme": "dark",
+                "ip": null,
+                "domain": "nicer.app",
+                "basePath": "\/var\/www\/nicer.app",
+                "selfHealer": null,
+                "view": null,
+                "dbs": "initializing",
+                "dbsAdmin": null,
+                "hasDB": false,
+                "showAllErrors": false,
+                "cts": null,
+                "comments": null,
+                "debugThemeLoading": false,
+                "browserDebug": false,
+                "domainForDB": "nicer_app",
+                "ownerInfo": {
+                    "OWNER_NAME": "Rene AJM Veerman",
+                    "OWNER_EMAIL": "rene.veerman.netherlands@gmail.com",
+                    "OWNER_PASSWORD": "dontGoBitingMee,Pups"
+                },
+                "viewsMIDpath": "\/var\/www\/nicer.app\/NicerAppWebOS\/apps\/\/var\/www\/NicerAppWebOS\/NicerAppWebOS\/apps\/manufacturerNameForDomainName_NicerAppWebOS_val.txt",
+                "viewsMID": "NicerAppWebOS",
+                "cssFiles": [
+                    {
+                        "indexFile": "\/var\/www\/nicer.app\/NicerAppWebOS\/domainConfigs\/nicer.app\/index.css.json",
+                        "type": "css"
+                    },
+                    {
+                        "files": [
+                            "\/NicerAppWebOS\/logic.userInterface\/vividButton-4.1.0\/themes.css",
+                            "\/NicerAppWebOS\/logic.userInterface\/vividButton-4.1.0\/btn_audioVideo_playPause.css"
+                        ],
+                        "type": "css"
+                    }
+                ],
+                "javascriptFiles": [
+                    {
+                        "indexFile": "\/var\/www\/nicer.app\/NicerAppWebOS\/domainConfigs\/nicer.app\/index.javascripts.json",
+                        "type": "javascript"
+                    }
+                ]
+            },
+            "connectionSettings": {
+                "host": "127.0.0.1",
+                "port": "5984",
+                "useSSL": false,
+                "httpAdapter": "HTTP_CURL",
+                "dbName": "analytics",
+                "username": "nicer_app___Guest",
+                "password": "Guest"
+            }
+        },
+        "type": "->",
+        "args": [
+            "nicer_app___Guest"
+        ]
+    },
+    {
+        "file": "\/var\/www\/nicer.app\/NicerAppWebOS\/logic.databases\/generalizedDatabasesAPI-1.0.0\/class.database_API.php",
+        "line": 311,
+        "function": "callAllDataSets",
+        "class": "class_NicerAppWebOS_database_API",
+        "object": {
+            "cn": "class_NicerAppWebOS_database_API",
+            "settings": {
+                "databases": {
+                    "couchdb": {
+                        "host": "127.0.0.1",
+                        "port": "5984",
+                        "useSSL": false,
+                        "httpAdapter": "HTTP_CURL",
+                        "dbName": "analytics",
+                        "username": "nicer_app___Guest",
+                        "password": "Guest"
+                    }
+                }
+            },
+            "connections": [
+                {
+                    "ct": "couchdb",
+                    "cRec": {
+                        "host": "127.0.0.1",
+                        "port": "5984",
+                        "useSSL": false,
+                        "httpAdapter": "HTTP_CURL",
+                        "dbName": "analytics",
+                        "username": "nicer_app___Guest",
+                        "password": "Guest"
+                    },
+                    "conn": {
+                        "cn": "class_NicerAppWebOS_database_API_couchdb_3_2",
+                        "connectionType": "couchdb",
+                        "debug": false,
+                        "ip": null,
+                        "security_admin": null,
+                        "security_guest": null,
+                        "naWebOS": null,
+                        "cdb": {},
+                        "cdb_slr": null,
+                        "username": "nicer_app___Guest",
+                        "roles": [
+                            "nicer_app___Guests"
+                        ],
+                        "cms": {
+                            "cn": "...\/NicerAppWebOS\/logic.business\/class.core.WebsiteOperatingSystem-5.y.z.php::class NicerAppWebOS",
+                            "version": "5.5.0",
+                            "about": {
+                                "whatsThis": "NicerApp Content Management System PHP class",
+                                "version": "5.5.0",
+                                "lastModified": "Sunday, 9 July, 2023, 19:07 CEST (Amsterdam.NL timezone)",
+                                "copyright": "Copyright 2002-2023 by Rene A.J.M. Veerman <rene.veerman.netherlandsd@gmail.com>"
+                            },
+                            "initialized": false,
+                            "baseIndentLevel": 2,
+                            "cssTheme": "dark",
+                            "ip": null,
+                            "domain": "nicer.app",
+                            "basePath": "\/var\/www\/nicer.app",
+                            "selfHealer": null,
+                            "view": null,
+                            "dbs": "initializing",
+                            "dbsAdmin": null,
+                            "hasDB": false,
+                            "showAllErrors": false,
+                            "cts": null,
+                            "comments": null,
+                            "debugThemeLoading": false,
+                            "browserDebug": false,
+                            "domainForDB": "nicer_app",
+                            "ownerInfo": {
+                                "OWNER_NAME": "Rene AJM Veerman",
+                                "OWNER_EMAIL": "rene.veerman.netherlands@gmail.com",
+                                "OWNER_PASSWORD": "dontGoBitingMee,Pups"
+                            },
+                            "viewsMIDpath": "\/var\/www\/nicer.app\/NicerAppWebOS\/apps\/\/var\/www\/NicerAppWebOS\/NicerAppWebOS\/apps\/manufacturerNameForDomainName_NicerAppWebOS_val.txt",
+                            "viewsMID": "NicerAppWebOS",
+                            "cssFiles": [
+                                {
+                                    "indexFile": "\/var\/www\/nicer.app\/NicerAppWebOS\/domainConfigs\/nicer.app\/index.css.json",
+                                    "type": "css"
+                                },
+                                {
+                                    "files": [
+                                        "\/NicerAppWebOS\/logic.userInterface\/vividButton-4.1.0\/themes.css",
+                                        "\/NicerAppWebOS\/logic.userInterface\/vividButton-4.1.0\/btn_audioVideo_playPause.css"
+                                    ],
+                                    "type": "css"
+                                }
+                            ],
+                            "javascriptFiles": [
+                                {
+                                    "indexFile": "\/var\/www\/nicer.app\/NicerAppWebOS\/domainConfigs\/nicer.app\/index.javascripts.json",
+                                    "type": "javascript"
+                                }
+                            ]
+                        },
+                        "connectionSettings": {
+                            "host": "127.0.0.1",
+                            "port": "5984",
+                            "useSSL": false,
+                            "httpAdapter": "HTTP_CURL",
+                            "dbName": "analytics",
+                            "username": "nicer_app___Guest",
+                            "password": "Guest"
+                        }
+                    }
+                }
+            ]
+        },
+        "type": "->",
+        "args": [
+            "setGlobals",
+            [
+                "nicer_app___Guest"
+            ]
+        ]
+    },
+    {
+        "file": "\/var\/www\/nicer.app\/NicerAppWebOS\/logic.business\/class.core.WebsiteOperatingSystem-5.y.z.php",
+        "line": 188,
+        "function": "setGlobals",
+        "class": "class_NicerAppWebOS_database_API",
+        "object": {
+            "cn": "class_NicerAppWebOS_database_API",
+            "settings": {
+                "databases": {
+                    "couchdb": {
+                        "host": "127.0.0.1",
+                        "port": "5984",
+                        "useSSL": false,
+                        "httpAdapter": "HTTP_CURL",
+                        "dbName": "analytics",
+                        "username": "nicer_app___Guest",
+                        "password": "Guest"
+                    }
+                }
+            },
+            "connections": [
+                {
+                    "ct": "couchdb",
+                    "cRec": {
+                        "host": "127.0.0.1",
+                        "port": "5984",
+                        "useSSL": false,
+                        "httpAdapter": "HTTP_CURL",
+                        "dbName": "analytics",
+                        "username": "nicer_app___Guest",
+                        "password": "Guest"
+                    },
+                    "conn": {
+                        "cn": "class_NicerAppWebOS_database_API_couchdb_3_2",
+                        "connectionType": "couchdb",
+                        "debug": false,
+                        "ip": null,
+                        "security_admin": null,
+                        "security_guest": null,
+                        "naWebOS": null,
+                        "cdb": {},
+                        "cdb_slr": null,
+                        "username": "nicer_app___Guest",
+                        "roles": [
+                            "nicer_app___Guests"
+                        ],
+                        "cms": {
+                            "cn": "...\/NicerAppWebOS\/logic.business\/class.core.WebsiteOperatingSystem-5.y.z.php::class NicerAppWebOS",
+                            "version": "5.5.0",
+                            "about": {
+                                "whatsThis": "NicerApp Content Management System PHP class",
+                                "version": "5.5.0",
+                                "lastModified": "Sunday, 9 July, 2023, 19:07 CEST (Amsterdam.NL timezone)",
+                                "copyright": "Copyright 2002-2023 by Rene A.J.M. Veerman <rene.veerman.netherlandsd@gmail.com>"
+                            },
+                            "initialized": false,
+                            "baseIndentLevel": 2,
+                            "cssTheme": "dark",
+                            "ip": null,
+                            "domain": "nicer.app",
+                            "basePath": "\/var\/www\/nicer.app",
+                            "selfHealer": null,
+                            "view": null,
+                            "dbs": "initializing",
+                            "dbsAdmin": null,
+                            "hasDB": false,
+                            "showAllErrors": false,
+                            "cts": null,
+                            "comments": null,
+                            "debugThemeLoading": false,
+                            "browserDebug": false,
+                            "domainForDB": "nicer_app",
+                            "ownerInfo": {
+                                "OWNER_NAME": "Rene AJM Veerman",
+                                "OWNER_EMAIL": "rene.veerman.netherlands@gmail.com",
+                                "OWNER_PASSWORD": "dontGoBitingMee,Pups"
+                            },
+                            "viewsMIDpath": "\/var\/www\/nicer.app\/NicerAppWebOS\/apps\/\/var\/www\/NicerAppWebOS\/NicerAppWebOS\/apps\/manufacturerNameForDomainName_NicerAppWebOS_val.txt",
+                            "viewsMID": "NicerAppWebOS",
+                            "cssFiles": [
+                                {
+                                    "indexFile": "\/var\/www\/nicer.app\/NicerAppWebOS\/domainConfigs\/nicer.app\/index.css.json",
+                                    "type": "css"
+                                },
+                                {
+                                    "files": [
+                                        "\/NicerAppWebOS\/logic.userInterface\/vividButton-4.1.0\/themes.css",
+                                        "\/NicerAppWebOS\/logic.userInterface\/vividButton-4.1.0\/btn_audioVideo_playPause.css"
+                                    ],
+                                    "type": "css"
+                                }
+                            ],
+                            "javascriptFiles": [
+                                {
+                                    "indexFile": "\/var\/www\/nicer.app\/NicerAppWebOS\/domainConfigs\/nicer.app\/index.javascripts.json",
+                                    "type": "javascript"
+                                }
+                            ]
+                        },
+                        "connectionSettings": {
+                            "host": "127.0.0.1",
+                            "port": "5984",
+                            "useSSL": false,
+                            "httpAdapter": "HTTP_CURL",
+                            "dbName": "analytics",
+                            "username": "nicer_app___Guest",
+                            "password": "Guest"
+                        }
+                    }
+                }
+            ]
+        },
+        "type": "->",
+        "args": [
+            "nicer_app___Guest"
+        ]
+    },
+    {
+        "file": "\/var\/www\/nicer.app\/NicerAppWebOS\/boot.php",
+        "line": 131,
+        "function": "initializeDatabases",
+        "class": "NicerAppWebOS",
+        "object": {
+            "cn": "...\/NicerAppWebOS\/logic.business\/class.core.WebsiteOperatingSystem-5.y.z.php::class NicerAppWebOS",
+            "version": "5.5.0",
+            "about": {
+                "whatsThis": "NicerApp Content Management System PHP class",
+                "version": "5.5.0",
+                "lastModified": "Sunday, 9 July, 2023, 19:07 CEST (Amsterdam.NL timezone)",
+                "copyright": "Copyright 2002-2023 by Rene A.J.M. Veerman <rene.veerman.netherlandsd@gmail.com>"
+            },
+            "initialized": false,
+            "baseIndentLevel": 2,
+            "cssTheme": "dark",
+            "ip": null,
+            "domain": "nicer.app",
+            "basePath": "\/var\/www\/nicer.app",
+            "selfHealer": null,
+            "view": null,
+            "dbs": {
+                "cn": "class_NicerAppWebOS_database_API",
+                "settings": {
+                    "databases": {
+                        "couchdb": {
+                            "host": "127.0.0.1",
+                            "port": "5984",
+                            "useSSL": false,
+                            "httpAdapter": "HTTP_CURL",
+                            "dbName": "analytics",
+                            "username": "nicer_app___Guest",
+                            "password": "Guest"
+                        }
+                    }
+                },
+                "connections": [
+                    {
+                        "ct": "couchdb",
+                        "cRec": {
+                            "host": "127.0.0.1",
+                            "port": "5984",
+                            "useSSL": false,
+                            "httpAdapter": "HTTP_CURL",
+                            "dbName": "analytics",
+                            "username": "nicer_app___Guest",
+                            "password": "Guest"
+                        },
+                        "conn": {
+                            "cn": "class_NicerAppWebOS_database_API_couchdb_3_2",
+                            "connectionType": "couchdb",
+                            "debug": false,
+                            "ip": null,
+                            "security_admin": null,
+                            "security_guest": null,
+                            "naWebOS": null,
+                            "cdb": {},
+                            "cdb_slr": null,
+                            "username": "nicer_app___Guest",
+                            "roles": [
+                                "nicer_app___Guests"
+                            ],
+                            "cms": {
+                                "cn": "...\/NicerAppWebOS\/logic.business\/class.core.WebsiteOperatingSystem-5.y.z.php::class NicerAppWebOS",
+                                "version": "5.5.0",
+                                "about": {
+                                    "whatsThis": "NicerApp Content Management System PHP class",
+                                    "version": "5.5.0",
+                                    "lastModified": "Sunday, 9 July, 2023, 19:07 CEST (Amsterdam.NL timezone)",
+                                    "copyright": "Copyright 2002-2023 by Rene A.J.M. Veerman <rene.veerman.netherlandsd@gmail.com>"
+                                },
+                                "initialized": false,
+                                "baseIndentLevel": 2,
+                                "cssTheme": "dark",
+                                "ip": null,
+                                "domain": "nicer.app",
+                                "basePath": "\/var\/www\/nicer.app",
+                                "selfHealer": null,
+                                "view": null,
+                                "dbs": "initializing",
+                                "dbsAdmin": null,
+                                "hasDB": false,
+                                "showAllErrors": false,
+                                "cts": null,
+                                "comments": null,
+                                "debugThemeLoading": false,
+                                "browserDebug": false,
+                                "domainForDB": "nicer_app",
+                                "ownerInfo": {
+                                    "OWNER_NAME": "Rene AJM Veerman",
+                                    "OWNER_EMAIL": "rene.veerman.netherlands@gmail.com",
+                                    "OWNER_PASSWORD": "dontGoBitingMee,Pups"
+                                },
+                                "viewsMIDpath": "\/var\/www\/nicer.app\/NicerAppWebOS\/apps\/\/var\/www\/NicerAppWebOS\/NicerAppWebOS\/apps\/manufacturerNameForDomainName_NicerAppWebOS_val.txt",
+                                "viewsMID": "NicerAppWebOS",
+                                "cssFiles": [
+                                    {
+                                        "indexFile": "\/var\/www\/nicer.app\/NicerAppWebOS\/domainConfigs\/nicer.app\/index.css.json",
+                                        "type": "css"
+                                    },
+                                    {
+                                        "files": [
+                                            "\/NicerAppWebOS\/logic.userInterface\/vividButton-4.1.0\/themes.css",
+                                            "\/NicerAppWebOS\/logic.userInterface\/vividButton-4.1.0\/btn_audioVideo_playPause.css"
+                                        ],
+                                        "type": "css"
+                                    }
+                                ],
+                                "javascriptFiles": [
+                                    {
+                                        "indexFile": "\/var\/www\/nicer.app\/NicerAppWebOS\/domainConfigs\/nicer.app\/index.javascripts.json",
+                                        "type": "javascript"
+                                    }
+                                ]
+                            },
+                            "connectionSettings": {
+                                "host": "127.0.0.1",
+                                "port": "5984",
+                                "useSSL": false,
+                                "httpAdapter": "HTTP_CURL",
+                                "dbName": "analytics",
+                                "username": "nicer_app___Guest",
+                                "password": "Guest"
+                            }
+                        }
+                    }
+                ]
+            },
+            "dbsAdmin": {
+                "cn": "class_NicerAppWebOS_database_API",
+                "settings": {
+                    "databases": {
+                        "couchdb": {
+                            "host": "127.0.0.1",
+                            "port": "5984",
+                            "useSSL": false,
+                            "httpAdapter": "HTTP_CURL",
+                            "username": "admin",
+                            "password": "ABiNi3ceElaisaDeserveMiGold"
+                        }
+                    }
+                },
+                "connections": [
+                    {
+                        "ct": "couchdb",
+                        "cRec": {
+                            "host": "127.0.0.1",
+                            "port": "5984",
+                            "useSSL": false,
+                            "httpAdapter": "HTTP_CURL",
+                            "username": "admin",
+                            "password": "ABiNi3ceElaisaDeserveMiGold"
+                        },
+                        "conn": {
+                            "cn": "class_NicerAppWebOS_database_API_couchdb_3_2",
+                            "connectionType": "couchdb",
+                            "debug": false,
+                            "ip": null,
+                            "security_admin": null,
+                            "security_guest": null,
+                            "naWebOS": null,
+                            "cdb": {},
+                            "cdb_slr": null,
+                            "username": "admin",
+                            "roles": [
+                                "_admin"
+                            ],
+                            "cms": {
+                                "cn": "...\/NicerAppWebOS\/logic.business\/class.core.WebsiteOperatingSystem-5.y.z.php::class NicerAppWebOS",
+                                "version": "5.5.0",
+                                "about": {
+                                    "whatsThis": "NicerApp Content Management System PHP class",
+                                    "version": "5.5.0",
+                                    "lastModified": "Sunday, 9 July, 2023, 19:07 CEST (Amsterdam.NL timezone)",
+                                    "copyright": "Copyright 2002-2023 by Rene A.J.M. Veerman <rene.veerman.netherlandsd@gmail.com>"
+                                },
+                                "initialized": false,
+                                "baseIndentLevel": 2,
+                                "cssTheme": "dark",
+                                "ip": null,
+                                "domain": "nicer.app",
+                                "basePath": "\/var\/www\/nicer.app",
+                                "selfHealer": null,
+                                "view": null,
+                                "dbs": {
+                                    "cn": "class_NicerAppWebOS_database_API",
+                                    "settings": {
+                                        "databases": {
+                                            "couchdb": {
+                                                "host": "127.0.0.1",
+                                                "port": "5984",
+                                                "useSSL": false,
+                                                "httpAdapter": "HTTP_CURL",
+                                                "dbName": "analytics",
+                                                "username": "nicer_app___Guest",
+                                                "password": "Guest"
+                                            }
+                                        }
+                                    },
+                                    "connections": [
+                                        {
+                                            "ct": "couchdb",
+                                            "cRec": {
+                                                "host": "127.0.0.1",
+                                                "port": "5984",
+                                                "useSSL": false,
+                                                "httpAdapter": "HTTP_CURL",
+                                                "dbName": "analytics",
+                                                "username": "nicer_app___Guest",
+                                                "password": "Guest"
+                                            },
+                                            "conn": {
+                                                "cn": "class_NicerAppWebOS_database_API_couchdb_3_2",
+                                                "connectionType": "couchdb",
+                                                "debug": false,
+                                                "ip": null,
+                                                "security_admin": null,
+                                                "security_guest": null,
+                                                "naWebOS": null,
+                                                "cdb": {},
+                                                "cdb_slr": null,
+                                                "username": "nicer_app___Guest",
+                                                "roles": [
+                                                    "nicer_app___Guests"
+                                                ],
+                                                "cms": {
+                                                    "cn": "...\/NicerAppWebOS\/logic.business\/class.core.WebsiteOperatingSystem-5.y.z.php::class NicerAppWebOS",
+                                                    "version": "5.5.0",
+                                                    "about": {
+                                                        "whatsThis": "NicerApp Content Management System PHP class",
+                                                        "version": "5.5.0",
+                                                        "lastModified": "Sunday, 9 July, 2023, 19:07 CEST (Amsterdam.NL timezone)",
+                                                        "copyright": "Copyright 2002-2023 by Rene A.J.M. Veerman <rene.veerman.netherlandsd@gmail.com>"
+                                                    },
+                                                    "initialized": false,
+                                                    "baseIndentLevel": 2,
+                                                    "cssTheme": "dark",
+                                                    "ip": null,
+                                                    "domain": "nicer.app",
+                                                    "basePath": "\/var\/www\/nicer.app",
+                                                    "selfHealer": null,
+                                                    "view": null,
+                                                    "dbs": "initializing",
+                                                    "dbsAdmin": null,
+                                                    "hasDB": false,
+                                                    "showAllErrors": false,
+                                                    "cts": null,
+                                                    "comments": null,
+                                                    "debugThemeLoading": false,
+                                                    "browserDebug": false,
+                                                    "domainForDB": "nicer_app",
+                                                    "ownerInfo": {
+                                                        "OWNER_NAME": "Rene AJM Veerman",
+                                                        "OWNER_EMAIL": "rene.veerman.netherlands@gmail.com",
+                                                        "OWNER_PASSWORD": "dontGoBitingMee,Pups"
+                                                    },
+                                                    "viewsMIDpath": "\/var\/www\/nicer.app\/NicerAppWebOS\/apps\/\/var\/www\/NicerAppWebOS\/NicerAppWebOS\/apps\/manufacturerNameForDomainName_NicerAppWebOS_val.txt",
+                                                    "viewsMID": "NicerAppWebOS",
+                                                    "cssFiles": [
+                                                        {
+                                                            "indexFile": "\/var\/www\/nicer.app\/NicerAppWebOS\/domainConfigs\/nicer.app\/index.css.json",
+                                                            "type": "css"
+                                                        },
+                                                        {
+                                                            "files": [
+                                                                "\/NicerAppWebOS\/logic.userInterface\/vividButton-4.1.0\/themes.css",
+                                                                "\/NicerAppWebOS\/logic.userInterface\/vividButton-4.1.0\/btn_audioVideo_playPause.css"
+                                                            ],
+                                                            "type": "css"
+                                                        }
+                                                    ],
+                                                    "javascriptFiles": [
+                                                        {
+                                                            "indexFile": "\/var\/www\/nicer.app\/NicerAppWebOS\/domainConfigs\/nicer.app\/index.javascripts.json",
+                                                            "type": "javascript"
+                                                        }
+                                                    ]
+                                                },
+                                                "connectionSettings": {
+                                                    "host": "127.0.0.1",
+                                                    "port": "5984",
+                                                    "useSSL": false,
+                                                    "httpAdapter": "HTTP_CURL",
+                                                    "dbName": "analytics",
+                                                    "username": "nicer_app___Guest",
+                                                    "password": "Guest"
+                                                }
+                                            }
+                                        }
+                                    ]
+                                },
+                                "dbsAdmin": "initializing",
+                                "hasDB": true,
+                                "showAllErrors": false,
+                                "cts": null,
+                                "comments": null,
+                                "debugThemeLoading": false,
+                                "browserDebug": false,
+                                "domainForDB": "nicer_app",
+                                "ownerInfo": {
+                                    "OWNER_NAME": "Rene AJM Veerman",
+                                    "OWNER_EMAIL": "rene.veerman.netherlands@gmail.com",
+                                    "OWNER_PASSWORD": "dontGoBitingMee,Pups"
+                                },
+                                "viewsMIDpath": "\/var\/www\/nicer.app\/NicerAppWebOS\/apps\/\/var\/www\/NicerAppWebOS\/NicerAppWebOS\/apps\/manufacturerNameForDomainName_NicerAppWebOS_val.txt",
+                                "viewsMID": "NicerAppWebOS",
+                                "cssFiles": [
+                                    {
+                                        "indexFile": "\/var\/www\/nicer.app\/NicerAppWebOS\/domainConfigs\/nicer.app\/index.css.json",
+                                        "type": "css"
+                                    },
+                                    {
+                                        "files": [
+                                            "\/NicerAppWebOS\/logic.userInterface\/vividButton-4.1.0\/themes.css",
+                                            "\/NicerAppWebOS\/logic.userInterface\/vividButton-4.1.0\/btn_audioVideo_playPause.css"
+                                        ],
+                                        "type": "css"
+                                    }
+                                ],
+                                "javascriptFiles": [
+                                    {
+                                        "indexFile": "\/var\/www\/nicer.app\/NicerAppWebOS\/domainConfigs\/nicer.app\/index.javascripts.json",
+                                        "type": "javascript"
+                                    }
+                                ]
+                            },
+                            "connectionSettings": {
+                                "host": "127.0.0.1",
+                                "port": "5984",
+                                "useSSL": false,
+                                "httpAdapter": "HTTP_CURL",
+                                "username": "admin",
+                                "password": "ABiNi3ceElaisaDeserveMiGold"
+                            }
+                        }
+                    }
+                ]
+            },
+            "hasDB": true,
+            "showAllErrors": false,
+            "cts": null,
+            "comments": null,
+            "debugThemeLoading": false,
+            "browserDebug": false,
+            "domainForDB": "nicer_app",
+            "ownerInfo": {
+                "OWNER_NAME": "Rene AJM Veerman",
+                "OWNER_EMAIL": "rene.veerman.netherlands@gmail.com",
+                "OWNER_PASSWORD": "dontGoBitingMee,Pups"
+            },
+            "viewsMIDpath": "\/var\/www\/nicer.app\/NicerAppWebOS\/apps\/\/var\/www\/NicerAppWebOS\/NicerAppWebOS\/apps\/manufacturerNameForDomainName_NicerAppWebOS_val.txt",
+            "viewsMID": "NicerAppWebOS",
+            "cssFiles": [
+                {
+                    "indexFile": "\/var\/www\/nicer.app\/NicerAppWebOS\/domainConfigs\/nicer.app\/index.css.json",
+                    "type": "css"
+                },
+                {
+                    "files": [
+                        "\/NicerAppWebOS\/logic.userInterface\/vividButton-4.1.0\/themes.css",
+                        "\/NicerAppWebOS\/logic.userInterface\/vividButton-4.1.0\/btn_audioVideo_playPause.css"
+                    ],
+                    "type": "css"
+                }
+            ],
+            "javascriptFiles": [
+                {
+                    "indexFile": "\/var\/www\/nicer.app\/NicerAppWebOS\/domainConfigs\/nicer.app\/index.javascripts.json",
+                    "type": "javascript"
+                }
+            ]
+        },
+        "type": "->",
+        "args": []
+    },
+    {
+        "file": "\/var\/www\/nicer.app\/NicerAppWebOS\/apps\/NicerAppWebOS\/applications\/2D\/news\/crontabEntry_manageDatabase.php",
+        "line": 2,
+        "args": [
+            "\/var\/www\/nicer.app\/NicerAppWebOS\/boot.php"
+        ],
+        "function": "require_once"
+    }
+]</pre></pre>[OS commandline probably : 2023-07-25 18:35:03] PHP E_NOTICE error in "/var/www/nicer.app/NicerAppWebOS/functions.php":464 : ob_end_clean(): Failed to delete buffer. No buffer to delete, backtrace = 
+CLASS class_NicerAppWebOS__errorHandler -> add
+Location : /var/www/nicer.app/NicerAppWebOS/functions.php, lineNum=177
+Arguments : 
+8,
+"ob_end_clean(): Failed to delete buffer. No buffer to delete",
+"\/var\/www\/nicer.app\/NicerAppWebOS\/functions.php",
+464,
+[37;49m[OS commandline probably : 2023-07-25 18:35:03] PHP E_WARNING : couchdb : nicer_app___Guest:*****@127.0.0.1:5984 : null, backtrace = 
+CLASS class_NicerAppWebOS__errorHandler -> addStandardResults
+Location : /var/www/nicer.app/NicerAppWebOS/logic.databases/generalizedDatabasesAPI-1.0.0/class.database_API.php, lineNum=395
+Arguments : 
+[
+    {
+        "c": {
+            "ct": "couchdb",
+            "cRec": {
+                "host": "127.0.0.1",
+                "port": "5984",
+                "useSSL": false,
+                "httpAdapter": "HTTP_CURL",
+                "dbName": "analytics",
+                "username": "nicer_app___Guest",
+                "password": "Guest"
+            },
+            "conn": {
+                "cn": "class_NicerAppWebOS_database_API_couchdb_3_2",
+                "connectionType": "couchdb",
+                "debug": false,
+                "ip": null,
+                "security_admin": "{\"admins\":{\"names\":[],\"roles\":[\"nicer_app___Guests\"]},\"members\":{\"names\":[],\"roles\":[\"nicer_app___Guests\"]}}",
+                "security_guest": "{\"admins\":{\"names\":[],\"roles\":[\"nicer_app___Guests\"]},\"members\":{\"names\":[],\"roles\":[\"nicer_app___Guests\"]}}",
+                "naWebOS": null,
+                "cdb": {},
+                "cdb_slr": null,
+                "username": "nicer_app___Guest",
+                "roles": [
+                    "nicer_app___Guests"
+                ],
+                "cms": {
+                    "cn": "...\/NicerAppWebOS\/logic.business\/class.core.WebsiteOperatingSystem-5.y.z.php::class NicerAppWebOS",
+                    "version": "5.5.0",
+                    "about": {
+                        "whatsThis": "NicerApp Content Management System PHP class",
+                        "version": "5.5.0",
+                        "lastModified": "Sunday, 9 July, 2023, 19:07 CEST (Amsterdam.NL timezone)",
+                        "copyright": "Copyright 2002-2023 by Rene A.J.M. Veerman <rene.veerman.netherlandsd@gmail.com>"
+                    },
+                    "initialized": false,
+                    "baseIndentLevel": 2,
+                    "cssTheme": "dark",
+                    "ip": null,
+                    "domain": "nicer.app",
+                    "basePath": "\/var\/www\/nicer.app",
+                    "selfHealer": null,
+                    "view": null,
+                    "dbs": "initializing",
+                    "dbsAdmin": null,
+                    "hasDB": false,
+                    "showAllErrors": false,
+                    "cts": null,
+                    "comments": null,
+                    "debugThemeLoading": false,
+                    "browserDebug": false,
+                    "domainForDB": "nicer_app",
+                    "ownerInfo": {
+                        "OWNER_NAME": "Rene AJM Veerman",
+                        "OWNER_EMAIL": "rene.veerman.netherlands@gmail.com",
+                        "OWNER_PASSWORD": "dontGoBitingMee,Pups"
+                    },
+                    "viewsMIDpath": "\/var\/www\/nicer.app\/NicerAppWebOS\/apps\/\/var\/www\/NicerAppWebOS\/NicerAppWebOS\/apps\/manufacturerNameForDomainName_NicerAppWebOS_val.txt",
+                    "viewsMID": "NicerAppWebOS",
+                    "cssFiles": [
+                        {
+                            "indexFile": "\/var\/www\/nicer.app\/NicerAppWebOS\/domainConfigs\/nicer.app\/index.css.json",
+                            "type": "css"
+                        },
+                        {
+                            "files": [
+                                "\/NicerAppWebOS\/logic.userInterface\/vividButton-4.1.0\/themes.css",
+                                "\/NicerAppWebOS\/logic.userInterface\/vividButton-4.1.0\/btn_audioVideo_playPause.css"
+                            ],
+                            "type": "css"
+                        }
+                    ],
+                    "javascriptFiles": [
+                        {
+                            "indexFile": "\/var\/www\/nicer.app\/NicerAppWebOS\/domainConfigs\/nicer.app\/index.javascripts.json",
+                            "type": "javascript"
+                        }
+                    ]
+                },
+                "connectionSettings": {
+                    "host": "127.0.0.1",
+                    "port": "5984",
+                    "useSSL": false,
+                    "httpAdapter": "HTTP_CURL",
+                    "dbName": "analytics",
+                    "username": "nicer_app___Guest",
+                    "password": "Guest"
+                }
+            }
+        },
+        "resultValue": null,
+        "result": false
+    }
+],
+[37;49m[OS commandline probably : 2023-07-25 18:35:03] PHP E_WARNING : couchdb : admin:*****@127.0.0.1:5984 : null, backtrace = 
+CLASS class_NicerAppWebOS__errorHandler -> addStandardResults
+Location : /var/www/nicer.app/NicerAppWebOS/logic.databases/generalizedDatabasesAPI-1.0.0/class.database_API.php, lineNum=395
+Arguments : 
+[
+    {
+        "c": {
+            "ct": "couchdb",
+            "cRec": {
+                "host": "127.0.0.1",
+                "port": "5984",
+                "useSSL": false,
+                "httpAdapter": "HTTP_CURL",
+                "username": "admin",
+                "password": "ABiNi3ceElaisaDeserveMiGold"
+            },
+            "conn": {
+                "cn": "class_NicerAppWebOS_database_API_couchdb_3_2",
+                "connectionType": "couchdb",
+                "debug": false,
+                "ip": null,
+                "security_admin": "{\"admins\":{\"names\":[],\"roles\":[\"nicer_app___Owners\",\"nicer_app___Chief_Officers\",\"nicer_app___Guests\"]},\"members\":{\"names\":[],\"roles\":[\"nicer_app___Owners\",\"nicer_app___Chief_Officers\",\"nicer_app___Guests\"]}}",
+                "security_guest": "{\"admins\":{\"names\":[],\"roles\":[\"nicer_app___Guests\"]},\"members\":{\"names\":[],\"roles\":[\"nicer_app___Guests\"]}}",
+                "naWebOS": null,
+                "cdb": {},
+                "cdb_slr": null,
+                "username": "admin",
+                "roles": [
+                    "_admin"
+                ],
+                "cms": {
+                    "cn": "...\/NicerAppWebOS\/logic.business\/class.core.WebsiteOperatingSystem-5.y.z.php::class NicerAppWebOS",
+                    "version": "5.5.0",
+                    "about": {
+                        "whatsThis": "NicerApp Content Management System PHP class",
+                        "version": "5.5.0",
+                        "lastModified": "Sunday, 9 July, 2023, 19:07 CEST (Amsterdam.NL timezone)",
+                        "copyright": "Copyright 2002-2023 by Rene A.J.M. Veerman <rene.veerman.netherlandsd@gmail.com>"
+                    },
+                    "initialized": false,
+                    "baseIndentLevel": 2,
+                    "cssTheme": "dark",
+                    "ip": null,
+                    "domain": "nicer.app",
+                    "basePath": "\/var\/www\/nicer.app",
+                    "selfHealer": null,
+                    "view": null,
+                    "dbs": {
+                        "cn": "class_NicerAppWebOS_database_API",
+                        "settings": {
+                            "databases": {
+                                "couchdb": {
+                                    "host": "127.0.0.1",
+                                    "port": "5984",
+                                    "useSSL": false,
+                                    "httpAdapter": "HTTP_CURL",
+                                    "dbName": "analytics",
+                                    "username": "nicer_app___Guest",
+                                    "password": "Guest"
+                                }
+                            }
+                        },
+                        "connections": [
+                            {
+                                "ct": "couchdb",
+                                "cRec": {
+                                    "host": "127.0.0.1",
+                                    "port": "5984",
+                                    "useSSL": false,
+                                    "httpAdapter": "HTTP_CURL",
+                                    "dbName": "analytics",
+                                    "username": "nicer_app___Guest",
+                                    "password": "Guest"
+                                },
+                                "conn": {
+                                    "cn": "class_NicerAppWebOS_database_API_couchdb_3_2",
+                                    "connectionType": "couchdb",
+                                    "debug": false,
+                                    "ip": null,
+                                    "security_admin": "{\"admins\":{\"names\":[],\"roles\":[\"nicer_app___Guests\"]},\"members\":{\"names\":[],\"roles\":[\"nicer_app___Guests\"]}}",
+                                    "security_guest": "{\"admins\":{\"names\":[],\"roles\":[\"nicer_app___Guests\"]},\"members\":{\"names\":[],\"roles\":[\"nicer_app___Guests\"]}}",
+                                    "naWebOS": null,
+                                    "cdb": {},
+                                    "cdb_slr": null,
+                                    "username": "nicer_app___Guest",
+                                    "roles": [
+                                        "nicer_app___Guests"
+                                    ],
+                                    "cms": {
+                                        "cn": "...\/NicerAppWebOS\/logic.business\/class.core.WebsiteOperatingSystem-5.y.z.php::class NicerAppWebOS",
+                                        "version": "5.5.0",
+                                        "about": {
+                                            "whatsThis": "NicerApp Content Management System PHP class",
+                                            "version": "5.5.0",
+                                            "lastModified": "Sunday, 9 July, 2023, 19:07 CEST (Amsterdam.NL timezone)",
+                                            "copyright": "Copyright 2002-2023 by Rene A.J.M. Veerman <rene.veerman.netherlandsd@gmail.com>"
+                                        },
+                                        "initialized": false,
+                                        "baseIndentLevel": 2,
+                                        "cssTheme": "dark",
+                                        "ip": null,
+                                        "domain": "nicer.app",
+                                        "basePath": "\/var\/www\/nicer.app",
+                                        "selfHealer": null,
+                                        "view": null,
+                                        "dbs": "initializing",
+                                        "dbsAdmin": null,
+                                        "hasDB": false,
+                                        "showAllErrors": false,
+                                        "cts": null,
+                                        "comments": null,
+                                        "debugThemeLoading": false,
+                                        "browserDebug": false,
+                                        "domainForDB": "nicer_app",
+                                        "ownerInfo": {
+                                            "OWNER_NAME": "Rene AJM Veerman",
+                                            "OWNER_EMAIL": "rene.veerman.netherlands@gmail.com",
+                                            "OWNER_PASSWORD": "dontGoBitingMee,Pups"
+                                        },
+                                        "viewsMIDpath": "\/var\/www\/nicer.app\/NicerAppWebOS\/apps\/\/var\/www\/NicerAppWebOS\/NicerAppWebOS\/apps\/manufacturerNameForDomainName_NicerAppWebOS_val.txt",
+                                        "viewsMID": "NicerAppWebOS",
+                                        "cssFiles": [
+                                            {
+                                                "indexFile": "\/var\/www\/nicer.app\/NicerAppWebOS\/domainConfigs\/nicer.app\/index.css.json",
+                                                "type": "css"
+                                            },
+                                            {
+                                                "files": [
+                                                    "\/NicerAppWebOS\/logic.userInterface\/vividButton-4.1.0\/themes.css",
+                                                    "\/NicerAppWebOS\/logic.userInterface\/vividButton-4.1.0\/btn_audioVideo_playPause.css"
+                                                ],
+                                                "type": "css"
+                                            }
+                                        ],
+                                        "javascriptFiles": [
+                                            {
+                                                "indexFile": "\/var\/www\/nicer.app\/NicerAppWebOS\/domainConfigs\/nicer.app\/index.javascripts.json",
+                                                "type": "javascript"
+                                            }
+                                        ]
+                                    },
+                                    "connectionSettings": {
+                                        "host": "127.0.0.1",
+                                        "port": "5984",
+                                        "useSSL": false,
+                                        "httpAdapter": "HTTP_CURL",
+                                        "dbName": "analytics",
+                                        "username": "nicer_app___Guest",
+                                        "password": "Guest"
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "dbsAdmin": "initializing",
+                    "hasDB": true,
+                    "showAllErrors": false,
+                    "cts": null,
+                    "comments": null,
+                    "debugThemeLoading": false,
+                    "browserDebug": false,
+                    "domainForDB": "nicer_app",
+                    "ownerInfo": {
+                        "OWNER_NAME": "Rene AJM Veerman",
+                        "OWNER_EMAIL": "rene.veerman.netherlands@gmail.com",
+                        "OWNER_PASSWORD": "dontGoBitingMee,Pups"
+                    },
+                    "viewsMIDpath": "\/var\/www\/nicer.app\/NicerAppWebOS\/apps\/\/var\/www\/NicerAppWebOS\/NicerAppWebOS\/apps\/manufacturerNameForDomainName_NicerAppWebOS_val.txt",
+                    "viewsMID": "NicerAppWebOS",
+                    "cssFiles": [
+                        {
+                            "indexFile": "\/var\/www\/nicer.app\/NicerAppWebOS\/domainConfigs\/nicer.app\/index.css.json",
+                            "type": "css"
+                        },
+                        {
+                            "files": [
+                                "\/NicerAppWebOS\/logic.userInterface\/vividButton-4.1.0\/themes.css",
+                                "\/NicerAppWebOS\/logic.userInterface\/vividButton-4.1.0\/btn_audioVideo_playPause.css"
+                            ],
+                            "type": "css"
+                        }
+                    ],
+                    "javascriptFiles": [
+                        {
+                            "indexFile": "\/var\/www\/nicer.app\/NicerAppWebOS\/domainConfigs\/nicer.app\/index.javascripts.json",
+                            "type": "javascript"
+                        }
+                    ]
+                },
+                "connectionSettings": {
+                    "host": "127.0.0.1",
+                    "port": "5984",
+                    "useSSL": false,
+                    "httpAdapter": "HTTP_CURL",
+                    "username": "admin",
+                    "password": "ABiNi3ceElaisaDeserveMiGold"
+                }
+            }
+        },
+        "resultValue": null,
+        "result": false
+    }
+],
+[37;49m\033[42;1;4mnicerapp/apps/nicer.app/applications/2D/news/crontabEntry_manageDatabase.php : Fetching news for 0 RSS pages, 60 menu-items.\033[37;49m
+newsapp3_class->fetch() : Rewriting menu files took 0.0104 seconds.
+newsapp3_class->fetch() : Fetching news for 0 RSS pages, 60 menu-items, took 0 minutes, 10.1198 seconds; 0 new items.
+CURL operation (path=/Deutsche nachrichten/Sport, url=http://boerse.ard.de/index~rss.xml) 0 bytes retrieved
+CURL operation (path=/English News/World Headlines, url=http://feeds.reuters.com/Reuters/worldNews) ERROR : Could not resolve host: feeds.reuters.com
+CURL operation (path=/English News/World Headlines, url=https://beijingtoday.com.cn/feed/) 0 bytes retrieved
+CURL operation (path=/English News/World Headlines, url=http://feeds.reuters.com/Reuters/worldNews) ERROR : Could not resolve host: feeds.reuters.com
+CURL operation (path=/English News/World Headlines, url=https://www.president.ir/view/rss.php?si=en) 0 bytes retrieved
+CURL operation (path=/English News/World Headlines, url=http://feeds.washingtonpost.com/rss/world) 0 bytes retrieved
+CURL operation (path=/English News/World Headlines, url=https://www.rt.com/rss/news/) 0 bytes retrieved
+CURL operation (path=/English News/World Headlines, url=https://sputniknews.com/export/rss2/world/index.xml) 0 bytes retrieved
+CURL operation (path=/English News/Regions/Countries/USA, url=http://feeds.reuters.com/Reuters/domesticNews) 0 bytes retrieved
+CURL operation (path=/English News/Regions/Countries/USA, url=https://rightwirereport.com/feed/) 0 bytes retrieved
+CURL operation (path=/English News/Regions/Countries/Australia, url=http://feeds.smh.com.au/rssheadlines/top.xml) ERROR : Could not resolve host: feeds.smh.com.au
+CURL operation (path=/English News/Regions/Countries/Australia, url=http://feeds.theage.com.au/rssheadlines/top.xml) 0 bytes retrieved
+CURL operation (path=/English News/Regions/Countries/Australia, url=http://www.huffingtonpost.com.au/rss/index.xml) 0 bytes retrieved
+CURL operation (path=/English News/Regions/Countries/Australia, url=http://feeds.brisbanetimes.com.au/rssheadlines/top.xml) 0 bytes retrieved
+CURL operation (path=/English News/Regions/Countries/Australia, url=http://feeds.watoday.com.au/rssheadlines/top.xml) 0 bytes retrieved
+CURL operation (path=/English News/Regions/Countries/Australia, url=https://pixelkey.biz/tasmaniantimes/feed/) 0 bytes retrieved
+CURL operation (path=/English News/Regions/Countries/Australia, url=http://www.theconservative.com.au/feed/rss) 0 bytes retrieved
+CURL operation (path=/English News/Regions/Countries/North-Korea, url=http://english.yonhapnews.co.kr/RSS/northkorea.xml) 0 bytes retrieved
+CURL operation (path=/English News/Regions/Countries/Russia, url=https://www.rt.com/rss/) 0 bytes retrieved
+CURL operation (path=/English News/Regions/Europe, url=http://www.rferl.org/z/645/rss/feeds/posts/default) 0 bytes retrieved
+CURL operation (path=/English News/Regions/Europe, url=http://beta.euractiv.com/feed) 0 bytes retrieved
+CURL operation (path=/English News/Regions/Europe, url=http://news.ofthe.eu/feed) 0 bytes retrieved
+CURL operation (path=/English News/Regions/Asia, url=http://asiancorrespondent.com/feed) 0 bytes retrieved
+CURL operation (path=/English News/Regions/Asia, url=http://www.eastasiaforum.org/feed/) 0 bytes retrieved
+CURL operation (path=/English News/Regions/Asia, url=http://sea-globe.com/feed) 0 bytes retrieved
+CURL operation (path=/English News/Regions/Asia, url=http://www.vona.tv/feed) 0 bytes retrieved
+CURL operation (path=/English News/Topics/Business, url=http://english.yonhapnews.co.kr/RSS/business.xml) 0 bytes retrieved
+CURL operation (path=/English News/Topics/Business, url=https://asia.nikkei.com/rss/feed/nar) 0 bytes retrieved
+CURL operation (path=/English News/Topics/Business, url=http://www.asiainsurancereview.com/desktopmodules/rssedaily) 0 bytes retrieved
+CURL operation (path=/English News/Topics/Business, url=http://www.coinnewsasia.com/feed) 0 bytes retrieved
+CURL operation (path=/English News/Topics/Business, url=http://www.digitalmarket.asia/feed) 0 bytes retrieved
+CURL operation (path=/English News/Topics/Careers, url=http://www.singingbasics.com/feed/) 0 bytes retrieved
+CURL operation (path=/English News/Topics/Sports, url=http://soccernet.espn.com/rss/news) 0 bytes retrieved
+CURL operation (path=/English News/Topics/Sports, url=http://english.yonhapnews.co.kr/RSS/culture.xml) 0 bytes retrieved
+CURL operation (path=/English News/Topics/Stock Trading, url=http://blog.commodityandderivativeadv.com/feed/) 0 bytes retrieved
+CURL operation (path=/English News/Topics/Technology, url=https://www.wired.com/feed) 0 bytes retrieved
+CURL operation (path=/English News/Topics/Technology, url=http://feeds.pcworld.com/pcworld/latestnews) 0 bytes retrieved
+Total records fetched : 12184
+0m0.0215s (0m0.0213s) : 100 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (100 total duplicates so far).
+0m0.0409s (0m0.0193s) : 200 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (200 total duplicates so far).
+0m0.0475s (0m0.0065s) : 300 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (300 total duplicates so far).
+0m0.0543s (0m0.0067s) : 400 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (400 total duplicates so far).
+0m0.0637s (0m0.0091s) : 500 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (500 total duplicates so far).
+0m0.0729s (0m0.009s) : 600 documents (attempted to upload 100 RSS documents, 98 duplicates in this batch) (598 total duplicates so far).
+0m0.0853s (0m0.0122s) : 700 documents (attempted to upload 100 RSS documents, 97 duplicates in this batch) (695 total duplicates so far).
+0m0.0975s (0m0.0119s) : 800 documents (attempted to upload 100 RSS documents, 99 duplicates in this batch) (794 total duplicates so far).
+0m0.1073s (0m0.0096s) : 900 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (894 total duplicates so far).
+0m0.1168s (0m0.0093s) : 1000 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (994 total duplicates so far).
+0m0.1245s (0m0.0076s) : 1100 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (1094 total duplicates so far).
+0m0.1307s (0m0.0061s) : 1200 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (1194 total duplicates so far).
+0m0.1377s (0m0.0068s) : 1300 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (1294 total duplicates so far).
+0m0.1435s (0m0.0057s) : 1400 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (1394 total duplicates so far).
+0m0.1495s (0m0.0059s) : 1500 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (1494 total duplicates so far).
+0m0.1558s (0m0.0062s) : 1600 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (1594 total duplicates so far).
+0m0.1619s (0m0.006s) : 1700 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (1694 total duplicates so far).
+0m0.1659s (0m0.0039s) : 1800 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (1794 total duplicates so far).
+0m0.1723s (0m0.0064s) : 1900 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (1894 total duplicates so far).
+0m0.1789s (0m0.0065s) : 2000 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (1994 total duplicates so far).
+0m0.1838s (0m0.0048s) : 2100 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (2094 total duplicates so far).
+0m0.1885s (0m0.0047s) : 2200 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (2194 total duplicates so far).
+0m0.1945s (0m0.0057s) : 2300 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (2294 total duplicates so far).
+0m0.2009s (0m0.0062s) : 2400 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (2394 total duplicates so far).
+0m0.2059s (0m0.0049s) : 2500 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (2494 total duplicates so far).
+0m0.2135s (0m0.0074s) : 2600 documents (attempted to upload 100 RSS documents, 92 duplicates in this batch) (2586 total duplicates so far).
+0m0.2278s (0m0.014s) : 2700 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (2686 total duplicates so far).
+0m0.2368s (0m0.0084s) : 2800 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (2786 total duplicates so far).
+0m0.2423s (0m0.0054s) : 2900 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (2886 total duplicates so far).
+0m0.2466s (0m0.0043s) : 3000 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (2986 total duplicates so far).
+0m0.2517s (0m0.005s) : 3100 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (3086 total duplicates so far).
+0m0.2574s (0m0.0055s) : 3200 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (3186 total duplicates so far).
+0m0.2635s (0m0.0058s) : 3300 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (3286 total duplicates so far).
+0m0.2711s (0m0.0072s) : 3400 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (3386 total duplicates so far).
+0m0.2762s (0m0.0051s) : 3500 documents (attempted to upload 100 RSS documents, 99 duplicates in this batch) (3485 total duplicates so far).
+0m0.2814s (0m0.0051s) : 3600 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (3585 total duplicates so far).
+0m0.2862s (0m0.0046s) : 3700 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (3685 total duplicates so far).
+0m0.2941s (0m0.0078s) : 3800 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (3785 total duplicates so far).
+0m0.3003s (0m0.006s) : 3900 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (3885 total duplicates so far).
+0m0.3076s (0m0.007s) : 4000 documents (attempted to upload 100 RSS documents, 96 duplicates in this batch) (3981 total duplicates so far).
+0m0.3156s (0m0.0079s) : 4100 documents (attempted to upload 100 RSS documents, 99 duplicates in this batch) (4080 total duplicates so far).
+0m0.3242s (0m0.008s) : 4200 documents (attempted to upload 100 RSS documents, 99 duplicates in this batch) (4179 total duplicates so far).
+0m0.3325s (0m0.0079s) : 4300 documents (attempted to upload 100 RSS documents, 99 duplicates in this batch) (4278 total duplicates so far).
+0m0.3403s (0m0.0077s) : 4400 documents (attempted to upload 100 RSS documents, 99 duplicates in this batch) (4377 total duplicates so far).
+0m0.3483s (0m0.0078s) : 4500 documents (attempted to upload 100 RSS documents, 96 duplicates in this batch) (4473 total duplicates so far).
+0m0.3562s (0m0.0076s) : 4600 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (4573 total duplicates so far).
+0m0.3624s (0m0.006s) : 4700 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (4673 total duplicates so far).
+0m0.368s (0m0.0054s) : 4800 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (4773 total duplicates so far).
+0m0.3769s (0m0.0084s) : 4900 documents (attempted to upload 100 RSS documents, 98 duplicates in this batch) (4871 total duplicates so far).
+0m0.3838s (0m0.0067s) : 5000 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (4971 total duplicates so far).
+0m0.3902s (0m0.0063s) : 5100 documents (attempted to upload 100 RSS documents, 97 duplicates in this batch) (5068 total duplicates so far).
+0m0.3945s (0m0.0042s) : 5200 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (5168 total duplicates so far).
+0m0.3984s (0m0.0038s) : 5300 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (5268 total duplicates so far).
+0m0.4049s (0m0.0064s) : 5400 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (5368 total duplicates so far).
+0m0.4092s (0m0.0041s) : 5500 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (5468 total duplicates so far).
+0m0.4152s (0m0.0058s) : 5600 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (5568 total duplicates so far).
+0m0.4217s (0m0.006s) : 5700 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (5668 total duplicates so far).
+0m0.428s (0m0.0059s) : 5800 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (5768 total duplicates so far).
+0m0.4331s (0m0.005s) : 5900 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (5868 total duplicates so far).
+0m0.4391s (0m0.0059s) : 6000 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (5968 total duplicates so far).
+0m0.4457s (0m0.0065s) : 6100 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (6068 total duplicates so far).
+0m0.4541s (0m0.0083s) : 6200 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (6168 total duplicates so far).
+0m0.4639s (0m0.0096s) : 6300 documents (attempted to upload 100 RSS documents, 95 duplicates in this batch) (6263 total duplicates so far).
+0m0.4721s (0m0.008s) : 6400 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (6363 total duplicates so far).
+0m0.4785s (0m0.006s) : 6500 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (6463 total duplicates so far).
+0m0.485s (0m0.0061s) : 6600 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (6563 total duplicates so far).
+0m0.4894s (0m0.0043s) : 6700 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (6663 total duplicates so far).
+0m0.4952s (0m0.0057s) : 6800 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (6763 total duplicates so far).
+0m0.5013s (0m0.0059s) : 6900 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (6863 total duplicates so far).
+0m0.5085s (0m0.007s) : 7000 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (6963 total duplicates so far).
+0m0.52s (0m0.0109s) : 7100 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (7063 total duplicates so far).
+0m0.5308s (0m0.0106s) : 7200 documents (attempted to upload 100 RSS documents, 99 duplicates in this batch) (7162 total duplicates so far).
+0m0.5391s (0m0.008s) : 7300 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (7262 total duplicates so far).
+0m0.5479s (0m0.0086s) : 7400 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (7362 total duplicates so far).
+0m0.5568s (0m0.0086s) : 7500 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (7462 total duplicates so far).
+0m0.5628s (0m0.0059s) : 7600 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (7562 total duplicates so far).
+0m0.5705s (0m0.0071s) : 7700 documents (attempted to upload 100 RSS documents, 99 duplicates in this batch) (7661 total duplicates so far).
+0m0.5775s (0m0.0066s) : 7800 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (7761 total duplicates so far).
+0m0.5826s (0m0.0051s) : 7900 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (7861 total duplicates so far).
+0m0.588s (0m0.0053s) : 8000 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (7961 total duplicates so far).
+0m0.5978s (0m0.0095s) : 8100 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (8061 total duplicates so far).
+0m0.6025s (0m0.0047s) : 8200 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (8161 total duplicates so far).
+0m0.6086s (0m0.0058s) : 8300 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (8261 total duplicates so far).
+0m0.6155s (0m0.0068s) : 8400 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (8361 total duplicates so far).
+0m0.6226s (0m0.0066s) : 8500 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (8461 total duplicates so far).
+0m0.632s (0m0.0086s) : 8600 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (8561 total duplicates so far).
+0m0.6369s (0m0.0048s) : 8700 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (8661 total duplicates so far).
+0m0.6469s (0m0.0098s) : 8800 documents (attempted to upload 100 RSS documents, 71 duplicates in this batch) (8732 total duplicates so far).
+0m0.6555s (0m0.0084s) : 8900 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (8832 total duplicates so far).
+0m0.6609s (0m0.0052s) : 9000 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (8932 total duplicates so far).
+0m0.6698s (0m0.0086s) : 9100 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (9032 total duplicates so far).
+0m0.6754s (0m0.0054s) : 9200 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (9132 total duplicates so far).
+0m0.6837s (0m0.0078s) : 9300 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (9232 total duplicates so far).
+0m0.6895s (0m0.0055s) : 9400 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (9332 total duplicates so far).
+0m0.6985s (0m0.0089s) : 9500 documents (attempted to upload 100 RSS documents, 99 duplicates in this batch) (9431 total duplicates so far).
+0m0.7067s (0m0.008s) : 9600 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (9531 total duplicates so far).
+0m0.7139s (0m0.0071s) : 9700 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (9631 total duplicates so far).
+0m0.7216s (0m0.0069s) : 9800 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (9731 total duplicates so far).
+0m0.7268s (0m0.0051s) : 9900 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (9831 total duplicates so far).
+0m0.7324s (0m0.0056s) : 10000 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (9931 total duplicates so far).
+0m0.7374s (0m0.0049s) : 10100 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (10031 total duplicates so far).
+0m0.7434s (0m0.0059s) : 10200 documents (attempted to upload 100 RSS documents, 99 duplicates in this batch) (10130 total duplicates so far).
+0m0.7547s (0m0.0108s) : 10300 documents (attempted to upload 100 RSS documents, 98 duplicates in this batch) (10228 total duplicates so far).
+0m0.765s (0m0.0101s) : 10400 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (10328 total duplicates so far).
+0m0.7736s (0m0.0083s) : 10500 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (10428 total duplicates so far).
+0m0.7825s (0m0.0085s) : 10600 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (10528 total duplicates so far).
+0m0.7908s (0m0.0079s) : 10700 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (10628 total duplicates so far).
+0m0.8002s (0m0.0091s) : 10800 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (10728 total duplicates so far).
+0m0.8078s (0m0.0072s) : 10900 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (10828 total duplicates so far).
+0m0.8148s (0m0.0068s) : 11000 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (10928 total duplicates so far).
+0m0.8226s (0m0.0076s) : 11100 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (11028 total duplicates so far).
+0m0.8312s (0m0.0083s) : 11200 documents (attempted to upload 100 RSS documents, 95 duplicates in this batch) (11123 total duplicates so far).
+0m0.8383s (0m0.007s) : 11300 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (11223 total duplicates so far).
+0m0.8534s (0m0.0143s) : 11400 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (11323 total duplicates so far).
+0m0.8601s (0m0.0066s) : 11500 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (11423 total duplicates so far).
+0m0.8656s (0m0.0054s) : 11600 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (11523 total duplicates so far).
+0m0.8713s (0m0.0057s) : 11700 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (11623 total duplicates so far).
+0m0.8763s (0m0.0049s) : 11800 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (11723 total duplicates so far).
+0m0.8826s (0m0.0062s) : 11900 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (11823 total duplicates so far).
+0m0.8875s (0m0.0049s) : 12000 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (11923 total duplicates so far).
+0m0.8939s (0m0.0063s) : 12100 documents (attempted to upload 100 RSS documents, 100 duplicates in this batch) (12023 total duplicates so far).
+0m0.9002s (0m0.0062s) : 12184 documents (attempted to upload 84 RSS documents, 84 duplicates in this batch) (12107 total duplicates so far).
+Duplicates : 12107
+New items : 77
+\x1b[42;1;4mnicerapp/apps/nicer.app/applications/2D/news/crontabEntry_manageDatabase.php : Done.\x1b[37;49m

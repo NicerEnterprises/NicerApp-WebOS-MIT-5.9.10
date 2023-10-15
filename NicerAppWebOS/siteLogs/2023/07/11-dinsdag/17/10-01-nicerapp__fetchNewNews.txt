@@ -1,0 +1,16 @@
+
+Fatal error: Uncaught SagCouchException: CouchDB Error: unauthorized (Name or password is incorrect.) in /var/www/nicer.app/NicerAppWebOS/3rd-party/sag/src/httpAdapters/SagHTTPAdapter.php:81
+Stack trace:
+#0 /var/www/nicer.app/NicerAppWebOS/3rd-party/sag/src/httpAdapters/SagCURLHTTPAdapter.php(172): SagHTTPAdapter->makeResult()
+#1 /var/www/nicer.app/NicerAppWebOS/3rd-party/sag/src/Sag.php(1348): SagCURLHTTPAdapter->procPacket()
+#2 /var/www/nicer.app/NicerAppWebOS/3rd-party/sag/src/Sag.php(264): Sag->procPacket()
+#3 /var/www/nicer.app/NicerAppWebOS/functions.php(274): Sag->getSession()
+#4 /var/www/nicer.app/NicerAppWebOS/logic.databases/generalizedDatabasesAPI-1.0.0/connectors/class.couchdb-3.2.2_1.0.1.php(40): cdb_login()
+#5 /var/www/nicer.app/NicerAppWebOS/logic.databases/generalizedDatabasesAPI-1.0.0/class.database_API.php(53): class_NicerAppWebOS_database_API_couchdb_3_2->__construct()
+#6 /var/www/nicer.app/NicerAppWebOS/logic.databases/generalizedDatabasesAPI-1.0.0/class.database_API.php(38): class_NicerAppWebOS_database_API->connectToDatabase()
+#7 /var/www/nicer.app/NicerAppWebOS/logic.databases/generalizedDatabasesAPI-1.0.0/class.database_API.php(10): class_NicerAppWebOS_database_API->connectToDatabases()
+#8 /var/www/nicer.app/NicerAppWebOS/logic.business/class.core.WebsiteOperatingSystem-5.y.z.php(166): class_NicerAppWebOS_database_API->__construct()
+#9 /var/www/nicer.app/NicerAppWebOS/boot.php(131): NicerAppWebOS->initializeDatabases()
+#10 /var/www/nicer.app/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/news/crontabEntry_manageDatabase.php(2): require_once('...')
+#11 {main}
+  thrown in /var/www/nicer.app/NicerAppWebOS/3rd-party/sag/src/httpAdapters/SagHTTPAdapter.php on line 81
