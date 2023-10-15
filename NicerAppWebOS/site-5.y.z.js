@@ -229,8 +229,6 @@ na.site = {
             });
             window.needsResize_interval = setInterval (function (evt) {
                 if (!evt) return false;
-                alert (evt.scale);
-                debugger;
                 var c = na.site.settings.current, w = $(window).width();
                 if (!c.lastWidth) {
                     c.lastWidth = w;
@@ -1062,7 +1060,6 @@ na.site = {
         });
 
         $('.na_themes_dropdown__specificity > .vividDropDownBox_selector > .vividScrollpane > div').click(function(evt) {
-            debugger;
             na.site.globals.specificityName = $(this).html();
             //debugger;
             $('.na_themes_dropdown__specificity > .vividDropDownBox_selected').html($(this).html());
@@ -1612,7 +1609,6 @@ onclick_btnFullResetOfAllThemes : function (event) {
                             { resizeApps : [na.m.newEventFunction(function() {
                                 na.m.waitForCondition ('loadContent_displayContent : na.m.HTMLidle() && !na.site.settings.current.running_loadContent?', function () { return na.m.HTMLidle() && !na.site.settings.current.loadingApps}, function () {
                                     na.site.resizeApps();
-                                    debugger;
                                     na.site.settings.current.running_loadContent = false;
                                 }, 100);
                             }, { dat : dat })] },
@@ -1620,7 +1616,6 @@ onclick_btnFullResetOfAllThemes : function (event) {
                             //{ getPageSpecificSettings : [na.m.newEventFunction (na.site.getPageSpecificSettings)] }
                             { loadTheme : [na.m.newEventFunction (function() {
                                 na.m.waitForCondition ('loadContent_displayContent : na.m.HTMLidle() && !na.site.settings.current.running_loadContent?', function () { return na.m.HTMLidle() && !na.site.settings.current.running_loadContent}, function () {
-                                    debugger;
                                     na.site.loadTheme (null, null, false, false);
                                 }, 100);
                             })] },
@@ -1731,7 +1726,6 @@ onclick_btnFullResetOfAllThemes : function (event) {
         c.scriptsToLoadTotal = 0;
         c.scriptsLoaded = false;
         c.scriptsToLoad = 0;
-        debugger;
         for (let divID in dat) {
             i++;
             if (divID==='head') {
@@ -3054,7 +3048,6 @@ onclick_btnFullResetOfAllThemes : function (event) {
 
         if (typeof specificityName=='undefined') specificityName = na.site.globals.specificityName;
 
-        debugger;
         for (var app in apps) break;
 
         na.site.settings.current.running_loadTheme = true;
@@ -3172,7 +3165,6 @@ onclick_btnFullResetOfAllThemes : function (event) {
             //if (s.specificityName) acData.specificityName = s.specificityName;
             acData.specificityName = specificityName;
             if (app) acData.app = app;
-            debugger;
         }
 
         var
@@ -3216,7 +3208,6 @@ onclick_btnFullResetOfAllThemes : function (event) {
                     break;
                 };
                 //na.site.setSpecificity (true);
-                debugger;
                 na.site.loadTheme_applySettings (dat, callback);
                 na.te.onload('siteContent');
             },
@@ -3334,7 +3325,6 @@ onclick_btnFullResetOfAllThemes : function (event) {
                 if (bg) $(el).css({background:bg});
             });
         }
-debugger;
         if (dat.themeSettings && dat.themeSettings['.vividDialog']) {
             $('.vividDialog').css(dat.themeSettings['.vividDialog']);
             $('.vividDialog > .vdBackground').css(dat.themeSettings['.vividDialog > .vdBackground']);
@@ -3555,7 +3545,6 @@ debugger;
             na.site.globals.themes[na.site.globals.themeName] = $.extend({}, themeData);
             
             // ENCAPSULATE (ENCODE) json objects for HTTP transport
-            debugger;
             themeData.themeSettings = JSON.stringify(themeData.themeSettings);
             themeData.apps = JSON.stringify(Object.assign({},themeData.apps));
             //if (themeData.dialogs.indexOf('+')!==-1) themeData.dialogs = themeData.dialogs.replace(/\+/g, ' ');
