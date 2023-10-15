@@ -176,7 +176,11 @@ class SagCURLHTTPAdapter extends SagHTTPAdapter {
           case CURLOPT_CUSTOMREQUEST : $optsTranslated['CURLOPT_CUSTOMREQUEST'] = $v; break;
           case CURLOPT_HTTPHEADER : $optsTranslated['CURLOPT_HTTPHEADER'] = $v; break;
           case CURLOPT_POSTFIELDS : $optsTranslated['CURLOPT_POSTFIELDS'] = json_decode($v); break;
-          default : $optsTranslated[$k] = $v; break;
+          default :
+            $constants = get_defined_constants(true);
+            $curlOptLookup = preg_grep('/^CURLOPT_/', array_flip($constants['curl']));
+            $optsTranslated[$curlOptLookup[$k]] = $v;
+            break;
         }
       }
 
@@ -197,13 +201,16 @@ class SagCURLHTTPAdapter extends SagHTTPAdapter {
       $ret = str_replace(" ",'&nbsp;',$ret);
 
       $dbgHTML =
-        '<div class="naLogHeader_curlOptions" style="display:flex;align-items:center;">'.$this->buttonExpand().'curl options '.$date.'</div>'
+        '<div class="naLogEntry">'
+        .'<div class="naLogEntry_header">'.$date.'&nbsp;<span class="naLogHeader_curlOptions_url">'.$opts[CURLOPT_URL].'</span></div>'
+        .'<div class="naLogHeader_curlOptions" style="display:flex;align-items:center;">'.$this->buttonExpand().'curl options</div>'
         .'<div id="expandData_'.($_SESSION['dbgNum']-1).'" class="naLogCurlOptions">'
         .$dbgOpts
         .'</div>'
-        .'<div class="naLogHeader_curlResponse" style="display:flex;align-items:center;">'.$this->buttonExpand().'curl response '.$date.'</div>'
+        .'<div class="naLogHeader_curlResponse" style="display:flex;align-items:center;">'.$this->buttonExpand().'curl response</div>'
         .'<div id="expandData_'.($_SESSION['dbgNum']-1).'" class="naLogCurlResponse">'
         .$ret
+        .'</div>'
         .'</div>';
       file_put_contents ($_SESSION['na_error_log_filepath_html'], $dbgHTML, FILE_APPEND);
 
@@ -255,7 +262,7 @@ class SagCURLHTTPAdapter extends SagHTTPAdapter {
       'expand_'.$_SESSION['dbgNum'],
       'vividButton_icon_50x50', '_50x50', 'grouped',
       '',
-      'if (!$(this).is(\'.disabled\')) { var $el = $(\'#expandData_'.$_SESSION['dbgNum'].'\'); if ($el.css(\'display\')==\'none\') $el.show(); else $el.slideUp(); }',
+      'if (!$(this).is(\'.disabled\')) { var $el = $(\'#expandData_'.$_SESSION['dbgNum'].'\'); if ($el.css(\'display\')==\'none\') { $el.slideDown(); window.location.hash=\''.$_SESSION['dbgNum'].'\' } else { $el.slideUp(); window.location.hash = \'\'; }}',
       '',
       '',
 
