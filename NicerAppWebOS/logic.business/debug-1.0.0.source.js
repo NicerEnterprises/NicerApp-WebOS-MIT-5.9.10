@@ -14,7 +14,7 @@ $(document).ready(function() {
         //$el[0].scrollIntoView(true);
         setTimeout (function() {
             scrollParentToChild($('#siteContent .vividScrollpane')[0], $el[0]);
-        }, 2000);
+        }, 500);
         $el.css ({ border : '3px ridge lime', boxShadow : '2px 2px 6px 4px rgba(0,0,0,0.75), 0px 0px 3px 2px rgba(0,50,0,0.7)' });
     }
 

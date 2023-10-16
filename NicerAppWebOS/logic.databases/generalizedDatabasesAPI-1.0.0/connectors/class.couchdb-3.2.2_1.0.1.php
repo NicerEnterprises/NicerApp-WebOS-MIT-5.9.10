@@ -815,6 +815,7 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
         $rec = [
             'index' => [
                 //'fields' => [ '_id', 'lastUsed', 'app', 'user', 'role', 'view', 'theme', 'url', 'themeSettings', 'apps', 'background', 'backgroundSearchKey', 'textBackgroundOpacity', 'changeBackgroundsAutomatically', 'backgroundChange_hours', 'backgroundChange_minutes']
+                //'fields' => [ 'lastUsed', 'ip', 'specificityName', 'app', 'user', 'role', 'view', 'url' ]
                 'fields' => [ 'lastUsed' ]
                 //'fields' => [ 'user', 'view', 'role', 'lastUsed', 'theme', 'url', 'background', 'backgroundSearchKey', 'textBackgroundOpacity', 'changeBackgroundsAutomatically', 'backgroundChange_hours', 'backgroundChange_minutes' ]
             ],

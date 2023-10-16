@@ -122,6 +122,7 @@ NicerApp WCS (Website Control System) from Nicer Enterprises
         $naWebOS->initializeGlobals();
     }
     if ($_SERVER['SCRIPT_NAME']=='/NicerAppWebOS/index.php') {
+        $_SESSION['started'] = microtime(true);
         $now = DateTime::createFromFormat('U.u', $_SESSION['started']);
         $now->setTimezone(new DateTimeZone(exec('date +%z')));
         //$date = $now->format("Y-m-d_H:i:s.u");
