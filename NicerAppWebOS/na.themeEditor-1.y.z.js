@@ -775,9 +775,10 @@ na.te = na.themeEditor = {
                     },
                     type : type
                 });
+                debugger;
                 for (var cssText in value) {
                     if (cssText.match(/\> .vdBackground/)) continue;
-                    var vdata = value[cssText];
+                    var vdata = value[cssText].css;
                     var newID2 = na.m.randomString();
                     outputData.dat.push ({
                         id : newID2,
@@ -865,10 +866,12 @@ na.te = na.themeEditor = {
                     !it.text.match(regExDialogs)
                     && !it.text.match(regExApps)
                     && !it.text.match(/Dialog/)
+                    //&& !it.text.match(/Extras/)
                 ) {
-                    if (!themeSettings[parent.text]) themeSettings[parent.text] = {};
-                    themeSettings[parent.text] = $.extend (
-                        themeSettings[parent.text], na.site.fetchTheme(it.text)
+                    if (!themeSettings[parent.text]) themeSettings[parent.text] = { css : {} };
+                    if (!themeSettings[parent.text].css) themeSettings[parent.text].css = {};
+                    themeSettings[parent.text].css = $.extend (
+                        themeSettings[parent.text].css, na.site.fetchTheme(it.text)
                     );
                 }
                 break;

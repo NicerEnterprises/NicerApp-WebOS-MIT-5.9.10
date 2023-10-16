@@ -2032,7 +2032,7 @@ class NicerAppWebOS {
             //$selector['ip'] = $naIP;
             //$selector['ua'] = $_SERVER['HTTP_USER_AGENT'];
             $selector['lastUsed'] = [
-                '&gt' => 0
+                '$exists' => true
             ];
             //$debug = true;
             if ($debug) { echo '<pre style="color:blue">$sel = '; var_dump ($sel); echo '</pre>'; };
@@ -2045,13 +2045,14 @@ class NicerAppWebOS {
                 //'use_index' => 'sortIndex_lastUsed'
                // 'use_index' => 'primaryIndex'
             );
+/*
             $findCommand = array (
                 'selector' => $sel,
                 'fields' => [ '_id', 'lastUsed' ],
                 'sort' => [['lastUsed'=>'asc']],
                 'use_index' => 'sortIndex_lastUsed'
                // 'use_index' => 'primaryIndex'
-            );
+            );*/
             try {
                 $call = $this->dbs->findConnection('couchdb')->cdb->find ($findCommand);
             } catch (Exception $e) {
@@ -2072,7 +2073,8 @@ class NicerAppWebOS {
                     $hasRecord = true;
                     if ($debug) { echo '$d='; var_dump ($d); }
                     $tn = ( isset($d->theme) ? $d->theme : 'default' );
-                    $d2 = $this->dbs->findConnection('couchdb')->cdb->get($d->_id)->body;
+                    //$d2 = $this->dbs->findConnection('couchdb')->cdb->get($d->_id)->body;
+                    $d2 = $d;
                     $ret = [
                         $tn => [
                             'dbID' => $d2->_id,

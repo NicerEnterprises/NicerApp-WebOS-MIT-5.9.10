@@ -3079,7 +3079,7 @@ onclick_btnFullResetOfAllThemes : function (event) {
     loadTheme_initializeExtras : function () {
         // gets called at the end of a chain started by onload_phase2()
 
-
+/*
         if (
             na.site.globals.themes.default.themeSettings
             && (
@@ -3087,7 +3087,7 @@ onclick_btnFullResetOfAllThemes : function (event) {
                 || typeof na.site.globals.themes.default.themeSettings['Extras'].length==='number'
             )
         ) {
-
+*/
             for (var themeID in na.site.globals.themes) break;
             na.site.globals.themes.default.themeSettings.Extras = {
                 'texts' : {
@@ -3102,7 +3102,7 @@ onclick_btnFullResetOfAllThemes : function (event) {
                     }
                 }
             };
-        };
+  //      };
     },
     loadTheme_doGetPageSpecificSettings : function(callback, doSwitchSpecificities) {
         var
