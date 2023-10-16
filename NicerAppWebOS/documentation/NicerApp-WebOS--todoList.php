@@ -55,6 +55,7 @@
 
     <li class="todoList"><div>(CURRENT) (2023 Oct) Upgrade the blogging features.</div></li>
 
+    <li class="todoList"><div>(2023 Nov) Fix the final bugs in vividMenu.</div></li>
 
     <li class="todoList"><div>(STALLED) Create a custom HTML WYSIWYG rich-text editor component of my own, that ties into the UWTE.<br/>
     This is stalled because browser makers need to start supporting a window.getSelection() that returns a .anchorOffset and .extentOffset that works on the .innerHTML instead of the .innerText of any given element (usually the .commonAncestorElement).

@@ -1225,12 +1225,13 @@ class NicerAppWebOS {
         foreach ($selectors2 as $idx => $selector) {
             //if (!$this->selectorPermissionsPass('write', $selector)) continue;
             $css = $this->getPageCSS_specific($selector);
+            //echo '<pre>'; var_dump($css); echo '</pre>';
             if (is_array($css)) {
                 foreach ($css['themes'] as $themeName => $theme) { break; };
                 $specificityName = (
                     array_key_exists($themeName, $css['themes'])
                     && array_key_exists('specificityName', $css['themes'][$themeName])
-                    ? css['themes'][$themeName]['specificityName']
+                    ? $css['themes'][$themeName]['specificityName']
                     : $selector['specificityName']
                 );
             } else {
@@ -2033,13 +2034,23 @@ class NicerAppWebOS {
             $selector['lastUsed'] = [
                 '&gt' => 0
             ];
-            if ($debug) { echo '<pre style="color:blue">$sel = '; var_dump ($sel); echo '</pre>';};
-//array( 'url'=>$selector['url'], 'role'=>$selector['role'] ),//$selector,
+            //$debug = true;
+            if ($debug) { echo '<pre style="color:blue">$sel = '; var_dump ($sel); echo '</pre>'; };
+            //array( 'url'=>$selector['url'], 'role'=>$selector['role'] ),//$selector,
+
             $findCommand = array (
                 'selector' => $sel,
-                'fields' => [ '_id', 'user', 'view', 'role', 'lastUsed', 'theme', 'url', 'themeSettings', 'apps', 'background', 'backgroundSearchKey', 'textBackgroundOpacity', 'changeBackgroundsAutomatically', 'backgroundChange_hours', 'backgroundChange_minutes' ],
+                'fields' => [ '_id', 'user', 'view', 'role', 'lastUsed', 'theme', 'url', 'themeSettings', 'apps', 'background', 'backgroundSearchKey', 'textBackgroundOpacity', 'changeBackgroundsAutomatically', 'backgroundChange_hours', 'backgroundChange_minutes' ]//,
+                //'sort' => [['lastUsed'=>'asc']],
+                //'use_index' => 'sortIndex_lastUsed'
+               // 'use_index' => 'primaryIndex'
+            );
+            $findCommand = array (
+                'selector' => $sel,
+                'fields' => [ '_id', 'lastUsed' ],
                 'sort' => [['lastUsed'=>'asc']],
                 'use_index' => 'sortIndex_lastUsed'
+               // 'use_index' => 'primaryIndex'
             );
             try {
                 $call = $this->dbs->findConnection('couchdb')->cdb->find ($findCommand);
@@ -2061,29 +2072,30 @@ class NicerAppWebOS {
                     $hasRecord = true;
                     if ($debug) { echo '$d='; var_dump ($d); }
                     $tn = ( isset($d->theme) ? $d->theme : 'default' );
+                    $d2 = $this->dbs->findConnection('couchdb')->cdb->get($d->_id)->body;
                     $ret = [
                         $tn => [
-                            'dbID' => $d->_id,
-                            'themeSettings' => json_decode(json_encode($d->themeSettings), true),
-                            'apps' => json_decode(json_encode((property_exists($d,'apps')?$d->apps:[])), true),
-                            'background' => ( isset($d->background) ? $d->background : '' ),
-                            'backgroundSearchKey' => ( isset($d->backgroundSearchKey) ? $d->backgroundSearchKey : '' ),
-                            'textBackgroundOpacity' => ( isset($d->textBackgroundOpacity) ? $d->textBackgroundOpacity : ''),
-                            'changeBackgroundsAutomatically' => ( isset($d->changeBackgroundsAutomatically)
-                                ? ($d->changeBackgroundsAutomatically ? 'true' : 'false')
+                            'dbID' => $d2->_id,
+                            'themeSettings' => json_decode(json_encode($d2->themeSettings), true),
+                            'apps' => json_decode(json_encode((property_exists($d2,'apps')?$d2->apps:[])), true),
+                            'background' => ( isset($d2->background) ? $d2->background : '' ),
+                            'backgroundSearchKey' => ( isset($d2->backgroundSearchKey) ? $d2->backgroundSearchKey : '' ),
+                            'textBackgroundOpacity' => ( isset($d2->textBackgroundOpacity) ? $d2->textBackgroundOpacity : ''),
+                            'changeBackgroundsAutomatically' => ( isset($d2->changeBackgroundsAutomatically)
+                                ? ($d2->changeBackgroundsAutomatically ? 'true' : 'false')
                                 : 'false'
                             ),
-                            'backgroundChange_hours' => ( isset($d->backgroundChange_hours) ? $d->backgroundChange_hours : ''),
-                            'backgroundChange_minutes' => ( isset($d->backgroundChange_minutes) ? $d->backgroundChange_minutes : ''),
+                            'backgroundChange_hours' => ( isset($d2->backgroundChange_hours) ? $d2->backgroundChange_hours : ''),
+                            'backgroundChange_minutes' => ( isset($d2->backgroundChange_minutes) ? $d2->backgroundChange_minutes : ''),
                             'theme' => $tn
                         ]
                     ];
-                    if (isset($d->user)) $ret[$tn]['user'] = $d->user;
-                    if (isset($d->role)) $ret[$tn]['role'] = $d->role;
-                    if (isset($d->url)) $ret[$tn]['url'] = $d->url;
-                    if (isset($d->view)) $ret[$tn]['view'] = $d->view;
-                    if (isset($d->app)) $ret[$tn]['app'] = $d->app;
-                    if (isset($d->specificityName)) $ret[$tn]['specificityName'] = $d->specificityName;
+                    if (isset($d2->user)) $ret[$tn]['user'] = $d2->user;
+                    if (isset($d2->role)) $ret[$tn]['role'] = $d2->role;
+                    if (isset($d2->url)) $ret[$tn]['url'] = $d2->url;
+                    if (isset($d2->view)) $ret[$tn]['view'] = $d2->view;
+                    if (isset($d2->app)) $ret[$tn]['app'] = $d2->app;
+                    if (isset($d2->specificityName)) $ret[$tn]['specificityName'] = $d2->specificityName;
                     if (isset($tn)) $ret[$tn]['theme'] = $tn;
 
                     if ($debug) echo '</pre>';

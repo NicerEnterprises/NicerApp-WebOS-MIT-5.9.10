@@ -70,7 +70,7 @@ $spacer = "\n\t\t\t\t";
 	
 	<div id="titlebar" class="vividDialog" style="opacity:0.0001;position:absolute;display:flex;background:rgba(0,0,0,0.4);border:1px solid white;border-radius:15px;font-weight:bold;justify-content:center;vertical-align:middle;align-content: center;align-items : center;padding:5px;margin-bottom:10px;">
         <div class="vividDialogContent" style="text-align:center;margin:2px;width:100%;">
-        <h1 class="pageTitle">
+        <h1 class="pageTitle backdropped">
             <span class="contentSectionTitle1_span" id="folderName"><?php echo str_replace('_', ' ', $view['set']) ?></span>&nbsp;
             on&nbsp;<a href="/music"><span class="contentSectionTitle3_span">https://nicer.app/music</span></a>.
         </h1>
