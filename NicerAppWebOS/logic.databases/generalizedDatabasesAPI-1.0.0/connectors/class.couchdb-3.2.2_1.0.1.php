@@ -815,10 +815,10 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
         $rec = [
             'index' => [
                 //'fields' => [ '_id', 'lastUsed', 'app', 'user', 'role', 'view', 'theme', 'url', 'themeSettings', 'apps', 'background', 'backgroundSearchKey', 'textBackgroundOpacity', 'changeBackgroundsAutomatically', 'backgroundChange_hours', 'backgroundChange_minutes']
-                //'fields' => [ '_id', 'lastUsed', 'app', 'user', 'role', 'view', 'theme', 'url', 'ip', 'specificityName']
-                'fields' => [ 'user', 'view', 'role', 'lastUsed', 'theme', 'url', 'themeSettings', 'apps', 'background', 'backgroundSearchKey', 'textBackgroundOpacity', 'changeBackgroundsAutomatically', 'backgroundChange_hours', 'backgroundChange_minutes' ]
+                'fields' => [ 'lastUsed' ]
+                //'fields' => [ 'user', 'view', 'role', 'lastUsed', 'theme', 'url', 'background', 'backgroundSearchKey', 'textBackgroundOpacity', 'changeBackgroundsAutomatically', 'backgroundChange_hours', 'backgroundChange_minutes' ]
             ],
-            'name' => 'sortIndex',
+            'name' => 'sortIndex_lastUsed',
             'type' => 'json'
         ];
         try {
@@ -951,9 +951,9 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
 
         $rec = [
             'index' => [
-                'fields' => [ 'user', 'view', 'role', 'lastUsed', 'theme', 'url', 'themeSettings', 'apps', 'background', 'backgroundSearchKey', 'textBackgroundOpacity', 'changeBackgroundsAutomatically', 'backgroundChange_hours', 'backgroundChange_minutes' ]
+                'fields' => [ 'lastUsed' ]
             ],
-            'name' => 'sortIndex',
+            'name' => 'sortIndex_lastUsed',
             'type' => 'json'
         ];
         try {

@@ -2037,9 +2037,9 @@ class NicerAppWebOS {
 //array( 'url'=>$selector['url'], 'role'=>$selector['role'] ),//$selector,
             $findCommand = array (
                 'selector' => $sel,
-                'fields' => [ '_id', 'user', 'view', 'role', 'lastUsed', 'theme', 'url', 'themeSettings', 'apps', 'background', 'backgroundSearchKey', 'textBackgroundOpacity', 'changeBackgroundsAutomatically', 'backgroundChange_hours', 'backgroundChange_minutes' ]//,
-                //'sort' => [['lastUsed'=>'asc']],
-                //'use_index' => 'primaryIndex'
+                'fields' => [ '_id', 'user', 'view', 'role', 'lastUsed', 'theme', 'url', 'themeSettings', 'apps', 'background', 'backgroundSearchKey', 'textBackgroundOpacity', 'changeBackgroundsAutomatically', 'backgroundChange_hours', 'backgroundChange_minutes' ],
+                'sort' => [['lastUsed'=>'asc']],
+                'use_index' => 'sortIndex_lastUsed'
             );
             try {
                 $call = $this->dbs->findConnection('couchdb')->cdb->find ($findCommand);

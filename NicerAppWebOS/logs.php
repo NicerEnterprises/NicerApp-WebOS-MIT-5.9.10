@@ -4,13 +4,17 @@ global $naWebOS;
 global $naLAN;
 
 
-$authorizedFile = '45.83.241.21-2023-10-16_00:56:04_plus0200.html';
+$authorizedFile1 = '45.83.241.21-2023-10-16_07:07:36_plus0200.html';
+$authorizedFile2 = '45.83.241.21-2023-10-16_07:13:08_plus0200.html';
 
 if (
     !$naLAN
     && !(
         array_key_exists('file',$_GET)
-        && $_GET['file'] == $authorizedFile
+        && (
+            $_GET['file'] == $authorizedFile1
+            || $_GET['file'] == $authorizedFile2
+        )
     )
 ) die('403 Forbidden.');
 
@@ -19,7 +23,10 @@ if (array_key_exists('file', $_GET)) {
     //echo file_get_contents($fp); die();
     if ($naLAN) $c = [
         'siteContent' => file_get_contents($fp)
-    ]; elseif ($_GET['file'] == $authorizedFile) $c = [
+    ]; elseif (
+        $_GET['file'] == $authorizedFile1
+        || $_GET['file'] == $authorizedFile2
+    ) $c = [
         'siteContent' => file_get_contents($fp)
     ]; else $c = [
         'siteContent' => '403 Forbidden.'
