@@ -182,7 +182,7 @@ NicerApp WCS (Website Control System) from Nicer Enterprises
     // at the *bottom* of this file (that's for good reasons),
     // you will find : require_once(dirname(__FILE__).'/apps/nicer.app/api.paymentSystems/boot.php');
     
-    ini_set('memory_limit','16M');
+    ini_set('memory_limit','256M');
     set_time_limit(20); // 20 seconds
 
     //echo '<pre>'; var_dump ($_SERVER); exit();
