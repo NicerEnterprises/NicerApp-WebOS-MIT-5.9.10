@@ -14,6 +14,7 @@ NicerApp WCS (Website Control System) from Nicer Enterprises
     define ("FILE_FORMATS_photos", "/^(.*\.png)|(.*\.gif)|(.*\.jpg)|(.*\.jpeg)$/");
     define ("FILE_FORMATS_mp3s", "/^(.*\.mp3)$/");
     define ("FILE_FORMATS_texts", "/^(.*\.txt)$/");
+    define ("FILE_FORMATS_html", "/^(.*\.html)$/");
     define ("FILE_FORMATS_photos_texts", "/^(.*\.png)|(.*\.gif)|(.*\.jpg)|(.*\.jpeg)|(.*\.txt)$/");
     define ("FILE_FORMATS_NO_thumbs", '/(?!.*thumbs).*/');
     global $na_full_init;
@@ -99,6 +100,9 @@ NicerApp WCS (Website Control System) from Nicer Enterprises
 
         if ($_SERVER['SCRIPT_NAME']=='/NicerAppWebOS/index.php') {
             $_SESSION['started'] = microtime(true);
+            $_SESSION['dbgNum'] = 0;
+            $_SESSION['dbgNum2'] = 0;
+
             $_SESSION['logsInitialized'] = false;
             $_SESSION[SEID] = [];
             $_SESSION['naWebOS_errors_startup'] = [];
@@ -131,8 +135,9 @@ NicerApp WCS (Website Control System) from Nicer Enterprises
     }
     if ($_SERVER['SCRIPT_NAME']=='/NicerAppWebOS/index.php') {
         $now = DateTime::createFromFormat('U.u', $_SESSION['started']);
+        $now->setTimezone(new DateTimeZone(system('date +%z')));
         //$date = $now->format("Y-m-d_H:i:s.u");
-        $date = $now->format("Y-m-d_H:i:s");
+        $date = $now->format("Y-m-d_H:i:s_").str_replace('+','plus',preg_replace('/.*\s/','',date(DATE_RFC2822)));
         $_SESSION['na_error_log_filepath_html'] =
             '/var/www/'.$naWebOS->domain.'/NicerAppWebOS/siteLogs/'
             .$naIP.'-'.$date.'.html';
@@ -157,12 +162,14 @@ NicerApp WCS (Website Control System) from Nicer Enterprises
         || in_array($naIP, $lanConfig)
     );
     if ($naLAN && array_key_exists('logsInitialized', $_SESSION) && !$_SESSION['logsInitialized']) {
-        file_put_contents (
-            $_SESSION['na_error_log_filepath_html'],
-            PHP_EOL.$naWebOS->getLinks($naWebOS->cssFiles)
-            .PHP_EOL.$naWebOS->getLinks($naWebOS->javascriptFiles).PHP_EOL,
-            FILE_APPEND
-        );
+        /*
+        $html = $naWebOS->getSite();
+            //'<html><head>'
+            //.PHP_EOL.$naWebOS->getLinks($naWebOS->cssFiles)
+            //.PHP_EOL.$naWebOS->getLinks($naWebOS->javascriptFiles).PHP_EOL
+            //.'</head><body style="overflow:visible"><div id="siteBackground"></div>';*/
+        $html = '<script type="text/javascript" src="/NicerAppWebOS/logic.business/debug-1.0.0.source.js?c='.date('Ymd_His',filemtime(dirname(__FILE__).'/logic.business/debug-1.0.0.source.js')).'"></script>';
+        file_put_contents ($_SESSION['na_error_log_filepath_html'], $html, FILE_APPEND);
 
         $_SESSION['logsInitialized'] = true;
     }
@@ -189,10 +196,12 @@ NicerApp WCS (Website Control System) from Nicer Enterprises
     $fn = dirname(__FILE__).'/apps/siteOperator_boot.php';
     if (file_exists($fn)) require_once ($fn);
 
+    /*
     require_once(dirname(__FILE__).'/apps/NicerAppWebOS/application-programmer-interfaces/technology/authentication/paymentSystems/boot.php');
     
     
     // oAuth like login systems and others like that :
     // everything excluding the NicerApp and NicerApp->couchdb login systems, basically.
     require_once(dirname(__FILE__).'/apps/NicerAppWebOS/application-programmer-interfaces/technology/authentication/loginSystems/boot.php');
+    */
 ?>

@@ -322,7 +322,10 @@ class class_NicerAppWebOS_database_API {
             foreach ($dbs as $dbName => $mustDo) {
                 if ($mustDo) {
                     $fncName = 'createDataSet_'.$dbName;
-                    $params = [];
+                    $isAdmin = strpos($dbName, '_administrator')!==false;
+                    $adminUser = preg_replace('/.*___/','',$dbName);
+                    $params = [ $adminUser ];
+                    if ($isAdmin) $fncName = preg_replace('/(___administrator)(___.*)$/','$1',$fncName);
                     $x = call_user_func_array ( [ $c['conn'], $fncName ], $params );
                     $localCheck = $this->standardResultHandling($c, $x);
                     $r = array_merge ($r, [$localCheck]);
@@ -340,7 +343,10 @@ class class_NicerAppWebOS_database_API {
             foreach ($dbs as $dbName => $mustDo) {
                 if ($mustDo) {
                     $fncName = 'resetDataSet_'.$dbName;
-                    $params = [];
+                    $isAdmin = strpos($dbName, '_administrator')!==false;
+                    $adminUser = preg_replace('/.*___/','',$dbName);
+                    $params = [ $adminUser ];
+                    if ($isAdmin) $fncName = preg_replace('/(___administrator)(___.*)$/','$1',$fncName);
                     $x = call_user_func_array ( [ $c['conn'], $fncName ], $params );
                     $localCheck = $this->standardResultHandling($c, $x);
                     $r = array_merge ($r, [$localCheck]);

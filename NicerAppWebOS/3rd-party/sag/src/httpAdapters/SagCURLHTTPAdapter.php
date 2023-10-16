@@ -147,6 +147,7 @@ class SagCURLHTTPAdapter extends SagHTTPAdapter {
     global $na_error_log_filepath_html;
     global $na_error_log_filepath_txt;
     //if (is_object($naWebOS->dbs)) { echo '<pre>'; var_dump ($naWebOS->dbs->findConnection('couchdb')->username); echo '</pre>'; }
+
     $dbg = [
       1 => (isset($_SESSION['na_error_log_filepath_html'])),
       2 => (is_object($naWebOS->dbs)),
@@ -158,7 +159,11 @@ class SagCURLHTTPAdapter extends SagHTTPAdapter {
       && session_status() === PHP_SESSION_ACTIVE
       && isset($_SESSION['na_error_log_filepath_html'])
       && is_object($naWebOS->dbs)
-      && $naWebOS->dbs->findConnection('couchdb')->username=='said_by___Rene__AJM__Veerman'
+      && (
+        $naWebOS->dbs->findConnection('couchdb')->username=='said_by___Rene__AJM__Veerman'
+        || $naWebOS->dbs->findConnection('couchdb')->username=='said_by___Guest'
+        || $naWebOS->dbs->findConnection('couchdb')->username=='nicer_app___Guest'
+      )
       && strpos($opts[CURLOPT_URL], 'log_entries')===false
       && strpos($opts[CURLOPT_URL], '_session')===false
     ) {
@@ -187,7 +192,7 @@ class SagCURLHTTPAdapter extends SagHTTPAdapter {
 
       //var_dump ($na_error_log_filepath_html); die();
       $now = DateTime::createFromFormat('U.u', $_SESSION['started']);
-      $now->setTimezone(new DateTimeZone(system('date +%z')));
+      $now->setTimezone(new DateTimeZone(exec('date +%z')));
       $date = $now->format("Y-m-d H:i:s.u ").preg_replace('/.*\s/','',date(DATE_RFC2822));
       //$date = $now->format("Y-m-d_H:i:s");
 
@@ -205,7 +210,7 @@ class SagCURLHTTPAdapter extends SagHTTPAdapter {
 
       $dbgHTML =
         '<div id="entry_'.$_SESSION['dbgNum2'].'" class="naLogEntry">'
-        .'<div class="naLogEntry_header"><span class="naLogHeader_curlOptions_datetime">'.$date.'</span><br/><span class="naLogHeader_curlOptions_url">'.$opts[CURLOPT_URL].'</span></div>'
+        .'<div class="naLogEntry_header"><span class="naLogHeader_title">Database Query</span><br/><span class="naLogHeader_datetime">'.$date.'</span><br/><span class="naLogHeader_url">'.$opts[CURLOPT_URL].'</span></div>'
         .'<div class="naLogHeader_curlOptions" style="display:flex;align-items:center;">'.$this->buttonExpand().'curl options</div>'
         .'<div id="expandData_'.($_SESSION['dbgNum']-1).'" class="naLogCurlOptions">'
         .$dbgOpts

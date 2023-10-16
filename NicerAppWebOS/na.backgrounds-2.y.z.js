@@ -214,7 +214,6 @@ na.backgrounds = {
                     na.site.saveTheme();
                 }*/
                 if (saveTheme) {
-                    debugger;
                     na.site.saveTheme();
                 }
 

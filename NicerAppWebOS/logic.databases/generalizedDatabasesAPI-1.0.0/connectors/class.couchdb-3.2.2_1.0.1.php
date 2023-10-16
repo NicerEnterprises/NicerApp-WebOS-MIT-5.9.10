@@ -195,6 +195,7 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
             if (
                 $this->translate_plainUserName_to_couchdbUserName($username1)===$username
                 || $username1===$username
+                || $username==='admin'
             ) {
                //echo '<pre>'.$this->translate_plainUserName_to_couchdbUserName($username1).'==='.$username.'</pre>';
                 $g = [];
@@ -540,8 +541,8 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
         echo 'Created database '.$dataSetName.'<br/>';
     }
 
-    public function createDataSet_cms_tree___user___administrator() {
-        $dataSetName = $this->dataSetName('cms_tree___user___administrator');
+    public function createDataSet_cms_tree___user___administrator($un1) {
+        $dataSetName = $this->dataSetName('cms_tree___user___'.$un1);
         try { $this->cdb->deleteDatabase ($dataSetName); } catch (Exception $e) { };
         $this->cdb->setDatabase($dataSetName, true);
         try { 
@@ -815,26 +816,7 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
             'index' => [
                 //'fields' => [ '_id', 'lastUsed', 'app', 'user', 'role', 'view', 'theme', 'url', 'themeSettings', 'apps', 'background', 'backgroundSearchKey', 'textBackgroundOpacity', 'changeBackgroundsAutomatically', 'backgroundChange_hours', 'backgroundChange_minutes']
                 //'fields' => [ '_id', 'lastUsed', 'app', 'user', 'role', 'view', 'theme', 'url', 'ip', 'specificityName']
-                'fields' => [
-                    "_id",
-                    "user",
-                    "view",
-                    "role",
-                    "lastUsed",
-                    "theme",
-                    "url",
-                    "themeSettings",
-                    "app",
-                    "apps",
-                    "background",
-                    "backgroundSearchKey",
-                    "textBackgroundOpacity",
-                    "changeBackgroundsAutomatically",
-                    "backgroundChange_hours",
-                    "backgroundChange_minutes",
-                    "specificityName",
-                    "ip"
-                ]
+                'fields' => [ 'user', 'view', 'role', 'lastUsed', 'theme', 'url', 'themeSettings', 'apps', 'background', 'backgroundSearchKey', 'textBackgroundOpacity', 'changeBackgroundsAutomatically', 'backgroundChange_hours', 'backgroundChange_minutes' ]
             ],
             'name' => 'sortIndex',
             'type' => 'json'
@@ -969,7 +951,7 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
 
         $rec = [
             'index' => [
-                'fields' => [ ['lastUsed'] ]
+                'fields' => [ 'user', 'view', 'role', 'lastUsed', 'theme', 'url', 'themeSettings', 'apps', 'background', 'backgroundSearchKey', 'textBackgroundOpacity', 'changeBackgroundsAutomatically', 'backgroundChange_hours', 'backgroundChange_minutes' ]
             ],
             'name' => 'sortIndex',
             'type' => 'json'

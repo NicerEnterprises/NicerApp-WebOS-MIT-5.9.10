@@ -39,10 +39,10 @@ $dbs = [
     'views',
     'cms_tree',
     'cms_tree___role___guests',
-    'cms_tree___user___'.$un1,
+    'cms_tree___user___administrator___'.$un1,
     'cms_tree___user___guest',
     'cms_documents___role___guests',
-    'cms_documents___user___'.$un1,
+    'cms_documents___user___administrator___'.$un1,
     'cms_documents___user___guest',
     'themes',
     'api_wallpaperscraper__plugin_bingImages',
@@ -66,10 +66,10 @@ $dbsReset = [
     'views',
     'cms_tree',
     'cms_tree___role___guests',
-    'cms_tree___user___'.$un1,
+    'cms_tree___user___administrator___'.$un1,
     'cms_tree___user___guest',
     'cms_documents___role___guests',
-    'cms_documents___user___'.$un1,
+    'cms_documents___user___administrator___'.$un1,
     'cms_documents___user___guest',
     'themes',
     'api_wallpaperscraper__plugin_bingImages',
@@ -156,10 +156,10 @@ if (mustDo('cms')) {
     $dbs = goDo ($dbs, [
         'cms_tree',
         'cms_tree___role___guests',
-        'cms_tree___user___'.$un1,
+        'cms_tree___user___administrator___'.$un1,
         'cms_tree___user___guest',
         'cms_documents___role___guests',
-        'cms_documents___user___'.$un1,
+        'cms_documents___user___administrator___'.$un1,
         'cms_documents___user___guest'
     ]);
 };
