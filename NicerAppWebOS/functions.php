@@ -161,7 +161,7 @@ function mainErrorHandler ($errno, $errstr, $errfile, $errline) {
 
 
     //trigger_error (json_encode(debug_backtrace()), E_USER_NOTICE);
-    $dbg = [
+    /*$dbg = [
         'errno' => $errno,
         'errstr' => $errstr,
         'errfile' => $errfile,
@@ -170,7 +170,7 @@ function mainErrorHandler ($errno, $errstr, $errfile, $errline) {
     { echo '<pre style="color:white;background:rgba(255,0,0,0.8);border-radius:10px;padding:8px;box-shadow:inset 1px 1px 3px 2px rgba(0,0,0,0.7), 2px 2px 2px 1px rgba(0,0,0,0.8);">'; echo json_encode($dbg, JSON_PRETTY_PRINT);
         { echo '<pre style="color:white;background:rgba(50,0,0,0.5);border-radius:10px;padding:8px;box-shadow:inset 1px 1px 3px 2px rgba(0,0,0,0.7), 2px 2px 2px 1px rgba(0,0,0,0.8);">'; echo json_encode(debug_backtrace(), JSON_PRETTY_PRINT); echo '</pre>'; }
         echo '</pre>';
-    }
+    }*/
 
 
 

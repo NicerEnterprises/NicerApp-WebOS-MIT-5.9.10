@@ -189,11 +189,8 @@ class class_NicerAppWebOS_log {
             .'</pre>'.PHP_EOL;
 
         if (
-            isset($naWebOS)
-            && session_status() === PHP_SESSION_ACTIVE
+            session_status() === PHP_SESSION_ACTIVE
             && isset($_SESSION['na_error_log_filepath_html'])
-            && is_object($naWebOS->dbs)
-            && $naWebOS->dbs->findConnection('couchdb')->username=='said_by___Rene__AJM__Veerman'
         ) {
             foreach ($entries as $entryIdx => $entry) {
                 $it = $entry['ENTRY:add_PHPerror'];

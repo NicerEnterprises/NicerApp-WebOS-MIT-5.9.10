@@ -99,18 +99,6 @@ NicerApp WCS (Website Control System) from Nicer Enterprises
         }
 
         if ($_SERVER['SCRIPT_NAME']=='/NicerAppWebOS/index.php') {
-            $_SESSION['started'] = microtime(true);
-            $_SESSION['dbgNum'] = 0;
-            $_SESSION['dbgNum2'] = 0;
-
-            $_SESSION['logsInitialized'] = false;
-            $_SESSION[SEID] = [];
-            $_SESSION['naWebOS_errors_startup'] = [];
-
-            // outdated?
-            $_SESSION['naErrors'] = [];
-            $_SESSION['naErrors_startup'] = [];
-            $_SESSION['naErrors_js'] = [ 'bootup' => [] ];
         }
     }
     
@@ -135,7 +123,7 @@ NicerApp WCS (Website Control System) from Nicer Enterprises
     }
     if ($_SERVER['SCRIPT_NAME']=='/NicerAppWebOS/index.php') {
         $now = DateTime::createFromFormat('U.u', $_SESSION['started']);
-        $now->setTimezone(new DateTimeZone(system('date +%z')));
+        $now->setTimezone(new DateTimeZone(exec('date +%z')));
         //$date = $now->format("Y-m-d_H:i:s.u");
         $date = $now->format("Y-m-d_H:i:s_").str_replace('+','plus',preg_replace('/.*\s/','',date(DATE_RFC2822)));
         $_SESSION['na_error_log_filepath_html'] =
@@ -144,6 +132,20 @@ NicerApp WCS (Website Control System) from Nicer Enterprises
         $_SESSION['na_error_log_filepath_txt'] =
             '/var/www/'.$naWebOS->domain.'/NicerAppWebOS/siteLogs/'
             .$naIP.'-'.$date.'.txt';
+            $_SESSION['started'] = microtime(true);
+            $_SESSION['dbgNum'] = 0;
+            $_SESSION['dbgNum2'] = 0;
+
+        trigger_error ('SESSION RESET', E_USER_NOTICE);
+
+        $_SESSION['logsInitialized'] = false;
+        $_SESSION[SEID] = [];
+        $_SESSION['naWebOS_errors_startup'] = [];
+
+        // outdated?
+        $_SESSION['naErrors'] = [];
+        $_SESSION['naErrors_startup'] = [];
+        $_SESSION['naErrors_js'] = [ 'bootup' => [] ];
     }
     //echo '<pre>'; var_dump ($_SERVER); die();
 

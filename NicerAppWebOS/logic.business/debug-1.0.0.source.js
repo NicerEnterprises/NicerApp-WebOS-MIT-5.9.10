@@ -20,6 +20,8 @@ $(document).ready(function() {
 
 });
 function scrollParentToChild(parent, child) {
+// thanks go to https://stackoverflow.com/questions/45408920/plain-javascript-scrollintoview-inside-div
+// for providing this function.
 
   // Where is the parent on page
   var parentRect = parent.getBoundingClientRect();
