@@ -271,7 +271,7 @@ class SagCURLHTTPAdapter extends SagHTTPAdapter {
       'expand_'.$_SESSION['dbgNum'],
       'vividButton_icon_50x50', '_50x50', 'grouped',
       '',
-      'if (!$(this).is(\'.disabled\')) { var $el = $(\'#expandData_'.$_SESSION['dbgNum'].'\'), $el2 = $(\'#entry_'.$_SESSION['dbgNum2'].'\'), $btn = $(\'#expand_'.$_SESSION['dbgNum'].'\'); if ($el.css(\'display\')==\'none\') { $(\'.vividButton_icon_imgButtonIcon_50x50\', $btn)[0].src = \'/NicerAppWebOS/siteMedia/btnCheckmark_green.png\'; $el2.animate({width:\'98%\'}); $el.slideDown(); window.location.hash=\''.$_SESSION['dbgNum2'].'\'; setTimeout (function() {            scrollParentToChild($(\'#siteContent .vividScrollpane\')[0], $el2[0]); }, 1250); } else { $(\'.vividButton_icon_imgButtonIcon_50x50\', $btn)[0].src = \'/NicerAppWebOS/siteMedia/btnPlus.png\'; $el2.animate({ width : $(window).width() / 4 }); $el.slideUp(); window.location.hash = \'\'; }}',
+      'if (!$(this).is(\'.disabled\')) { var $el = $(\'#expandData_'.$_SESSION['dbgNum'].'\'), $el2 = $(\'#entry_'.$_SESSION['dbgNum2'].'\'), $btn = $(\'#expand_'.$_SESSION['dbgNum'].'\'); if ($el.css(\'display\')==\'none\') { $(\'.vividButton_icon_imgButtonIcon_50x50\', $btn)[0].src = \'/NicerAppWebOS/siteMedia/btnCheckmark_green.png\'; $el2.addClass(\'naLogEntry_read\');/*.animate({width:\'98%\'});*/ $el.slideDown(); window.location.hash=\''.$_SESSION['dbgNum2'].'\'; setTimeout (function() {            scrollParentToChild($(\'#siteContent .vividScrollpane\')[0], $el2[0]); }, 1250); } else { $(\'.vividButton_icon_imgButtonIcon_50x50\', $btn)[0].src = \'/NicerAppWebOS/siteMedia/btnPlus.png\'; $el2.animate({ width : ($(window).width() - 200) / 2 }); $el.slideUp(); window.location.hash = \'\'; }}',
       '',
       '',
 

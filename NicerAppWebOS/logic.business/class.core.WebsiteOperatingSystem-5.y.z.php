@@ -1412,6 +1412,8 @@ class NicerAppWebOS {
                                 */
 
                             'li.todoList > div' => 'naHS_l0_out',
+                            '.todoList.active' => 'naHS_l0_in',
+                            '.todoList.in-active' => 'naHS_l0_out',
                             '.todoList_l1 > li > div.active' => 'naHS_l1_in',
                             '.todoList_l1 > li > div' => 'naHS_l1_out',
                             '.todoList_l2 > li > div.active' => 'naHS_l2_in',

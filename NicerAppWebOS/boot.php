@@ -123,21 +123,27 @@ NicerApp WCS (Website Control System) from Nicer Enterprises
     }
     if ($_SERVER['SCRIPT_NAME']=='/NicerAppWebOS/index.php') {
         $_SESSION['started'] = microtime(true);
+
         $now = DateTime::createFromFormat('U.u', $_SESSION['started']);
         $now->setTimezone(new DateTimeZone(exec('date +%z')));
         //$date = $now->format("Y-m-d_H:i:s.u");
-        $date = $now->format("Y-m-d_H:i:s_").str_replace('+','plus',preg_replace('/.*\s/','',date(DATE_RFC2822)));
+        $date =
+            $now->format("Y-m-d_H:i:s_")
+            .str_replace(
+                '+','plus',
+                preg_replace('/.*\s/','',date(DATE_RFC2822))
+            );
+
         $_SESSION['na_error_log_filepath_html'] =
             '/var/www/'.$naWebOS->domain.'/NicerAppWebOS/siteLogs/'
             .$naIP.'-'.$date.'.html';
         $_SESSION['na_error_log_filepath_txt'] =
             '/var/www/'.$naWebOS->domain.'/NicerAppWebOS/siteLogs/'
             .$naIP.'-'.$date.'.txt';
-            $_SESSION['started'] = microtime(true);
-            $_SESSION['dbgNum'] = 0;
-            $_SESSION['dbgNum2'] = 0;
 
-        trigger_error ('SESSION RESET', E_USER_NOTICE);
+        $_SESSION['dbgNum'] = 0;
+        $_SESSION['dbgNum2'] = 0;
+
 
         $_SESSION['logsInitialized'] = false;
         $_SESSION[SEID] = [];
@@ -148,6 +154,14 @@ NicerApp WCS (Website Control System) from Nicer Enterprises
         $_SESSION['naErrors_startup'] = [];
         $_SESSION['naErrors_js'] = [ 'bootup' => [] ];
     }
+
+    $dbg = [
+        '$_SERVER' => $_SERVER,
+        '$_GET' => $_GET,
+        '$_POST' => $_POST,
+        '$naWebOS->view' => $naWebOS->view
+    ];
+    trigger_error ('NEW REQUEST : $dbg=<pre class="naLogHeader_newRequest">'.json_encode($dbg, JSON_PRETTY_PRINT).'</pre>', E_USER_NOTICE);
     //echo '<pre>'; var_dump ($_SERVER); die();
 
     $lanConfigFilepath = realpath(dirname(__FILE__)).'/domainConfigs/'.$naWebOS->domain.'/naLAN.json';

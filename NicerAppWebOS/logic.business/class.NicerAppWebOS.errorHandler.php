@@ -230,7 +230,7 @@ class class_NicerAppWebOS__errorHandler {
 
             switch ($returnType) {
                 case 'html' :
-                    $html .= '\t\t\t<div class="backtraceItem">'.PHP_EOL;
+                    $html .= "\t\t\t<div class=\"backtraceItem\">".PHP_EOL;
                     if (array_key_exists('class', $it) && $it['class']!=='') {
                         $html .=
                             "\t\t\t\t".'<span class="backtraceCodeLocation">'.PHP_EOL

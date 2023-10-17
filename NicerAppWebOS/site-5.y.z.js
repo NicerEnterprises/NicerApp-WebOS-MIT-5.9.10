@@ -80,6 +80,8 @@ na.site = {
         );
 
 
+        $('p, h1, h2, h3').addClass('todoList');
+
         /*if ($('#siteToolbarTop > .vividDialogContent').html().trim()==='{$div_siteToolbarTop}') {
             na.d.s.visibleDivs.remove('#siteToolbarTop'); $.cookie('visible_siteToolbarTop','', na.m.cookieOptions());
         } else {
@@ -465,7 +467,8 @@ na.site = {
                         */
                         startLogo('neCompanyLogo', 'countryOfOriginColors');
                         na.site.bindTodoListAnimations (
-                            '.todoList > li, '
+                            '.todoList, '
+                            +'.todoList > li, '
                             +'.todoList > li > div, '
                             +'.todoList > li > pre, '
                             +'.todoList_l1 > li, '
@@ -503,7 +506,8 @@ na.site = {
                     */
                     startLogo('neCompanyLogo', 'countryOfOriginColors');
                     na.site.bindTodoListAnimations (
-                        '.todoList > li, '
+                        '.todoList, '
+                        +'.todoList > li, '
                         +'.todoList > li > div, '
                         +'.todoList > li > pre, '
                         +'.todoList_l1 > li, '
