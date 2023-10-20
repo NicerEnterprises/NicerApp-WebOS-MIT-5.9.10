@@ -11,6 +11,7 @@ na.site = {
     },
     
     globals : {
+        background : '/NicerAppWebOS/siteMedia/backgrounds/tiled/grey/seamless_texture_of_ice.jpg',
         debug : {
             backgroundChanges : false
         },
@@ -3046,7 +3047,7 @@ onclick_btnFullResetOfAllThemes : function (event) {
         });
     },
 
-    loadTheme : function (callback, theme, doGetPageSpecificSettings, doSwitchSpecificities, specificityName) {
+    loadTheme : function (callback, theme, doGetPageSpecificSettings, doSwitchSpecificities, specificityName, loadBackground) {
         var 
         fncn = 'na.site.loadTheme(callback,theme)',
         s = na.te.settings.current.specificity,
@@ -3076,10 +3077,10 @@ onclick_btnFullResetOfAllThemes : function (event) {
         debugger;
         if (doGetPageSpecificSettings) {
             na.site.loadTheme_doGetPageSpecificSettings (function() {
-                na.site.loadTheme_do (callback, theme, specificityName);
+                na.site.loadTheme_do (callback, theme, specificityName, loadBackground);
             }, doSwitchSpecificities);
         } else {
-            na.site.loadTheme_do (callback, theme, specificityName);
+            na.site.loadTheme_do (callback, theme, specificityName, loadBackground);
         };
     },
     loadTheme_initializeExtras : function () {
@@ -3146,7 +3147,7 @@ onclick_btnFullResetOfAllThemes : function (event) {
         //}, 250);
     },
 
-    loadTheme_do : function (callback, theme, specificityName) {
+    loadTheme_do : function (callback, theme, specificityName, loadBackground) {
         var
         fncn = 'na.site.loadTheme_do(callback,theme)',
         s = na.te.settings.current.specificity,
@@ -3245,7 +3246,7 @@ onclick_btnFullResetOfAllThemes : function (event) {
                     break;
                 };*/
                 //na.site.setSpecificity (true);
-                na.site.loadTheme_applySettings (dat, callback);
+                na.site.loadTheme_applySettings (dat, callback, loadBackground);
                 //na.te.onload('siteContent');
             },
             error : function (xhr, textStatus, errorThrown) {
@@ -3306,6 +3307,13 @@ onclick_btnFullResetOfAllThemes : function (event) {
                 '#siteBackground',
                 na.site.globals.backgroundSearchKey,
                 dat.background,
+                false
+            );
+        } else if (loadBackground && !dat.background /*&& dat.background!==na.site.globals.background*/) { /* doesn't jive with na.site.loadContent() */
+            na.backgrounds.next (
+                '#siteBackground',
+                na.site.globals.backgroundSearchKey,
+                na.site.globals.background,
                 false
             );
         }
@@ -3496,7 +3504,7 @@ onclick_btnFullResetOfAllThemes : function (event) {
         if (typeof callback=='function') callback(true);
     },
     
-    saveTheme : function (callback, theme) {
+    saveTheme : function (callback, theme, loadBackground) {
         var 
         fncn = 'na.site.saveTheme(callback,theme)',
         s = na.themeEditor.settings.current.specificity,
