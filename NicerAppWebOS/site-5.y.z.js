@@ -3257,11 +3257,12 @@ onclick_btnFullResetOfAllThemes : function (event) {
         $.ajax(ac);
     },
 
-    loadTheme_applySettings : function (dat, callback) {
+    loadTheme_applySettings : function (dat, callback, loadBackground) {
         if (!dat) {
             na.m.log (1, 'Error : loadTheme_applySettings() called with dat=undefined/false', false);
             return false;
         };
+        if (typeof loadBackground=='undefined') loadBackground = true;
         //if (dat.specificityName) {
             $('.na_themes_dropdown__specificity > .vividDropDownBox_selector > div')
                 .removeClass('selected')
@@ -3300,7 +3301,7 @@ onclick_btnFullResetOfAllThemes : function (event) {
 
         }
 
-        if (dat.background /*&& dat.background!==na.site.globals.background*/) { /* doesn't jive with na.site.loadContent() */
+        if (loadBackground && dat.background /*&& dat.background!==na.site.globals.background*/) { /* doesn't jive with na.site.loadContent() */
             na.backgrounds.next (
                 '#siteBackground',
                 na.site.globals.backgroundSearchKey,
@@ -3581,7 +3582,7 @@ onclick_btnFullResetOfAllThemes : function (event) {
             }*/
 
             themeData = na.site.loadTheme_fetchDialogs(themeData);
-            na.site.loadTheme_applySettings (themeData); // apply changes in setTimeout() for backgroundChangeInterval
+            na.site.loadTheme_applySettings (themeData, null, false); // apply theme changes, all except .background in this case.
             na.site.globals.themes[na.site.globals.themeName] = $.extend({}, themeData);
             
             // ENCAPSULATE (ENCODE) json objects for HTTP transport
