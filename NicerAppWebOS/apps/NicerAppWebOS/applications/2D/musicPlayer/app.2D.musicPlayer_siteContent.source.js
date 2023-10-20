@@ -557,7 +557,7 @@ na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/musicPlayer'] 
                     }
                 });
 
-                na.site.loadTheme_applySettings(na.site.globals.themes[na.site.globals.themeName]);
+                na.site.loadTheme_applySettings(na.site.globals.themes[na.site.globals.themeName], null, false);
 
                 return dragged;
 			}

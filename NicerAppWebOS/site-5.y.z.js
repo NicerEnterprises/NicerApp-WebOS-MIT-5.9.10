@@ -1603,7 +1603,7 @@ onclick_btnFullResetOfAllThemes : function (event) {
             }
         });
         lcc.ec.events.push(naEventData);
-
+debugger;
         var useTimeouts = false;
         na.site.settings.current.running_loadTheme = true;
         na.site.settings.current.running_loadContent = true;
@@ -1616,6 +1616,7 @@ onclick_btnFullResetOfAllThemes : function (event) {
                             { initializeApps : [na.m.newEventFunction(na.site.initializeApps, { dat : dat })] },
                             { resizeApps : [na.m.newEventFunction(function() {
                                 na.m.waitForCondition ('loadContent_displayContent : na.m.HTMLidle() && !na.site.settings.current.running_loadContent?', function () { return na.m.HTMLidle() && !na.site.settings.current.loadingApps}, function () {
+                                    debugger;
                                     na.site.resizeApps();
                                     na.site.settings.current.running_loadContent = false;
                                 }, 100);
@@ -1888,7 +1889,10 @@ onclick_btnFullResetOfAllThemes : function (event) {
                     }
                 };
                 
-                if (c.divsInitializing.length === 0) c.startingApps = false;
+                if (c.divsInitializing.length === 0) {
+                    c.startingApps = false;
+                    c.loadingApps = false;
+                }
             }, 
         100);
         return false;
@@ -3053,6 +3057,7 @@ onclick_btnFullResetOfAllThemes : function (event) {
         s = na.te.settings.current.specificity,
         u = na.site.settings.current.url,
         apps = na.site.globals.app;
+        debugger;
 
         if (typeof specificityName=='undefined') specificityName = na.site.globals.specificityName;
 
@@ -3302,6 +3307,7 @@ onclick_btnFullResetOfAllThemes : function (event) {
 
         }
 
+        debugger;
         if (loadBackground && dat.background /*&& dat.background!==na.site.globals.background*/) { /* doesn't jive with na.site.loadContent() */
             na.backgrounds.next (
                 '#siteBackground',
