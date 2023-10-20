@@ -1145,26 +1145,23 @@ na.te = na.themeEditor = {
     themeSelected : function (evt) {
         var
         //theme = $(evt.currentTarget).html();
-        theme = na.site.globals.themeName;
-debugger;
+        themeName = na.site.globals.themeName;
         //$('#themeName').val(theme);
+
         na.site.saveTheme(function() {
             var
             theme = $('.na_themes_dropdown__themes > .vividDropDownBox_selected').html();
-
 
             setTimeout (function(theme) {
                 na.site.loadTheme(function() {
                     var btn = $('#'+na.te.s.c.selectedButtonID)[0];
                     if (btn) na.te.onclick(btn, false);
+
                     na.te.s.c.selectedThemeName = theme;
                     na.site.globals.themeName = theme;
                 }, theme, true);
-
-
             }, 100, theme);
-
-        },theme);
+        },themeName);
     },
     deleteTheme : function (event) {
         var
