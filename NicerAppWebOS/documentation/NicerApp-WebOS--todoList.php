@@ -9,21 +9,23 @@
 
 <ol class="todoList">
 
-<li class="todoList"><div>
-<ul class="todoList_l1">
-    <li class="todoList_l1"><div>Versions 3.y.z and lower : Increasingly stylish, and compatible with older browsers, but in terms of core code quite bulky and slow.</li>
-    <li class="todoList_l1"><div>4.0.0 : complete rewrite of the version 3.Y.Z, much faster startup times.</li>
-    <li class="todoList_l1"><div>4.1.0 : added many of the apps of the v3.Y.Z back in (tarot, music player, news, etc).</li>
-    <li class="todoList_l1"><div>4.1.1 : vertical roots for vividMenu added.</li>
-    <li class="todoList_l1"><div>4.2.0 : webmail functionality finished but not including an editor for the config settings yet (as these have to be stored encrypted, and i have no way of doing that yet).</li>
-    <li class="todoList_l1"><div>4.2.1 : many small improvements and additions to apps/nicer.app</li>
-    <li class="todoList_l1"><div>4.3.0 : made vividButton's (text version) height fit to the text placed in the vividButton, made the top menu bar *completely* resolution independent.</li>
-    <li class="todoList_l1"><div>5.0.0 : bugfixes and efficiency improvements in the core code
-        <ul class="todoList_l2">
-        <li class="todoList_l2"><div>Lots of changes and standarization of the entire code convention or naming structure for variables, Server-side PHP class names, Browser-side Javascript root level objects, and all the other root-level variable names used in NicerApp WebOS</li>
+    <li class="todoList"><div>
+        <ul class="todoList_l1">
+            <li class="todoList_l1"><div>Versions 3.y.z and lower : Increasingly stylish, and compatible with older browsers, but in terms of core code quite bulky and slow.</li>
+            <li class="todoList_l1"><div>4.0.0 : complete rewrite of the version 3.Y.Z, much faster startup times.</li>
+            <li class="todoList_l1"><div>4.1.0 : added many of the apps of the v3.Y.Z back in (tarot, music player, news, etc).</li>
+            <li class="todoList_l1"><div>4.1.1 : vertical roots for vividMenu added.</li>
+            <li class="todoList_l1"><div>4.2.0 : webmail functionality finished but not including an editor for the config settings yet (as these have to be stored encrypted, and i have no way of doing that yet).</li>
+            <li class="todoList_l1"><div>4.2.1 : many small improvements and additions to apps/nicer.app</li>
+            <li class="todoList_l1"><div>4.3.0 : made vividButton's (text version) height fit to the text placed in the vividButton, made the top menu bar *completely* resolution independent.</li>
+            <li class="todoList_l1"><div>5.0.0 : bugfixes and efficiency improvements in the core code
+                <ul class="todoList_l2">
+                <li class="todoList_l2"><div>Lots of changes and standarization of the entire code convention or naming structure for variables, Server-side PHP class names, Browser-side Javascript root level objects, and all the other root-level variable names used in NicerApp WebOS</li>
+                </ul>
+            </li>
         </ul>
+        </div>
     </li>
-</ul>
 
     <li class="todoList"><div>(DONE) (2021-2022) Create a Theme Editor.</div></li>
 
@@ -51,18 +53,24 @@
 
     <li class="todoList"><div>(DONE) (2023) Build an extension of the Sag library that i'm using for communication between PHP and couchdb that allows one to log database calls and view them with /NicerAppWebOS/logs.php</div></li>
 
-    <li class="todoList"><div>(CURRENT) (2023) Allow users (and Guests) to specify which theme a new end-user should initially see for a page managed by them on a NicerApp website.</div></li>
+    <li class="todoList"><div>(DONE) (2023) Allow users (and Guests) to specify which theme a new end-user should initially see for a page managed by them on a NicerApp website.</div></li>
 
-    <li class="todoList"><div>(CURRENT) (2023 Oct) Upgrade the blogging features.</div></li>
-
-    <li class="todoList"><div>(2023 Nov) Fix the final bugs in vividMenu.</div></li>
-
-    <li class="todoList"><div>(STALLED) Create a custom HTML WYSIWYG rich-text editor component of my own, that ties into the UWTE.<br/>
-    This is stalled because browser makers need to start supporting a window.getSelection() that returns a .anchorOffset and .extentOffset that works on the .innerHTML instead of the .innerText of any given element (usually the .commonAncestorElement).
+    <li class="todoList"><div>(CURRENT) (2023 Oct,Nov,Dec) Upgrade the blogging features.
         <ol class="todoList_l1">
-            <li class="todoList_l1"><div>supply data from a HTML+CSS form into <a href="https://github.com/NicerEnterprises/NicerApp-WebOS/blob/main/NicerAppWebOS/logic.business/class.core.WebsiteOperatingSystem-5.y.z.php#L1353" class="noPushState" target="naGH_wos1088">css_keyframes_to_array() and css_animation_template_to_animation()</a>.</div></li>
+            <li class="todoList_l1"><div>(STALLED) Create a custom HTML WYSIWYG rich-text editor component of my own, that ties into the UWTE.<br/>
+            This is stalled because browser makers need to start supporting a window.getSelection() that returns a .anchorOffset and .extentOffset that works on the .innerHTML instead of the .innerText of any given element (usually the .commonAncestorElement).
+                <ol class="todoList_l2">
+                    <li class="todoList_l2"><div>supply data from a HTML+CSS form into <a href="https://github.com/NicerEnterprises/NicerApp-WebOS/blob/main/NicerAppWebOS/logic.business/class.core.WebsiteOperatingSystem-5.y.z.php#L1353" class="noPushState" target="naGH_wos1088">css_keyframes_to_array() and css_animation_template_to_animation()</a>.</div></li>
+                </ol>
+            </div></li>
         </ol>
-    </li>
+
+    </div></li>
+
+    <li class="todoList"><div>(CURRENT) (2023 Oct,Nov,Dec) Fix the final bugs in vividMenu.</div></li>
+
+    <li class="todoList"><div>(CURRENT) (2023 Oct,Nov,Dec) Fix any final bugs in the Theme Editor (none known at this time).</div></li>
+
 
     <li class="todoList"><div>Add a checkbox in the Theme Editor to select backgrounds and stretch instead of tile them for any DIV.</div></li>
 
@@ -82,11 +90,11 @@
     <li class="todoList"><div>Restore the automatic retrieval of new backgrounds download routines for nicerapp via free to use methods of delivery at Google image search and (TODO :)Bing image search.</div></li>
 
     <li class="todoList">
-<div><pre class="todoList">
-rewrite the backgrounds analysis and automatic resizing routines;
-- put all of the backgrounds in a DOMAIN_TLD___backgrounds dataSet with relative filepath (starting at siteMedia/backgrounds) and image size.
-- let users search for backgrounds based on filepath, then save those searches in their account settings and make them viewable as photoalbums.
-</pre></div>
+    <div><pre class="todoList">
+    rewrite the backgrounds analysis and automatic resizing routines;
+    - put all of the backgrounds in a DOMAIN_TLD___backgrounds dataSet with relative filepath (starting at siteMedia/backgrounds) and image size.
+    - let users search for backgrounds based on filepath, then save those searches in their account settings and make them viewable as photoalbums.
+    </pre></div>
     </li>
 
 
