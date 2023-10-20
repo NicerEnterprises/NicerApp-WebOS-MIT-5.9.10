@@ -63,13 +63,14 @@
                     <li class="todoList_l2"><div>supply data from a HTML+CSS form into <a href="https://github.com/NicerEnterprises/NicerApp-WebOS/blob/main/NicerAppWebOS/logic.business/class.core.WebsiteOperatingSystem-5.y.z.php#L1353" class="noPushState" target="naGH_wos1088">css_keyframes_to_array() and css_animation_template_to_animation()</a>.</div></li>
                 </ol>
             </div></li>
+
+            <li class="todoList_l1"><div>(CURRENT) (2023 Oct,Nov,Dec) Fix the final bugs in vividMenu.</div></li>
+
+            <li class="todoList_l1"><div>(CURRENT) (2023 Oct,Nov,Dec) Fix any final bugs in the Theme Editor (none known at this time).</div></li>
         </ol>
 
     </div></li>
 
-    <li class="todoList"><div>(CURRENT) (2023 Oct,Nov,Dec) Fix the final bugs in vividMenu.</div></li>
-
-    <li class="todoList"><div>(CURRENT) (2023 Oct,Nov,Dec) Fix any final bugs in the Theme Editor (none known at this time).</div></li>
 
 
     <li class="todoList"><div>Add a checkbox in the Theme Editor to select backgrounds and stretch instead of tile them for any DIV.</div></li>
