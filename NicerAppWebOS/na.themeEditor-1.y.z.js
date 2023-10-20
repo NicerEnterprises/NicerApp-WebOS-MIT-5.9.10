@@ -1017,6 +1017,7 @@ na.te = na.themeEditor = {
         if (idx) {
            var s = na.te.s.c.specificity = na.site.globals.themesDBkeys[idx];
            na.site.globals.themeSpecificityName = sn;
+           na.site.globals.themeName = s.themeName;
             if (!s || (!s.role && !s.user)) {
                 na.site.settings.buttons['#btnDeleteSpecificity'].disable();
             } else {
@@ -1026,7 +1027,7 @@ na.te = na.themeEditor = {
             na.site.loadTheme (function () { // **POSSIBLY** NOT NEEDED
                 var btn = $('#'+na.te.s.c.selectedButtonID)[0];
                 if (btn) na.te.onclick(btn, false);
-            }, null, true);
+            }, s.themeName, true);
 
             na.site.setSiteLoginLogout();
         }
@@ -1145,7 +1146,7 @@ na.te = na.themeEditor = {
         var
         //theme = $(evt.currentTarget).html();
         theme = na.site.globals.themeName;
-
+debugger;
         //$('#themeName').val(theme);
         na.site.saveTheme(function() {
             var
@@ -1156,10 +1157,10 @@ na.te = na.themeEditor = {
                 na.site.loadTheme(function() {
                     var btn = $('#'+na.te.s.c.selectedButtonID)[0];
                     if (btn) na.te.onclick(btn, false);
-                }, theme, na.site.globals.themeName!==theme);
+                    na.te.s.c.selectedThemeName = theme;
+                    na.site.globals.themeName = theme;
+                }, theme, true);
 
-                na.te.s.c.selectedThemeName = theme;
-                na.site.globals.themeName = theme;
 
             }, 100, theme);
 
