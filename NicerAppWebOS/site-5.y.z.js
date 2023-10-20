@@ -3581,7 +3581,7 @@ onclick_btnFullResetOfAllThemes : function (event) {
             }*/
 
             themeData = na.site.loadTheme_fetchDialogs(themeData);
-            //na.site.loadTheme_applySettings (themeData); // apply changes in setTimeout() for backgroundChangeInterval
+            na.site.loadTheme_applySettings (themeData); // apply changes in setTimeout() for backgroundChangeInterval
             na.site.globals.themes[na.site.globals.themeName] = $.extend({}, themeData);
             
             // ENCAPSULATE (ENCODE) json objects for HTTP transport
