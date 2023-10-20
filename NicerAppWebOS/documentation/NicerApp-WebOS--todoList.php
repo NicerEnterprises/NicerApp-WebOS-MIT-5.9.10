@@ -46,9 +46,6 @@
 
     <li class="todoList"><div>(DONE) (2023 July) Transform the Theme Editor (that was restricted to NicerApp vividDialogs) into a Universal Web Theme Editor that can work on any HTML selector.</div></li>
 
-    <li class="todoList"><div>(DONE) Establish a proper permissions system and add users and groups editing capabilities to <a href="/cms" class="nomod noPushState contentSectionTitle3_a" target="_new"><span class="contentSectionTitle3_span">/cms</span></a> and the Theme Editor.<br/>
-    The last thing you wanna do in software development is replicate other people's work that you can work with (or <a href="https://github.com/apache/couchdb/pull/4139" class="nomod noPushState contentSectionTitle2_a" target="_new"><span class="contentSectionTitle2_span">soon</span></a> can), but since i was advised by the couchdb developers on 2023-06-30 to "not wait for implementation of this functionality by couchdb staff", i'll go ahead and work on implementing these per-doc permissions features in my own new PHP business logic that sits between the PHP 'Sag' library and the rest of my database PHP business logic, as a plugin.</div></li>
-
     <li class="todoList"><div>(DONE) Configure my LAN to do full backups every few hours of both the nicer.app and said.by data and databases.</div></li>
 
     <li class="todoList"><div>(DONE) (2023) Build an extension of the Sag library that i'm using for communication between PHP and couchdb that allows one to log database calls and view them with /NicerAppWebOS/logs.php</div></li>
