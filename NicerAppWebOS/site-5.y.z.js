@@ -3098,7 +3098,7 @@ onclick_btnFullResetOfAllThemes : function (event) {
             na.site.globals.themes.default.themeSettings.Extras = {
                 'texts' : {
                     'css' : {
-                        '#siteContent > .vividDialogContent > li > a, p:not(.backdropped), h1:not(.backdropped), h2:not(.backdropped), h3:not(.backdropped)' : { opacity : na.site.globals.themes[themeID].textBackgroundOpacity, backgroundClip:'text' },
+                        '#siteContent > .vividDialogContent > li > a, p:not(.backdropped, .vividTextCSS), h1:not(.backdropped, .vividTextCSS), h2:not(.backdropped, .vividTextCSS), h3:not(.backdropped, .vividTextCSS)' : { opacity : na.site.globals.themes[themeID].textBackgroundOpacity, backgroundClip:'text' },
                         '#siteContent .newsApp__item__outer p' : { opacity : 1, backgroundClip:'none' }
                     }
                 },
@@ -3656,7 +3656,8 @@ onclick_btnFullResetOfAllThemes : function (event) {
                 appDialogName = m[2];
                 if (!themeData.themeSettings['Apps'][appName])
                     themeData.themeSettings['Apps'][appName] = { css : {} };
-                if (!themeData.themeSettings['Apps'][appName]['css'][divSel])
+                //if (!themeData.themeSettings['Apps'][appName]['css'][divSel])
+                themeData.themeSettings['Apps'][appName]['css'] =
                     $.extend( themeData.themeSettings['Apps'][appName]['css'], na.site.fetchTheme(divSel) );
             }
         };
