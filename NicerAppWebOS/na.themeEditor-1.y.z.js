@@ -775,7 +775,6 @@ na.te = na.themeEditor = {
                     },
                     type : type
                 });
-                debugger;
                 for (var cssText in value) {
                     if (cssText.match(/\> .vdBackground/)) continue;
                     var vdata = value[cssText].css;
@@ -1027,7 +1026,7 @@ na.te = na.themeEditor = {
             na.site.loadTheme (function () { // **POSSIBLY** NOT NEEDED
                 var btn = $('#'+na.te.s.c.selectedButtonID)[0];
                 if (btn) na.te.onclick(btn, false);
-            });
+            }, null, true);
 
             na.site.setSiteLoginLogout();
         }
@@ -1144,21 +1143,26 @@ na.te = na.themeEditor = {
     },    
     themeSelected : function (evt) {
         var
-        theme = $(evt.currentTarget).val();
+        //theme = $(evt.currentTarget).html();
+        theme = na.site.globals.themeName;
+
         //$('#themeName').val(theme);
         na.site.saveTheme(function() {
             var
             theme = $('.na_themes_dropdown__themes > .vividDropDownBox_selected').html();
 
-            na.te.s.c.selectedThemeName = theme;
-            na.site.globals.themeName = theme;
 
             setTimeout (function(theme) {
                 na.site.loadTheme(function() {
                     var btn = $('#'+na.te.s.c.selectedButtonID)[0];
                     if (btn) na.te.onclick(btn, false);
-                }, theme);
+                }, theme, na.site.globals.themeName!==theme);
+
+                na.te.s.c.selectedThemeName = theme;
+                na.site.globals.themeName = theme;
+
             }, 100, theme);
+
         },theme);
     },
     deleteTheme : function (event) {
@@ -1238,7 +1242,7 @@ na.te = na.themeEditor = {
                     $('.na_themes_dropdown__themes > .vividDropDownBox_selector > .vividScrollpane > div').each(function(idx,optEl){
                         if ($(optEl)[0].innerText === oldThemeName) $(optEl).html(newThemeName);
                     });
-                    $('.na_themes_dropdown__themes > .vividDropDownBox_selector').html(newThemeName);
+                    $('.na_themes_dropdown__themes > .vividDropDownBox_selected').html(newThemeName);
                     na.site.globals.themeName = newThemeName;
                     na.te.s.c.selectedThemeName = newThemeName;
                 };                    
@@ -1250,7 +1254,6 @@ na.te = na.themeEditor = {
         $.ajax(ajaxCmd);            
     },
     setPermissionsForTheme : function (event) {
-        debugger;
         $('.themeEditorComponent, .themeEditorComponent_containerDiv2').not('#themePermissions').fadeOut('fast');
         $('.themeEditor_colorPicker').next().fadeOut('fast');
         $('#themePermissions').fadeIn('fast', 'swing', function () {
@@ -1274,7 +1277,6 @@ na.te = na.themeEditor = {
         });        
     },
     addTheme : function (event) {
-        debugger;
         var 
         opt = document.createElement('div'),
         i = $('#btnOptions_menu__themes_dropdown > .vividDropDownBox_selector > .vividScrollpane > div').length;

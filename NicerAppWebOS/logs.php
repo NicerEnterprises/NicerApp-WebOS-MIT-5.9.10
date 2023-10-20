@@ -49,10 +49,19 @@ if (array_key_exists('file', $_GET)) {
         $url = '/NicerAppWebOS/logs.php?interface=no&file='.$fp2;
         $html .= '<a href="'.$url.'">'.$fp.'</a><br/>';
     }
-    $c = [ 'siteContent' => $html ];
-    //echo $naWebOS->getSite($c);
     $html .= '<script type="text/javascript">na.site.transformLinks()</script>';
-    echo $html;
+    $c = [ 'siteContent' => $html ];
+    if (
+        $_SERVER['SCRIPT_NAME']=='/NicerAppWebOS/logs.php'
+        && (
+            !array_key_exists('interface',$_GET)
+            || $_GET['interface'] !== 'no'
+        )
+    ) {
+        echo $naWebOS->getSite($c);
+    } else {
+        echo $html;
+    }
 
 } else die('403 Forbidden.');
 ?>

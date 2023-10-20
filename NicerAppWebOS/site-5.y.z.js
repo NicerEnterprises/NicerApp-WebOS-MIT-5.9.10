@@ -1022,6 +1022,7 @@ na.site = {
             $('.na_themes_dropdown__specificity > .vividDropDownBox_selector > .vividScrollpane').append($(divEl).clone(true,true));
         };
 
+        debugger;
         na.te.s.c.selectedThemeName = na.site.globals.themeName;
         for (var themeName in na.site.globals.themes) {
             var theme = na.site.globals.themes[themeName];
@@ -3072,6 +3073,7 @@ onclick_btnFullResetOfAllThemes : function (event) {
         //if (!s) var s = { url : '[default]', role : 'guests', user : 'Guest' }; 
 
         //if (!s) var s = { url : '[default]' };
+        debugger;
         if (doGetPageSpecificSettings) {
             na.site.loadTheme_doGetPageSpecificSettings (function() {
                 na.site.loadTheme_do (callback, theme, specificityName);
@@ -3151,8 +3153,8 @@ onclick_btnFullResetOfAllThemes : function (event) {
         u = na.site.settings.current.url,
         apps = na.site.globals.app,
         acData = {
-            orientation : na.site.settings.current.orientation,
-            theme : theme//,
+            orientation : na.site.settings.current.orientation//,
+            //theme : theme//,
             //dialogs : JSON.stringify (na.desktop.settings.visibleDivs)
         };
         if (typeof specificityName=='undefined') specificityName = na.site.globals.specificityName;
@@ -3162,15 +3164,23 @@ onclick_btnFullResetOfAllThemes : function (event) {
         //if (app) acData.app = app;
         if (s) {
             if (s.view) acData.view = s.view;
-            if (specificityName.match('current page')) {
-                if (s.url) acData.url = s.url;
-                if (u) acData.url = u;
-            }
             if (s.role) acData.role = s.role;
             if (s.user) acData.user = s.user;
             //if (s.specificityName) acData.specificityName = s.specificityName;
             acData.specificityName = specificityName;
-            if (app) acData.app = app;
+            if (specificityName.match('current page')) {
+                if (u) acData.url = u;
+                if (s.url) acData.url = s.url;
+                if (!acData.url) acData.url = window.location.href.replace('https://'+na.site.globals.domain,'');
+            }
+            if (specificityName.match('app \'')) {
+                if (app) acData.app = app;
+            }
+            if (specificityName.match(/^site /)) {
+                delete acData.view;
+                delete acData.app;
+                delete acData.url;
+            }
         }
 
         var
@@ -3208,14 +3218,35 @@ onclick_btnFullResetOfAllThemes : function (event) {
                     return false;
                 }
                 //na.site.globals.themes = themes;
+                //na.site.settings.current.theme = themes[theme];
+
+                /*
+                var html = ''; idx = 0;
+                for (var themeName in themes) {
+                    var dit = themes[themeName];
+
+                    if (themeName==theme) {
+                        html += '<div id="theme_'+idx+'" class="selected onfocus">'+themeName+'</div>';
+                    } else {
+                        html += '<div id="theme_'+idx+'">'+themeName+'</div>';
+                    }
+                }
+                $('.na_themes_dropdown__themes > .vividDropDownBox_selector > .vividScrollpane').html(html);
+                debugger;
+                $('.na_themes_dropdown__themes > .vividDropDownBox_selected').html(theme);
+                */
+
+                var dat = themes[theme];
+                debugger;
+                /*
                 for (var themeName in themes) {
                     var dat = themes[themeName];
                     na.site.settings.current.theme = dat;
                     break;
-                };
+                };*/
                 //na.site.setSpecificity (true);
                 na.site.loadTheme_applySettings (dat, callback);
-                na.te.onload('siteContent');
+                //na.te.onload('siteContent');
             },
             error : function (xhr, textStatus, errorThrown) {
                 debugger;
@@ -3470,6 +3501,7 @@ onclick_btnFullResetOfAllThemes : function (event) {
         s = na.themeEditor.settings.current.specificity,
         u = na.site.settings.current.url,
         apps = na.site.globals.app;
+        debugger;
 
         if (!theme) theme = na.site.globals.themeName;
         if ($('#'+theme)[0]) {
@@ -3514,21 +3546,22 @@ onclick_btnFullResetOfAllThemes : function (event) {
                 textBackgroundOpacity : parseInt($('#textBackgroundOpacity').val()) / 100
             };
 
-            if (s.view) themeData.view = s.view; else if (s.url) themeData.url = s.url;
+            if (s.view) themeData.view = s.view; //else if (s.url) themeData.url = s.url;
             if (s.role) themeData.role = s.role;
             if (s.user) themeData.user = s.user;
-            if (app) themeData.app = app;
             if (s.specificityName) themeData.specificityName = s.specificityName;
             if (s.specificityName.match('current page')) {
                 if (u) themeData.url = u;
                 if (s.url) themeData.url = s.url;
-                themeData.url = window.location.href.replace('https://'+na.site.globals.domain,'');
+                if (!themeData.url) themeData.url = window.location.href.replace('https://'+na.site.globals.domain,'');
                 //if (themeData.app) delete themeData.app;
-            };
-
+            }
             if (
                 typeof s.specificityName=='string'
-                && s.specificityName.match(/site /)
+                && (
+                    s.specificityName.match(/site /)
+                    || s.specificityName.match(/current page/)
+                )
             ) {
                 delete themeData.view;
                 delete themeData.app;
@@ -3538,6 +3571,7 @@ onclick_btnFullResetOfAllThemes : function (event) {
                 && s.specificityName.match(/app /)
             ) {
                 delete themeData.view;
+                if (app) themeData.app = app;
             }
 
             /*

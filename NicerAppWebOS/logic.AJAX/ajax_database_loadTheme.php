@@ -52,7 +52,7 @@ try {
 if ($callOK) {
     $findCommand = array (
         'selector' => array(
-            'theme' => $_POST['theme']
+            //'theme' => $_POST['theme']
         ),
         'fields' => array( '_id' ),
         'use_index' => 'primaryIndex'
@@ -63,12 +63,13 @@ if ($callOK) {
     if (array_key_exists('url',$_POST) && !is_null($_POST['url'])) $findCommand['selector']['url'] = $_POST['url'];
     if (array_key_exists('role',$_POST) && !is_null($_POST['role'])) $findCommand['selector']['role'] = $_POST['role'];
     if (array_key_exists('user',$_POST) && !is_null($_POST['user'])) $findCommand['selector']['user'] = $_POST['user'];
+    if (array_key_exists('app',$_POST) && !is_null($_POST['app'])) $findCommand['selector']['app'] = $_POST['app'];
     if (
         array_key_exists('specificityName', $_POST)
         && preg_match('/client$/', $_POST['specificityName'])
     ) {
         $findCommand['selector']['ip'] = $naIP;
-        $findCommand['selector']['ua'] = $_SERVER['HTTP_USER_AGENT'];
+        //$findCommand['selector']['ua'] = $_SERVER['HTTP_USER_AGENT'];
     }
     
     try { 

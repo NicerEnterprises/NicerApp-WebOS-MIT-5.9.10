@@ -1192,7 +1192,7 @@ class NicerAppWebOS {
         ];
     }
     
-    public function getPageCSS($js=true) {
+    public function getPageCSS($js=true, $doSetSpecificity=true) {
         global $naDebugAll;
         global $naLAN;
         $debug = false;
@@ -1285,14 +1285,14 @@ class NicerAppWebOS {
                     $r .= "\tuseLoadContent : ".$useLoadContent.",".PHP_EOL;
                     $r .= "\tbackground : '".$theme['background']."',".PHP_EOL;
                     $r .= "\tbackgroundSearchKey : '".$theme['backgroundSearchKey']."',".PHP_EOL;
-                    $r .= "\tthemes : ".json_encode($css['themes']).",".PHP_EOL;
+                    $r .= "\tthemes : ".json_encode($css['themes'], JSON_PRETTY_PRINT).",".PHP_EOL;
                     $r .= "\tthemeName : '".$themeName."',".PHP_EOL;
                     //$r .= "\tspecificityName : \"".$specificityName."\",".PHP_EOL;
                     //$r .= "\tspecificityName_revert : \"".$specificityName."\",".PHP_EOL;
                     //echo '<pre style="background:navy;color:lime;border-radius:10px;">'; var_dump ($css); echo '</pre>';
                     $r .= "\tspecificityName : \"".$specificityName."\",".PHP_EOL;
                     //$r .= "\tspecificityNames : ".json_encode($selectorNames).",".PHP_EOL;
-                    $r .= "\tthemesDBkeys : ".json_encode($selectors2).",".PHP_EOL;
+                    $r .= "\tthemesDBkeys : ".json_encode($selectors2, JSON_PRETTY_PRINT).",".PHP_EOL;
                     $r .= "\tnaLAN : ".($naLAN ? 'true' : 'false').','.PHP_EOL;
                     $r .= "\tnaHasErrors : ".((array_key_exists('naErrors',$_SESSION) && is_string ($_SESSION['naErrors']) && $_SESSION['naErrors']!=='') ? 'true' : 'false').','.PHP_EOL;
                     $r .= "\thasDB : ".($this->hasDB ? 'true' : 'false').PHP_EOL;
@@ -1312,10 +1312,12 @@ class NicerAppWebOS {
                 };
 
 
-                $r .= '$(document).ready(function() {'.PHP_EOL;
-                //$r .= "\tna.m.waitForCondition('HTML BODY : document.ready -> na.site.setSpecificity', na.m.HTMLidle, na.site.setSpecificity, 50);".PHP_EOL;
-                $r .= "\tna.site.setSpecificity();".PHP_EOL;
-                $r .= "});".PHP_EOL;
+                if ($doSetSpecificity) {
+                    $r .= '$(document).ready(function() {'.PHP_EOL;
+                    //$r .= "\tna.m.waitForCondition('HTML BODY : document.ready -> na.site.setSpecificity', na.m.HTMLidle, na.site.setSpecificity, 50);".PHP_EOL;
+                    $r .= "\tna.site.setSpecificity();".PHP_EOL;
+                    $r .= "});".PHP_EOL;
+                }
                 /*
                 $r .= '$(document).ready(function() {'.PHP_EOL;
                     $r .= "\t//setTimeout(function() {".PHP_EOL;
@@ -1463,13 +1465,13 @@ class NicerAppWebOS {
                         $r .= "\tuseVividTexts : ".$useVividTexts.",".PHP_EOL;
                         $r .= "\tbackground : '".$theme['background']."',".PHP_EOL;
                         $r .= "\tbackgroundSearchKey : '".$theme['backgroundSearchKey']."',".PHP_EOL;
-                        $r .= "\tthemes : ".json_encode($css['themes']).",".PHP_EOL;
+                        $r .= "\tthemes : ".json_encode($css['themes'], JSON_PRETTY_PRINT).",".PHP_EOL;
                         $r .= "\tthemeName : '".$themeName."',".PHP_EOL;
                         $r .= "\tspecificityName : \"".$specificityName."\",".PHP_EOL;
                         //$r .= "\tspecificityName : \"".$specificityName."\",".PHP_EOL;
                         //$r .= "\tspecificityName_revert : \"".$specificityName."\",".PHP_EOL;
                         //$r .= "\tspecificityNames : ".json_encode($selectorNames).",".PHP_EOL;
-                        $r .= "\tthemesDBkeys : ".json_encode($selectors2).",".PHP_EOL;
+                        $r .= "\tthemesDBkeys : ".json_encode($selectors2, JSON_PRETTY_PRINT).",".PHP_EOL;
                         $r .= "\tnaLAN : ".($naLAN ? 'true' : 'false').','.PHP_EOL;
                         $r .= "\tnaHasErrors : ".((array_key_exists('naErrors',$_SESSION) && is_string ($_SESSION['naErrors']) && $_SESSION['naErrors']!=='') ? 'true' : 'false').','.PHP_EOL;
                         $r .= "\thasDB : ".($this->hasDB ? 'true' : 'false').PHP_EOL;
@@ -1546,7 +1548,43 @@ class NicerAppWebOS {
         } */else {
             $viewFolder = '[front page]';
             $url = '/';
+
         }
+        if (
+            (
+                !array_key_exists('url', $_SESSION)
+                || $_SERVER['REQUEST_URI'] !== $_SESSION['url']
+            ) && (
+                strpos($_SERVER['REQUEST_URI'], 'pageSpecificSettings.php')===false
+            )
+        ) {
+            if (is_array($this->view)) {
+                foreach ($this->view as $viewFolder => $viewSettings) break;
+                //$viewFolder = preg_replace('/.*\//','', $viewFolder);
+                //var_dump ($viewFolder); die();
+                $url = '/view/'.base64_encode_url(json_encode($this->view));
+            } /*else if (array_key_exists('REQUEST_URI',$_SERVER)) {
+                // use defaults if not in proper format (when URL uses HTTP URL parameters for instance)..
+                $viewName = '[front page]';
+                $url = '/';
+
+                // check if SEO url exists in proper format
+                $uri = $_SERVER['REQUEST_URI'];
+                if ($uri!=='' && strpos('?', $uri)===false) {
+                    $viewName = '[app page]';
+                    $url = $uri;
+                }
+            } */else {
+                $viewFolder = '[front page]';
+                $url = '/';
+
+            }
+            //$url = $_SERVER['REQUEST_URI'];
+            $_SESSION['url'] = $url;
+        } else {
+            $url = $_SESSION['url'] = $url;
+        }
+
         $appName = preg_replace('/.*\//','',$viewFolder);
         //if ($debug) { echo '<pre>'; var_dump ($url); echo PHP_EOL; var_dump ($this->view); echo '</pre>'.PHP_EOL; }
         /*if ($viewFolder!=='') {
@@ -1805,7 +1843,7 @@ class NicerAppWebOS {
                     ],
                     'specificityName' => 'current page for group '.$role2,
                     'url' => $url,
-                    'app' => $viewFolder,
+                    //'app' => $viewFolder,
                     'role' => $role,
                     'display' => true
                 );
@@ -1818,7 +1856,7 @@ class NicerAppWebOS {
                     ],
                     'specificityName' => 'current page for group '.$role2.' at the client',
                     'url' => $url,
-                    'app' => $viewFolder,
+                    //'app' => $viewFolder,
                     'role' => $role,
                     'ip' => $naIP,
                     'display' => true
@@ -2031,42 +2069,51 @@ class NicerAppWebOS {
             if (array_key_exists('theme', $selector)) $sel['theme'] = $selector['theme']; //else $sel['theme'] = [ '$exists' => false ];
             if (array_key_exists('ip', $selector)) $sel['ip'] = $selector['ip']; else $sel['ip'] = [ '$exists' => false ];
             global $naIP;
-            //$selector['ip'] = $naIP;
-            //$selector['ua'] = $_SERVER['HTTP_USER_AGENT'];
+            if (strpos($selector['specificityName'], 'on the client')!==false) {
+                $selector['ip'] = $naIP;
+                //$selector['ua'] = $_SERVER['HTTP_USER_AGENT'];
+            }
             $selector['lastUsed'] = [
                 '$exists' => true
             ];
-            //$debug = true;
             if ($debug) { echo '<pre style="color:blue">$sel = '; var_dump ($sel); echo '</pre>'; };
             //array( 'url'=>$selector['url'], 'role'=>$selector['role'] ),//$selector,
 
             $findCommand = array (
                 'selector' => $sel,
-                'fields' => [ '_id', 'user', 'view', 'role', 'lastUsed', 'theme', 'url', 'themeSettings', 'apps', 'background', 'backgroundSearchKey', 'textBackgroundOpacity', 'changeBackgroundsAutomatically', 'backgroundChange_hours', 'backgroundChange_minutes' ]//,
-                //'sort' => [['lastUsed'=>'asc']],
-                //'use_index' => 'sortIndex_lastUsed'
-               // 'use_index' => 'primaryIndex'
+                'fields' => [ '_id', 'ip', 'user', 'view', 'role', 'lastUsed', 'theme', 'url', 'themeSettings', 'apps', 'background', 'backgroundSearchKey', 'textBackgroundOpacity', 'changeBackgroundsAutomatically', 'backgroundChange_hours', 'backgroundChange_minutes' ],
+                'sort' => [['lastUsed'=>'desc']],
+                'use_index' => '_design/5a5ca56d9824edad32284bf01bc7fb3838fa049c'
             );
-/*
+            /*
             $findCommand = array (
                 'selector' => $sel,
                 'fields' => [ '_id', 'lastUsed' ],
                 'sort' => [['lastUsed'=>'asc']],
                 'use_index' => 'sortIndex_lastUsed'
                // 'use_index' => 'primaryIndex'
+            );
+            $findCommand = array (
+                'selector' => $sel,
+                'fields' => [ '_id', 'user', 'role', 'view', 'app', 'url', 'specificityName', 'ip', 'lastUsed' ],
+                'sort' => [['lastUsed'=>'asc']],
+            /'use_index' => 'sortIndex_lastUsed'
+               // 'use_index' => 'primaryIndex'
             );*/
             try {
                 $call = $this->dbs->findConnection('couchdb')->cdb->find ($findCommand);
             } catch (Exception $e) {
+                $debug = true;
+                if ($debug)     {
+                    echo '<pre>info : $findCommand2='; var_dump ($findCommand); echo '.<br/>'.PHP_EOL;
+                    echo 'info : $call='; var_dump ($call); echo '.</pre>'.PHP_EOL;
+                };
+
                 $msg = 'NicerAppWebOS FATAL ERROR : while trying to find in \''.$dbName.'\' : '.$e->getMessage();
                 echo $msg;
                 exit();
             }
-            if ($debug)     {
-                echo '<pre>info : $findCommand2='; var_dump ($findCommand); echo '.<br/>'.PHP_EOL;
-                echo 'info : $call='; var_dump ($call); echo '.</pre>'.PHP_EOL;
-                //exit();
-            }
+
 
             $hasRecord = false;
             $rets = [];
@@ -2076,7 +2123,7 @@ class NicerAppWebOS {
                     if ($debug) { echo '$d='; var_dump ($d); }
                     $tn = ( isset($d->theme) ? $d->theme : 'default' );
                     //$d2 = $this->dbs->findConnection('couchdb')->cdb->get($d->_id)->body;
-                    $d2 = $d;
+                    $d2 = &$d;
                     $ret = [
                         $tn => [
                             'dbID' => $d2->_id,

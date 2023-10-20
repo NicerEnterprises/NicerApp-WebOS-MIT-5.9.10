@@ -43,7 +43,6 @@ $findCommand = array (
     )
 );
 
-if (array_key_exists('specificityName',$_POST) && !is_null($_POST['specificityName'])) $findCommand['selector']['specificityName'] = $_POST['specificityName'];
 if (array_key_exists('orientation',$_POST) && !is_null($_POST['orientation'])) $findCommand['selector']['orientation'] = $_POST['orientation'];
 if (array_key_exists('app',$_POST) && !is_null($_POST['app'])) $findCommand['selector']['app'] = $_POST['app'];
 if (array_key_exists('view',$_POST) && !is_null($_POST['view'])) $findCommand['selector']['view'] = $_POST['view'];
@@ -52,6 +51,29 @@ if (array_key_exists('role',$_POST) && !is_null($_POST['role'])) $findCommand['s
 if (array_key_exists('user',$_POST) && !is_null($_POST['user'])) $findCommand['selector']['user'] = $_POST['user'];
 if (array_key_exists('ip',$_POST) && !is_null($_POST['ip'])) $findCommand['selector']['ip'] = $_POST['ip'];
 if ($debug) { echo 't1 $findCommand='; var_dump ($findCommand); echo PHP_EOL.PHP_EOL; }
+
+if (array_key_exists('specificityName',$_POST) && !is_null($_POST['specificityName'])) {
+    $findCommand['selector']['specificityName'] = $_POST['specificityName'];
+    if (
+        strpos($_POST['specificityName'], 'current page')!==false
+    ) {
+        unset ($findCommand['selector']['app']);
+        unset ($findCommand['selector']['view']);
+    }
+    if (
+        strpos($_POST['specificityName'], 'app \'')!==false
+    ) {
+        unset ($findCommand['selector']['view']);
+        unset ($findCommand['selector']['url']);
+    }
+    if (
+        strpos($_POST['specificityName'], 'site ')!==false
+    ) {
+        unset ($findCommand['selector']['view']);
+        unset ($findCommand['selector']['app']);
+        unset ($findCommand['selector']['url']);
+    }
+}
 
 /*
 $proceed = $cdb->havePermission ($dataSetName, $findCommand);
@@ -109,6 +131,27 @@ if (preg_match('/at the client/', $rec2['specificityName'])!==1) {
     unset ($rec2['ua']);
 };
 
+if (array_key_exists('specificityName',$_POST) && !is_null($_POST['specificityName'])) {
+    if (
+        strpos($_POST['specificityName'], 'current page')!==false
+    ) {
+        unset ($rec2['app']);
+        unset ($rec2['view']);
+    }
+    if (
+        strpos($_POST['specificityName'], 'app \'')!==false
+    ) {
+        unset ($rec2['view']);
+        unset ($rec2['url']);
+    }
+    if (
+        strpos($_POST['specificityName'], 'site ')!==false
+    ) {
+        unset ($rec2['view']);
+        unset ($rec2['app']);
+        unset ($rec2['url']);
+    }
+}
 $dbg = [
     '1' => preg_match('/at the client/', $rec2['specificityName']),
     '2' => $rec2
@@ -209,7 +252,7 @@ try {
         echo 'status : Failed.'; exit();
     }
 }
-if ($debug) { echo '<pre>$call3='; var_dump ($call3); var_dump($_POST); var_dump(json_last_error()); echo '</pre>'.PHP_EOL.PHP_EOL; }
+if ($debug) { echo '<pre>$call3='; var_dump ($call3); var_dump($rec2); var_dump(json_last_error()); echo '</pre>'.PHP_EOL.PHP_EOL; }
         
 if ($call3->headers->_HTTP->status=='201' || $call3->headers->_HTTP->status=='200') {
     echo 'status : Success';
