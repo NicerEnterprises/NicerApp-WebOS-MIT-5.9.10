@@ -62,7 +62,7 @@ class naVividMenu__behavior_rainbowPanels {
     }
 
     initWatchFunctions(t) {
-        na.m.waitForCondition('report on major variables', function () {
+./        na.m.waitForCondition('report on major variables', function () {
             var
             t1 = $.extend({},t),
             dbg = {
@@ -712,46 +712,45 @@ class naVividMenu__behavior_rainbowPanels {
     }
 
     hideAll (t, bp) {
-        debugger;
-            if (!bp || !(typeof bp.id=='string')) return false;
-            if (!t.timeout_hideAll[bp.id]) {
-                t.timeout_hideAll[bp.id] = [];
-            } else {
-                for (var i=0; i<t.timeout_hideAll[bp.id].length; i++) {
-                    clearTimeout(t.timeout_hideAll[bp.id][i]);
-                };
-                t.timeout_hideAll[bp.id] = [];
+        if (!bp || !(typeof bp.id=='string')) return false;
+        if (!t.timeout_hideAll[bp.id]) {
+            t.timeout_hideAll[bp.id] = [];
+        } else {
+            for (var i=0; i<t.timeout_hideAll[bp.id].length; i++) {
+                clearTimeout(t.timeout_hideAll[bp.id][i]);
             };
-            var to = t.timeout_hideAll[bp.id];
-            t.timeout_hideAll[bp.id].push( setTimeout(function (t, bp) {
-                var hiding = [];
-                $('.vividMenu_item', $('#menu_'+t.el.id)[0]).each(function(idx,button) {
-                    var
-                    it = t.items[idx],
-                    panelID = (it ? t.el.id+'__panel__'+it.idx : null),
-                    panel = $('#'+panelID)[0];
-                    if (panel) hiding.push(panel);
-                    if (it && it.level!==1 && it.b) hiding.push (it.b.el);
-                });
+            t.timeout_hideAll[bp.id] = [];
+        };
+        var to = t.timeout_hideAll[bp.id];
+        t.timeout_hideAll[bp.id].push( setTimeout(function (t, bp) {
+            var hiding = [];
+            $('.vividMenu_item', $('#menu_'+t.el.id)[0]).each(function(idx,button) {
+                var
+                it = t.items[idx],
+                panelID = (it ? t.el.id+'__panel__'+it.idx : null),
+                panel = $('#'+panelID)[0];
+                if (panel) hiding.push(panel);
+                if (it && it.level!==1 && it.b) hiding.push (it.b.el);
+            });
 
-                $('.vividMenu_backPanel').each(function(idx,el){
-                    hiding.push(el);
-                });
+            $('.vividMenu_backPanel').each(function(idx,el){
+                hiding.push(el);
+            });
 
-                if (t.useFading) {
-                    $(hiding).stop(true,true).fadeOut(t.fadingSpeed);
-                    $('.vividMenu_subMenuPanel').stop(true,true).fadeOut(t.fadingSpeed, function () {
-                        $(this).remove();
-                    });
-                } else {
-                    $(hiding).css({display:'none'});
-                    $('.vividMenu_backPanel').remove();
-                }
-                t.shownChildren = {};
-                $(bp).remove();
-            }, 500, t, bp));
-            var ha = t.timeout_hideAll[bp.id];
-            return ha[ha.length-1];
+            if (t.useFading) {
+                $(hiding).stop(true,true).fadeOut(t.fadingSpeed);
+                $('.vividMenu_subMenuPanel').stop(true,true).fadeOut(t.fadingSpeed, function () {
+                    $(this).remove();
+                });
+            } else {
+                $(hiding).css({display:'none'});
+                $('.vividMenu_backPanel').remove();
+            }
+            t.shownChildren = {};
+            $(bp).remove();
+        }, 500, t, bp));
+        var ha = t.timeout_hideAll[bp.id];
+        return ha[ha.length-1];
     }
 
 
@@ -967,7 +966,6 @@ class naVividMenu__behavior_rainbowPanels {
                     panel = $('#'+panelID)[0];
                     panel.it = pit.it;
 
-debugger;
                     t.showPanel (
                         t, panel, r.it, pit.it, r.dim, r.numColumns, (r.numKids / r.numColumns),
                         $(x1.b.el).offset().left - $(t.el).offset().left,
