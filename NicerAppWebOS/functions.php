@@ -172,11 +172,13 @@ function mainErrorHandler ($errno, $errstr, $errfile, $errline) {
         echo '</pre>';
     }*/
 
-
-
-
-    $err = $naErr->add ($errno, $errstr, $errfile, $errline);
-    $naLog->add ( [ $err ] ); // outputs to screen and apache log file as well.
+    if (
+        stripos($_SERVER['HTTP_USER_AGENT'], 'bot')===false
+        && stripos($_SERVER['SCRIPT_NAME'], 'logs.php')===false
+    ) {
+        $err = $naErr->add ($errno, $errstr, $errfile, $errline);
+        $naLog->add ( [ $err ] ); // outputs to screen and apache log file as well.
+    }
     return true;
 
 

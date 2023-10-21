@@ -399,8 +399,13 @@ class class_NicerAppWebOS_database_API {
             if ($localCheck['result']!==true) {
                 $failedAtLeastOne = true;
                 $r['origin'] = $functionName;
-                $err = $naErr->addStandardResults ($r);
-                $naLog->add ( [ $err ] );
+                if (
+                    stripos($_SERVER['HTTP_USER_AGENT'], 'bot')===false
+                    && stripos($_SERVER['SCRIPT_NAME'], 'logs.php')===false
+                ) {
+                    $err = $naErr->addStandardResults ($r);
+                    $naLog->add ( [ $err ] );
+                }
             }
         }
 
@@ -421,8 +426,13 @@ class class_NicerAppWebOS_database_API {
                 if ($localCheck['result']!==true) {
                     $failedAtLeastOne = true;
                     $r['origin'] = $functionName;
-                    $err = $naErr->addStandardResults ($r);
-                    $naLog->add ( [ $err ] );
+                    if (
+                        stripos($_SERVER['HTTP_USER_AGENT'], 'bot')===false
+                        && stripos($_SERVER['SCRIPT_NAME'], 'logs.php')===false
+                    ) {
+                        $err = $naErr->addStandardResults ($r);
+                        $naLog->add ( [ $err ] );
+                    }
                 }
             }
         }

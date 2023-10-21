@@ -38,7 +38,6 @@ $(document).ready(function() {
     <link rel="manifest" href="/NicerAppWebOS/favicon/site.webmanifest">
     <link rel="mask-icon" href="/NicerAppWebOS/favicon/safari-pinned-tab.svg" color="#5bbad5">
     <link rel="shortcut icon" href="/NicerAppWebOS/favicon/favicon.ico">
-    <?php echo '<link type="text/css" rel="StyleSheet" href="/NicerAppWebOS/logic.business/errors.css?c='.date('Ymd_His', filemtime(dirname(__FILE__).'/../../../NicerAppWebOS/logic.business/errors.css')).'">'.PHP_EOL; ?>
     <?php echo '<link type="text/css" rel="StyleSheet" href="/NicerAppWebOS/3rd-party/jsTree-3.3.15/dist/themes/default/style.css?c='.date('Ymd_His', filemtime(dirname(__FILE__).'/../../../NicerAppWebOS/3rd-party/jsTree-3.3.15/dist/themes/default/style.css')).'">'.PHP_EOL; ?>
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-config" content="/NicerAppWebOS/favicon/browserconfig.xml">

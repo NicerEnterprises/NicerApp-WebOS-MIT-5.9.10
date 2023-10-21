@@ -85,7 +85,12 @@ global $naWebOS;
             if ($debug && count($call->body->docs)>0) { echo '$findCommand='; var_dump ($findCommand); echo PHP_EOL.'$call='; var_dump ($call); echo PHP_EOL.PHP_EOL; }
         } catch (Exception $e) {
             global $naErr;
-            $naErr->addStr('<p>'.$e->getMessage().'</p>'.PHP_EOL, $e->getMessage());
+            if (
+                stripos($_SERVER['HTTP_USER_AGENT'], 'bot')===false
+                && stripos($_SERVER['SCRIPT_NAME'], 'logs.php')===false
+            ) {
+                $naErr->addStr('<p>'.$e->getMessage().'</p>'.PHP_EOL, $e->getMessage());
+            }
             echo $e->getMessage();
             $go = false;
             $done = true;

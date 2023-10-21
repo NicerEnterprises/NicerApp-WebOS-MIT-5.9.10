@@ -532,8 +532,8 @@ class naVividMenu__behavior_rainbowPanels {
 
 
         return {
-            currentEl : items_currentEl,
-            prevEl : items_prevEl
+            currentEl : items_final,
+            prevEl : items_final
         };
     }
 
@@ -562,8 +562,14 @@ class naVividMenu__behavior_rainbowPanels {
         i = pit.levelIdx;
         panel.it = pit;
         $(panel).bind('mouseover', function (event) {
-            //$('#'+t.el.id+'__backPanel').remove();
-            //t.showBackPanel(t);
+            $('#'+t.currentEl.id+'__backPanel').fadeOut();
+            t.cancelHidings(t);
+
+            t.prevEl = t.currentEl;
+            t.currentEl = event.currentTarget;
+
+            $('#'+t.el.id+'__backPanel').remove();
+            t.showBackPanel(t);
 
             var panel = event.currentTarget;
             if (!t.panelsShown[panel.id]) t.panelsShown[panel.id] = {
@@ -572,10 +578,6 @@ class naVividMenu__behavior_rainbowPanels {
                 hideMe : null,
                 hideKids : null
             };
-
-/*            t.prevEl = t.currentEl;
-            t.currentEl = event.currentTarget;
-            t.cancelHidings(t);*/
 
 
         });
@@ -680,8 +682,8 @@ class naVividMenu__behavior_rainbowPanels {
                 : it.idx
             );
             t.childPanels[idx] = $(t.el).append(html);
-            //debugger;
-            $('#'+panelID).css(cssPanel).fadeIn(t.fadingSpeed);
+            debugger;
+            $('#'+panelID).css(cssPanel).css({opacity:1,display:'block'});//fadeIn(t.fadingSpeed);
         //}
     }
 
@@ -710,6 +712,7 @@ class naVividMenu__behavior_rainbowPanels {
     }
 
     hideAll (t, bp) {
+        debugger;
             if (!bp || !(typeof bp.id=='string')) return false;
             if (!t.timeout_hideAll[bp.id]) {
                 t.timeout_hideAll[bp.id] = [];
@@ -895,8 +898,13 @@ class naVividMenu__behavior_rainbowPanels {
         el = event.currentTarget,
         myKids = t.children[el.parent?el.parent.el.id:el.idx];
 
-        if (!t.timeout_onmouseover) t.timeout_onmouseover = {};
-        if (t.timeout_onmouseover[el.it.idx]) clearTimeout (t.timeout_onmouseover[el.it.idx]);
+        for (var id in t.timeout_onmouseover) {
+            var it = t.timeout_onmouseover[id];
+            clearTimeout (it);
+        };
+        t.timeout_onmouseover = {};
+        //if (!t.timeout_onmouseover) t.timeout_onmouseover = {};
+        //if (t.timeout_onmouseover[el.it.idx]) clearTimeout (t.timeout_onmouseover[el.it.idx]);
         for (var panelID in t.panelsShown) {
             var p = t.panelsShown[panelID];
             if (p.hideAll) clearTimeout(p.hideAll);
@@ -911,7 +919,7 @@ class naVividMenu__behavior_rainbowPanels {
         if (t.currentEl_cssItem) $(t.prevEl).css(t.currentEl_cssItem);
         t.currentEl = evt.currentTarget;
 
-        if (t.timeout_onmouseover[el.it.idx]) clearTimeout (t.timeout_onmouseover[el.it.idx]);
+        //if (t.timeout_onmouseover[el.it.idx]) clearTimeout (t.timeout_onmouseover[el.it.idx]);
         t.timeout_onmouseover[el.it.idx] = setTimeout(function(t, el, evt) {
         //debugger;
             if (t.debugMe) na.m.log (20, 'naVividMenu.createVividButton() : bind("mouseover") : showing sub-menu for "'+el.it.label+'"', false);
@@ -921,13 +929,13 @@ class naVividMenu__behavior_rainbowPanels {
 
             t.prevDisplayedEl = t.currentEl;
             t.currentDisplayedEl = t.currentEl;//evt.currentTarget;
-
             t.currentDisplayedEl_negativeOffsetY = null;
 
             var
             r = null,
             dim = t.getDimensions(t, el, false);
             t.prevDisplayedEl = null;
+            if (myKids && myKids.length > 0)
             for (var i=0; i<myKids.length; i++) {
                 var
                 it = myKids[i];
@@ -959,7 +967,7 @@ class naVividMenu__behavior_rainbowPanels {
                     panel = $('#'+panelID)[0];
                     panel.it = pit.it;
 
-
+debugger;
                     t.showPanel (
                         t, panel, r.it, pit.it, r.dim, r.numColumns, (r.numKids / r.numColumns),
                         $(x1.b.el).offset().left - $(t.el).offset().left,
@@ -980,14 +988,24 @@ class naVividMenu__behavior_rainbowPanels {
     onmouseout (event) {
         var t = this, el = event.currentTarget;
         if (!t.timeout_onmouseout) t.timeout_onmouseout = {};
-        if (t.timeout_onmouseout[el.it.idx]) clearTimeout (t.timeout_onmouseout[el.it.idx]);
+        for (var id in t.timeout_onmouseout) {
+            var it = t.timeout_onmouseout[id];
+            clearTimeout (it);
+        }
+        t.timeout_onmouseout = {};
+        //if (t.timeout_onmouseout[el.it.idx]) clearTimeout (t.timeout_onmouseout[el.it.idx]);
+        var toHide = t.mustHide (t, el.it, event);
         t.timeout_onmouseout[el.it.idx] = setTimeout (function(t, evt) {
-            t.onmouseout_do(evt);
-        }, 700, t, event);
+            if (
+                evt.currentTarget.it.parent.it.level === 1
+                || toHide.currentEl.length>0
+                || toHide.prevEl.length>0
+            ) t.onmouseout_do(evt, toHide);
+        }, 700, t, event, toHide);
     }
 
 
-    onmouseout_do (event) {
+    onmouseout_do (event, toHide) {
         var
         t = this,
         el = event.currentTarget,
@@ -997,8 +1015,7 @@ class naVividMenu__behavior_rainbowPanels {
         t = this,
         el = event.currentTarget,
         it = t.items[el.it.idx],
-        menu = $('#menu_'+t.el.id)[0],
-        toHide = t.mustHide (t, it, event);
+        menu = $('#menu_'+t.el.id)[0];
 
         var prevs = [], prevsLabels = [];
         for (var i=0; i < toHide.prevEl.length; i++) {
@@ -1014,6 +1031,7 @@ class naVividMenu__behavior_rainbowPanels {
                 }
             }
         }
+        debugger;
         //na.m.log (26, 'naVividMenu.onmouseout(label='+it.label+') (1) : prevsLabels = '+prevsLabels, false);
 
 
@@ -1159,7 +1177,8 @@ class naVividMenu__behavior_rainbowPanels {
         }
 
 
-        currs = $(currs).not(myPeers).not(prevPeers).not(prevKids).not(myKids);
+        debugger;
+        currs = $(currs).not(prevs).not(myPeers).not(prevPeers).not(prevKids).not(myKids);
         if (t.useFading) {
             $('.vividMenu_item', menu).add('.vividMenu_subMenuPanel').not(rootLevel).not(currs).not(myPeers).not(parentPanels).not(myKids).not(prevPeers)
                 .stop(true,true).fadeOut('fast', function () {

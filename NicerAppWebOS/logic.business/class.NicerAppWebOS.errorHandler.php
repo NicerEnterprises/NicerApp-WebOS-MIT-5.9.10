@@ -217,12 +217,13 @@ class class_NicerAppWebOS__errorHandler {
         while (count($data) > 0) {
             
             $it = array_shift($data);
-            
+
             if (
                 array_key_exists('function', $it) 
                 && (
                     // ignore these, as they are part of the custom error handling system itself :
                     $it['function'] == 'backtrace'
+                    || $it['function'] == 'add'
                     || $it['function'] == 'mainErrorHandler'
                     || $it['function'] == 'trigger_error'
                 )

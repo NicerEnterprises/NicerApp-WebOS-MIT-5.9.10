@@ -1240,7 +1240,12 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
             $call = $naWebOS->dbsAdmin->findConnection('couchdb')->cdb->find ($findCommand);
         } catch (Exception $e) {
             global $naErr;
-            $naErr->addStr('<p>'.$e->getMessage().'</p>'.PHP_EOL, $e->getMessage());
+            if (
+                stripos($_SERVER['HTTP_USER_AGENT'], 'bot')===false
+                && stripos($_SERVER['SCRIPT_NAME'], 'logs.php')===false
+            ) {
+                $naErr->addStr('<p>'.$e->getMessage().'</p>'.PHP_EOL, $e->getMessage());
+            }
             echo $e->getMessage();
             $go = false;
             $done = true;
@@ -1282,7 +1287,12 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
                     $call = $this->cdb->find ($findCommand);
                 } catch (Exception $e) {
                     global $naErr;
-                    $naErr->addStr('<p>'.$e->getMessage().'</p>'.PHP_EOL, $e->getMessage());
+                    if (
+                        stripos($_SERVER['HTTP_USER_AGENT'], 'bot')===false
+                        && stripos($_SERVER['SCRIPT_NAME'], 'logs.php')===false
+                    ) {
+                        $naErr->addStr('<p>'.$e->getMessage().'</p>'.PHP_EOL, $e->getMessage());
+                    }
                     echo $e->getMessage();
                     $go = false;
                     $done = true;
