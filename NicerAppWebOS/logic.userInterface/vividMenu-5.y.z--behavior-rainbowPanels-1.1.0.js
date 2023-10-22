@@ -322,6 +322,7 @@ class naVividMenu__behavior_rainbowPanels {
                 var container = document.createElement('div');
                 container.id = t.el.id+'__panel__'+itp_idx;
                 container.className = 'vividMenu_subMenuPanel';
+                debugger;
                 $(container).css({
                     position : 'absolute',
                     left : p_bcr.left-tel_bcr.left+(it.level>2?$(it.b.el).width()*.7:0),
@@ -626,8 +627,8 @@ class naVividMenu__behavior_rainbowPanels {
         itp_bcr = pit.b.el.getBoundingClientRect(),
         cssPanelWidth =
             t.el.parentNode!==document.body
-            ? ($(x1.b.el).outerWidth() * (it.numColumns)) + (na.d.g.margin*it.numColumns) + (na.d.g.margin*2)
-            : ($(x1.b.el).outerWidth() * (it.numColumns)) + (na.d.g.margin*it.numColumns) + (na.d.g.margin*2),
+            ? ($(x1.b.el).outerWidth() * (it.numColumns)) + (na.d.g.margin*it.numColumns)
+            : ($(x1.b.el).outerWidth() * (it.numColumns)) + (na.d.g.margin*it.numColumns),
         x1t = x1_bcr.top - tel_bcr.top,
         x1l = x1_bcr.left - tel_bcr.left,
         x2t = x2_bcr.top - tel_bcr.top,
@@ -638,8 +639,9 @@ class naVividMenu__behavior_rainbowPanels {
             borderRadius : 8,
             background : background2a,
             boxShadow : 'inset 0px 0px 3px 2px rgba(0,0,0,0.8), 4px 4px 2px 2px rgba(0,0,0,0.7)',
-            width : cssPanelWidth + (na.d.g.margin),
-            height : Math.abs(Math.abs(x2_bcr.top) - itp_bcr.top ) + (na.d.g.margin ),
+            width : cssPanelWidth,
+            height : Math.abs(Math.abs(x2_bcr.top) - Math.abs(x1_bcr.top) ) + Math.abs(x2_bcr.height) + (2*na.d.g.margin),
+            padding : 5,
             left : (
                 dim.horDirection=='east'
                 ? x1l - (2 * na.d.g.margin)
@@ -1008,122 +1010,6 @@ class naVividMenu__behavior_rainbowPanels {
             }
         }, 100, t, event);
     }
-/*
-    onmouseout_do (event, toHide) {
-        var
-        t = this,
-        el = event.currentTarget;
-
-        var prevs = [];
-        for (var i=0; i < toHide.prevEl.length; i++) {
-            var idxOrEl = toHide.prevEl[i];
-            if (typeof idxOrEl=='object') {
-                prevs.push(idxOrEl);
-            } else {
-                var it2 = t.items[idxOrEl];
-                if (it2.b) {
-                    prevs.push(it2.b.el);
-                }
-            }
-        }
-
-        var currs = [];
-        for (var i=0; i < toHide.currentEl.length; i++) {
-            var idxOrEl = toHide.currentEl[i];
-            if (typeof idxOrEl=='object') {
-                currs.push (idxOrEl);
-            } else {
-                var it2 = t.items[idxOrEl];
-                if (it2.b) {
-                    currs.push(it2.b.el);
-                }
-            }
-        }
-
-        var myKids = [];
-        if (t.currentEl) {
-            var myKids2 = t.children[t.currentEl.it.idx];
-
-            for (var kidIdx in myKids2) {
-                var it2 = myKids2[kidIdx];
-                if (it2.b) {
-                    //currs.push(it2.b.el);
-                    myKids.push (it2.b.el);
-                };
-            }
-        }
-
-        var rootLevel = [];
-        $('.vividMenu_item, .vividMenu_subMenuPanel', t.el).each(function(idx,div) {
-        //$('.vividMenu_item, .vividMenu_subMenuPanel', t.el).each(function(idx,div) {
-            var
-            idx = parseInt(div.id.replace(/.*__/,'')),
-            it = t.items[idx];
-            if (it && it.level === 1 && div.id.indexOf('_panel')===-1) rootLevel.push (div);
-        });
-
-        var myPeers = [];
-        var prevKids = [];
-        var prevPeers = [];
-        if (
-            t.currentEl
-            && t.prevEl
-            //&& t.currentEl.it.level !== t.prevEl.it.level
-            && t.currentEl.it.parents && t.currentEl.it.parents.length > 0
-        ) {
-            for (var pIdx=0; pIdx<t.currentEl.it.parents.length; pIdx++) {
-                var prevPeers_idxs = t.children[t.currentEl.it.parents[pIdx].idx];
-                for (var peerIdx in prevPeers_idxs) {
-                    var it2 = prevPeers_idxs[peerIdx];
-                    if (it2.b) prevPeers.push (it2.b.el);
-                }
-                var panel = $('#'+t.el.id+'__panel__'+t.currentEl.it.parents[pIdx].idx);
-                if (panel[0]) prevPeers.push (it2.b.el);
-            }
-
-            var myPeers_idxs = t.children[t.currentEl.it.parents[0].idx];
-
-            for (var peerIdx in myPeers_idxs) {
-                var it2 = myPeers_idxs[peerIdx];
-                if (it2.b) myPeers.push (it2.b.el);
-            }
-            var panel = $('#'+t.el.id+'__panel__'+t.currentEl.it.parents[0].idx);
-            if (panel[0]) myPeers.push (it2.b.el);
-
-            if (t.children[it2.idx] && t.children[it2.idx].length && t.children[it2.idx].length > 0) {
-                var peersKids_idx = t.children[it2.idx];
-                for (var peerKidIdx in peersKids_idx) {
-                    var it3 = peersKids_idx[peerKidIdx];
-                    if (it3.b) prevKids.push (it3.b.el);
-                }
-            }
-        }
-
-        var currs =
-            $('.vividMenu_item', t.el).add('.vividMenu_subMenuPanel')
-            .not(currs).not(prevPeers).not(myPeers).not(myKids).not(rootLevel);
-        debugger;
-
-        if (t.useFading) {
-            //$('.vividMenu_item', menu).add('.vividMenu_subMenuPanel').not(rootLevel).not(currs).not(myPeers).not(parentPanels).not(myKids).not(prevPeers)
-            $(currs)
-                .stop(true,true).fadeOut('fast', function () {
-                    if (
-                        $(this).is('.vividMenu_subMenuPanel')
-                        && el.id.indexOf(t.el.id)!==-1
-                    ) $(this).remove();
-                });
-        } else {
-            //$('.vividMenu_item, .vividMenu_subMenuPanel', menu)
-            $(currs)
-                .css({display:'none'});
-            $('.vividMenu_subMenuPanel').each(function(idx,el){
-                if (el.id.indexOf(t.el.id)!==-1) $(this).remove();
-
-            });
-        }
-    }
-*/
 
     onmouseout_do (event, toHide) {
         var
@@ -1270,8 +1156,10 @@ class naVividMenu__behavior_rainbowPanels {
                 var it2 = myPeers_idxs[peerIdx];
                 if (it2.b) myPeers.push (it2.b.el);
             }
-            var panel = $('#'+t.el.id+'__panel__'+t.currentEl.it.parents[0].idx);
-            if (panel[0]) myPeers.push (it2.b.el);
+            if (t.currentEl && t.currentEl.it.parents && t.currentEl.it.parents[0]) {
+                var panel = $('#'+t.el.id+'__panel__'+t.currentEl.it.parents[0].idx);
+                if (panel[0]) myPeers.push (panel[0]);
+            }
 
             if (t.children[it2.idx] && t.children[it2.idx].length && t.children[it2.idx].length > 0) {
                 var peersKids_idx = t.children[it2.idx];
