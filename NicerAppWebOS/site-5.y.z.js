@@ -469,6 +469,8 @@ na.site = {
                         startLogo('neCompanyLogo', 'countryOfOriginColors');
                         na.site.bindTodoListAnimations (
                             '.todoList, '
+                            +'.contentSectionTitle3, '
+                            +'p.todoList, h1.todoList, h2.todoList, h3.todoList, '
                             +'.todoList > li, '
                             +'.todoList > li > div, '
                             +'.todoList > li > pre, '
@@ -508,6 +510,8 @@ na.site = {
                     startLogo('neCompanyLogo', 'countryOfOriginColors');
                     na.site.bindTodoListAnimations (
                         '.todoList, '
+                            +'.contentSectionTitle3, '
+                            +'p.todoList, h1.todoList, h2.todoList, h3.todoList, '
                         +'.todoList > li, '
                         +'.todoList > li > div, '
                         +'.todoList > li > pre, '

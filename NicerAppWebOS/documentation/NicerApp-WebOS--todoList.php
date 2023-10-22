@@ -5,50 +5,12 @@
 
 <h1 class="contentSectionTitle2"><span class="contentSectionTitle2_span">NicerApp WebOS Development Direction</span></h1><br/><br/>
 
-<p>FYI : major release time is Christmas Day each year.</p>
+<p class="todoList">FYI : major release time is Christmas Day each year.</p>
 
 <ol class="todoList">
 
-    <li class="todoList"><div>
-        <ul class="todoList_l1">
-            <li class="todoList_l1"><div>Versions 3.y.z and lower : Increasingly stylish, and compatible with older browsers, but in terms of core code quite bulky and slow.</li>
-            <li class="todoList_l1"><div>4.0.0 : complete rewrite of the version 3.Y.Z, much faster startup times.</li>
-            <li class="todoList_l1"><div>4.1.0 : added many of the apps of the v3.Y.Z back in (tarot, music player, news, etc).</li>
-            <li class="todoList_l1"><div>4.1.1 : vertical roots for vividMenu added.</li>
-            <li class="todoList_l1"><div>4.2.0 : webmail functionality finished but not including an editor for the config settings yet (as these have to be stored encrypted, and i have no way of doing that yet).</li>
-            <li class="todoList_l1"><div>4.2.1 : many small improvements and additions to apps/nicer.app</li>
-            <li class="todoList_l1"><div>4.3.0 : made vividButton's (text version) height fit to the text placed in the vividButton, made the top menu bar *completely* resolution independent.</li>
-            <li class="todoList_l1"><div>5.0.0 : bugfixes and efficiency improvements in the core code
-                <ul class="todoList_l2">
-                <li class="todoList_l2"><div>Lots of changes and standarization of the entire code convention or naming structure for variables, Server-side PHP class names, Browser-side Javascript root level objects, and all the other root-level variable names used in NicerApp WebOS</li>
-                </ul>
-            </li>
-        </ul>
-        </div>
-    </li>
 
-    <li class="todoList"><div>(DONE) (2021-2022) Create a Theme Editor.</div></li>
-
-    <li class="todoList"><div>(DONE) (2022) Automatic site background rotations via #btnOptions dialog's first 'setting'.</div></li>
-
-    <li class="todoList"><div>(DONE) (2022) Better error display features (list full error details in seperate dialog on the site itself).</div></li>
-
-    <li class="todoList"><div>(DONE) (2022-Sept) Allow Guest users to use the Theme Editor (by storing theme settings per IP address + User-Agent in the database's existing theme_settings table).</div></li>
-
-    <li class="todoList"><div>(DONE) (2022-Sept) Restore the old links, like the 3D WebGL (component) demos.</div></li>
-
-    <li class="todoList releaseDate"><div>(DONE) (2022 Nov 7th) : the emerging of <a href="https://said.by" class="nomod noPushState noVividText contentSectionTitle2_a" target="saidDotBy" style="margin:0 !important;"><span class="contentSectionTitle2_span">https://said.by</span></a> as an online blogging platform for end-users</a>.</li>
-
-    <li class="todoList releaseDate"><div>(DONE) (2023 June 22nd) Release <a href="https://github.com/NicerEnterprises/NicerApp-WebOS" class="nomod noPushState noVividText contentSectionTitle2_a" target="ghNA"><span class="contentSectionTitle2_span">version 5.5.0</span></a> : Theme Editor upgrade released.
-    </div></li>
-
-    <li class="todoList"><div>(DONE) (2023 May) Build a <a href="/wiki/frontpage">view port</a> into <a href="https://wikipedia.org" target="wikipedia">https://wikipedia.org</a> data, whose content one may re-use without legal consequences, and which is *great*. :D</li>
-
-    <li class="todoList"><div>(DONE) (2023 July) Transform the Theme Editor (that was restricted to NicerApp vividDialogs) into a Universal Web Theme Editor that can work on any HTML selector.</div></li>
-
-    <li class="todoList"><div>(DONE) Configure my LAN to do full backups every few hours of both the nicer.app and said.by data and databases.</div></li>
-
-    <li class="todoList"><div>(DONE) (2023) Build an extension of the Sag library that i'm using for communication between PHP and couchdb that allows one to log database calls and view them with /NicerAppWebOS/logs.php</div></li>
+    <li class="todoList"><div>(DONE) (2023) Build an extension of the Sag library that i'm using for communication between PHP and couchdb that allows you to log database calls and view them with /NicerAppWebOS/logs.php</div></li>
 
     <li class="todoList"><div>(DONE) (2023) Allow users (and Guests) to specify which theme a new end-user should initially see for a page managed by them on a NicerApp website.</div></li>
 
