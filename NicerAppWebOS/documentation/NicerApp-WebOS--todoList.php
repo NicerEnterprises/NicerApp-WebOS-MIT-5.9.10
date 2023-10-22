@@ -14,7 +14,7 @@
 
     <li class="todoList"><div>(DONE) (2023) Allow users (and Guests) to specify which theme a new end-user should initially see for a page managed by them on a NicerApp website.</div></li>
 
-    <li class="todoList"><div>(CURRENT) (2023 Oct,Nov,Dec) Fix the final bugs in vividMenu.</div></li>
+    <li class="todoList"><div>(DONE) (2023) Fix the final bugs in vividMenu.</div></li>
 
     <li class="todoList"><div>(CURRENT) (2023 Oct,Nov,Dec) Upgrade the blogging features.
         <ol class="todoList_l1">
@@ -88,16 +88,17 @@
 
 </ol>
 <script type="text/javascript">
-                        na.site.bindTodoListAnimations (
-                            '.todoList > li, '
-                            +'.todoList > li > div, '
-                            +'.todoList > li > pre, '
-                            +'.todoList_l1 > li, '
-                            +'.todoList_l1 > li > div, '
-                            +'.todoList_l1 > li > pre, '
-                            +'.todoList_l2 > li, '
-                            +'.todoList_l2 > li > div, '
-                            +'.todoList_l2 > li > pre '
-                        );
-
+    na.site.bindTodoListAnimations (
+        '.todoList > li, '
+        +'.contentSectionTitle3, '
+        +'p.todoList, h1.todoList, h2.todoList, h3.todoList, '
+        +'.todoList > li > div, '
+        +'.todoList > li > pre, '
+        +'.todoList_l1 > li, '
+        +'.todoList_l1 > li > div, '
+        +'.todoList_l1 > li > pre, '
+        +'.todoList_l2 > li, '
+        +'.todoList_l2 > li > div, '
+        +'.todoList_l2 > li > pre '
+    );
 </script>
