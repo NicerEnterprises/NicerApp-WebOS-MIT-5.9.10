@@ -14,7 +14,7 @@
 
     <li class="todoList"><div>(DONE) (2023) Allow users (and Guests) to specify which theme a new end-user should initially see for a page managed by them on a NicerApp website.</div></li>
 
-    <li class="todoList"><div>(CURRENT) (2023) Fix the final bugs in vividMenu.</div></li>
+    <li class="todoList"><div>(DONE) (2023) Fix the final bugs in vividMenu.</div></li>
 
     <li class="todoList"><div>(CURRENT) (2023 Oct,Nov,Dec) Upgrade the blogging features.
         <ol class="todoList_l1">
