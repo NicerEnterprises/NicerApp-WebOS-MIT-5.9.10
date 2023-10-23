@@ -282,7 +282,6 @@ class naVividButton_icon {
         t.gradientRadius = 10;
         t.grayScale = 0;
         //if (t.el.id=='btnSelectBoxShadowSettings') debugger;
-        console.log ('t333:' + t.el.id);
         if (t.el.id=='btnPlayPause') debugger;
         $(t.p.iconComponents, el).add(t.elText).hover(function () { t.hoverStarts(t) }, function () { t.hoverEnds(t) });
     }
