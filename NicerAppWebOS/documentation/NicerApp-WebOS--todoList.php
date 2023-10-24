@@ -14,11 +14,15 @@
 
     <li class="todoList"><div>(DONE) (2023) Allow users (and Guests) to specify which theme a new end-user should initially see for a page managed by them on a NicerApp website.</div></li>
 
-    <li class="todoList"><div>(DONE) (2023) Fix the final bugs in vividMenu.</div></li>
+    <li class="todoList"><div>(CURRENT) (2023 Oct) Fix the final (root-pathing) bugs in vividMenu.</div></li>
+
+    <li class="todoList"><div>(CURRENT) (2023 Oct) Fix the page refreshing bugs that show up sometimes.</div></li>
 
     <li class="todoList"><div>(CURRENT) (2023 Oct,Nov,Dec) Upgrade the blogging features.
         <ol class="todoList_l1">
             <li class="todoList_l1"><div>(CURRENT) (2023 Oct,Nov,Dec) Fix any final bugs in the Theme Editor (none known at this time).</div></li>
+
+            <li class="todoList_l1"><div>(CURRENT) (2023 Oct,Nov,Dec) Build a comments engine and user-interface (again).</div></li>
 
             <li class="todoList_l1"><div>(STALLED) Create a custom HTML WYSIWYG rich-text editor component of my own, that ties into the NicerApp Theme Editor.<br/>
             This is stalled because browser makers need to start supporting a window.getSelection() that returns a .anchorOffset and .extentOffset that works on the .innerHTML instead of the .innerText of any given element (usually the .commonAncestorElement).
@@ -26,11 +30,13 @@
                     <li class="todoList_l2"><div>supply data from a HTML+CSS form into <a href="https://github.com/NicerEnterprises/NicerApp-WebOS/blob/main/NicerAppWebOS/logic.business/class.core.WebsiteOperatingSystem-5.y.z.php#L1353" class="noPushState" target="naGH_wos1088">css_keyframes_to_array() and css_animation_template_to_animation()</a>.</div></li>
                 </ol>
             </div></li>
+
+            <li class="todoList_l1"><div>(2023 Dec / 2024 Jan) Extend the current limited permissions system to a full CMS, Web User Interfaced, permissions system for the WebOS.</div></li>
         </ol>
 
     </div></li>
 
-
+    <li class="todoList"><div>Create an app-store app :D</div></li>
 
     <li class="todoList"><div>Add a checkbox in the Theme Editor to select backgrounds and stretch instead of tile them for any DIV.</div></li>
 
@@ -42,7 +48,6 @@
     </div>
     </li>
 
-    <li class="todoList"><div>Build a comments engine and user-interface (again).</div></li>
 
     <li class="todoList"><div>Make the musicPlayer app work on smartphone vertical screens as well.</div></li>
 

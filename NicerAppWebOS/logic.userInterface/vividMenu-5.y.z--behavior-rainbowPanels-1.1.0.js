@@ -132,7 +132,7 @@ class naVividMenu__behavior_rainbowPanels {
                 if (!itp) debugger;
                 if (!t.children[itp.idx]) t.children[itp.idx] = [];
                 t.children[itp.idx].push(it);
-                it.levelIdx = t.children[t.el.id].length;
+                it.levelIdx = t.children[itp.idx].length;
             } //else debugger;
         });
 

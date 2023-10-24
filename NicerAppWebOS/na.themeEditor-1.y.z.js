@@ -555,10 +555,19 @@ na.te = na.themeEditor = {
                         '#btnSelectTextSettings', '#btnSelectTextShadowSettings',
                         '#btnSelectBackgroundFolder' , '#btnSelectBackgroundImage'
                     ]);
+                debugger;
+
+                var inExtras = false;
+                for (var idx in rec.parents) {
+                    var it = data.instance.get_node(rec.parents[idx]);
+                    if (it.text=='Extras') inExras = true;
+                }
+
                 if (rec && rec.type=='naElement')
                     if (
                         rec.text.match(/#site[\w\d]+$/)
                         || rec.text.match(/#app__[\w\d]+$/)
+                        || inExtras
                     )
                         na.te.enableButtons([
                             '#btnAddElement', '#btnDeleteElement',
@@ -618,6 +627,7 @@ na.te = na.themeEditor = {
                         na.te.s.c.forDialogID = null;
                         na.te.s.c.forElements = data.node.text;
                         na.te.enableButtons([
+                            '#btnDeleteElement',
                             '#btnSelectBackgroundFolder' , '#btnSelectBackgroundImage',
                             '#btnSelectBackgroundColor', '#btnSelectBorderSettings' , '#btnSelectBoxShadowSettings',
                             '#btnSelectTextSettings', '#btnSelectTextShadowSettings'
@@ -1654,10 +1664,15 @@ na.te = na.themeEditor = {
             if (bs && b) {
                 if (bs.match('inset')) $('#boxShadowInset')[0].checked = true; else $('#boxShadowInset')[0].checked = false;
 
-                var 
-                cssExtract = na.te.cssExtract(na.te.s.c.forDialogID),
-                ctI = parseInt($(event.currentTarget).attr('i'));
-                
+                if (na.te.s.c.forDialogID)
+                    var
+                    cssExtract = na.te.cssExtract(na.te.s.c.forDialogID),
+                    ctI = parseInt($(event.currentTarget).attr('i'));
+                else
+                    var
+                    cssExtract = na.te.cssExtract(na.te.s.c.forElements),
+                    ctI = parseInt($(event.currentTarget).attr('i'));
+
                 na.te.s.c.boxShadowColor = cssExtract.boxShadowColor[ctI];
                 $('#boxShadowXoffset').val(cssExtract.boxShadowSliders[ctI][0]);
                 $('#boxShadowYoffset').val(cssExtract.boxShadowSliders[ctI][1]);
@@ -1726,7 +1741,11 @@ na.te = na.themeEditor = {
             if (newBoxSetting!=='') newBoxSetting += ', ';
             newBoxSetting += $('#'+el.id+' div').css('boxShadow');
         });
-        $('#'+na.te.s.c.forDialogID).css ({ boxShadow : newBoxSetting });
+        if (na.te.s.c.forDialogID)
+            $('#'+na.te.s.c.forDialogID).css ({ boxShadow : newBoxSetting });
+        else
+            $(na.te.s.c.forElements).css ({ boxShadow : newBoxSetting });
+
 
         na.site.saveTheme();
         
@@ -2533,22 +2552,34 @@ debugger;
     },
 
     onclick_btnDeleteGraphics : function (event) {
-        var jsonNodes = $('#themeEditor_jsTree_selectors').jstree(true).get_json(na.te.s.c.selectedSelector.node.id, { flat: true });
-        for (var i=0; i<jsonNodes.length; i++) {
-            var nit = jsonNodes[i];
-            if (nit.type=='naElement') na.te.deleteElement (nit);
-        };
+        na.te.deleteElement(nit);
+    },
 
-        var node = $('#themeEditor_jsTree_selectors').jstree().get_node(na.te.s.c.selectedSelector.node.id);
-        $('#themeEditor_jsTree_selectors').jstree('delete_node', node);
-        na.site.saveTheme ();
+    onclick_btnDeleteElement : function (nit) {
+        na.te.deleteElement(nit);
     },
 
     deleteElement : function (nit) {
+        if (nit.currentTarget) nit = na.te.s.c.selectedSelector.node;
         $(nit.text).css ({
             color : '',
             background : ''
         });
+
+        var jsonNodes =
+            $('#themeEditor_jsTree_selectors')
+            .jstree(true)
+            .get_json(na.te.s.c.selectedSelector.node.id, { flat: true });
+
+        var node =
+            $('#themeEditor_jsTree_selectors')
+            .jstree()
+            .get_node(na.te.s.c.selectedSelector.node.id);
+
+        $('#themeEditor_jsTree_selectors')
+            .jstree('delete_node', node);
+
+        na.site.saveTheme (na.site.loadTheme);
     }
 
 };

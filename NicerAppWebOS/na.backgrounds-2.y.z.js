@@ -137,19 +137,22 @@ na.backgrounds = {
                         width: jQuery(window).width() * na.site.settings.current.scale,
                         height: jQuery(window).height() * na.site.settings.current.scale,
                         background : 'url("'+url+'") repeat'
-                    }).fadeIn('slow', 'swing', function () {
-                        $(bgDiv).css ({
-                            display : 'block',
-                            width: jQuery(window).width() * na.site.settings.current.scale,
-                            height: jQuery(window).height() * na.site.settings.current.scale,
-                            background : 'url("'+url+'") repeat'
-                        });
-                        setTimeout(function(){
-                            $(bgDiv2).css ({display:'none'});
-                        }, 50);
-                        
-                        if (typeof callback == 'function') callback();
                     });
+                    setTimeout(function() {
+                        $(bgDiv2).fadeIn('slow', 'swing', function () {
+                            $(bgDiv).css ({
+                                display : 'block',
+                                width: jQuery(window).width() * na.site.settings.current.scale,
+                                height: jQuery(window).height() * na.site.settings.current.scale,
+                                background : 'url("'+url+'") repeat'
+                            });
+                            setTimeout(function(){
+                                $(bgDiv2).css ({display:'none'});
+                            }, 50);
+
+                            if (typeof callback == 'function') callback();
+                        });
+                    }, 500);
                     
                 } else if (url.match('youtube')) {
                     $(bgDiv).add(bgDiv2).css({display:'none'});
@@ -192,13 +195,14 @@ na.backgrounds = {
                         jQuery(bgDiv).add('#siteBackground_iframe').fadeOut('slow', function(){
                             //$(bgDiv).tubeplayer('destroy');
                         });
-
-                        jQuery(bgl).fadeIn('slow', function(){
-                            bgf.src = bgl.src;
-                            $(bgf).css ({ display : 'block', opacity : 1 });
-                            $(bgl).hide();
-                            if (typeof callback == 'function') callback();
-                        });
+                        setTimeout(function() {
+                            jQuery(bgl).fadeIn('slow', function(){
+                                bgf.src = bgl.src;
+                                $(bgf).css ({ display : 'block', opacity : 1 });
+                                $(bgl).hide();
+                                if (typeof callback == 'function') callback();
+                            });
+                        }, 500);
                     };
                     $(bgl).css({position:'absolute',display:'none',opacity:1}).hide();
                     bgl.src = url;
