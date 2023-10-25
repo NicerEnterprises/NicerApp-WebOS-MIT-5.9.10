@@ -16,11 +16,26 @@
 
     <li class="todoList"><div>(CURRENT) (2023 Oct) Fix the final (root-pathing) bugs in vividMenu.</div></li>
 
-    <li class="todoList"><div>(CURRENT) (2023 Oct) Fix the page refreshing bugs that show up sometimes.</div></li>
+    <li class="todoList"><div>(CURRENT) (2023 Oct) Fix the page refreshing bugs that show up sometimes.
+        <ol class="todoList_l1">
+            <li class="todoList_l1"><div>Add 4 functions to be called from the new na.site.startUIvisuals(divID), which in turn is to be called after each na.site.loadContent_displayContent() reaches it final stages.<br/>
+            na.site.startUIvisuals(divID) would call na.site.startLogo(), na.site.startMenus(divID), na.site.startDialogs(divID), and na.site.startButtons(divID).<br/>
+            And i should not forget to add a <pre class="todoList_l1">if (na.customer &amp;&amp; typeof na.customer.startUIvisuals == 'function') na.customer.startUIvisuals(divID);</pre>to the end of na.site.startUIvisuals().</div></li>
+        </ol>
+    </div></li>
+
+    <li class="todoList"><div>(CURRENT) (2023 Oct,Nov) Make the musicPlayer app work on smartphone vertical screens as well.</div></li>
+
+    <li class="todoList"><div>(CURRENT) (2023 Oct,Nov) Always / Shaded / No showing of .vdSettings for any .vividDialog and listed in #siteBtnOptions_menu</div></li>
+
+    <li class="todoList"><div>(CURRENT) (2023 Oct,Nov) Show 'bot' hits in mydomain.com/NicerAppWebOS/logs.php in a different color (grey)</div></li>
 
     <li class="todoList"><div>(CURRENT) (2023 Oct,Nov,Dec) Upgrade the blogging features.
         <ol class="todoList_l1">
-            <li class="todoList_l1"><div>(CURRENT) (2023 Oct,Nov,Dec) Fix any final bugs in the Theme Editor (none known at this time).</div></li>
+            <li class="todoList_l1"><div>(CURRENT) (2023 Oct,Nov,Dec) Fix any final bugs in the Theme Editor (a few barely known at this time).<br/>
+            UPDATE : a few serious bugs have been found, and reported to the Chrome Development team, about -webkit-mask-image CSS not exactly getting along at the moment with a box-shadow CSS setting.<br/>
+            Corners get messed up relative to background div of a dialog, all sorts of distortions :(<br/>
+            We clearly need a new approach to mixing pixel data. a combo of a PNG and video file format would be best i think. layered in CSS per selector.</div></li>
 
             <li class="todoList_l1"><div>(CURRENT) (2023 Oct,Nov,Dec) Build a comments engine and user-interface (again).</div></li>
 
@@ -36,7 +51,13 @@
 
     </div></li>
 
-    <li class="todoList"><div>Create an app-store app :D</div></li>
+    <li class="todoList"><div>Create a webshop app with a subscription model (that i'll publish as https://nicer.app/shop), in collaboration with paypal.com</div></li>
+
+    <li class="todoList"><div>Create a donations button (again, in collaboration with paypal.com), with monthly goal indicator, for the news app.</div></li>
+
+    <li class="todoList"><div>Create an app-store app that links into an eCommerce app component set (a bunch of javascript, svg, css and html snippet files).</div></li>
+
+    <li class="todoList"><div>Implement bandwidth throttling for my webserver.</div></li>
 
     <li class="todoList"><div>Add a checkbox in the Theme Editor to select backgrounds and stretch instead of tile them for any DIV.</div></li>
 
