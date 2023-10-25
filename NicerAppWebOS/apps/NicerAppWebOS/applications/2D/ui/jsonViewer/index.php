@@ -1,14 +1,14 @@
 <?php
 // 	This file is part of jsonViewer
-//	Written & copyrighted (c) 2010-2013 by [the owner of seductiveapps.com] <seductiveapps@gmail.com>
+//	Written & copyrighted (c) 2010-2013 by [the owner of NicerApp.com] <NicerApp@gmail.com>
 //	License: LGPL, free for any type of use
 //	NO WARRANTY EXPRESSED OR IMPLIED. USE AT YOUR OWN RISK.
-//	Download: http://seductiveapps.com/products/jsonViewer/
+//	Download: http://NicerApp.com/products/jsonViewer/
 
-//define ('SA_SHOW_CONSTANTS', true); //uncomment if you want to see what define()s the seductiveapps framework exposes
-require_once (dirname(__FILE__).'/../../../../boot.php');
+//define ('SA_SHOW_CONSTANTS', true); //uncomment if you want to see what define()s the NicerApp framework exposes
+require_once (dirname(__FILE__).'/../../../../../../boot.php');
 $_SESSION['errors'] = array();
-require_once (dirname(__FILE__).'/jv.php');
+require_once (dirname(__FILE__).'/jsonViewer.php');
 $hmConfig = jsonViewer_config (array(
 	 'developerVisitors' => array (
 	 // ONLY if your webbrowser IP ($_SERVER['REMOTE_ADDR']) is listed here, 
@@ -82,29 +82,29 @@ if (!array_key_exists('rootURL', $_GET)) $_GET['rootURL'] = dirname(dirname(dirn
 				startAppDo();
 			};
 			function startAppDo() {
-				sa.m.settings.logLevel = 30; //see what a "300" does to your console log here;
-				sa.vividControls.init(document.body, function () {
-					sa.m.settings.initialized.site = true;
-					sa.hms.startProcessing();
+				na.m.settings.logLevel = 30; //see what a "300" does to your console log here;
+				na.vividControls.init(document.body, function () {
+					na.m.settings.initialized.site = true;
+					na.hms.startProcessing();
 					jQuery('div.jsonViewer').css ({opacity:0.7});
-					sa.sp.containerSizeChanged (jQuery('#tabs__scrollpane')[0]);
+					na.sp.containerSizeChanged (jQuery('#tabs__scrollpane')[0]);
 				});
 				jQuery(window).resize(function(evt) {
-					sa.tabs.containerSizeChanged(jQuery('#tabs')[0]);
+					na.tabs.containerSizeChanged(jQuery('#tabs')[0]);
 					var h = jQuery('#tabs')[0].children[2].offsetHeight;
 					jQuery('#tabs__scrollpane__container').css ({height:h});
 				//debugger;
-					sa.sp.containerSizeChanged(jQuery('#tabs__scrollpane')[0], true);
+					na.sp.containerSizeChanged(jQuery('#tabs__scrollpane')[0], true);
 					if (
 						jQuery('#scope0')[0]
 						&& jQuery('#scope0')[0].children[0]
 						&& jQuery('#scope0')[0].children[0].children[2]
-					) sa.sp.containerSizeChanged(jQuery('#scope0')[0].children[0].children[2], true);
+					) na.sp.containerSizeChanged(jQuery('#scope0')[0].children[0].children[2], true);
 					if (
 						jQuery('#selfTest')[0]
 						&& jQuery('#selfTest')[0].children[0]
 						&& jQuery('#selfTest')[0].children[0].children[2]
-					) sa.sp.containerSizeChanged(jQuery('#selfTest')[0].children[0].children[2], true);
+					) na.sp.containerSizeChanged(jQuery('#selfTest')[0].children[0].children[2], true);
 				})
 			}
 		</script>
@@ -143,7 +143,7 @@ if (!array_key_exists('rootURL', $_GET)) $_GET['rootURL'] = dirname(dirname(dirn
 			This component provides best response times in Google's Chrome browser, but also works in Firefox, Safari and Opera.<br/>
 			Internet explorer 10 on Windows 8 will run the latest jsonViewer, but Internet explorer 8, 9, and before, in all modes, on Windows 7 or earlier, all have limitations that prevent jsonViewer from running properly.<br/>
 			<br/>
-			<a href="http://seductiveapps.com/" target="_parent">Download</a>.<br/>
+			<a href="http://NicerApp.com/" target="_parent">Download</a>.<br/>
 	       <br/>
 			</p>
 			</div>
@@ -165,8 +165,8 @@ if (!array_key_exists('rootURL', $_GET)) $_GET['rootURL'] = dirname(dirname(dirn
 			At the top of the script that generates your page, add this:
 			<pre>
 &lt;?php
-require_once (dirname(__FILE__).'/[RELATIVE_PATH_TO]/seductiveapps/sitewide/boot.php');
-require_once (dirname(__FILE__).'/[RELATIVE_PATH_TO]/seductiveapps/com/jsonViewer/jv.php');
+require_once (dirname(__FILE__).'/[RELATIVE_PATH_TO]/NicerApp/sitewide/boot.php');
+require_once (dirname(__FILE__).'/[RELATIVE_PATH_TO]/NicerApp/com/jsonViewer/jv.php');
 ?&gt;
 			</pre>
 
@@ -180,7 +180,7 @@ require_once (dirname(__FILE__).'/[RELATIVE_PATH_TO]/seductiveapps/com/jsonViewe
 &lt;link type="text/css" rel="StyleSheet" media="screen" href="&lt;?php echo SA_WEB?&gt;/get_css.php?want=jsonViewer,logAndHandler"/&gt;
 &lt;script type="text/javascript" src="&lt;?php echo SA_WEB?&gt;/get_javascript.php?want=jsonViewer,logAndHandler"&gt;&lt;/script&gt;
 			</pre>
-			or, you might want to include my entire seductiveapps web framework;
+			or, you might want to include my entire NicerApp WebOS;
 			<pre>
 &lt;link type="text/css" rel="StyleSheet" media="screen" href="&lt;?php echo SA_WEB?&gt;/get_css.php?want=all"/&gt;
 &lt;script type="text/javascript" src="&lt;?php echo SA_WEB?&gt;/get_javascript.php?want=all"&gt;&lt;/script&gt;
@@ -211,12 +211,12 @@ hm (bigArrayOrObject, title, {
 			
 			<p>
 			Use this link to generate test-data:<br/>
-			<a class="nomod" target="_parent" href="/seductiveapps/com/jsonViewer/index.php?fresh=true&mem=30&file=hm_testdata_30mb.html">/seductiveapps/com/jsonViewer/index.php?fresh=true&mem=30&file=hm_testdata_30mb.html</a><br/>
+			<a class="nomod" target="_parent" href="/NicerApp/com/jsonViewer/index.php?fresh=true&mem=30&file=hm_testdata_30mb.html">/NicerApp/com/jsonViewer/index.php?fresh=true&mem=30&file=hm_testdata_30mb.html</a><br/>
 			You can check the source of that index.php to see more options. &mem=30 specifies to use 30mb of memory for that run.
 			</p>
 			
 			<p>
-			Alternatively, you can use .../seductiveapps/com/jsonViewer/build.up.testdata.php to generate test data from the commandline. Use the source, Luke.
+			Alternatively, you can use .../NicerApp/com/jsonViewer/build.up.testdata.php to generate test data from the commandline. Use the source, Luke.
 			</p>
 
 
@@ -282,7 +282,7 @@ hm (bigArrayOrObject, title, {
 
 			<script type="text/javascript" language="javascript">
 				setTimeout (function () {
-					sa.m.waitForCondition ('site init', function () {
+					na.m.waitForCondition ('site init', function () {
 						return (jQuery('#tabs-3').css('display')!=='none');
 					}, function () {
 						var hms_tst_js = {
@@ -436,7 +436,7 @@ hm (bigArrayOrObject, title, {
 					<td>
 						<ul>
 							<li>hm() can now be part of a <a href="http://www.kelvinluck.com/assets/jquery/jScrollPane/jScrollPane.html" target="_new">jScrollPane</a> and still scroll correctly internally.</li>
-							<li>hm() is now used by <a href="http://seductiveapps.com/lah">logAndHandler</a>.</li>
+							<li>hm() is now used by <a href="http://NicerApp.com/lah">logAndHandler</a>.</li>
 							<li>hms.json.decode.small() can now decode synchronously. Still have to adjust it to use asynchronous operations for larger strings though.</li>
 						</ul>
 					</td>
@@ -623,15 +623,15 @@ hm (bigArrayOrObject, title, {
 		<div id="tabs-7" class="tabPage">
 			<div class="hmText">
 			<table border="1" cellspacing="10" class="jsonViewer_status" style="border:1px solid black; margin:10px">
-			<tr><td id="hmStatus_key" colspan="2" style="font-size:85%;">Written and <span style="">Copyrighted(c) 2010-2011 by [the owner of seductiveapps.com]</span> [seductiveapps@gmail.com]</td></tr>
+			<tr><td id="hmStatus_key" colspan="2" style="font-size:85%;">Written and <span style="">Copyrighted(c) 2010-2011 by [the owner of NicerApp.com]</span> [NicerApp@gmail.com]</td></tr>
 			<tr><td>Languages</td><td>php5 + javascript</td></tr>
 			<tr><td>Permalink</td><td>
-				<a href="http://seductiveapps.com/jsonViewer/">http://seductiveapps.com/jsonViewer/</a><br/>
+				<a href="http://NicerApp.com/jsonViewer/">http://NicerApp.com/jsonViewer/</a><br/>
 				<br/>
 				Mirror : <a href="http://code.google.com/p/jsonViewer/" target="_blank">http://code.google.com/p/jsonViewer/</a><br/>
 			</td></tr>
 			<tr><td id="downloadHM_key">Download</td><td>
-				<a href="http://seductiveapps.com/downloads/">jsonViewer as part of a package of downloads.</a><br/>
+				<a href="http://NicerApp.com/downloads/">jsonViewer as part of a package of downloads.</a><br/>
 			</td>
 			</tr>
 			<tr><td>License:</td>
