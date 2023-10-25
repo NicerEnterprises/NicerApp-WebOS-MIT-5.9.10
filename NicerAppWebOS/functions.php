@@ -1636,5 +1636,32 @@ function recryptFunctionNameCompatibility ($val) {
     $ret = str_replace('.','_',$val);
     return $ret;
 }
+function negotiateOptions () {
+	//print_r (debug_backtrace());
+  $params = func_get_args ();
+
+  $r = array();
+
+  foreach ($params as $paramIdx => $param) {
+		if ((array)$param!==$param) return badResult (E_USER_WARNING, array(
+			'function' => '/code/sitewide_rv/php_expansion_packs.php::negotiateOptions',
+			'msg' => 'Param with idx '.$paramIdx.' is not an array.',
+			'$paramIdx' => $paramIdx,
+			'$param' => $param
+		));
+
+		foreach ($param as $k=>$v) {
+
+		  if (is_array($v)) {
+			if (!array_key_exists($k,$r) || !is_array($r[$k])) $r[$k] = array();
+			$r[$k] = negotiateOptions ($r[$k], $v);
+		  } else {
+			$r[$k] = $v;
+		  }
+
+		}
+	}
+	return $r;
+}
 
 ?>

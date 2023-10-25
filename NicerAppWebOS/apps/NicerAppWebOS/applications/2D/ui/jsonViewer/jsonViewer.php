@@ -205,8 +205,8 @@ function jsonViewer_config_authorsDefaults () {
     $hmConfig['releaseDate'] = '2012 December 19, 08:08 CET';
 		//'jv.php'.': '.date('r',filectime (HD_ROOT.'code/libraries_rv/jsonViewer-1.3.3/jv.php')).', '.
 		//'jv.source.js'.': '.date('r',filectime (HD_ROOT.'code/libraries_rv/jsonViewer-1.3.3/jv.source.js'));
-    $hmConfig['baseDir'] = SA_HD.'/com/jsonViewer';
-    $hmConfig['baseURL'] = SA_WEB.'/com/jsonViewer';
+    $hmConfig['baseDir'] = $naWebOS->rootPath.'/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/ui/jsonViewer';
+    $hmConfig['baseURL'] = 'https://'.$naWebOS->domain.'/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/ui/jsonViewer';
     
     return $hmConfig;
 
