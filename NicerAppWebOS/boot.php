@@ -133,6 +133,7 @@ NicerApp WCS (Website Control System) from Nicer Enterprises
                 '+','plus',
                 preg_replace('/.*\s/','',date(DATE_RFC2822))
             );
+        $naBot = stripos($_SERVER['HTTP_USER_AGENT'], 'bot')!==false;
 
         $_SESSION['na_error_log_filepath_html'] =
             '/var/www/'.$naWebOS->domain.'/NicerAppWebOS/siteLogs/'
