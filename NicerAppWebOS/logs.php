@@ -17,27 +17,29 @@ if (
         )
     )
 ) die('403 Forbidden.');
-
 if (array_key_exists('file', $_GET)) {
     $fp = '/var/www/'.$naWebOS->domain.'/NicerAppWebOS/siteLogs/'.$_GET['file'];
     //echo file_get_contents($fp); die();
     if ($naLAN) $c = [
-        'siteContent' => file_get_contents($fp)
+        'siteContent' => file_get_contents($fp).'<script type="text/javascript">na.site.settings.current.loadingApps = false; na.site.settings.current.running_loadTheme = false; setTimeout (na.hms.startProcessing, 2500); na.site.transformLinks()</script>'
     ]; elseif (
         $_GET['file'] == $authorizedFile1
         || $_GET['file'] == $authorizedFile2
     ) $c = [
-        'siteContent' => file_get_contents($fp)
+        'siteContent' => file_get_contents($fp).'<script type="text/javascript">na.site.settings.current.loadingApps = false; na.site.settings.current.running_loadTheme = false; setTimeout (na.hms.startProcessing, 2500); na.site.transformLinks()</script>'
     ]; else $c = [
         'siteContent' => '403 Forbidden.'
     ];
-    if (
+    /*if (
         array_key_exists('interface',$_GET)
         && $_GET['interface']=='no'
-    ) echo file_get_contents($fp);
-    else echo $naWebOS->getSite($c);
+    ) echo file_get_contents($fp);*/
+    //else
+    echo $naWebOS->getSite($c);
 
-} elseif ($naLAN) {
+} elseif (array_key_exists('seoValue',$_GET) && $_GET['seoValue']==='logs') {
+//} elseif ($naLAN) {
+
     //$excl = '/(?!.*thumbs).*/'; // exclude anything that includes 'thumbs' in it's filepath.
     $excl = null;
     $folder = dirname(__FILE__).'/siteLogs/';
@@ -46,10 +48,10 @@ if (array_key_exists('file', $_GET)) {
     $html = '';
     foreach ($files as $i => $fp) {
         $fp2 = str_replace('/var/www/'.$naWebOS->domain.'/NicerAppWebOS/siteLogs/', '', $fp);
-        $url = '/NicerAppWebOS/logs.php?interface=no&file='.$fp2;
+        $url = '/logs?seoValue=logs&file='.$fp2;
         $html .= '<a href="'.$url.'">'.$fp.'</a><br/>';
     }
-    $html .= '<script type="text/javascript">na.site.transformLinks()</script>';
+    $html .= '<script type="text/javascript">na.site.settings.current.loadingApps = false; na.site.settings.current.running_loadTheme = false;  setTimeout (na.hms.startProcessing, 2500); na.site.transformLinks()</script>';
     $c = [ 'siteContent' => $html ];
     if (
         $_SERVER['SCRIPT_NAME']=='/NicerAppWebOS/logs.php'
@@ -64,4 +66,5 @@ if (array_key_exists('file', $_GET)) {
     }
 
 } else die('403 Forbidden.');
+echo '<pre>';var_dump ($_GET); die();
 ?>

@@ -11,7 +11,8 @@ Options +FollowSymLinks
     RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
     RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
 
-
+    RewriteCond %{REQUEST_METHOD} ^(GET)$
+    RewriteRule ^logs$ NicerAppWebOS/index.php?seoValue=logs&%{QUERY_STRING} [L]
 
     # /*--Heart of the blogging features--*/
     RewriteCond %{REQUEST_METHOD} ^(GET)$
@@ -224,19 +225,6 @@ Options +FollowSymLinks
 
 <IfModule mod_rewrite.c>
 # .../NicerAppWebOS/domainConfigs/nicer.app/mainmenu.items.php::$na_apps_structure as RewriteRules back into /*--NICERAPP_BASICS--*/
-
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_METHOD} ^(GET)$
-RewriteCond %{HTTP:X-Requested-With} XMLHttpRequest
-RewriteRule ^political-ideas--Gavan-Peacefan-Hoverswell$ /view-content/eyJcL05pY2VyQXBwV2ViT1NcL2FwcHNcL05pY2VyQXBwV2ViT1NcL2NvbnRlbnQtbWFuYWdlbWVudC1zeXN0ZW1zXC9OaWNlckFwcC1XQ1NcL2Rpc2tUZXh0Ijp7ImZpbGUiOiJ1c2VyLS1SZW5lX0FKTV9WZWVybWFuLWFrYS1HYXZhbl9QZWFjZWZhbl9Ib3ZlcnN3ZWxsXC9hcHAuZGlhbG9nLnNpdGVDb250ZW50LXBvbGl0aWNhbENvbnRyaWJ1dGlvbnMucGhwIiwiU0VPX3ZhbHVlIjoicG9saXRpY2FsLWlkZWFzLS1HYXZhbi1QZWFjZWZhbi1Ib3ZlcnN3ZWxsIn19 [N]
-
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_METHOD} ^(GET)$
-RewriteRule ^political-ideas--Gavan-Peacefan-Hoverswell$ /view/eyJcL05pY2VyQXBwV2ViT1NcL2FwcHNcL05pY2VyQXBwV2ViT1NcL2NvbnRlbnQtbWFuYWdlbWVudC1zeXN0ZW1zXC9OaWNlckFwcC1XQ1NcL2Rpc2tUZXh0Ijp7ImZpbGUiOiJ1c2VyLS1SZW5lX0FKTV9WZWVybWFuLWFrYS1HYXZhbl9QZWFjZWZhbl9Ib3ZlcnN3ZWxsXC9hcHAuZGlhbG9nLnNpdGVDb250ZW50LXBvbGl0aWNhbENvbnRyaWJ1dGlvbnMucGhwIiwiU0VPX3ZhbHVlIjoicG9saXRpY2FsLWlkZWFzLS1HYXZhbi1QZWFjZWZhbi1Ib3ZlcnN3ZWxsIn19 [N]
-
-
 
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
@@ -846,6 +834,45 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_METHOD} ^(GET)$
 RewriteRule ^forums-configuration$ /view/eyJcL05pY2VyQXBwV2ViT1NcL2FwcHNcL05pY2VyQXBwV2ViT1NcL2FwcGxpY2F0aW9uc1wvMkRcL2ZvcnVtc19fdmlld19pbmRleCI6eyJwYWdlIjoiaW5kZXgiLCJTRU9fdmFsdWUiOiJmb3J1bXMtY29uZmlndXJhdGlvbiJ9fQ [N]
+
+
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_METHOD} ^(GET)$
+RewriteCond %{HTTP:X-Requested-With} XMLHttpRequest
+RewriteRule ^jv$ /view-content/eyJcL05pY2VyQXBwV2ViT1NcL2FwcHNcL05pY2VyQXBwV2ViT1NcL2FwcGxpY2F0aW9uc1wvMkRcL3VpXC9qc29uVmlld2VyIjp7InBhZ2UiOiJpbmRleCIsIlNFT192YWx1ZSI6WyJqdiIsImpzb25WaWV3ZXIiXX19 [N]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_METHOD} ^(GET)$
+RewriteRule ^jv$ /view/eyJcL05pY2VyQXBwV2ViT1NcL2FwcHNcL05pY2VyQXBwV2ViT1NcL2FwcGxpY2F0aW9uc1wvMkRcL3VpXC9qc29uVmlld2VyIjp7InBhZ2UiOiJpbmRleCIsIlNFT192YWx1ZSI6WyJqdiIsImpzb25WaWV3ZXIiXX19 [N]
+
+
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_METHOD} ^(GET)$
+RewriteCond %{HTTP:X-Requested-With} XMLHttpRequest
+RewriteRule ^jsonViewer$ /view-content/eyJcL05pY2VyQXBwV2ViT1NcL2FwcHNcL05pY2VyQXBwV2ViT1NcL2FwcGxpY2F0aW9uc1wvMkRcL3VpXC9qc29uVmlld2VyIjp7InBhZ2UiOiJpbmRleCIsIlNFT192YWx1ZSI6WyJqdiIsImpzb25WaWV3ZXIiXX19 [N]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_METHOD} ^(GET)$
+RewriteRule ^jsonViewer$ /view/eyJcL05pY2VyQXBwV2ViT1NcL2FwcHNcL05pY2VyQXBwV2ViT1NcL2FwcGxpY2F0aW9uc1wvMkRcL3VpXC9qc29uVmlld2VyIjp7InBhZ2UiOiJpbmRleCIsIlNFT192YWx1ZSI6WyJqdiIsImpzb25WaWV3ZXIiXX19 [N]
+
+
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_METHOD} ^(GET)$
+RewriteCond %{HTTP:X-Requested-With} XMLHttpRequest
+RewriteRule ^logs$ /view-content/eyJcL05pY2VyQXBwV2ViT1NcL2FwcHNcL05pY2VyQXBwV2ViT1NcL2FwcGxpY2F0aW9uc1wvMkRcL2xvZ3MiOnsicGFnZSI6ImluZGV4IiwiU0VPX3ZhbHVlIjoibG9ncyJ9fQ [N]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_METHOD} ^(GET)$
+RewriteRule ^logs$ /view/eyJcL05pY2VyQXBwV2ViT1NcL2FwcHNcL05pY2VyQXBwV2ViT1NcL2FwcGxpY2F0aW9uc1wvMkRcL2xvZ3MiOnsicGFnZSI6ImluZGV4IiwiU0VPX3ZhbHVlIjoibG9ncyJ9fQ [N]
 
 
 

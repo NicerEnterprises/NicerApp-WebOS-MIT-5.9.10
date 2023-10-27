@@ -1,6 +1,6 @@
 <?php
 // This file is part of jsonViewer
-//	Written & copyrighted (c) 2010-2013 by [the owner of seductiveapps.com] <seductiveapps@gmail.com>
+//	Written & copyrighted (c) 2010-2013 by Rene AJM Veerman <rene.veerman.netherlands@gmail.com>
 //	License: LGPL, free for any type of use
 //	Disclaimer: NO WARRANTY EXPRESSED OR IMPLIED. USE ONLY AT YOUR OWN RISK.
 //	Download: http://seductiveapps.com/jsonViewer/
@@ -12,7 +12,11 @@ function hm (&$var, $title, $options=null, $settings=array('direct'=>'')) {
 }
 
 function hmJSON (&$jsonString, $title, $options=null) {
-	jsonViewer_dumpJSON ($jsonString, $title, $options);
+	$settings = [ 'mem' => '' ];
+	global $hmOutput;
+	$hmOutput = '';
+	jsonViewer_dump ($jsonString, $title, $options, $settings);
+	return $hmOutput;
 }
 
 
@@ -46,8 +50,9 @@ function jsonViewer_dump ($var, $title, $options=null, $outputSettings=array('di
 	$hmOutput = '';
 	global $jesx_cntChunkBytesDone;
 	$jesx_cntChunkBytesDone = 1;
-	json_encode_xxl_do($options, array('mem'=>''), false);
-	$options = ($options ? $hmOutput : null);
+	//$hmOutput = '<span style="display:none;">'.json_encode($options).'</span>';
+	//json_encode_xxl_do($options, array('mem'=>''), false);
+	$options = ($options ? json_encode($options) : null);
 	$traceData=debug_backtrace();
 	$traceData = jsonViewer_filterTrace_forPHP($traceData, array(
 		'filter' => array(
@@ -94,7 +99,7 @@ function jsonViewer_dump ($var, $title, $options=null, $outputSettings=array('di
 	json_encode_xxl_output (' "id" : "'.$htmlID.'", ', $outputSettings);
 	json_encode_xxl_output (' "dataOrigin" : "php"', $outputSettings);
 	json_encode_xxl_output ('};'."\n", $outputSettings);
-	json_encode_xxl_output ('setTimeout(function() { sa.jsonViewer.processWhenReady (hmData); }, 500);'."\n", $outputSettings);
+	json_encode_xxl_output ('setTimeout(function(hmData) { na.jsonViewer.processWhenReady (hmData); }, 500, hmData);'."\n", $outputSettings);
 	json_encode_xxl_output ('</script>'."\n", $outputSettings);
 	if ($outputSettings) return true; else return $hmOutput;
 }
@@ -205,7 +210,8 @@ function jsonViewer_config_authorsDefaults () {
     $hmConfig['releaseDate'] = '2012 December 19, 08:08 CET';
 		//'jv.php'.': '.date('r',filectime (HD_ROOT.'code/libraries_rv/jsonViewer-1.3.3/jv.php')).', '.
 		//'jv.source.js'.': '.date('r',filectime (HD_ROOT.'code/libraries_rv/jsonViewer-1.3.3/jv.source.js'));
-    $hmConfig['baseDir'] = $naWebOS->rootPath.'/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/ui/jsonViewer';
+	global $naWebOS;
+    $hmConfig['baseDir'] = $naWebOS->basePath.'/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/ui/jsonViewer';
     $hmConfig['baseURL'] = 'https://'.$naWebOS->domain.'/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/ui/jsonViewer';
     
     return $hmConfig;

@@ -1,4 +1,4 @@
-var NicerApp_WebOS = na = {};
+var NicerApp_WebOS = nicerapp = na = {};
 na.site = {
     about : {
         firstCreated : '10 January 2002',
@@ -62,7 +62,7 @@ na.site = {
     
     dismissCopyrightMessage : function () {
         $.cookie('visible_siteStatusbar', 'false', na.m.cookieOptions());
-        na.desktop.settings.visibleDivs.remove('#siteStatusbar');
+        na.d.s.visibleDivs = arrayRemove (na.d.s.visibleDivs,'#siteStatusbar');
         na.desktop.resize();
     },
     
@@ -94,12 +94,13 @@ na.site = {
             na.d.s.visibleDivs.push('#siteToolbarRight'); $.cookie('visible_siteToolbarRight','true', na.m.cookieOptions());
         }*/
         if ($('#siteToolbarLeft > .vividDialogContent').html().trim()==='{$div_siteToolbarLeft}') {
-            na.d.s.visibleDivs.remove('#siteToolbarLeft'); $.cookie('visible_siteToolbarLeft','');
+            na.d.s.visibleDivs = arrayRemove (na.d.s.visibleDivs,'#siteToolbarLeft');
+            $.cookie('visible_siteToolbarLeft','');
         } else {
             na.d.s.visibleDivs.push('#siteToolbarLeft'); $.cookie('visible_siteToolbarLeft','true', na.m.cookieOptions());
         }
         if ($.cookie('visible_siteStatusbar')!=='true') {
-            na.d.s.visibleDivs.remove('#siteStatusbar');
+            na.d.s.visibleDivs = arrayRemove (na.d.s.visibleDivs,'#siteStatusbar');
         } else {
             na.d.s.visibleDivs.push('#siteStatusbar');
         };
@@ -1547,10 +1548,10 @@ onclick_btnFullResetOfAllThemes : function (event) {
         na.apps.loaded = {};
         
         // stage 002 : hide all the toolbar DIVs (apps loaded in this loadContent() call will have to make them visible again themselves during their onload() code call
-        na.d.s.visibleDivs.remove('#siteToolbarTop'); $.cookie('visible_siteToolbarTop','', na.m.cookieOptions());
-        na.d.s.visibleDivs.remove('#siteErrors'); $.cookie('visible_siteErrors','', na.m.cookieOptions());
-        na.d.s.visibleDivs.remove('#siteToolbarLeft'); $.cookie('visible_siteToolbarLeft','', na.m.cookieOptions());
-        na.d.s.visibleDivs.remove('#siteToolbarRight'); $.cookie('visible_siteToolbarRight','', na.m.cookieOptions());
+        na.d.s.visibleDivs = arrayRemove (na.d.s.visibleDivs,'#siteToolbarTop'); $.cookie('visible_siteToolbarTop','', na.m.cookieOptions());
+        na.d.s.visibleDivs = arrayRemove (na.d.s.visibleDivs,'#siteErrors'); $.cookie('visible_siteErrors','', na.m.cookieOptions());
+        na.d.s.visibleDivs = arrayRemove (na.d.s.visibleDivs,'#siteToolbarLeft'); $.cookie('visible_siteToolbarLeft','', na.m.cookieOptions());
+        na.d.s.visibleDivs = arrayRemove (na.d.s.visibleDivs,'#siteToolbarRight'); $.cookie('visible_siteToolbarRight','', na.m.cookieOptions());
         na.desktop.resize();
         
         var 
@@ -2560,7 +2561,7 @@ debugger;
                     clearTimeout (na.site.settings.current.timeoutRevertStatusbarMsg);
                     na.site.settings.current.timeoutRevertStatusbarMsg = setTimeout (function () {
                         na.site.setStatusMsg (na.site.settings.defaultStatusMsg, false);
-                        if (!na.site.settings.current.statusbarVisible) na.desktop.settings.visibleDivs.remove ('#siteStatusbar');
+                        if (!na.site.settings.current.statusbarVisible) na.d.s.visibleDivs = arrayRemove (na.d.s.visibleDivs,'#siteStatusbar');
                         if (resize) setTimeout(function() {
                             $(window).trigger('resize');
                         }, 1000);

@@ -8,6 +8,7 @@
  * @package HTTP
  */
 require_once('SagHTTPAdapter.php');
+require_once(dirname(__FILE__).'/../../../../apps/NicerAppWebOS/applications/2D/ui/jsonViewer/jsonViewer.php');
 
 class SagCURLHTTPAdapter extends SagHTTPAdapter {
   private $ch;
@@ -196,6 +197,7 @@ class SagCURLHTTPAdapter extends SagHTTPAdapter {
       $date = $now->format("Y-m-d H:i:s.u ").preg_replace('/.*\s/','',date(DATE_RFC2822));
       //$date = $now->format("Y-m-d_H:i:s");
 
+      /*
       $dbgOpts = json_encode($optsTranslated, JSON_PRETTY_PRINT);
       $dbgOpts = str_replace('\/','/',$dbgOpts);
       $dbgOpts = str_replace("\n",'<br/>',$dbgOpts);
@@ -207,15 +209,22 @@ class SagCURLHTTPAdapter extends SagHTTPAdapter {
       $ret = str_replace("\n",'<br/>',$ret);
       $ret = str_replace('\n','<br/>',$ret);
       $ret = str_replace(" ",'&nbsp;',$ret);
+      */
+      $dbgOpts = json_decode(json_encode($optsTranslated), true);
+      $dbgOpts = hmJSON ($dbgOpts, 'cURL options',
+                          [ 'themeName' => 'naColorgradientSchemeMagicalBlue' ] );
+
+      $ret = json_decode($response->body,true);
+      $ret = hmJSON ($ret, 'cURL response', [ 'themeName' => 'naColorgradientSchemeGreen' ] );
 
       $dbgHTML =
         '<div id="entry_'.$_SESSION['dbgNum2'].'" class="naLogEntry">'
         .'<div class="naLogEntry_header"><span class="naLogHeader_title">Database Query</span><br/><span class="naLogHeader_datetime">'.$date.'</span><br/><span class="naLogHeader_url">'.$opts[CURLOPT_URL].'</span></div>'
-        .'<div class="naLogHeader_curlOptions" style="display:flex;align-items:center;">'.$this->buttonExpand().'curl options</div>'
+        //.'<div class="naLogHeader_curlOptions" style="display:flex;align-items:center;">'.$this->buttonExpand().'curl options</div>'
         .'<div id="expandData_'.($_SESSION['dbgNum']-1).'" class="naLogCurlOptions">'
         .$dbgOpts
         .'</div>'
-        .'<div class="naLogHeader_curlResponse" style="display:flex;align-items:center;">'.$this->buttonExpand().'curl response</div>'
+        //.'<div class="naLogHeader_curlResponse" style="display:flex;align-items:center;">'.$this->buttonExpand().'curl response</div>'
         .'<div id="expandData_'.($_SESSION['dbgNum']-1).'" class="naLogCurlResponse">'
         .$ret
         .'</div>'

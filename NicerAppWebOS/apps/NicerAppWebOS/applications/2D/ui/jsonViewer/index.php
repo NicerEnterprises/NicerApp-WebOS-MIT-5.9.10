@@ -68,15 +68,14 @@ if (!array_key_exists('rootURL', $_GET)) $_GET['rootURL'] = dirname(dirname(dirn
 		<link rel="stylesheet" href="<?php echo $_GET['rootURL'];?>/code/libraries/jquery-ui-1.8.16/development-bundle/themes/base/jquery.ui.theme.css" type="text/css" media="all" />
     	<script type="text/javascript" src="<?php echo $_GET['rootURL'];?>/code/libraries/jquery-ui-1.8.16/development-bundle/ui/jquery-ui-1.8.16.custom.js"></script>
 */
+
+global $naWebOS;
+define ('SA_WEB', 'https://'.$naWebOS->domain);
 ?>
-<!DOCTYPE html>
-<html style="width:100%;height:100%;">
-    <head>
 		<title><?php readfile (dirname(__FILE__).'/index.php.title.txt');?></title>
 		<?php require (dirname(__FILE__).'/index.php.meta.php');?>
-		<link type="text/css" rel="StyleSheet" media="screen" href="<?php echo SA_WEB?>/com/ui/tools/jsonViewer/css.index.css">
-		<link type="text/css" rel="StyleSheet" media="screen" href="<?php echo SA_WEB?>/get_css.php?want=all"/>
-		<script type="text/javascript" src="<?php echo SA_WEB?>/get_javascript.php?want=all"></script>
+		<link type="text/css" rel="StyleSheet" media="screen" href="<?php echo SA_WEB?>/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/ui/jsonViewer/css.index.css">
+
 		<script type="text/javascript">
 			function startApp () {
 				startAppDo();
@@ -108,9 +107,7 @@ if (!array_key_exists('rootURL', $_GET)) $_GET['rootURL'] = dirname(dirname(dirn
 				})
 			}
 		</script>
-    </head>
-<body style="overflow:hidden;width:100%;height:100%" onload="startApp();">
-	<div id="tabs" class="vividTabs vividTheme__<?php echo SA_SITES_SEDUCTIVEAPPS_TABS_THEME?>" style="width:100%;height:100%">
+	<div id="tabs" class="vividTabs vividTheme__" style="width:100%;height:100%">
 		<ul>
 			<li><a href="#tabs-2">PHP Demo</a></li>
 			<li><a href="#tabs-3">JS Demo</a></li>
@@ -286,7 +283,7 @@ hm (bigArrayOrObject, title, {
 						return (jQuery('#tabs-3').css('display')!=='none');
 					}, function () {
 						var hms_tst_js = {
-							sa : sa
+							na : na
 						};
 						hm (hms_tst_js, 'sa dump', { htmlID : 'selfTest', opacity : 0.7 });
 					},1000);
@@ -672,5 +669,3 @@ hm (bigArrayOrObject, title, {
 		-->
 		</div>
 	</div>
-</body>
-</html>

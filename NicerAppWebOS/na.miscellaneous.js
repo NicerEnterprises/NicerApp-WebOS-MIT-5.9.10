@@ -11,7 +11,13 @@ na.m = {
     settings : {
         debugLevel : 1099,// max level shown, use the following to show all msgs (leads to cluttering of console.log) : //'show all',
         debugCategoriesVisible : [ 'all' ],
-        waitForCondition : {}
+        waitForCondition : {},
+		cloneObject : {
+			circulars : []
+		},
+		cloneObjectAsync : {
+			commands : []
+		}
     },
 
     adjustColorOpacity : function (el, opacityValue) {
@@ -269,6 +275,7 @@ na.m = {
             var date = new Date();
             na.m.settings.siteStartTime = date.getTime();
         };
+        if (msg && msg.msg) msg = msg.msg;
 
         if (includeBacktrace!==false) includeBacktrace = true;
 
@@ -1272,7 +1279,329 @@ na.m = {
         );
         if (!r && typeof ctx=='object' && ctx.debugMe) debugger;
         return r;
+    },
+
+	cloneObject : function (v) {
+		var cIdx = na.m.settings.cloneObject.circulars.length;
+		na.m.settings.cloneObject.circulars[cIdx] = [];
+		return na.m.cloneObject_do(cIdx, v, '');
+	},
+
+	cloneObject_circularFound : function (cIdx, v) {
+		var c = na.m.settings.cloneObject.circulars[cIdx];
+		for (var i=0; i<c.length; i++) {
+			if (c[i].v===v) return c[i];
+		}
+		return false;
+	},
+
+	cloneObject_addCircular : function (cIdx, v, path) {
+		var c = na.m.settings.cloneObject.circulars[cIdx];
+		c[c.length] = {
+			v : v,
+			path : path
+		};
+	},
+
+	cloneObject_do: function (cIdx, v, path) {
+
+		if (Array.isArray(v)) {
+			// JSON / javascrip simple list aka []
+			var test = [];
+			for (var i=0; i<v.length; i++) {
+				if (v[i] === window) {
+					test[i] = '-window node skipped-';
+				} else if (v[i] && v[i].tagName) {
+					test[i] = '-DOM node skipped-';
+				} else {
+					var cr = na.m.cloneObject_circularFound(cIdx,v[i]);
+					if (typeof cr==='object') {
+						test[i] = '-Circular reference skipped- ['+cr.path+']';
+					} else {
+						//na.m.log (1, path+'/'+x);
+						if (typeof v[i] == 'object') {
+							if (v[i]!==undefined && v[i]!==null) na.m.cloneObject_addCircular (cIdx, v[i], path+'/'+x);
+							test[i] = new na.m.cloneObject_do (cIdx, v[i], path+'/'+x);
+						} else {
+							test[i] = v[i];
+						}
+					}
+				}
+			}
+
+		} else {
+			// JSON / javascript folders and subfolders aka {}
+			var test = {};
+			for (var x in v) {
+				if (v[x] === window) {
+					test[x] = '-window node skipped-';
+				} else if (v[x] && v[x].tagName) {
+					test[x] = '-DOM node skipped-';
+				} else {
+					var cr = na.m.cloneObject_circularFound(cIdx,v[x]);
+					if (typeof cr==='object') {
+						test[x] = '-Circular reference skipped- ['+cr.path+']';
+					} else {
+						//na.m.log (1, path+'/'+x);
+						if (
+							x=='context'
+							|| x=='parentNode'
+							|| x=='panel'
+							|| x=='styleSheets'
+							|| x=='defaultView'
+						) {
+							test[x] = '[skipped] ['+x+']';
+						} else if (typeof v[x] == 'object') {
+							if (v[x]!==undefined && v[x]!==null) na.m.cloneObject_addCircular (cIdx, v[x], path+'/'+x);
+							test[x] = new na.m.cloneObject_do (cIdx, v[x], path+'/'+x);
+						} else {
+							test[x] = v[x];
+						}
+					}
+				}
+			}
+		}
+		return test;
+	},
+
+	reAttachUA : function (uaIdx, func) {
+		var ua = na.tracer.userActions[uaIdx];
+		func.ua = ua;
+		return func;
+	},
+
+	cloneObjectAsync : function (cmd) {
+		var rscc = na.m.settings.cloneObjectAsync.commands;
+		var cmdIdx = rscc.length;
+		rscc[cmdIdx] = cmd;
+		cmd.result = {};
+		cmd.lastPause = 0;
+		cmd.lastCheck = 0;
+		cmd.countKeys=1;
+		if (!cmd.cIdx) {
+			cmd.cIdx = na.m.settings.cloneObject.circulars.length;
+			na.m.settings.cloneObject.circulars[cmd.cIdx] = [];
+		};
+	    var queue = [{parent:null,source:cmd.original,target:cmd.result,path:''}];
+
+	    var processQueue = function() {
+			if (queue.length==0) {
+				cmd.resultCallback(cmd);
+			} else {
+	        	var it = queue.shift();
+			var logStr = 'na.m.cloneObjectAsync(): now copying '+it.path;
+		    //na.m.log (1, logStr);
+			if (cmd.statusUpdateTo) jQuery('#'+cmd.statusUpdateTo).html(logStr);
+			/* todo: attempt to copy members of Array in the correct order
+			if (it.source instanceof Array) {
+				for (var k=0; k<it.source.length) {
+					it.target[k] = it.source[k];
+				}
+			}
+			*/
+			//debugger;
+			for (var k in it.source) {
+					if (/*typeof k!=='number' && */ it.source.hasOwnProperty(k)) {
+						if (it.source[k] === undefined) {
+							it.target[k] = '[undefined]';
+						} else if (typeof it.source[k]=='object' && it.source[k]!==null && it.source[k].contentWindow) {
+							it.target[k] = '[iframe node skipped]';
+						} else if (it.source[k] == window) {
+							it.target[k] = '[window node skipped]';
+						} else if (it.source[k] && it.source[k].tagName) {
+							it.target[k] = '[DOM node skipped] [id="'+it.source[k].id+'" class="'+it.source[k].className+'" style="'+(it.source[k].style?it.source[k].style.cssText:'')+'"]';
+						} else if (
+							k=='context'
+							|| k=='parent'
+							|| k=='parentNode'
+							|| k=='panel'
+							|| k=='styleSheets'
+							|| k=='defaultView'
+							|| k=='original'
+							|| k=='traced'
+							|| k=='userActions'
+							|| k=='_request'
+							|| k=='circulars'
+							|| k=='cloneObjectAsync'
+							|| k=='entries'
+							/*
+							|| (
+							    it.path.indexOf ('sa')!==false
+							    && it.path.indexOf ('settings')!==false
+							)
+							|| (
+							    it.path.indexOf ('sa')!==false
+							    && it.path.indexOf ('json' )!==false
+							    && it.path.indexOf ('decode')!==false
+							    && it.path.indexOf ('contexts')!==false
+							)
+							|| (
+							    it.path.indexOf ('sa')!==false
+							    && it.path.indexOf ('jsonviewer')!==false
+							    && it.path.indexOf ('options')!==false
+							    && it.path.indexOf ('thisCmd')!==false
+							)
+							|| (
+							    it.path.indexOf ('sa')!==false
+							    && it.path.indexOf ('jsonViewer')!==false
+							    && it.path.indexOf ('settings')!==false
+							)
+							|| (
+							    it.path.indexOf ('sa')!==false
+							    && it.path.indexOf ('vividControls')!==false
+							    && it.path.indexOf ('settings')!==false
+							    && it.path.indexOf ('fadeCmds')!==false
+							)
+							|| (
+							    it.path.indexOf ('sa')!==false
+							    && it.path.indexOf ('tracer')!==false
+							    && it.path.indexOf ('traced')!==false
+							)
+							|| (
+							    it.path.indexOf ('sa')!==false
+							    && it.path.indexOf ('tracer')!==false
+							    //&& it.path.indexOf ('userActions')!==false
+							)*/
+
+							|| it.path.indexOf(' / na / settings ')!== -1
+							|| it.path.indexOf(' / na / json / decode / contexts ')!== -1
+							|| it.path.indexOf(' / na / jsonViewer / options / thisCmd ')!== -1
+							|| it.path.indexOf(' / na / jsonViewer / settings ')!== -1
+							|| it.path.indexOf(' / na / vividControls / settings / fadeCmds ') !== -1
+							|| it.path.indexOf(' / na / tracer / traced ') !== -1
+							|| it.path.indexOf(' / na / tracer / userActions ') !== -1
+							|| it.path.indexOf(' / steps') !== -1
+							|| it.path.indexOf(' / backgrounds') !== -1
+
+						) {
+							it.target[k] = '[Dangerously large node skipped; k='+k+', it.path='+it.path+']';
+						} else {
+							var cr = na.m.cloneObject_circularFound(cmd.cIdx,it.source[k]);
+							if (typeof cr==='object') {
+								it.target[k] = '[Circular reference skipped] ['+cr.path+']';
+							} else {
+								cmd.countKeys++;
+								//jQuery('#rslv_status2').html (cmd.countKeys + ' - ' + queue.length);
+								if (typeof it.source[k]=='object' && it.source[k]!==null && it.source[k]!=undefined) {
+									 if (it.source[k]!==undefined && it.source[k]!==null) na.m.cloneObject_addCircular (cmd.cIdx, it.source[k], it.path+' / '+k);
+									 it.target[k] = (it.source[k] instanceof Array) ? [] : {};
+									queue.push({parent:it.source, source:it.source[k], target:it.target[k],path:it.path+' / '+k});
+								} else {
+									it.target[k] = it.source[k];
+								};
+							}
+						}
+					}
+		        };
+				//jQuery('#rslv_status2').html (cmd.countKeys + ' - ' + queue.length);
+				var pauseFactor = cmd.countKeys;
+				if (pauseFactor > cmd.lastPause+200) {
+					setTimeout (function () {
+						cmd.lastPause = pauseFactor;
+						cmd.countKeys++;
+			            		processQueue();
+					}, 250);
+				} else {
+					processQueue();
+				};
+
+
+			}
+	    };
+	    processQueue();
+	},
+
+    millisecondsHumanReadable : function (ms, htmlYes) {
+      if (typeof htmlYes == 'undefined') htmlYes = true;
+      if (ms < 1000) {
+        var s = ms + ' milliseconds';
+      } else {
+        var s = na.m.milliseconds_format(size, htmlYes);
+
+        if (htmlYes) s = '<a href="#" class="hmByteSize" title="' + size + ' bytes" onclick="return false;">' + s + '</a>';
+      };
+      return s;
+    },
+
+    milliseconds_format : function (ms, htmlYes) {
+        if (typeof htmlYes == 'undefined') htmlYes = true;
+        var pre = '';
+        var post = '';
+        if (htmlYes) {
+            pre = '<span class="millisecondsHumanReadable">';
+            post = '</span>';
+        }
+        if (ms >= 1 * 24 * 60 * 60 * 1000) {
+            ms= na.m.number_format(ms / 24*60*60*1000, 2, pre + '.', post, '') + ' days';
+        } else if (ms >= 60 * 60 * 1000) {
+            ms= na.m.number_format(ms / 60*60*1000, 2, pre + '.', post, '') + ' hours';
+        } else if (ms >= 60 * 1000) {
+            ms = na.m.number_format(filesize / 60*1000, 2, pre + '.', post, '') + ' minutes';
+        } else if (ms >= 1000) {
+            ms = na.m.number_format(filesize / 60*1000, 2, pre + '.', post, '') + ' seconds';
+        } else ms = '[Time\'s up]';
+        return ms;
+    },
+
+    sizeHumanReadable: function (size, htmlYes) { // sizeHumanReadable
+      if (typeof htmlYes == 'undefined') htmlYes = true;
+      if (size < 1024) {
+        var s = size + ' bytes';
+      } else {
+        var s = na.m.size_format(size, htmlYes);
+
+        if (htmlYes) s = '<a href="#" class="hmByteSize" title="' + size + ' bytes" onclick="return false;">' + s + '</a>';
+      };
+      return s;
+    },
+
+    size_format: function (filesize, htmlYes) {
+      if (typeof htmlYes == 'undefined') htmlYes = true;
+      var pre = '';
+      var post = '';
+      if (htmlYes) {
+        pre = '<span class="sizeHumanReadable">';
+        post = '</span>';
+      }
+      if (filesize >= 1073741824) {
+        filesize = na.m.number_format(filesize / 1073741824, 2, pre + '.', post, '') + ' Gb';
+      } else {
+        if (filesize >= 1048576) {
+          filesize = na.m.number_format(filesize / 1048576, 2, pre + '.', post, '') + ' Mb';
+        } else {
+          if (filesize >= 1024) {
+            filesize = na.m.number_format(filesize / 1024, 2, pre + '.', post, '') + ' Kb';
+          } else {
+            filesize = '';
+          };
+        };
+      };
+      return filesize;
+    },
+
+    number_format: function (number, decimals, dec_point, dec_point_end, thousands_sep) {
+      // http://kevin.vanzonneveld.net
+      // +	improved by: seductiveapps@gmail.com (2010/01)
+      // +   original by: Jonas Raoni Soares Silva (http://www.jsfromhell.com)
+      // +   improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+      // +     bugfix by: Michael White (http://crestidg.com)
+      // +     bugfix by: Benjamin Lupton
+      // +     bugfix by: Allan Jensen (http://www.winternet.no)
+      // +    revised by: Jonas Raoni Soares Silva (http://www.jsfromhell.com)
+      // *     example 1: number_format(1234.5678, 2, '.', '');
+      // *     returns 1: 1234.57
+      var n = number,
+        c = isNaN(decimals = Math.abs(decimals)) ? 2 : decimals;
+      var d = dec_point == undefined ? "," : dec_point;
+      var t = thousands_sep == undefined ? "." : thousands_sep,
+      s = n < 0 ? "-" : "";
+      var i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "",
+        j = (j = i.length) > 3 ? j % 3 : 0;
+
+      return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "jQuery1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) + dec_point_end : "");
     }
+
+
 }; // na.m
 
 Date.prototype.getMonthName = function(lang) {
@@ -1314,15 +1643,16 @@ Date.prototype.tet = function() {
 	return (this.getTimezoneOffset() < this.stdTimezoneOffset());
 };
 
-Array.prototype.remove = function() {
+arrayRemove = function(t) {
     var what, a = arguments, L = a.length, ax;
-    while (L && this.length) {
+    while (L && t.length) {
         what = a[--L];
-        while ((ax = this.indexOf(what)) !== -1) {
-            this.splice(ax, 1);
+        if (what===t) continue;
+        while ((ax = t.indexOf(what)) !== -1) {
+            t.splice(ax, 1);
         }
     }
-    return this;
+    return t;
 };
 
 /*Array.prototype.include = function (x) {

@@ -255,10 +255,12 @@ na.cg.themes = {
 					//	   0 = outer level of display, 
 					//	 100 = deepest level of display.
 					0: {
-						color: '#005050'
+						background : 'rgba(0,0,255,0.3)',
+						color: '#00FFFF'
 					},
 					100: {
-						color: '#00AAAA'
+						background : 'rgba(0,0,150,0.5)',
+						color: '#fbff21'
 					}
 					//Rules:
 					// 1: only css COLOR properties allowed here.
@@ -422,12 +424,12 @@ na.cg.themes = {
 					//	   0 = outer level of display, 
 					//	 100 = deepest level of display.
 					0: {
-						//background: 'blue',
+						background: 'rgba(0,0,255,0.5)',
                         opacity : 1,
 						color: 'white'
 					},
                     100 : { 
-                        //background : 'navy',
+                        background : 'rgba(0,0,50,0.7)',
                         color : 'grey',
                         opacity : 1
                     }
@@ -624,11 +626,11 @@ na.cg.themes = {
 					//	   0 = outer level of display, 
 					//	 100 = deepest level of display.
 					0: {
-						background: '#006655',
+						background: 'rgba(0,150,130,0.3)',
 						color: '#FFFFFF'
 					},
 					100: {
-						background: '#000000',
+						background: 'rgba(0,50,50,0.4)',
 						color: 'lime'
 					}
 					//Rules:4
@@ -1522,7 +1524,7 @@ na.cg.themes = {
                         )
                     };
 
-                    step[prop] = na.cg.generateCSS_combineColor(newColor, 'rgba');
+					step[prop] = na.cg.generateCSS_combineColor(newColor, 'rgba');
                 } else if (prop=='opacity') {
                     var 
                     above = na.cg.generateCSS_findNeighbour(prop, x, cg, 'above'),
@@ -1626,7 +1628,7 @@ na.cg.themes = {
                         )
                     };
 
-                    step[prop] = na.cg.generateCSS_combineColor(newColor);
+                    step[prop] = na.cg.generateCSS_combineColor(newColor,'rgba');
                 } else if (prop=='opacity') {
                     var 
                     above = na.cg.generateCSS_findNeighbour(prop, x, cg, 'above'),
