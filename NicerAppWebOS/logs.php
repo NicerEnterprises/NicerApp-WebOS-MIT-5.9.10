@@ -17,6 +17,7 @@ if (
         )
     )
 ) die('403 Forbidden.');
+
 if (array_key_exists('file', $_GET)) {
     $fp = '/var/www/'.$naWebOS->domain.'/NicerAppWebOS/siteLogs/'.$_GET['file'];
     //echo file_get_contents($fp); die();

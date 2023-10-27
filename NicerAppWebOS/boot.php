@@ -193,7 +193,7 @@ NicerApp WCS (Website Control System) from Nicer Enterprises
         '$_POST' => $_POST,
         '$naWebOS->view' => $naWebOS->view
     ];
-    trigger_error ('NEW REQUEST : $dbg=<pre class="naLogHeader_newRequest">'.json_encode($dbg, JSON_PRETTY_PRINT).'</pre>', E_USER_NOTICE);
+    trigger_error ('NEW REQUEST :<br/>'.hmJSON($dbg,'$dbg'), E_USER_NOTICE);
     //echo '<pre>'; var_dump ($_SERVER); die();
 
     $lanConfigFilepath = realpath(dirname(__FILE__)).'/domainConfigs/'.$naWebOS->domain.'/naLAN.json';

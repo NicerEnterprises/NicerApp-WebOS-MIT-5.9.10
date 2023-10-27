@@ -1450,6 +1450,7 @@ class NicerAppWebOS {
                 $r .= '</style>'.PHP_EOL;
                 $ret .= $r;
             }
+            if (is_array($css)) break;
         };
 
         //echo '<pre>'; var_dump ($d); die();
@@ -1507,6 +1508,7 @@ class NicerAppWebOS {
                     $ret = $r.$ret;
                 }
         };
+
         if ($debug) { echo '$ret='; var_dump(htmlentities($ret)); echo '</pre>'.PHP_EOL.PHP_EOL; exit(); };
         if ($this->debugThemeLoading) exit();
         return $ret;
@@ -1817,6 +1819,7 @@ class NicerAppWebOS {
                 //$preferredSelectorName = 'site for group '.$role.' at the client';
                 if ($viewFolder!==''
                     && $viewFolder!=='/'
+                    && $appName!==''
                 ) {
                     $selectors[] = array (
                         'permissions' => [
