@@ -424,12 +424,12 @@ na.cg.themes = {
 					//	   0 = outer level of display, 
 					//	 100 = deepest level of display.
 					0: {
-						background: 'rgba(0,0,255,0.2)',
+						background: 'rgba(0,0,255,0.1)',
                         opacity : 1,
 						color: 'white'
 					},
                     100 : { 
-                        background : 'rgba(0,0,50,0.35)',
+                        background : 'rgba(0,0,50,0.20)',
                         color : 'grey',
                         opacity : 1
                     }
@@ -626,11 +626,11 @@ na.cg.themes = {
 					//	   0 = outer level of display, 
 					//	 100 = deepest level of display.
 					0: {
-						background: 'rgba(0,150,130,0.2)',
+						background: 'rgba(0,150,130,0.1)',
 						color: '#FFFFFF'
 					},
 					100: {
-						background: 'rgba(0,50,50,0.35)',
+						background: 'rgba(0,50,50,0.20)',
 						color: 'lime'
 					}
 					//Rules:4

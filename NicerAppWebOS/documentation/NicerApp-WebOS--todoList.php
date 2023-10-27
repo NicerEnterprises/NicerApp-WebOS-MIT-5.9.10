@@ -28,7 +28,7 @@
 
     <li class="todoList"><div>(CURRENT) (2023 Oct,Nov) Always / Shaded / No showing of .vdSettings for any .vividDialog and listed in #siteBtnOptions_menu</div></li>
 
-    <li class="todoList"><div>(CURRENT) (2023 Oct,Nov) Show 'bot' hits in mydomain.com/NicerAppWebOS/logs.php in a different color (grey)</div></li>
+    <li class="todoList"><div>(DONE) (2023 Oct,Nov) Highlight 'bot' hits in myNAdomain.com/view/logs</div></li>
 
     <li class="todoList"><div>(CURRENT) (2023 Oct,Nov,Dec) Upgrade the blogging features.
         <ol class="todoList_l1">

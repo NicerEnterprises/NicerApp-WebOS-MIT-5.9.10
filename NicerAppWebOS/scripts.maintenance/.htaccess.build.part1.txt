@@ -15,9 +15,8 @@ Options +FollowSymLinks
     #RewriteCond %{REQUEST_METHOD} ^(GET)$
     #RewriteCond %{HTTP:X-Requested-With} XMLHttpRequest
     #RewriteRule ^logs$ NicerAppWebOS/logic.AJAX/ajax_get_content.php?seoValue=logs&%{QUERY_STRING} [L]
-
-    RewriteCond %{REQUEST_METHOD} ^(GET)$
-    RewriteRule ^logs$ NicerAppWebOS/index.php?seoValue=logs&%{QUERY_STRING} [L]
+    #RewriteCond %{REQUEST_METHOD} ^(GET)$
+    #RewriteRule ^logs$ NicerAppWebOS/index.php?seoValue=logs&%{QUERY_STRING} [L]
 
 
     # /*--Heart of the blogging features--*/

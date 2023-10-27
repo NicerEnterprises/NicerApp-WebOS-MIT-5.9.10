@@ -511,7 +511,7 @@ class naVividMenu__behavior_rainbowPanels {
 
         var items_final = $.extend([], items_prevEl);
         for (var i=0; i < items_currentEl.length; i++) {
-            items_final = items_final.remove (items_currentEl[i]);
+            items_final = arrayRemove (items_final, items_currentEl[i]);
         }
 
         return {
