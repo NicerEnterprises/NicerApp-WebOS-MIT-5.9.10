@@ -537,7 +537,6 @@ nicerapp.hms = nicerapp.jsonViewer = {
 			//na.hms.log (195, 'tools.expandMore():'+k+' - '+expandCmd.ids[k].levels+' - '+expandCmd.ids[k].id);
 			//na.hms.log (195, na.m.stacktrace());
 
-            debugger;
 			if (expandCmd.ids[k].levels > 0) {
 				var htmlID = expandCmd.ids[k].id;
 				var el = jQuery('#'+htmlID)[0];
@@ -897,7 +896,6 @@ nicerapp.hms = nicerapp.jsonViewer = {
 				}
 			};
 			cmd.hmd.hms.isRootVar = true;
-			debugger;
 			var 
 			l1 = na.hms.tools.printNextLevel({
 				id: na.hms.settings.cs.debugID,
@@ -1008,7 +1006,8 @@ nicerapp.hms = nicerapp.jsonViewer = {
 				|| (d.getTime() - na.hms.settings.lastResizeCmdIssued > na.hms.settings.waitTime)
 			) {
 				na.desktop.settings.lastResizeCmdIssued = d.getTime();
-                
+
+				/*
                 debugger;
 				var cmd = na.hms.settings.cs.cmds[cmdID];
 				if (cmd && cmd.scrollpaneID) {
@@ -1027,6 +1026,7 @@ nicerapp.hms = nicerapp.jsonViewer = {
 					});
 					na.sp.containerSizeChanged (jQuery('#'+cmd.externalScrollpaneID)[0], false);
 				}
+				*/
 			};
 		},
 
