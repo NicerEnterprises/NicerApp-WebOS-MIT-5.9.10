@@ -1092,7 +1092,6 @@ nicerapp.hms = nicerapp.jsonViewer = {
 				pvCmd.scanUpdateCallback (pvCmd);
 			};
 			na.hms.log (419, 'tools.printNextLevel_scan(): pvCmd.scanIdx='+pvCmd.scanIdx+', scanResults.length='+(pvCmd.scanResults.length));
-			if (pvCmd.scanIdx==30) debugger;
 			if (pvCmd.scanIdx==pvCmd.scanResults.length) {
 				//alert (1);
 				//na.hms.log (2, 'tools.printNextLevel_scan(): scanning done');
@@ -1105,7 +1104,7 @@ nicerapp.hms = nicerapp.jsonViewer = {
 			}
 			
 			var pauseFactor = pvCmd.scanIdx;
-			if (true || pauseFactor > pvCmd.lastPause + 2) {
+			if (pauseFactor > pvCmd.lastPause + 50) {
 				//na.hms.log (418, 'tools.printNextLevel_scan(): pausing for 200 milliseconds');
 				setTimeout (function () {
 					pvCmd.lastPause = pauseFactor;
