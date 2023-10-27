@@ -429,7 +429,9 @@ na.site = {
                 $('body > .lds-facebook').fadeOut('normal');//css({display:'none'});
 
                 na.site.renderAllCustomHeadingsAndLinks();
+
                 //na.themeEditor.onload ('siteContent'); // must remain HERE, or else you'll not correctly load the theme settings for 'Extras'
+                na.te.s.c.specificity = na.site.globals.themeDBkeys; // IF NOT using the statement above here, DO USE THIS, or you end up loading ALL THEMES in ajax_loadTheme.php
 
                 $('#siteContent .vividDialogContent.vividScrollpane')[0].focus();
 
@@ -957,7 +959,6 @@ na.site = {
     },
     
     setSpecificity : function(simple) {
-        //debugger;
         $('.na_themes_dropdown').html('<div class="vividDropDownBox_selected vividScrollpane" style="white-space:normal;"></div><div class="vividDropDownBox_selector"><div class="vividScrollpane" style="padding:0px;"></div></div>').delay(50);
         $('.vividDropDownBox_selected, .vividDropDownBox_selector').each(function(idx,el) {
             var w = 0;
@@ -982,14 +983,14 @@ na.site = {
         for (var i in na.site.globals.themesDBkeys) {
             if (
                 na.site.globals.themesDBkeys[i].display===false
-                || !na.site.globals.themesDBkeys[i].hasWritePermission
+                || !na.site.globals.themesDBkeys[i].has_write_permission
             ) continue;
             var l = i;
         }
         for (var i in na.site.globals.themesDBkeys) {
             if (
                 na.site.globals.themesDBkeys[i].display===false
-                || !na.site.globals.themesDBkeys[i].hasWritePermission
+                || !na.site.globals.themesDBkeys[i].has_write_permission
             ) continue;
 
             var
@@ -3170,6 +3171,8 @@ debugger;
             for (var app in apps) break;
         else app = apps;
         //if (app) acData.app = app;
+
+
         if (s) {
             if (s.view) acData.view = s.view;
             if (s.role) acData.role = s.role;
@@ -3189,7 +3192,7 @@ debugger;
                 delete acData.app;
                 delete acData.url;
             }
-        }
+        } else debugger;
 
         var
         url = '/NicerAppWebOS/logic.AJAX/ajax_database_loadTheme.php',
