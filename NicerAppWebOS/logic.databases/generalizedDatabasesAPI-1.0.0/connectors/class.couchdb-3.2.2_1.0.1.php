@@ -265,6 +265,7 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
     public function translate_plainUserName_to_couchdbUserName ($un) {
         global $naWebOS;
         $dn = $this->dataSetName_domainName($naWebOS->domain);
+        $un = str_replace($dn.'___', '', $un);
         return $dn.'___'.str_replace('.','__',str_replace(' ', '_', $un));
     }
     public function translate_couchdbUserName_to_plainUserName ($un) {
@@ -275,6 +276,9 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
     public function translate_plainGroupName_to_couchdbGroupName ($gn) {
         global $naWebOS;
         $dn = $this->dataSetName_domainName($naWebOS->domain);
+        //echo '<pre style="color:red">'; var_dump ($dn); echo '</pre>';
+        $gn = str_replace($dn.'___', '', $gn);
+        //echo '<pre style="color:purple">'; var_dump ($dn); echo '</pre>';
         return $dn.'___'.str_replace('.','__',str_replace(' ', '_', $gn));
     }
     public function translate_couchdbGroupName_to_plainGroupName ($gn) {

@@ -1142,11 +1142,14 @@ class NicerAppWebOS {
             if ($debug) { echo $idx.'<br/>'.PHP_EOL; };
 
             $permissions = $selector['permissions'];
+            //echo '<pre style="color:cyan;background:navy;">'; var_dump ($permissions); echo '</pre>';
 
             $hasPermission = false;
+            foreach (['read','write'] as $idx=>$pt) {
             foreach ($permissions as $permissionType => $permissionsRec) {
-                if ($permissionType=='write') {
+                if ($permissionType==$pt) {
                     foreach ($permissionsRec as $accountType => $accountsList) {
+                        //echo '<pre style="color:lime;background:navy;">'; var_dump ($permissionsRec); echo '</pre>';
                         foreach ($accountsList as $idx2 => $userOrGroupID) {
                             if ($accountType == 'users') {
                                 $adjustedUserOrGroupID = $db->translate_plainUserName_to_couchdbUserName($userOrGroupID);
@@ -1155,7 +1158,8 @@ class NicerAppWebOS {
                             }
                             //$adjustedUserOrGroupID = $userOrGroupID; // TODO : check if this is necessary
 
-                            //if ($debug) { echo 't666='; var_dump($accountType); var_dump ($this->dbs->username); echo PHP_EOL; var_dump ($userOrGroupID); echo PHP_EOL; var_dump ($adjustedUserOrGroupID); }
+                            //if ($debug)
+                            //{ echo 't666='; var_dump($accountType); var_dump ($this->dbs->username); echo PHP_EOL; var_dump ($userOrGroupID); echo PHP_EOL; var_dump ($adjustedUserOrGroupID); echo '<br/>';}
                             if ($accountType == 'roles') {
                                 //if ($debug) { echo '$this->dbs->roles='; var_dump($this->dbs->roles); };
                                 if (is_string($this->dbs)) {
@@ -1177,10 +1181,15 @@ class NicerAppWebOS {
                             }
                         }
                     }
+                    if ($hasPermission)
+                        $selectors2[$idx]['has_'.$pt.'_permission'] = true;
+                    else
+                        $selectors2[$idx]['has_'.$pt.'_permission'] = false;
                 }
             }
+
+            }
             //echo '<pre style="background:purple;color:white;font-weight:bold;">'.$idx.'</pre>'.PHP_EOL;
-            $selectors2[$idx]['hasWritePermission'] = $hasPermission;
         }
 
         if ($debug) {echo '<pre style="color:lime;background:blue;border-radius:10px;">'; var_dump ($selectors2); echo '</pre>'; }
@@ -1223,7 +1232,12 @@ class NicerAppWebOS {
 
         
         foreach ($selectors2 as $idx => $selector) {
-            //if (!$this->selectorPermissionsPass('write', $selector)) continue;
+            //echo '<pre>'; var_dump ($selector); exit();
+            if (
+                !array_key_exists('has_read_permission',$selector)
+                || !$selector['has_read_permission']
+            ) continue;
+
             $css = $this->getPageCSS_specific($selector);
             //echo '<pre>'; var_dump($css); echo '</pre>';
             if (is_array($css)) {
@@ -1877,7 +1891,7 @@ class NicerAppWebOS {
             }
 
 
-            if ($viewFolder!=='') {
+            if ($viewFolder!=='' && $appName!=='') {
                 $selectors[] = array (
                     'permissions' => [
                         'read' => [ 'users' => [ $username100 ] ],
@@ -1978,7 +1992,8 @@ class NicerAppWebOS {
         }
 
         unset ($selector['display']);
-        unset ($selector['hasWritePermission']);
+        unset ($selector['has_read_permission']);
+        unset ($selector['has_write_permission']);
         unset ($selector['permissions']);
 
         /*
