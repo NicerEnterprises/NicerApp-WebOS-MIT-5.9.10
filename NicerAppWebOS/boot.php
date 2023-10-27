@@ -143,6 +143,7 @@ NicerApp WCS (Website Control System) from Nicer Enterprises
 
         $_SESSION['dbgNum'] = 0;
         $_SESSION['dbgNum2'] = 0;
+        $_SESSION['hmTopIdx'] = 0;
 
 
         $_SESSION['logsInitialized'] = false;
@@ -175,6 +176,7 @@ NicerApp WCS (Website Control System) from Nicer Enterprises
 
         $_SESSION['dbgNum'] = 0;
         $_SESSION['dbgNum2'] = 0;
+        $_SESSION['hmTopIdx'] = 0;
 
 
         $_SESSION['logsInitialized'] = false;
@@ -187,13 +189,15 @@ NicerApp WCS (Website Control System) from Nicer Enterprises
         $_SESSION['naErrors_js'] = [ 'bootup' => [] ];
     }
 
+    $dbg = null;
     $dbg = [
         '$_SERVER' => $_SERVER,
         '$_GET' => $_GET,
         '$_POST' => $_POST,
         '$naWebOS->view' => $naWebOS->view
     ];
-    trigger_error ('NEW REQUEST :<br/>'.hmJSON($dbg,'$dbg'), E_USER_NOTICE);
+    $msg = 'NEW REQUEST :<br/>'.hmJSON($dbg,'$dbg');
+    trigger_error ($msg, E_USER_NOTICE);
     //echo '<pre>'; var_dump ($_SERVER); die();
 
     $lanConfigFilepath = realpath(dirname(__FILE__)).'/domainConfigs/'.$naWebOS->domain.'/naLAN.json';

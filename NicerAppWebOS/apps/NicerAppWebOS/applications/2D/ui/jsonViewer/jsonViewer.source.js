@@ -138,7 +138,6 @@ nicerapp.hms = nicerapp.jsonViewer = {
 			css: 0
 		};
 		cmd.waits = {}; // used to stall execution of 1 thread, when it has to wait for another thread to complete.
-		debugger;
 		if (typeof cmd.options=='string') cmd.options = eval ('('+cmd.options+')');
 
 
@@ -189,14 +188,16 @@ nicerapp.hms = nicerapp.jsonViewer = {
 				cmd.waits['data'] = 'data';
 				var json = '';
 				$('#'+cmd.id+' > .hmPreInit > div').each(function(idx,el) {
-					if (el.id.match(/_data_/)) {
+					if (el.id.match(/\_data\_/)) {
 						json += el.innerHTML.replace('<!--','').replace('-->','');
 					}
 				});
 
 				try {
 					cmd.hmd = JSON.parse (json);
-				} catch (err) {};
+				} catch (err) {
+					debugger;
+				};
 
 				cmd.waits['data'] = null;
 				/*
@@ -735,7 +736,6 @@ nicerapp.hms = nicerapp.jsonViewer = {
 
 
 			if (!cmd.themeName) {
-				debugger;
 				if (cmd.options && cmd.options.themeName) cmd.themeName = cmd.options.themeName;
 				else cmd.themeName = na.hms.options.current.themeChoices.hmDefault;
 			}
@@ -746,7 +746,9 @@ nicerapp.hms = nicerapp.jsonViewer = {
 			};
 
 			na.hms.options.current.theme = jQuery.extend(
-				na.hms.options.current.themes[na.hms.options.current.themeChoices.hmDefault],
+				na.hms.options.current.themes[
+					na.hms.options.current.themeChoices.hmDefault
+				],
 				na.hms.options.current.themes[cmd.themeName]
 			);
 			na.hms.options.current.theme = jQuery.extend(
@@ -895,6 +897,7 @@ nicerapp.hms = nicerapp.jsonViewer = {
 				}
 			};
 			cmd.hmd.hms.isRootVar = true;
+			debugger;
 			var 
 			l1 = na.hms.tools.printNextLevel({
 				id: na.hms.settings.cs.debugID,
@@ -1061,9 +1064,11 @@ nicerapp.hms = nicerapp.jsonViewer = {
 		},
 
 		printNextLevel : function (pvCmd) {
+			//debugger;
 			na.hms.settings.cs.pvCmds[pvCmd.id] = pvCmd;
 			pvCmd.scanPointer = pvCmd.val;
 			setTimeout (function () {
+				//debugger;
 				na.hms.tools.printNextLevel_scan (pvCmd, na.hms.tools.printNextLevel_buildList);
 			}, 50); // WAS 1500 [BUG?]
 			//na.hms.log (201, 'tools.printNextLevel(): '+pvCmd.val);
@@ -1369,7 +1374,6 @@ nicerapp.hms = nicerapp.jsonViewer = {
 					if (parentData[n].hmd == 'hmDeleteMe') c = true;
 					if (parentData[n].hms.keyName == 'remove') c = true;
 					if (c) {
-						pvCmd.scanIdx++;
 						continue;
 					}
 					// if array, build sibling list (as html)
@@ -1911,8 +1915,6 @@ nicerapp.hms = nicerapp.jsonViewer = {
 				var t = document.createTextNode(css);
 				na.hms.settings.cs.cssNode.appendChild(t, na.hms.settings.cs.cssNode.firstChild);
 			};
-
-			debugger;
 
 			var l = css.length;
 			var stat = 'tools.insertCSS(): adding ' + na.m.sizeHumanReadable(l, false) + ' of CSS to DOM for ' + cmd.id + ', ' + v.hms.keyID + ', ' + v.hms.depth + ' levels deep, from ' + origin + ' location, using theme ' + theme.themeName + '.'+'\n'+css;

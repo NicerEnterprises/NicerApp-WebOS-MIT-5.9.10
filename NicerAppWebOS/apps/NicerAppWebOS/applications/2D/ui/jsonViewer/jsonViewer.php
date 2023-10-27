@@ -41,7 +41,8 @@ function jsonViewer_dump ($var, $title, $options=null, $outputSettings=array('di
 	if (!$hmSettings) $hmSettings = jsonViewer_config();
 	
 	global $hmTopIdx;
-	$id = $hmTopIdx++;
+	$_SESSION['hmTopIdx']++;
+	$id = $_SESSION['hmTopIdx'];
 	$htmlID = 'scope'.$id;
 	
 	global $jesx_idPrefix;
@@ -85,6 +86,7 @@ function jsonViewer_dump ($var, $title, $options=null, $outputSettings=array('di
 	$traceJSON = seductiveapps_json_prepare($trace);
 	json_encode_xxl ($traceJSON, $outputSettings);
 	$jesx_idPrefix = $htmlID.'_data_';
+	//echo '<pre>'; var_dump ($var); echo '</pre>';
 	$var = seductiveapps_json_prepare($var);
 	json_encode_xxl ($var, $outputSettings);
 	json_encode_xxl_output ("\n".'</div>'."\n", $outputSettings);

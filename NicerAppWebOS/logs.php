@@ -22,12 +22,12 @@ if (array_key_exists('file', $_GET)) {
     $fp = '/var/www/'.$naWebOS->domain.'/NicerAppWebOS/siteLogs/'.$_GET['file'];
     //echo file_get_contents($fp); die();
     if ($naLAN) $c = [
-        'siteContent' => file_get_contents($fp).'<script type="text/javascript">na.site.settings.current.loadingApps = false; na.site.settings.current.running_loadTheme = false; setTimeout (na.hms.startProcessing, 2500); na.site.transformLinks()</script>'
+        'siteContent' => file_get_contents($fp).'<script type="text/javascript">na.site.settings.current.loadingApps = false; na.site.settings.current.running_loadTheme = false; setTimeout (na.hms.startProcessing, 1000); na.site.transformLinks()</script>'
     ]; elseif (
         $_GET['file'] == $authorizedFile1
         || $_GET['file'] == $authorizedFile2
     ) $c = [
-        'siteContent' => file_get_contents($fp).'<script type="text/javascript">na.site.settings.current.loadingApps = false; na.site.settings.current.running_loadTheme = false; setTimeout (na.hms.startProcessing, 2500); na.site.transformLinks()</script>'
+        'siteContent' => file_get_contents($fp).'<script type="text/javascript">na.site.settings.current.loadingApps = false; na.site.settings.current.running_loadTheme = false; setTimeout (na.hms.startProcessing, 1000); na.site.transformLinks()</script>'
     ]; else $c = [
         'siteContent' => '403 Forbidden.'
     ];

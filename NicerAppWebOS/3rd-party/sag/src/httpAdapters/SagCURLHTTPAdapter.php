@@ -211,6 +211,11 @@ class SagCURLHTTPAdapter extends SagHTTPAdapter {
       $ret = str_replace(" ",'&nbsp;',$ret);
       */
       $dbgOpts = json_decode(json_encode($optsTranslated), true);
+      if (array_key_exists('CURLOPT_POSTFIELDS', $dbgOpts))
+        $dbgOpts = [
+          'cURL POST Fields' => $dbgOpts['CURLOPT_POSTFIELDS'],
+          'ALL cURL fields' => $dbgOpts
+        ];
       $dbgOpts = hmJSON ($dbgOpts, 'cURL options',
                           [ 'themeName' => 'naColorgradientSchemeMagicalBlue' ] );
 

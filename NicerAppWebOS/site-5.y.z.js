@@ -429,7 +429,7 @@ na.site = {
                 $('body > .lds-facebook').fadeOut('normal');//css({display:'none'});
 
                 na.site.renderAllCustomHeadingsAndLinks();
-                na.themeEditor.onload ('siteContent'); // must remain HERE, or else you'll not correctly load the theme settings for 'Extras'
+                //na.themeEditor.onload ('siteContent'); // must remain HERE, or else you'll not correctly load the theme settings for 'Extras'
 
                 $('#siteContent .vividDialogContent.vividScrollpane')[0].focus();
 
@@ -1028,7 +1028,6 @@ na.site = {
             $('.na_themes_dropdown__specificity > .vividDropDownBox_selector > .vividScrollpane').append($(divEl).clone(true,true));
         };
 
-        debugger;
         na.te.s.c.selectedThemeName = na.site.globals.themeName;
         for (var themeName in na.site.globals.themes) {
             var theme = na.site.globals.themes[themeName];
@@ -3062,7 +3061,6 @@ debugger;
         s = na.te.settings.current.specificity,
         u = na.site.settings.current.url,
         apps = na.site.globals.app;
-        debugger;
 
         if (typeof specificityName=='undefined') specificityName = na.site.globals.specificityName;
 
@@ -3084,7 +3082,6 @@ debugger;
         //if (!s) var s = { url : '[default]', role : 'guests', user : 'Guest' }; 
 
         //if (!s) var s = { url : '[default]' };
-        debugger;
         if (doGetPageSpecificSettings) {
             na.site.loadTheme_doGetPageSpecificSettings (function() {
                 na.site.loadTheme_do (callback, theme, specificityName, loadBackground);
@@ -3248,7 +3245,6 @@ debugger;
                 */
 
                 var dat = themes[theme];
-                debugger;
                 /*
                 for (var themeName in themes) {
                     var dat = themes[themeName];
@@ -3312,7 +3308,6 @@ debugger;
 
         }
 
-        debugger;
         if (loadBackground && dat.background /*&& dat.background!==na.site.globals.background*/) { /* doesn't jive with na.site.loadContent() */
             na.backgrounds.next (
                 '#siteBackground',
@@ -3521,7 +3516,6 @@ debugger;
         s = na.themeEditor.settings.current.specificity,
         u = na.site.settings.current.url,
         apps = na.site.globals.app;
-        debugger;
 
         if (!theme) theme = na.site.globals.themeName;
         if ($('#'+theme)[0]) {
