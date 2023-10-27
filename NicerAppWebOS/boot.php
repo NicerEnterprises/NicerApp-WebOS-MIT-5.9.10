@@ -136,10 +136,10 @@ NicerApp WCS (Website Control System) from Nicer Enterprises
 
         $_SESSION['na_error_log_filepath_html'] =
             '/var/www/'.$naWebOS->domain.'/NicerAppWebOS/siteLogs/'
-            .$date.'-'.$naIP.'.html';
+            .$date.'-'.$naIP.($naBot?'-BOT':'').'.html';
         $_SESSION['na_error_log_filepath_txt'] =
             '/var/www/'.$naWebOS->domain.'/NicerAppWebOS/siteLogs/'
-            .$date.'-'.$naIP.'.txt';
+            .$date.'-'.$naIP.($naBot?'-BOT':'').'.txt';
 
         $_SESSION['dbgNum'] = 0;
         $_SESSION['dbgNum2'] = 0;
