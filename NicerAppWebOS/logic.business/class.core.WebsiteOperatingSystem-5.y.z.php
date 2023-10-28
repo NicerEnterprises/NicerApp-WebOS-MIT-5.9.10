@@ -767,12 +767,14 @@ class NicerAppWebOS {
                 // ....
             }
 
+            /* NOT SURE THIS IS NEEDED :
             if (
                 strpos($_SERVER['SCRIPT_NAME'], '/index.php')!==false
                 || strpos($_SERVER['SCRIPT_NAME'], '/ajax_get_content.php')!==false
             ) $ret = array_merge ($ret, [
                 'head' => $this->getPageCSS()
             ]);
+            */
 
             return $ret;
 
@@ -1136,7 +1138,7 @@ class NicerAppWebOS {
         $viewFolder = '[UNKNOWN VIEW]';
 
         $selectors2 = $d['selectors'];
-        $selectorNames = $d['selectorNames'];
+        //$selectorNames = $d['selectorNames'];
         //$debug = true;
         foreach ($selectors2 as $idx => $selector) {
             if ($debug) { echo $idx.'<br/>'.PHP_EOL; };

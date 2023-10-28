@@ -159,8 +159,6 @@ nicerapp.hms = nicerapp.jsonViewer = {
 			// start a thread to prepare the trace data
 			var dataID = cmd.id + '_tracedata_';
 			cmd.waits['trace'] = 'trace';
-			cmd.waits['trace'] = null;
-			/*
 			na.json.decode.big(
 				dataID, cmd, 'root-trace', na.hms.tools.unmarshall,
 				function (result) { // onSuccess callback handler
@@ -179,7 +177,6 @@ nicerapp.hms = nicerapp.jsonViewer = {
 					cmd.waits['trace'] = null;
 				}
 			);
-			*/
 
 			// start a thread to decode the dump data.
 			dataID = cmd.id + '_data_';
@@ -639,9 +636,11 @@ nicerapp.hms = nicerapp.jsonViewer = {
 				jQuery(e).slideUp(na.hms.globals.showTraceSpeed);
 				var r = false;
 			};
+			/*
 			setTimeout (function () {
 				na.sp.containerSizeChanged (jQuery(e).closest('.vividScrollpane')[0], false);
 			}, na.hms.globals.showTraceSpeed*1.5);
+			*/
 			return false;//stop default A HREF from being followed?
 		},
 		
@@ -847,6 +846,7 @@ nicerapp.hms = nicerapp.jsonViewer = {
 				na.hms.settings.cs.debugID++;
 				//cmd.trace.hmd.trace.hmo = cmd.trace.hmo;
 				
+				debugger;
 				cmd.trace.hmd.trace.hmd.traceData.hms.isRootVar = true;
 
 				var call = na.hms.tools.printNextLevel({

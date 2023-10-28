@@ -15,5 +15,5 @@ $rootPathNA = realpath(dirname(__FILE__).'/../..').'/NicerAppWebOS';
 require_once ($rootPathNA.'/boot.php');
 
 global $naWebOS;
-echo json_encode($naWebOS->getContent(), JSON_PRETTY_PRINT);
+echo json_encode($naWebOS->getContent(false), JSON_PRETTY_PRINT);
 ?>
