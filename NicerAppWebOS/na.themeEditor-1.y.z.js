@@ -1027,6 +1027,7 @@ na.te = na.themeEditor = {
         if (idx) {
            var s = na.te.s.c.specificity = na.site.globals.themesDBkeys[idx];
            na.site.globals.themeSpecificityName = sn;
+           na.site.globals.specificityName = sn;
            na.site.globals.themeName = s.themeName;
             if (!s || (!s.role && !s.user)) {
                 na.site.settings.buttons['#btnDeleteSpecificity'].disable();
@@ -1034,10 +1035,12 @@ na.te = na.themeEditor = {
                 na.site.settings.buttons['#btnDeleteSpecificity'].enable();
             }
 
+            debugger;
             na.site.loadTheme (function () { // **POSSIBLY** NOT NEEDED
                 var btn = $('#'+na.te.s.c.selectedButtonID)[0];
                 if (btn) na.te.onclick(btn, false);
-            }, s.themeName, true);
+            }, s.themeName);
+
 
             na.site.setSiteLoginLogout();
         }
@@ -1169,7 +1172,7 @@ na.te = na.themeEditor = {
 
                     na.te.s.c.selectedThemeName = theme;
                     na.site.globals.themeName = theme;
-                }, theme, true);
+                }, theme);
             }, 100, theme);
         },themeName);
     },

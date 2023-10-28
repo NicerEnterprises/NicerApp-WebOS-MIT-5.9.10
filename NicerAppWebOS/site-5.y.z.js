@@ -714,8 +714,8 @@ na.site = {
             zIndex : 700000
         }).fadeIn('slow');
         setTimeout (function() {
-            na.site.setSpecificity ($('#btnLockSpecificity').is('.disabled'));
-        }, 200);
+            na.site.setSpecificity ($('#btnLockSpecificity').is('.featureIsActive'));
+        }, 50);
         //debugger;
         //na.site.setSpecificity();
     },
@@ -959,6 +959,7 @@ na.site = {
     },
     
     setSpecificity : function(simple) {
+        debugger;
         $('.na_themes_dropdown').html('<div class="vividDropDownBox_selected vividScrollpane" style="white-space:normal;"></div><div class="vividDropDownBox_selector"><div class="vividScrollpane" style="padding:0px;"></div></div>').delay(50);
         $('.vividDropDownBox_selected, .vividDropDownBox_selector').each(function(idx,el) {
             var w = 0;
@@ -999,6 +1000,7 @@ na.site = {
 
             $(divEl).html(na.site.globals.themesDBkeys[i].specificityName).attr('value',i);
             //if (!na.site.globals.themesDBkeys[i].hasWritePermission) $(divEl).addClass('disabled');
+
             var
             b = na.ui.vb.settings.buttons['#btnLockSpecificity'],
             selectMe = (
@@ -3075,7 +3077,6 @@ debugger;
             !theme
             || typeof theme=='number' // when called via na.site.loadContent()
         ) theme = na.site.globals.themeName;
-        if (typeof doGetPageSpecificSettings=='undefined') doGetPageSpecificSettings = true;
 
         na.themeEditor.settings.current.selectedThemeName = theme;
         
