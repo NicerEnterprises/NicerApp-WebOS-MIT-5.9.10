@@ -3,7 +3,7 @@ $rootPathNA = realpath(dirname(__FILE__).'/../..').'/NicerAppWebOS';
 require_once ($rootPathNA.'/boot.php');
 global $naIP;
 
-$debug = true;
+$debug = false;
 if ($debug) {
     echo 'info : '.__FILE__.' : $debug = true.<br/>'.PHP_EOL;
     ini_set('display_errors', 1);
@@ -50,7 +50,6 @@ if (array_key_exists('url',$_POST) && !is_null($_POST['url'])) $findCommand['sel
 if (array_key_exists('role',$_POST) && !is_null($_POST['role'])) $findCommand['selector']['role'] = $_POST['role'];
 if (array_key_exists('user',$_POST) && !is_null($_POST['user'])) $findCommand['selector']['user'] = $_POST['user'];
 if (array_key_exists('ip',$_POST) && !is_null($_POST['ip'])) $findCommand['selector']['ip'] = $_POST['ip'];
-if ($debug) { echo 't1 $findCommand='; var_dump ($findCommand); echo PHP_EOL.PHP_EOL; }
 
 if (array_key_exists('specificityName',$_POST) && !is_null($_POST['specificityName'])) {
     $findCommand['selector']['specificityName'] = $_POST['specificityName'];
@@ -73,6 +72,16 @@ if (array_key_exists('specificityName',$_POST) && !is_null($_POST['specificityNa
         unset ($findCommand['selector']['app']);
         unset ($findCommand['selector']['url']);
     }
+    if (
+        strpos($_POST['specificityName'], 'user ')!==false
+    ) {
+        unset ($findCommand['selector']['role']);
+    }
+    if (
+        strpos($_POST['specificityName'], 'group ')!==false
+    ) {
+        unset ($findCommand['selector']['user']);
+    }
 }
 
 /*
@@ -83,6 +92,8 @@ if (!$proceed) {
 }
 */
 
+
+if ($debug) { echo 't1 $findCommand='; var_dump ($findCommand); echo PHP_EOL.PHP_EOL; }
 $call = $cdb->find ($findCommand);
 if ($debug) { echo '$call='; var_dump ($call); echo PHP_EOL.PHP_EOL; }
 
@@ -150,6 +161,16 @@ if (array_key_exists('specificityName',$_POST) && !is_null($_POST['specificityNa
         unset ($rec2['view']);
         unset ($rec2['app']);
         unset ($rec2['url']);
+    }
+    if (
+        strpos($_POST['specificityName'], 'user ')!==false
+    ) {
+        unset ($rec2['role']);
+    }
+    if (
+        strpos($_POST['specificityName'], 'group ')!==false
+    ) {
+        unset ($rec2['user']);
     }
 }
 $dbg = [

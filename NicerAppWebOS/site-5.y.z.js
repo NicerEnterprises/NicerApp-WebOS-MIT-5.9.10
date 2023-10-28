@@ -3520,6 +3520,8 @@ debugger;
         u = na.site.settings.current.url,
         apps = na.site.globals.app;
 
+        na.te.onload('siteContent');
+
         if (!theme) theme = na.site.globals.themeName;
         if ($('#'+theme)[0]) {
             theme = $('#'+theme).val();
@@ -3590,6 +3592,14 @@ debugger;
                 delete themeData.view;
                 if (app) themeData.app = app;
             }
+            if (
+                typeof s.specificityName=='string'
+                && s.specificityName.match(/user /)
+            ) {
+                delete themeData.role;
+                if (themeData.app) delete themeData.app;
+            }
+
 
             /*
             for (var i=0; i<na.desktop.globals.divs.length; i++) {

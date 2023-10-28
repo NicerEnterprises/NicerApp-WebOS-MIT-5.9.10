@@ -3,11 +3,11 @@ $rootPath_na = realpath(dirname(__FILE__).'/../..'); global $rootPath_na;
 
 class NicerAppWebOS {
     public $cn = '.../NicerAppWebOS/logic.business/class.core.WebsiteOperatingSystem-5.y.z.php::class NicerAppWebOS';
-    public $version = '5.5.3';
+    public $version = '5.5.4';
     public $about = array(
         'whatsThis' => 'NicerApp Content Management System PHP class',
-        'version' => '5.5.3',
-        'lastModified' => 'Monday, October 16, 2023, 01:53 CEST (Amsterdam.NL timezone)',
+        'version' => '5.5.4',
+        'lastModified' => 'Saturday, Oct 28th, 2023, 06:40 CEST (Amsterdam.NL timezone)',
         'copyright' => 'Copyright 2002-2023 by Rene A.J.M. Veerman <rene.veerman.netherlandsd@gmail.com>'
     );
 
@@ -1135,8 +1135,8 @@ class NicerAppWebOS {
         $db = $this->dbs->findConnection('couchdb');
         $viewFolder = '[UNKNOWN VIEW]';
 
-        $selectors2 = &$d['selectors'];
-        $selectorNames = &$d['selectorNames'];
+        $selectors2 = $d['selectors'];
+        $selectorNames = $d['selectorNames'];
         //$debug = true;
         foreach ($selectors2 as $idx => $selector) {
             if ($debug) { echo $idx.'<br/>'.PHP_EOL; };
@@ -1144,8 +1144,8 @@ class NicerAppWebOS {
             $permissions = $selector['permissions'];
             //echo '<pre style="color:cyan;background:navy;">'; var_dump ($permissions); echo '</pre>';
 
+            foreach (['read','write'] as $idx3=>$pt) {
             $hasPermission = false;
-            foreach (['read','write'] as $idx=>$pt) {
             foreach ($permissions as $permissionType => $permissionsRec) {
                 if ($permissionType==$pt) {
                     foreach ($permissionsRec as $accountType => $accountsList) {
@@ -1170,17 +1170,22 @@ class NicerAppWebOS {
                                     as $roleIdx => $groupID
                                 ) {
                                     if ($debug) { echo 't667='; var_dump($groupID); };
-                                    if ($userOrGroupID==$groupID) {
+                                    if ($adjustedUserOrGroupID==$groupID) {
                                         $hasPermission = true;
                                     }
                                 }
                             }
-                            if ($accountType == 'users' && $this->dbs->findConnection('couchdb')->username == $adjustedUserOrGroupID) {
+                            if (
+                                $accountType == 'users'
+                                && $this->dbs->findConnection('couchdb')->username
+                                    == $adjustedUserOrGroupID
+                            ) {
                                 $hasPermission = true;
-                                if ($debug) { echo 't777 $username='.$this->dbs->findConnection('couchdb')->username.PHP_EOL; }
+                                if ($debug) { echo 't777 $username='.$this->dbs->findConnection('couchdb')->username.'<br/>'.PHP_EOL; }
                             }
                         }
                     }
+
                     if ($hasPermission)
                         $selectors2[$idx]['has_'.$pt.'_permission'] = true;
                     else
@@ -1209,9 +1214,10 @@ class NicerAppWebOS {
         $viewFolder = '[UNKNOWN VIEW]';
         $db = $this->dbs->findConnection('couchdb');
 
-        $d = $this->getPageCSS_permissionsList($js);
-        $d = $this->getPageCSS_checkPermissions($d);
-        $selectors = &$d['selectors'];
+        $d1 = $this->getPageCSS_permissionsList($js);
+        $d2 = $this->getPageCSS_checkPermissions($d1);
+        $selectors = $d2['selectors'];
+        //echo '<pre style="color:lime;background:green">'; var_dump ($selectors); echo '</pre>'; die();
         //$selectorNames = &$d['selectorNames'];
         //$specificityName = 'current page for user '.$db->username.' at the client';
 
@@ -1987,13 +1993,13 @@ class NicerAppWebOS {
         //{ echo '$selector='; var_dump ($selector); echo '<br/><br/>'.PHP_EOL.PHP_EOL; exit(); };
         
         $permissions = $selector['permissions'];
-        if ($debug) {
+        if (false && $debug) {
             echo '<pre style="color:purple">$selector='; var_dump ($selector); echo '</pre><br/>'.PHP_EOL.PHP_EOL;
         }
 
         unset ($selector['display']);
-        unset ($selector['has_read_permission']);
-        unset ($selector['has_write_permission']);
+        //unset ($selector['has_read_permission']);
+        //unset ($selector['has_write_permission']);
         unset ($selector['permissions']);
 
         /*
@@ -2103,7 +2109,7 @@ class NicerAppWebOS {
             $selector['lastUsed'] = [
                 '$exists' => true
             ];
-            if ($debug) { echo '<pre style="color:blue">$sel = '; var_dump ($sel); echo '</pre>'; };
+            if ($debug) { echo '<pre style="color:blue">$sel = '.json_encode ($sel, JSON_PRETTY_PRINT); echo '</pre>'; };
             //array( 'url'=>$selector['url'], 'role'=>$selector['role'] ),//$selector,
 
             $findCommand = array (
@@ -2140,11 +2146,12 @@ class NicerAppWebOS {
                 echo $msg;
                 exit();
             }
-
+            if ($debug) echo 'HTTP status==='.$call->headers->_HTTP->status.', count($call->body->docs)==='.count($call->body->docs).'!<br/>';
 
             $hasRecord = false;
             $rets = [];
             if ($call->headers->_HTTP->status==='200') {
+
                 foreach ($call->body->docs as $idx => $d) {
                     $hasRecord = true;
                     if ($debug) { echo '$d='; var_dump ($d); }
@@ -2199,7 +2206,7 @@ class NicerAppWebOS {
         //}
         if ($hasRecord) {
             return [
-                'sel' => $sel, // doesn't get used. for logging purposes only - and probably not set correctly.
+                'sel' => $selector, //sel, // doesn't get used. for logging purposes only - and probably not set correctly.
                 'themes' => $rets
             ];
         }
