@@ -461,13 +461,14 @@ na.m = {
 
 
 
-			if (!na.m.settings.waitForCondition[label]) { // prevents double checks & activations of callback().
+            if (na.m.settings.waitForCondition[label]) clearTimeout(na.m.settings.waitForCondition[label]);
+			//if (!na.m.settings.waitForCondition[label]) { // prevents double checks & activations of callback().
 				na.m.settings.waitForCondition[label] = setTimeout (function () {
 					clearTimeout (na.m.settings.waitForCondition[label]);
 					delete na.m.settings.waitForCondition[label];
 					na.m.waitForCondition (label, condition, callback, frequency, context);
 				}, frequency);
-			}
+			//}
 		}
 		return r;
 	},

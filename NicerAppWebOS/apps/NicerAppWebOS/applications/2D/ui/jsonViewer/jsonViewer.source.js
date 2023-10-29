@@ -4,14 +4,14 @@ nicerapp.hms = nicerapp.jsonViewer = {
 		copyright : '(c) (r) 2010-2013 by [the owner of nicerapp.com] <nicerapp@gmail.com>',
 		license : 'http://nicerapp.com/nicerapp/license.txt',
 		noWarranty : 'NO WARRANTY EXPRESSED OR IMPLIED. USE ONLY AT YOUR OWN RISK.',
-		version: '1.6.6',
+		version: '1.6.7',
 		dependencies: {
 			'jQuery.com': 'version>=1.4'
 		},
 		firstReleased : '2010',
-		lastUpdated : 'Feb 15 2014, 03:15 CET',
+		lastUpdated : 'Oct 29, 2023, 09:44 CEST',
 		knownBugs : {
-			0 : "Not too many I hope. Regardless, work on this component continues in the next few days."
+			0 : "Not too many I hope. Regardless, work on this component continues in the next few weeks."
 		},
 		downloadURL : 'http://nicerapp.com/'
 	},
@@ -174,7 +174,7 @@ nicerapp.hms = nicerapp.jsonViewer = {
 				};
 			cmd.waits['trace'] = null;
 			/*
-			na.json.decode.small(
+			na.json.decode.big(
 				dataID, cmd, 'root-trace', na.hms.tools.unmarshall,
 				function (result) { // onSuccess callback handler
 					na.hms.reportStatus(cmd, 'short', 'Making trace-data human-readable.');
@@ -199,6 +199,7 @@ nicerapp.hms = nicerapp.jsonViewer = {
 			var e = document.getElementById(cmd.id + '_data_0');
 			if (e) {
 				cmd.waits['data'] = 'data';
+
 				var json = '';
 				$('#'+cmd.id+' > .hmPreInit > div').each(function(idx,el) {
 					if (el.id.match(/\_data\_/)) {

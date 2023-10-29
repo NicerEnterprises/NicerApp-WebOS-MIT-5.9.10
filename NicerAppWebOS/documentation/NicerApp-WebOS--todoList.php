@@ -16,20 +16,6 @@
 
     <li class="todoList"><div>(CURRENT) (2023 Oct) Fix the final (root-pathing) bugs in vividMenu.</div></li>
 
-    <li class="todoList"><div>(CURRENT) (2023 Oct) Fix the page refreshing bugs that show up sometimes.
-        <ol class="todoList_l1">
-            <li class="todoList_l1"><div>Add 4 functions to be called from the new na.site.startUIvisuals(divID), which in turn is to be called after each na.site.loadContent_displayContent() reaches it final stages.<br/>
-            na.site.startUIvisuals(divID) would call na.site.startLogo(), na.site.startMenus(divID), na.site.startDialogs(divID), and na.site.startButtons(divID).<br/>
-            And i should not forget to add a <pre class="todoList_l1">if (na.customer &amp;&amp; typeof na.customer.startUIvisuals == 'function') na.customer.startUIvisuals(divID);</pre>to the end of na.site.startUIvisuals().</div></li>
-        </ol>
-    </div></li>
-
-    <li class="todoList"><div>(CURRENT) (2023 Oct,Nov) Make the musicPlayer app work on smartphone vertical screens as well.</div></li>
-
-    <li class="todoList"><div>(CURRENT) (2023 Oct,Nov) Always / Shaded / No showing of .vdSettings for any .vividDialog and listed in #siteBtnOptions_menu</div></li>
-
-    <li class="todoList"><div>(DONE) (2023 Oct,Nov) Highlight 'bot' hits in myNAdomain.com/view/logs</div></li>
-
     <li class="todoList"><div>(CURRENT) (2023 Oct,Nov,Dec) Upgrade the blogging features.
         <ol class="todoList_l1">
             <li class="todoList_l1"><div>(CURRENT) (2023 Oct,Nov,Dec) Fix any final bugs in the Theme Editor (a few barely known at this time).<br/>
@@ -50,6 +36,8 @@
         </ol>
 
     </div></li>
+
+    <li class="todoList"><div>Make the musicPlayer app work on smartphone vertical screens as well.</div></li>
 
     <li class="todoList"><div>Create a webshop app with a subscription model (that i'll publish as https://nicer.app/shop), in collaboration with paypal.com</div></li>
 

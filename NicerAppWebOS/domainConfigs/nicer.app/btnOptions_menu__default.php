@@ -19,7 +19,16 @@
 </div>
 
 
-
+<p style="margin:5px;padding:5px;text-align:center;width:calc(100%-10px);">Visibility of Dialog Settings icons :</p>
+<div id="btnOptions_menu__showVividDialogSettings__containerDiv" style="">
+    <div style="margin-left:10px;width:calc(100% - 20px);">
+        <select id="vdSettings_show" name="vdSettings_show" style="background:rgba(255,255,255,0.4);color:yellow" onchange="var opacity=$('#vdSettings_show').val()=='hidden'?0.000001:$('#vdSettings_show').val()=='transparent'?0.5:1; $('.vdSettings').css({opacity:opacity}); na.site.saveTheme();">
+            <option value="hidden" style="color:navy">Hidden until hovered over</option>
+            <option value="transparent" style="color:navy">Semi-transparent until hovered over</option>
+            <option value="shown" style="color:navy">Shown</option>
+        </select>
+    </div>
+</div>
 <p style="margin:5px;padding:5px;text-align:center;width:calc(100%-10px);">Set the time between background changes :</p>
 <div id="btnOptions_menu__backgroundTimeSettingsChanged_save__containerDiv" style="">
     <div style="margin-left:10px;width:calc(100% - 20px);">

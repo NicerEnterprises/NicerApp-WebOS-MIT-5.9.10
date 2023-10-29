@@ -1340,18 +1340,12 @@ class NicerAppWebOS {
                     $r .= "\tna.site.setSpecificity();".PHP_EOL;
                     $r .= "});".PHP_EOL;
                 }
-                /*
-                $r .= '$(document).ready(function() {'.PHP_EOL;
-                    $r .= "\t//setTimeout(function() {".PHP_EOL;
-                    $r .= "\t\tna.site.setSpecificity();".PHP_EOL;
-                    $r .= "\t//}, 10);".PHP_EOL;
-                $r .= "});".PHP_EOL;*/
                 $r .= '</script>'.PHP_EOL;
                 $ret = $r.$ret;
             };
 
             if (is_array($css) && !$hasCSS) {
-//echo '<pre>'; var_dump ($css); die();
+                //echo '<pre>'; var_dump ($css); die();
                 $hasCSS = true;
                 foreach ($css['themes'] as $themeName => $theme) { break; };
                 //echo '<pre style="color:blue;">'; var_dump ($selector); die();

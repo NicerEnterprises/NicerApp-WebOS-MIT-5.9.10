@@ -120,6 +120,7 @@ $rec2 = array (
     'apps' => json_decode($_POST['apps'], true),
     'backgroundSearchKey' => $_POST['backgroundSearchKey'],
     'background' => $_POST['background'],
+    'vdSettings_show' => $_POST['vdSettings_show'],
     'backgroundChange_hours' => $_POST['backgroundChange_hours'],
     'backgroundChange_minutes' => $_POST['backgroundChange_minutes'],
     'changeBackgroundsAutomatically' => $_POST['changeBackgroundsAutomatically'],

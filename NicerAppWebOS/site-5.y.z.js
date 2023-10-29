@@ -564,10 +564,6 @@ na.site = {
             }, 50);
         });
 
-        setTimeout(function() {
-            if (!na.m.userDevice.isPhone) $('.vdSettings').animate({opacity:0.0001}, 'slow');
-        }, 1000);
-
         this.completed = true;
     },
 
@@ -959,7 +955,6 @@ na.site = {
     },
     
     setSpecificity : function(simple) {
-        debugger;
         $('.na_themes_dropdown').html('<div class="vividDropDownBox_selected vividScrollpane" style="white-space:normal;"></div><div class="vividDropDownBox_selector"><div class="vividScrollpane" style="padding:0px;"></div></div>').delay(50);
         $('.vividDropDownBox_selected, .vividDropDownBox_selector').each(function(idx,el) {
             var w = 0;
@@ -1610,100 +1605,60 @@ onclick_btnFullResetOfAllThemes : function (event) {
             }
         });
         lcc.ec.events.push(naEventData);
-debugger;
-        var useTimeouts = false;
         na.site.settings.current.running_loadTheme = true;
         na.site.settings.current.running_loadContent = true;
-        if (!useTimeouts) {
-                na.m.runFunctions (lcc.ec, na.m.updateEvent (dt, {
-                    loadContent_displayContent : {
-                        labels : { marker : { whatsThis : fncn+'::na.m.runFunctions() called' } },
-                        newFunctions : [
-                            { initializeScriptsForApps : [na.m.newEventFunction (na.site.initializeScriptsForApps, { dat : dat })] },
-                            { initializeApps : [na.m.newEventFunction(na.site.initializeApps, { dat : dat })] },
-                            { resizeApps : [na.m.newEventFunction(function() {
-                                na.m.waitForCondition ('loadContent_displayContent : na.m.HTMLidle() && !na.site.settings.current.running_loadContent?', function () { return na.m.HTMLidle() && !na.site.settings.current.loadingApps}, function () {
-                                    debugger;
-                                    na.site.resizeApps();
-                                    na.site.settings.current.running_loadContent = false;
-                                }, 100);
-                            }, { dat : dat })] },
-                            { reloadMenu : [na.m.newEventFunction(na.site.reloadMenu)] },
-                            //{ getPageSpecificSettings : [na.m.newEventFunction (na.site.getPageSpecificSettings)] }
-                            { loadTheme : [na.m.newEventFunction (function() {
-                                na.m.waitForCondition ('loadContent_displayContent : na.m.HTMLidle() && !na.site.settings.current.running_loadContent?', function () { return na.m.HTMLidle() && !na.site.settings.current.running_loadContent}, function () {
-                                    na.site.loadTheme (null, null, false, false);
-                                }, 100);
-                            })] },
-                            { loadTheme_cleanup : [na.m.newEventFunction (function() {
-                                na.m.waitForCondition ('loadContent_displayContent : na.m.HTMLidle() && !na.site.settings.current.running_loadTheme?', function () { return na.m.HTMLidle() && !na.site.settings.current.running_loadTheme}, function () {
-                                    na.site.globals.themes.default = na.site.loadTheme_fetchDialogs();
-                                    na.themeEditor.onload();
-                                }, 100);
-                            })] },
-                            { renderAllCustomHeadingsAndLinks : [na.m.newEventFunction(function(){
-                                na.m.waitForCondition ('na.site.renderAllCustomHeadingsAndLinks() : na.m.HTMLidle()?', na.m.HTMLidle, na.site.renderAllCustomHeadingsAndLinks, 200);
-                            })] }
-                        ]
-                    }
-                }));
+        na.m.runFunctions (lcc.ec, na.m.updateEvent (dt, {
+            loadContent_displayContent : {
+                labels : { marker : { whatsThis : fncn+'::na.m.runFunctions() called' } },
+                newFunctions : [
+                    { initializeScriptsForApps : [na.m.newEventFunction (na.site.initializeScriptsForApps, { dat : dat })] },
+                    { initializeApps : [na.m.newEventFunction(na.site.initializeApps, { dat : dat })] },
+                    { resizeApps : [na.m.newEventFunction(function() {
+                        na.m.waitForCondition ('loadContent_displayContent : na.m.HTMLidle() && !na.site.settings.current.loadingApps?', function () { var r1=na.m.HTMLidle(); var r2=!na.site.settings.current.loadingApps; return r1&&r2;}, function () {
+                            na.site.resizeApps();
+                            na.site.settings.current.running_loadContent = false;
+                        }, 100);
+                    }, { dat : dat })] },
+                    //{ getPageSpecificSettings : [na.m.newEventFunction (na.site.getPageSpecificSettings)] }
+                    { loadTheme : [na.m.newEventFunction (function() {
+                        na.m.waitForCondition ('loadContent_displayContent : na.m.HTMLidle() && !na.site.settings.current.running_loadContent?', function () { var r1 = na.m.HTMLidle(); var r2=!na.site.settings.current.running_loadContent; return r1 && r2;}, function () {
+                            na.site.loadTheme (null, null, false, false);
+                        }, 500);
+                    })] },
+                    { reloadMenu : [na.m.newEventFunction(na.site.reloadMenu)] },
+                    { loadTheme_cleanup : [na.m.newEventFunction (function() {
+                        na.m.waitForCondition ('loadContent_displayContent : na.m.HTMLidle() && !na.site.settings.current.running_loadTheme?', function () { return na.m.HTMLidle() && !na.site.settings.current.running_loadTheme}, function () {
+                            na.themeEditor.onload(); // results in excess /view/logs data
+                            na.site.globals.themes.default = na.site.loadTheme_fetchDialogs();
+                        }, 100);
+                    })] },
+                    { initializeVivids : [na.m.newEventFunction(function(){
+                        na.m.waitForCondition ('na.site.initializeVivids() : na.m.HTMLidle()?', function () { return na.m.HTMLidle() && !na.site.settings.current.running_loadContent}, na.site.startUIvisuals, 100);
+                    })] },
+                    { renderAllCustomHeadingsAndLinks : [na.m.newEventFunction(function(){
+                        na.m.waitForCondition ('na.site.renderAllCustomHeadingsAndLinks() : na.m.HTMLidle()?', na.m.HTMLidle, na.site.renderAllCustomHeadingsAndLinks, 100);
+                    })] }
+                ]
+            }
+        }));
+    },
 
-        } else {
-            setTimeout (function() {
-                na.m.runFunctions (lcc.ec, na.m.updateEvent (dt, {
-                    loadContent_displayContent : {
-                        labels : { marker : { whatsThis : fncn+'::na.m.runFunctions() called' } },
-                        newFunctions : [
-                            { initializeScriptsForApps : [na.m.newEventFunction (na.site.initializeScriptsForApps, { dat : dat })] }
-                        ]
-                    }
-                }));
-            }, 10);
-            setTimeout (function() {
-                na.m.runFunctions (lcc.ec, na.m.updateEvent (dt, {
-                    loadContent_displayContent : {
-                        labels : { marker : { whatsThis : fncn+'::na.m.runFunctions() called' } },
-                        newFunctions : [
-                            { initializeApps : [na.m.newEventFunction(na.site.initializeApps, { dat : dat })] }
-                        ]
-                    }
-                }));
-            }, 1000);
-            setTimeout (function() {
-                na.m.runFunctions (lcc.ec, na.m.updateEvent (dt, {
-                    loadContent_displayContent : {
-                        labels : { marker : { whatsThis : fncn+'::na.m.runFunctions() called' } },
-                        newFunctions : [
-                            { resizeApps : [na.m.newEventFunction(na.site.resizeApps, { dat : dat })] }
-                        ]
-                    }
-                }));
-            }, 2000);
-            setTimeout (function() {
-                na.m.runFunctions (lcc.ec, na.m.updateEvent (dt, {
-                    loadContent_displayContent : {
-                        labels : { marker : { whatsThis : fncn+'::na.m.runFunctions() called' } },
-                        newFunctions : [
-                            { reloadMenu : [na.m.newEventFunction(na.site.reloadMenu)] }//,
-                            //{ getPageSpecificSettings : [na.m.newEventFunction (na.site.getPageSpecificSettings)] }
-                        ]
-                    }
-                }));
-            }, 3000);
-            setTimeout (function() {
-                na.m.runFunctions (lcc.ec, na.m.updateEvent (dt, {
-                    loadContent_displayContent : {
-                        labels : { marker : { whatsThis : fncn+'::na.m.runFunctions() called' } },
-                        newFunctions : [
-                            { loadTheme : [na.m.newEventFunction (na.site.loadTheme)] },
-                            { renderAllCustomHeadingsAndLinks : [na.m.newEventFunction(function(){
-                                na.m.waitForCondition ('na.site.renderAllCustomHeadingsAndLinks() : na.m.HTMLidle()?', na.m.HTMLidle, na.site.renderAllCustomHeadingsAndLinks, 200);
-                            })] }
-                        ]
-                    }
-                }));
-            }, 4000);
-        }
+    startUIvisuals : function (divID) {
+        if (typeof startLogo=='function') startLogo('neCompanyLogo', 'countryOfOriginColors');
+
+
+        $('.vividDialog'/*, vdc[0]*/).each(function(idx,el){
+            if (!na.site.settings.dialogs['#'+el.id]) na.site.settings.dialogs['#'+el.id] = new naVividDialog(el);
+        });
+
+        $('.vividMenu'/*, vdc[0]*/).each(function(idx,el){
+            if (!na.site.settings.menus['#'+el.id]) na.site.settings.menus['#'+el.id] = new naVividMenu(el)
+        });
+
+
+        $('.vividButton4, .vividButton, .vividButton_icon_50x50_siteTop, .vividButton_icon_50x50').each(function(idx,el){
+            if (!na.site.settings.buttons['#'+el.id]) na.site.settings.buttons['#'+el.id] = new naVividButton(el);
+        });
     },
     
     initializeScriptsForApps : function (ec, eventIdx, eventParams, f) {
@@ -3347,6 +3302,19 @@ debugger;
         }
         if (dat.backgroundChange_hours) $('#backgroundChange_hours').val(dat.backgroundChange_hours);
         if (dat.backgroundChange_minutes) $('#backgroundChange_minutes').val(dat.backgroundChange_minutes);
+        if (dat.vdSettings_show) $('#vdSettings_show').val(dat.vdSettings_show);
+        else $('#vdSettings_show').val('transparent');
+
+        var opacity = (
+            $('#vdSettings_show').val()=='hidden'
+            ? 0.000001
+            : $('#vdSettings_show').val()=='transparent'
+                ? 0.5
+                : 1
+        );
+        setTimeout (function() {
+            $('.vdSettings').delay(50).css({ opacity : opacity });
+        }, 1500);
 
         var
         h = parseInt($('#backgroundChange_hours').val()),
@@ -3556,6 +3524,7 @@ debugger;
                 backgroundSearchKey : na.site.globals.backgroundSearchKey,
                 background : na.site.globals.background,
                 changeBackgroundsAutomatically : $('#changeBackgroundsAutomatically')[0].checked?'true':'false',
+                vdSettings_show : $('#vdSettings_show').val(),
                 backgroundChange_hours : $('#backgroundChange_hours').val(),
                 backgroundChange_minutes : $('#backgroundChange_minutes').val(),
                 menusFadingSpeed : $('#menusFadingSpeed').val(),
