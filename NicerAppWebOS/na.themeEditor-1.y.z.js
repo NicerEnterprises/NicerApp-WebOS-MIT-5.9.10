@@ -16,8 +16,8 @@ na.te = na.themeEditor = {
 
         na.m.settings.startTime = timeInMilliseconds;
 
+            debugger;
         if (typeof forDialogID=='string') {
-
             var
             fncn = 'na.themeEditor.onload("'+forDialogID+'")';
             na.te.s.c.forDialogID = forDialogID;
@@ -154,9 +154,12 @@ na.te = na.themeEditor = {
                 };
                 na.te.initSelectorsTree (dat);
 
+
+                    debugger;
                 if (did) setTimeout (function() {
                     $('#themeEditor_jsTree_selectors').jstree('deselect_all').jstree('select_node', did);
                 }, 200);
+
 
                 $('#siteToolbarLeft .lds-facebook').fadeOut('slow');
           /*  },
@@ -291,9 +294,11 @@ na.te = na.themeEditor = {
                     };
                 });
                 
+                /*
                 if (lastFolder) setTimeout (function() {
                     $('#themeEditor_jsTree_backgrounds').jstree('deselect_all').jstree('select_node', lastFolder.id);
                 }, 200);
+                */
                 
                 $('#siteToolbarLeft .lds-facebook').fadeOut('slow');
             },
@@ -740,14 +745,16 @@ na.te = na.themeEditor = {
             {dat:[],did:null},
             'Selectors', '#', 'naSelectorSet'
         );
+        debugger;
         return outputData;
     },
 
     transform_siteGlobalsThemes_to_jsTree__recurse : function (inputData, outputData, parentName, parentID, type) {
         var did = inputData.did;
+
         for (var key in inputData.dat) {
             var value = inputData.dat[key], newID = na.m.randomString();
-            if (typeof value.length!=='undefined') continue;
+            //if (typeof value.length!=='undefined') continue;
             if (key=='css') {
                 for (var key2 in value) break;
                 outputData.dat.push ({
@@ -756,13 +763,15 @@ na.te = na.themeEditor = {
                     text : 'main',
                     state : {
                         opened : true,
-                        selected : 'site'+parentName==na.te.s.c.forDialogID
+                        selected : (
+                            'site'+parentName==na.te.s.c.forDialogID
+                        )
                     },
                     type : 'naCSS'
                 });
                 if ('site'+parentName==na.te.s.c.forDialogID) outputData.did = newID;
                 for (var divSel in value) {
-                    if (divSel.match(/\> .vdBackground/)) continue;
+                    //if (divSel.match(/\> .vdBackground/)) continue;
                     var newID2 = na.m.randomString();
                     outputData.dat.push ({
                         id : newID2,
@@ -773,8 +782,9 @@ na.te = na.themeEditor = {
                         },
                         type : 'naElement'
                     });
+                    if (divSel=='#'+na.te.s.c.forDialogID) outputData.did = newID2;
                 }
-            } else if (key=='Extras') {
+            } else if (key=='Extras' || key=='Apps') {
                 outputData.dat.push ({
                     id : newID,
                     parent : parentID,
@@ -797,6 +807,7 @@ na.te = na.themeEditor = {
                         },
                         type : 'naCSS'
                     });
+                    if (divSel=='#'+na.te.s.c.forDialogID) outputData.did = newID2;
 
                     for (var divSel in vdata) {
                         var newID3 = na.m.randomString();
@@ -810,6 +821,7 @@ na.te = na.themeEditor = {
                             type : 'naElement'
                         });
                         na.te.s.c.elementsCSS[newID3] = vdata[divSel];
+                        if (divSel=='#'+na.te.s.c.forDialogID) outputData.did = newID3;
                     }
                 }
             } else {
@@ -823,10 +835,18 @@ na.te = na.themeEditor = {
                     type : type
                 });
                 if (typeof value=='object') {
-                    $.extend (outputData.dat, na.te.transform_siteGlobalsThemes_to_jsTree__recurse ({dat:value,did:outputData.did}, outputData, key, newID, type).dat)
+                    var call = na.te.transform_siteGlobalsThemes_to_jsTree__recurse (
+                        {dat:value,did:outputData.did}, outputData, key, newID, type
+                    );
+                    $.extend (outputData.dat, call.dat)
+                    if (call.did) {
+                        outputData.did = call.did;
+                        debugger;
+                    }
                 };
             };
-        }
+        };
+        //if (outputData.dat.length > 50) debugger;
         return outputData;
     },
 
@@ -2438,6 +2458,7 @@ debugger;
             text : 'New Graphics',
             type : 'naCSS'
         }, 'last');
+        debugger;
         $('#themeEditor_jsTree_selectors').jstree('deselect_all').jstree('select_node', newNodeID);
         $('#themeEditor_jsTree_selectors').jstree(true).edit(na.te.s.c.selectedSelector.node);
     },

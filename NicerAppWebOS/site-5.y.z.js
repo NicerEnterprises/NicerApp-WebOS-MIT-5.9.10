@@ -499,7 +499,11 @@ na.site = {
                         }
                     );
 
-                    na.site.loadTheme(na.site.loadTheme_initializeExtras, undefined, false, false, na.site.globals.onloadSpecificityName);
+                    na.site.loadTheme(function() {
+                        setTimeout (function() {
+                            na.site.globals.themes[na.site.globals.themeName] = na.site.loadTheme_fetchDialogs();
+                        }, 500);
+                    }, undefined, false, false, na.site.globals.onloadSpecificityName);
 
                     na.site.settings.current.startupErrorsOccurred = 'maybe';
                     //na.site.seeIfAnyStartupErrorsOccurred();
@@ -1628,6 +1632,7 @@ onclick_btnFullResetOfAllThemes : function (event) {
                     { reloadMenu : [na.m.newEventFunction(na.site.reloadMenu)] },
                     { loadTheme_cleanup : [na.m.newEventFunction (function() {
                         na.m.waitForCondition ('loadContent_displayContent : na.m.HTMLidle() && !na.site.settings.current.running_loadTheme?', function () { return na.m.HTMLidle() && !na.site.settings.current.running_loadTheme}, function () {
+                            na.site.globals.themes[na.site.globals.themeName].themeSettings.Apps = {};
                             na.themeEditor.onload(); // results in excess /view/logs data
                             na.site.globals.themes.default = na.site.loadTheme_fetchDialogs();
                         }, 100);
@@ -3158,7 +3163,6 @@ onclick_btnFullResetOfAllThemes : function (event) {
             data : acData,
             success : function (data, ts, xhr) {
                 // reload #cssPageSpecific and #jsPageSpecific
-
                 if (data=='status : Failed.') {
                     na.m.log (10, 'na.site.loadTheme() : FAILED (HTTP SUCCESS, but no theme was found)');
                     na.site.loadTheme_applySettings (na.site.globals.themes[na.site.globals.themeName]);
@@ -3489,7 +3493,7 @@ onclick_btnFullResetOfAllThemes : function (event) {
         u = na.site.settings.current.url,
         apps = na.site.globals.app;
 
-        na.te.onload('siteContent');
+        na.te.onload();
 
         if (!theme) theme = na.site.globals.themeName;
         if ($('#'+theme)[0]) {
@@ -3635,11 +3639,17 @@ onclick_btnFullResetOfAllThemes : function (event) {
             }
             if (!themeData.themeSettings.Apps) themeData.themeSettings.Apps = {};
             //if (!themeData.themeSettings.Extras)
+            try {
                 themeData.themeSettings.Extras = na.te.transform_jsTree_to_siteGlobalsThemes();
+            } catch (err) {
+                //debugger;
+            }
+
 
             var
             regExDialogs = /#site(.*)[\s\w\.\#\d\>]*/,
             regExApps = /#app__(.*)__(.*)$/;
+            //debugger;
             if (divSel.match(regExDialogs)) {
                 var divName = divSel.match(regExDialogs)[1];
                 if (!themeData.themeSettings['Dialogs'][divName])

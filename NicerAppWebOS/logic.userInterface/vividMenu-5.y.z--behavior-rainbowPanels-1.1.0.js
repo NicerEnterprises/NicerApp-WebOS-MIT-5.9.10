@@ -1197,7 +1197,6 @@ class naVividMenu__behavior_rainbowPanels {
             $('.vividMenu_item', t.el).add('.vividMenu_subMenuPanel')
             .not(rootLevel).not(rootPath).not(myPeers).not(myKids).add(prevKids);
 
-            debugger;
         if (t.useFading) {
             $(currs).stop(true,true).fadeOut(t.fadingSpeed);
         } else {
