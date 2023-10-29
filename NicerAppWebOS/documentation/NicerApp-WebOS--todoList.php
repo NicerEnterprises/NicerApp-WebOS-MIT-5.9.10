@@ -32,6 +32,8 @@
                 </ol>
             </div></li>
 
+            <li class="todoList_l1"><div>(2023 Nov) Build a proper commenting system for all content items.</div></li>
+
             <li class="todoList_l1"><div>(2023 Dec / 2024 Jan) Extend the current limited permissions system to a full CMS, Web User Interfaced, permissions system for the WebOS.</div></li>
         </ol>
 

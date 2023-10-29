@@ -9,7 +9,7 @@ class naVividMenu__behavior_rainbowPanels {
         t.debugMe = true;
         t.useDelayedShowingAndHiding = true;
         t.useFading = true;
-        t.fadingSpeed = 'slow';
+        t.fadingSpeed = 'normal';
         t.percentageFor_rainbowPanels =
             !na.site.settings.current.theme || na.site.settings.current.theme.menusUseRainbowPanels
             ? 100
@@ -184,7 +184,6 @@ class naVividMenu__behavior_rainbowPanels {
         if (it.level === 1) $(it.b.el).css({ display : 'block' }); else $(it.b.el).css({ display : 'none' });
 
         $(it.b.el).bind('mouseenter', function(event) {
-            debugger;
             event.stopPropagation();
 
             var
@@ -416,8 +415,8 @@ class naVividMenu__behavior_rainbowPanels {
             : 'relative'
         );
 
-        //if (t.useFading && useFading) {
-        if (false) {
+        if (t.useFading && useFading) {
+        //if (false) {
             $(it.b.el).css ({
                 position : position,
                 opacity : 1,
@@ -521,7 +520,6 @@ class naVividMenu__behavior_rainbowPanels {
     }
 
     cancelHidings (t) {
-        debugger;
         for (var idx in t.timeout_hideSubMenu) {
             clearTimeout(t.timeout_hideSubMenu[idx]);
         }
@@ -546,7 +544,7 @@ class naVividMenu__behavior_rainbowPanels {
         i = pit.levelIdx;
         panel.it = pit;
         $(panel).bind('mouseover', function (event) {
-            $('#'+t.currentEl.id+'__backPanel').fadeOut();
+            $('#'+t.currentEl.id+'__backPanel').fadeOut(t.fadingSpeed);
 
             $('#'+t.el.id+'__backPanel').remove();
             t.showBackPanel(t, t.currentEl);
@@ -710,7 +708,6 @@ class naVividMenu__behavior_rainbowPanels {
                 background : 'rgba(0,0,0,0.0001)'
             });
             $(bp).bind('mouseover', function (event) {
-                debugger;
                 var bp = event.currentTarget;
                 t.hideAll(t,bp);
             });
@@ -746,7 +743,7 @@ class naVividMenu__behavior_rainbowPanels {
 
             if (t.useFading) {
                 $(hiding).stop(true,true).fadeOut(t.fadingSpeed);
-                $('.vividMenu_subMenuPanel').stop(true,true).fadeOut(t.fadingSpeed);
+                $('.vividMenu_subMenuPanel').fadeOut(t.fadingSpeed);
             } else {
                 $(hiding).css({display:'none'});
             }
@@ -982,7 +979,6 @@ class naVividMenu__behavior_rainbowPanels {
         t.timeout_onmouseout[el.it.idx] = setTimeout (function(t, evt) {
             var toHide = t.mustHide (t, t.currentEl.it, evt);
             if (t.currentEl.it.level > 1) {
-                debugger;
                 if (t.debugMe) na.m.log (20, 'naVividMenu.onmouseout() : hiding sub-menu for "'+toHide.currentEl[0].it.label+'"', false);
                 if (
                     toHide.currentEl[0].length>0
@@ -1182,12 +1178,28 @@ class naVividMenu__behavior_rainbowPanels {
             if (panel[0]) prevKids.push (panel[0]);
         }
 
+        var rootPath = [];
+        if (it.parents && it.parents.length > 0) {
+            for (var i=0; i < it.parents.length; i++) {
+                var panel = $('#'+t.el.id+'__panel__'+it.parents[i].idx);
+                if (panel[0]) rootPath.push (panel[0]);
+
+                var dit = t.children[it.parents[i].idx];
+                for (var dita in dit) {
+                    rootPath.push (dit[dita].b.el);
+                    var panel = $('#'+t.el.id+'__panel__'+dit[dita].idx);
+                    if (panel[0]) rootPath.push (panel[0]);
+                }
+            }
+        }
+
         currs =
             $('.vividMenu_item', t.el).add('.vividMenu_subMenuPanel')
-            .not(rootLevel).not(myPeers).not(myKids).add(prevKids);
+            .not(rootLevel).not(rootPath).not(myPeers).not(myKids).add(prevKids);
 
+            debugger;
         if (t.useFading) {
-            $(currs).stop(true,true).fadeOut('fast');
+            $(currs).stop(true,true).fadeOut(t.fadingSpeed);
         } else {
             $(currs)
                 .not(rootLevel).not(currs).not(myPeers).not(parentPanels).not(myKids).not(prevPeers)
