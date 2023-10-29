@@ -15,8 +15,6 @@ na.te = na.themeEditor = {
         timeInMilliseconds = date.getTime();
 
         na.m.settings.startTime = timeInMilliseconds;
-
-            debugger;
         if (typeof forDialogID=='string') {
             var
             fncn = 'na.themeEditor.onload("'+forDialogID+'")';
@@ -154,8 +152,6 @@ na.te = na.themeEditor = {
                 };
                 na.te.initSelectorsTree (dat);
 
-
-                    debugger;
                 if (did) setTimeout (function() {
                     $('#themeEditor_jsTree_selectors').jstree('deselect_all').jstree('select_node', did);
                 }, 200);
@@ -401,7 +397,6 @@ na.te = na.themeEditor = {
                 } else {
                     var bg = $(na.te.s.c.forElements);
                 };
-                debugger;
                 $(bg).css({ background : color, opacity : 1 });
                 na.site.saveTheme();                        
             }});
@@ -672,7 +667,6 @@ na.te = na.themeEditor = {
             } else {
                 //na.te.s.c.forDialogID = null;
                 //na.te.s.c.forElements = rec.text;
-                debugger;
                 if (na.te.s.c.elementsCSS[rec.id]) {
                     //setTimeout (function () {
 
@@ -745,7 +739,6 @@ na.te = na.themeEditor = {
             {dat:[],did:null},
             'Selectors', '#', 'naSelectorSet'
         );
-        debugger;
         return outputData;
     },
 
@@ -839,10 +832,7 @@ na.te = na.themeEditor = {
                         {dat:value,did:outputData.did}, outputData, key, newID, type
                     );
                     $.extend (outputData.dat, call.dat)
-                    if (call.did) {
-                        outputData.did = call.did;
-                        debugger;
-                    }
+                    if (call.did) outputData.did = call.did;
                 };
             };
         };
@@ -1441,7 +1431,7 @@ na.te = na.themeEditor = {
                 //console.log (bs[j]);
                 var m1 = typeof bs[j] !== 'string' || bs[j]==='' 
                     ? bs[j] 
-                    : bs[j].match(re1a) 
+                    : bs[j].match(re1a) !== null
                         ? bs[j].match(re1a) 
                         : bs[j].match(re1b);
                     
