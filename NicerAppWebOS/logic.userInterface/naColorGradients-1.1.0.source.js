@@ -1073,14 +1073,14 @@ na.cg.themes = {
 				colorStatusHREF : 'yellow',
 				colorLevels: {
 					0: {
-						background: '#FFFB7A',
+						background: 'rgba(255,255,100,0.2)',
 						color: '#0600B3'
 					},
 					40: {
 						color: 'darkred'
 					},
 					100: {
-						background: 'white',
+						background: 'rgba(255,255,255,0.4)',
 						color: '#67008C'
 					}
 				}
@@ -1740,7 +1740,7 @@ na.cg.themes = {
             if (combinedColor.substr(0, 1) != '#') {
                 var c = na.cg.getColorValue(combinedColor);
                 if (!c) {
-                    na.m.log(1, 'na.cg.generateCSS_extractColor(): Cannot translate color "' + combinedColor + '", using white.');
+                    //na.m.log(1, 'na.cg.generateCSS_extractColor(): Cannot translate color "' + combinedColor + '", using white.');
                     combinedColor = '#ffffff';
                 } else {
                     combinedColor = c;

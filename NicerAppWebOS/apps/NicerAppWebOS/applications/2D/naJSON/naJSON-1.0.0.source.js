@@ -680,9 +680,9 @@ na.json = nicerapp.json = {
 				} else {
 				// .json.decode.big() : works asynchronously.
 					if (ctx.status != 'error') { // see "error : function" for the actual error handling
-						ctx.waitTimeout = setTimeout(function () {
+						//ctx.waitTimeout = setTimeout(function () {
 						na.json.decode.nextValueWaitDone(ctx.id, ctr, atl);
-						}, 10);
+						//}, 10);
 					}
 				}
       },

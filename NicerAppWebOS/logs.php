@@ -53,7 +53,7 @@ if (array_key_exists('file', $_GET)) {
         $url = '/view/logs?file='.$fp2;
         $html .= '<a href="'.$url.'">'.$fp.'</a><br/>';
     }
-    $html .= '<script type="text/javascript">na.site.settings.current.loadingApps = false; na.site.settings.current.running_loadTheme = false; setTimeout (na.hms.startProcessing, 1500); na.site.transformLinks()</script>';
+    $html .= '<script type="text/javascript">setTimeout (function() {na.site.settings.current.running_loadTheme = false; na.site.settings.current.loadingApps = false; na.hms.startProcessing}, 1500); na.site.transformLinks()</script>';
     $c = [ 'siteContent' => $html ];
 
     if (

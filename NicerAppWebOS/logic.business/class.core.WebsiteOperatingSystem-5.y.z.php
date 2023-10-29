@@ -681,7 +681,7 @@ class NicerAppWebOS {
             strpos($_SERVER['SCRIPT_NAME'], '/index.php')!==false
             || strpos($_SERVER['SCRIPT_NAME'], '/ajax_get_content.php')!==false
         ) $ret = array_merge ($ret, [
-            'head' => $this->getPageCSS()
+            'head' => $this->getPageCSS(true,false)
         ]);
 //echo '<pre>'; var_dump ($ret); die();
         return $ret;
@@ -767,14 +767,14 @@ class NicerAppWebOS {
                 // ....
             }
 
-            /* NOT SURE THIS IS NEEDED :
+
             if (
                 strpos($_SERVER['SCRIPT_NAME'], '/index.php')!==false
                 || strpos($_SERVER['SCRIPT_NAME'], '/ajax_get_content.php')!==false
             ) $ret = array_merge ($ret, [
-                'head' => $this->getPageCSS()
+                'head' => $this->getPageCSS(true,false)
             ]);
-            */
+
 
             return $ret;
 
@@ -934,7 +934,7 @@ class NicerAppWebOS {
                 strpos($_SERVER['SCRIPT_NAME'], '/index.php')!==false
                 || strpos($_SERVER['SCRIPT_NAME'], '/ajax_get_content.php')!==false
             ) $ret = array_merge ($ret, [
-                'head' => $this->getPageCSS()
+                'head' => $this->getPageCSS(true,false)
             ]);
             //echo '<pre style="color:blue">'; var_dump ($ret); die();
             return $ret;

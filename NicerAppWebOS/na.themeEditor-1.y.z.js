@@ -555,7 +555,6 @@ na.te = na.themeEditor = {
                         '#btnSelectTextSettings', '#btnSelectTextShadowSettings',
                         '#btnSelectBackgroundFolder' , '#btnSelectBackgroundImage'
                     ]);
-                debugger;
 
                 var inExtras = false;
                 for (var idx in rec.parents) {

@@ -159,7 +159,22 @@ nicerapp.hms = nicerapp.jsonViewer = {
 			// start a thread to prepare the trace data
 			var dataID = cmd.id + '_tracedata_';
 			cmd.waits['trace'] = 'trace';
-			na.json.decode.big(
+				var json = '';
+				$('#'+cmd.id+' > .hmPreInit > div').each(function(idx,el) {
+					if (el.id.match(/\_tracedata\_/)) {
+						json += el.innerHTML.replace('<!--','').replace('-->','');
+					}
+				});
+
+				try {
+					cmd.trace = na.hms.tools.makeTraceHumanReadable(JSON.parse (json));
+					cmd.trace = na.hms.tools.augmentWithStats(cmd.trace, null, 'ROOT-TRACE');
+				} catch (err) {
+					debugger;
+				};
+			cmd.waits['trace'] = null;
+			/*
+			na.json.decode.small(
 				dataID, cmd, 'root-trace', na.hms.tools.unmarshall,
 				function (result) { // onSuccess callback handler
 					na.hms.reportStatus(cmd, 'short', 'Making trace-data human-readable.');
@@ -177,6 +192,7 @@ nicerapp.hms = nicerapp.jsonViewer = {
 					cmd.waits['trace'] = null;
 				}
 			);
+*/
 
 			// start a thread to decode the dump data.
 			dataID = cmd.id + '_data_';
@@ -249,7 +265,7 @@ nicerapp.hms = nicerapp.jsonViewer = {
 	},
 
 	log: function (errLevel, str) {
-		na.m.log (errLevel, { msg : 'na.jsonViewer: '+str } );
+		//na.m.log (errLevel, { msg : 'na.jsonViewer: '+str } );
 	},
 	
 	reportStatus: function (cmd, taip, str) {
@@ -836,7 +852,7 @@ nicerapp.hms = nicerapp.jsonViewer = {
 
 			if (cmd.trace) {
 				var oldTheme = na.hms.options.current.theme;
-				var localTheme = na.hms.tools.getThemeByName('--trace');
+				var localTheme = na.hms.tools.getThemeByName('--trace--');
 				if (cmd.trace.hmo && cmd.trace.hmo.themeName) {
 					var localTheme = na.hms.tools.getThemeByName(cmd.trace.hmo.themeName);
 				};
@@ -846,13 +862,15 @@ nicerapp.hms = nicerapp.jsonViewer = {
 				na.hms.settings.cs.debugID++;
 				//cmd.trace.hmd.trace.hmo = cmd.trace.hmo;
 				
-				debugger;
-				cmd.trace.hmd.trace.hmd.traceData.hms.isRootVar = true;
+				//debugger;
+				//cmd.trace.hmd.trace.hmd.traceData.hms.isRootVar = true;
+				cmd.trace.hms.isRootVar = true ;
 
 				var call = na.hms.tools.printNextLevel({
 					id: na.hms.settings.cs.debugID,
 					cmd: cmd,
-					val: cmd.trace.hmd.trace.hmd.traceData,
+					//val: cmd.trace.hmd.trace.hmd.traceData,
+					val : cmd.trace.hmd.traceData,
 					keyNameOrType: 'ROOT-TRACE',
 					keyName: '',
 					theme: localTheme,
@@ -860,7 +878,8 @@ nicerapp.hms = nicerapp.jsonViewer = {
 					hmo: cmd.trace.hmo,
 					subPrintID: 'hm_' + na.hms.settings.cs.debugID
 				});	
-				var traceID = cmd.trace.hmd.trace.hmd.traceData.hms.parentNode.hms.keyID;
+				//var traceID = cmd.trace.hmd.trace.hmd.traceData.hms.parentNode.hms.keyID;
+				var traceID = cmd.hmd.hms.keyID+'_trace';
 				var htmlTrace = 
 					'<tr><td colspan="999">' + 
 					'<div id="' + cmd.id + '_trace" class="hm hmTracePHP hmTheme_' + na.hms.options.current.theme.themeName + '" style="display:none">' +
@@ -876,10 +895,11 @@ nicerapp.hms = nicerapp.jsonViewer = {
 
 				if (localTheme.themeName!==na.hms.options.current.theme.themeName) {
 					//na.hms.reportStatus (cmd, 'long', 'Generating CSS for trace.');
-					var css = na.colorGradients.generateCSS_for_jsonViewer (localTheme, cmd.trace.hmd.trace.hmd.traceData, traceID);
-					na.hms.tools.insertCSS(cmd, cmd.trace.hmd.trace.hmd.traceData, css, localTheme, 'trace');
+					//var css = na.colorGradients.generateCSS_for_jsonViewer (localTheme, cmd.trace.hmd.trace.hmd.traceData, traceID);
+					var css = na.colorGradients.generateCSS_for_jsonViewer (localTheme, cmd.trace, traceID);
+					//na.hms.tools.insertCSS(cmd, cmd.trace.hmd.trace.hmd.traceData, css, localTheme, 'trace');
+					na.hms.tools.insertCSS(cmd, cmd.trace, css, localTheme, 'trace');
 				};
-
 			};
 
 
@@ -1126,10 +1146,13 @@ nicerapp.hms = nicerapp.jsonViewer = {
 			var it = pvCmd.scanResults[pvCmd.scanIdx];
 			if (
 				!(
-				typeof it==='object' 
-				&& typeof it.d==='object' 
-				&& ('d' in it) 
-				&& ('hmd' in it.d)
+					typeof it==='object'
+					&& typeof it.d==='object'
+					&& ('d' in it)
+					&& (
+						('hmd' in it.d)
+						|| ('trace' in it.d)
+					)
 				)
 			) { debugger; return false; }
 			
@@ -1211,7 +1234,7 @@ nicerapp.hms = nicerapp.jsonViewer = {
 			};
 			
 			var pauseFactor = pvCmd.buildIdx;
-			if (pauseFactor > pvCmd.lastPause + 1) {
+			if (pauseFactor > pvCmd.lastPause + 30) {
 				setTimeout (function () {
 					pvCmd.lastPause = pauseFactor;
 					na.hms.tools.printNextLevel_buildList (pvCmd);
@@ -1242,9 +1265,10 @@ nicerapp.hms = nicerapp.jsonViewer = {
 			};
 			var s = p.hms;
 			var id = false;
-			if (jQuery('#'+s.realParentID).length>0) id = s.realParentID;
-			else if (jQuery('#'+s.valueID).length>0) id = s.valueID;
-			else if (jQuery('#'+s.keyID).length>0) id = s.keyID;
+			debugger;
+			if (s.realParentID && jQuery('#'+s.realParentID).length>0) id = s.realParentID;
+			else if (s.valueID && jQuery('#'+s.valueID).length>0) id = s.valueID;
+			else if (s.keyID && jQuery('#'+s.keyID).length>0) id = s.keyID;
 				
 			//na.hms.log (202, 'tools.printNextLevel_buildItem(): pvCmd.buildIdx='+pvCmd.buildIdx+', '+(id!==false?'SUCCESS':'FAIL')+'; '+p+', '+id+' - '+it.html);
 			if (id) {
@@ -2079,7 +2103,7 @@ nicerapp.hms = nicerapp.jsonViewer = {
 				var d = btd[i];
 				if (btd.hmo && btd.hmo.urlEditor && btd.hmo.urlEditor != '') {
 					var url = btd.hmo.urlEditor;
-					url = url.replace(/{MACHINE}/, 'nicerapp.com');
+					url = url.replace(/{MACHINE}/, 'nicer.app');
 					url = url.replace(/{ROOT}/, '');
 					url = url.replace(/{FP}/, escape(d.file).replace(/nope\//, 'nope/'));
 					url = url.replace(/{LINE}/, d.line);
@@ -2089,7 +2113,7 @@ nicerapp.hms = nicerapp.jsonViewer = {
 			}
 			r.trace = btd;
 			r.hmo = btd.hmo;
-			return r;
+			return btd;
 		},
 
 		getThemeByName: function (themeName) {
