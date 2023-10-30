@@ -742,6 +742,7 @@ class naVividMenu__behavior_rainbowPanels {
             });
 
             if (t.useFading) {
+                debugger;
                 $(hiding).stop(true,true).fadeOut(t.fadingSpeed);
                 $('.vividMenu_subMenuPanel').fadeOut(t.fadingSpeed);
             } else {
@@ -1195,7 +1196,7 @@ class naVividMenu__behavior_rainbowPanels {
 
         currs =
             $('.vividMenu_item', t.el).add('.vividMenu_subMenuPanel')
-            .not(rootLevel).not(rootPath).not(myPeers).not(myKids).add(prevKids);
+            .not(rootLevel).not(rootPath).not(myPeers).not(myKids);
 
         if (t.useFading) {
             $(currs).stop(true,true).fadeOut(t.fadingSpeed);
