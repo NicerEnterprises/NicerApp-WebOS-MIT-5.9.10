@@ -42,7 +42,7 @@ class naVividMenu__behavior_rainbowPanels {
             }
         });
 
-        $(el).css({display:'flex',height:50,alignItems:'center'});
+        $(el).not('.noFlex').css({display:'flex',height:50,alignItems:'center'});
 
         if (typeof callback7=='function') callback7(t.el);
 

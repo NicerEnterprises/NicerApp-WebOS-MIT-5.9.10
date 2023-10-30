@@ -1176,6 +1176,7 @@ na.te = na.themeEditor = {
 
             setTimeout (function(theme) {
                 na.site.loadTheme(function() {
+                    debugger;
                     var btn = $('#'+na.te.s.c.selectedButtonID)[0];
                     if (btn) na.te.onclick(btn, false);
 
@@ -1278,6 +1279,7 @@ na.te = na.themeEditor = {
         $('.themeEditor_colorPicker').next().fadeOut('fast');
         $('#themePermissions').fadeIn('fast', 'swing', function () {
             na.te.s.c.oldThemeNames = [];
+            na.te.s.c.selectedButtonID = 'btnSetPermissionsForTheme';
             $('.themeItem').remove();
             var 
             t = $('#btnOptions_menu__themes_dropdown > .vividDropDownBox_selector > .vividScrollpane > div'),

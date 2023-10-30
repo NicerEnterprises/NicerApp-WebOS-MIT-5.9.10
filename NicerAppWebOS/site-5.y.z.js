@@ -1821,12 +1821,15 @@ onclick_btnFullResetOfAllThemes : function (event) {
                             if (typeof handlers.onload == 'function') {
                                 c.divsInitializing.push ({appID:appID,divID:divID});
                                 na.m.log (50, fncn+' : #'+divID+' : Now calling na.apps.loaded["'+appID+'"].settings.loadedIn["#'+divID+'"].onload();');
-                                handlers.onload ({
-                                    callbackParams : [ divID ],
-                                    callback : function (divID) {
-                                        na.site.appDivLoaded (appID, divID, f, callback);
-                                    } 
-                                });
+                                debugger;
+                                //setTimeout(function(){
+                                    handlers.onload ({
+                                        callbackParams : [ divID ],
+                                        callback : function (divID) {
+                                            na.site.appDivLoaded (appID, divID, f, callback);
+                                        }
+                                    });
+                                //}, 2500);
                             }
                         } else {
                             na.site.appDivLoaded(appID, divID, f, callback);
@@ -3493,7 +3496,7 @@ onclick_btnFullResetOfAllThemes : function (event) {
         u = na.site.settings.current.url,
         apps = na.site.globals.app;
 
-        na.te.onload();
+        if (!na.te.s.c.forDialogID && !na.te.s.c.forElements) na.te.onload();
 
         if (!theme) theme = na.site.globals.themeName;
         if ($('#'+theme)[0]) {

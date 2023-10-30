@@ -165,7 +165,6 @@ class naVividDialog {
             $(el2).attr('src', $(el2).attr('srcPreload'));
             $(el2).removeAttr('srcPreload');
         });
-        debugger;
         na.themeEditor.onload(did);
         
         na.desktop.resize(function(el) {

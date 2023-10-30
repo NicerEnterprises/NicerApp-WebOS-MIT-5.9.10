@@ -33,7 +33,7 @@ na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/musicPlayer'] 
             '#siteContent' : {
                 onload : function (settings) {
                     na.site.settings.current.app = '/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/musicPlayer';
-                    na.analytics.logMetaEvent ("na.mp.onload() called.");
+                    na.analytics.logMetaEvent ("na.musicPlayer.onload() called.");
 
             /*na.m.waitForCondition ('DOM ready', function() {
                 return na && na.apps && typeof na.mediaPlayer =='object' && $.ui && $.ui.draggable && $('#mp3s')[0] && $('#app__musicPlayer__player')[0];
@@ -68,10 +68,10 @@ na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/musicPlayer'] 
                         'na.site.settings.current.HTMLidle for resizing of playlist .vividButton elements (not in a .vividMenu btw)',
                         function () { return na.m.HTMLidle(); },
                         function () {
-                                $('#mp3s .vividButton').each(function(idx,el) {
-                                    $(el).css({width:w});
-                                    na.site.settings.buttons['#'+el.id] = new naVividButton(el);
-                                });
+                            $('#mp3s .vividButton').each(function(idx,el) {
+                                $(el).css({width:w});
+                                na.site.settings.buttons['#'+el.id] = new naVividButton(el);
+                            });
                         }, 100); // milliseconds delay number (milliseconds between check of 2nd parameter function call)
                     na.mp.setupDragNDrop();
                     
