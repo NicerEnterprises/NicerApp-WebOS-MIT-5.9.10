@@ -1188,8 +1188,8 @@ class naVividMenu__behavior_rainbowPanels {
                 var dit = t.children[it.parents[i].idx];
                 for (var dita in dit) {
                     rootPath.push (dit[dita].b.el);
-                    var panel = $('#'+t.el.id+'__panel__'+dit[dita].idx);
-                    if (panel[0]) rootPath.push (panel[0]);
+                    var panel = $('#'+t.el.id+'__panel__'+dit[dita].parent.it.idx);
+                    if (panel[0] && !rootPath.includes(panel[0])) rootPath.push (panel[0]);
                 }
             }
         }
