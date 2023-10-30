@@ -742,7 +742,6 @@ class naVividMenu__behavior_rainbowPanels {
             });
 
             if (t.useFading) {
-                debugger;
                 $(hiding).stop(true,true).fadeOut(t.fadingSpeed);
                 $('.vividMenu_subMenuPanel').fadeOut(t.fadingSpeed);
             } else {
@@ -1188,22 +1187,25 @@ class naVividMenu__behavior_rainbowPanels {
                 var dit = t.children[it.parents[i].idx];
                 for (var dita in dit) {
                     rootPath.push (dit[dita].b.el);
-                    var panel = $('#'+t.el.id+'__panel__'+dit[dita].parent.it.idx);
-                    if (panel[0] && !rootPath.includes(panel[0])) rootPath.push (panel[0]);
+                    if (dit[dita].parent && dit[dita].parent.it) {
+                        var panel =
+                            $('#'+t.el.id+'__panel__'+dit[dita].parent.it.idx);
+
+                        if (panel[0] && !rootPath.includes(panel[0]))
+                            rootPath.push (panel[0]);
+                    }
                 }
             }
         }
 
-        currs =
+        var currs =
             $('.vividMenu_item', t.el).add('.vividMenu_subMenuPanel')
-            .not(rootLevel).not(rootPath).not(myPeers).not(myKids);
+                .not(rootLevel).not(rootPath).not(myPeers).not(myKids);
 
         if (t.useFading) {
             $(currs).stop(true,true).fadeOut(t.fadingSpeed);
         } else {
-            $(currs)
-                .not(rootLevel).not(currs).not(myPeers).not(parentPanels).not(myKids).not(prevPeers)
-                .css({display:'none'});
+            $(currs).css({display:'none'});
         }
 
     }

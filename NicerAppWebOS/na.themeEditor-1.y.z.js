@@ -901,7 +901,7 @@ na.te = na.themeEditor = {
         if (!$(this).is('.disabled')) { 
             if (!na.desktop.settings.visibleDivs.includes('#siteContent')) na.desktop.settings.visibleDivs.push('#siteContent');
             
-            na.desktop.settings.visibleDivs.remove('#siteToolbarThemeEditor'); 
+            arrayRemove (na.desktop.settings.visibleDivs, '#siteToolbarThemeEditor');
             na.site.settings.activeDivs=['#siteContent']; 
             na.desktop.resize();
         }        

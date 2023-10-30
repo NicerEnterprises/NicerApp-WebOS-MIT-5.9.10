@@ -10,21 +10,13 @@
 <ol class="todoList">
     <li class="todoList"><div>(CURRENT) (2023 Oct,Nov,Dec) Upgrade the blogging features.
         <ol class="todoList_l1">
-            <li class="todoList_l1"><div>(CURRENT) (2023 Oct,Nov,Dec) Fix any final bugs in the Theme Editor (a few barely known at this time).<br/>
-            <br/>
-            UPDATE : a few serious bugs have been found, and reported to the Chrome Development team, about -webkit-mask-image CSS not exactly getting along at the moment with a box-shadow CSS setting.<br/>
-            Corners get messed up relative to background div of a dialog, all sorts of distortions :(<br/>
-            We clearly need a new approach to mixing pixel data. a combo of a PNG and video file format would be best i think. layered in CSS per selector.<br/>
-            <br/>
-            UPDATE : this can be solved by addressing the .vdBackground element that's a part of any vividDialog in the Theme Editor.</div></li>
-
             <li class="todoList_l1"><div>(CURRENT) (2023 Nov,Dec) Build a comments engine and user-interface (again).</div></li>
 
             <li class="todoList_l1"><div>(STALLED) Create a custom HTML WYSIWYG rich-text editor component of my own, that ties into the NicerApp Theme Editor.<br/>
-            This is stalled because browser makers need to start supporting a window.getSelection() that returns a .anchorOffset and .extentOffset that works on the .innerHTML instead of the .innerText of any given element (usually the .commonAncestorElement).
-                <ol class="todoList_l2">
-                    <li class="todoList_l2"><div>supply data from a HTML+CSS form into <a href="https://github.com/NicerEnterprises/NicerApp-WebOS/blob/main/NicerAppWebOS/logic.business/class.core.WebsiteOperatingSystem-5.y.z.php#L1353" class="noPushState" target="naGH_wos1088">css_keyframes_to_array() and css_animation_template_to_animation()</a>.</div></li>
-                </ol>
+            This is stalled because browser makers need to start supporting a window.getSelection() that returns a .anchorOffset and .extentOffset that works on the .innerHTML instead of the .innerText of any given element (usually the .commonAncestorElement).<br/>
+            But maybe i can strip the code that i need from the way tinymce does the work for it's link-dialog.
+            </div></li>
+            <li class="todoList_l1"><div>supply data from a HTML+CSS form (as a tabpage in the Theme Editor) into <a href="https://github.com/NicerEnterprises/NicerApp-WebOS/blob/main/NicerAppWebOS/logic.business/class.core.WebsiteOperatingSystem-5.y.z.php#L1353" class="noPushState" target="naGH_wos1088">css_keyframes_to_array() and css_animation_template_to_animation()</a>.
             </div></li>
 
             <li class="todoList_l1"><div>(2023 Dec / 2024 Jan) Extend the current limited permissions system to a full CMS, Web User Interfaced, permissions system for the WebOS.</div></li>
