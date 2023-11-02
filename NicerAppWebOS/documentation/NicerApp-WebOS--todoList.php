@@ -10,16 +10,18 @@
 <ol class="todoList">
     <li class="todoList"><div>(CURRENT) (2023 Oct,Nov,Dec) Upgrade the blogging features.
         <ol class="todoList_l1">
-            <li class="todoList_l1"><div>(CURRENT) (2023 Nov,Dec) Build a comments engine and user-interface (again).</div></li>
-
             <li class="todoList_l1"><div>(STALLED) Create a custom HTML WYSIWYG rich-text editor component of my own, that ties into the NicerApp Theme Editor.<br/>
             This is stalled because browser makers need to start supporting a window.getSelection() that returns a .anchorOffset and .extentOffset that works on the .innerHTML instead of the .innerText of any given element (usually the .commonAncestorElement).<br/>
-            But maybe i can strip the code that i need from the way tinymce does the work for it's link-dialog.
-            </div></li>
-            <li class="todoList_l1"><div>supply data from a HTML+CSS form (as a tabpage in the Theme Editor) into <a href="https://github.com/NicerEnterprises/NicerApp-WebOS/blob/main/NicerAppWebOS/logic.business/class.core.WebsiteOperatingSystem-5.y.z.php#L1353" class="noPushState" target="naGH_wos1088">css_keyframes_to_array() and css_animation_template_to_animation()</a>.
+            UPDATE : i can strip the code that i need[1] from the way tinymce does the work for it's link-dialog and color highlighting dropdown dialog, but this will not be easy; due to the many work arounds needed at the browser level, tinymce is about 27500 lines of code, much of which comes into play during simple tasks like this.<br/>
+            <br/>
+            [1] i need an 'id' and 'classNames' input field in the tinymce toolbar (to tie edited content into my universal web theme editor for my CMS/WebOS), creating a tinymce-4.9.11-na-1.0.0 branch of the tinymce MIT licensed v4.9 code.
             </div></li>
 
-            <li class="todoList_l1"><div>(2023 Dec / 2024 Jan) Extend the current limited permissions system to a full CMS, Web User Interfaced, permissions system for the WebOS.</div></li>
+            <li class="todoList_l1"><div>(STALLED, awaiting completion of item 1.1 on this list)<br/>
+            Supply data from a HTML+CSS form (as a tabpage in the Theme Editor) into <a href="https://github.com/NicerEnterprises/NicerApp-WebOS/blob/main/NicerAppWebOS/logic.business/class.core.WebsiteOperatingSystem-5.y.z.php#L1353" class="noPushState" target="naGH_wos1088">css_keyframes_to_array() and css_animation_template_to_animation()</a>.
+            </div></li>
+
+            <li class="todoList_l1"><div>(CURRENT) (2023 Dec / 2024 Jan) Extend the current limited permissions system to a full CMS, Web User Interfaced, permissions system for the WebOS.</div></li>
         </ol>
 
     </div></li>
@@ -36,17 +38,11 @@
 
     <li class="todoList"><div>Add a checkbox in the Theme Editor to select backgrounds and stretch instead of tile them for any DIV.</div></li>
 
-    <li class="todoList"><div>Show a small error window for a short time when a page can't load.</div></li>
-
     <li class="todoList"><div>Work my WebOS to be more Windows(tm)(r) compatible in terms of it's user-interface.<br/>
     Specifically, i want to move the date-time indicator on my web-pages to the bottom-right of the screen.<br/>
     The only downside of this is that i'll lose pixel space for content/apps. But there's ways around that, like only showing the time indicator when the page is F11-ed, shown fullscreen without browser menus.
     </div>
     </li>
-
-
-    <li class="todoList"><div>Make the musicPlayer app work on smartphone vertical screens as well.</div></li>
-
 
     <li class="todoList"><div>Restore the automatic retrieval of new backgrounds download routines for nicerapp via free to use methods of delivery at Google image search and (TODO :)Bing image search.</div></li>
 
@@ -75,6 +71,7 @@
     </div>
     </li>
 
+    <li class="todoList"><div>Build a comments engine and user-interface (again).</div></li>
 
     <li class="todoList"><div>Figure out a way to store the width and height of each background found in the filesystem in the output of .../NicerAppWebOS/domainConfigs/DOMAIN.TLD/ajax_backgrounds_recursive.php and .../NicerAppWebOS/domainConfigs/DOMAIN.TLD/ajax_backgrounds.php.<br/>
     (NOT DONE) Then use this information in the backgrounds menu to select only elligible backgrounds, and popup an error message 'No backgrounds found, reverting to search key = {$someSearchKey}' when no backgrounds are found for the current search / menu-option.</div></li>
