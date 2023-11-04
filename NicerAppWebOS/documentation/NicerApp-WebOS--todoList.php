@@ -12,21 +12,36 @@
         <ol class="todoList_l1">
             <li class="todoList_l1"><div>(STALLED) Create a custom HTML WYSIWYG rich-text editor component of my own, that ties into the NicerApp Theme Editor.<br/>
             This is stalled because browser makers need to start supporting a window.getSelection() that returns a .anchorOffset and .extentOffset that works on the .innerHTML instead of the .innerText of any given element (usually the .commonAncestorElement).<br/>
-            UPDATE : i can strip the code that i need[1] from the way tinymce does the work for it's link-dialog and color highlighting dropdown dialog, but this will not be easy; due to the many work arounds needed at the browser level, tinymce is about 27500 lines of code, much of which comes into play during simple tasks like this.<br/>
+            UPDATE : I can strip the code that I need[1] from the way tinymce does the work for it's link-dialog and color highlighting dropdown dialog, but this will not be easy; due to the many work arounds needed at the browser level, tinymce is about 27500 lines of code, much of which comes into play during simple tasks like this.<br/>
             <br/>
-            [1] i need an 'id' and 'classNames' input field in the tinymce toolbar (to tie edited content into my universal web theme editor for my CMS/WebOS), creating a tinymce-4.9.11-na-1.0.0 branch of the tinymce MIT licensed v4.9 code.
+            [1] I need an 'id' and 'classNames' input field in the tinymce toolbar (to tie edited content into my universal web theme editor for my CMS/WebOS), creating a tinymce-4.9.11-na-1.0.0 branch of the <a href="https://www.tiny.cloud/" class="noPushState" target="tinymce">tinymce</a> MIT licensed v4.9 code.<br/>
+            i've taken the liberty of web form contacting the tinymce sales team to ask if they can implement this for universal web theme editor makers for free.
             </div></li>
 
             <li class="todoList_l1"><div>(STALLED, awaiting completion of item 1.1 on this list)<br/>
-            Supply data from a HTML+CSS form (as a tabpage in the universal web theme editor) into <a href="https://github.com/NicerEnterprises/NicerApp-WebOS/blob/main/NicerAppWebOS/logic.business/class.core.WebsiteOperatingSystem-5.y.z.php#L1353" class="noPushState" target="naGH_wos1088">css_keyframes_to_array() and css_animation_template_to_animation()</a>.
+            Supply data from a HTML+CSS form (as a tabpage in the universal web theme editor) into <a href="https://github.com/NicerEnterprises/NicerApp-WebOS/blob/main/NicerAppWebOS/logic.business/class.core.WebsiteOperatingSystem-5.y.z.php#L1374" class="noPushState" target="naGH_wos1088">css_keyframes_to_array() and css_animation_template_to_animation()</a>.
+                <ol class="todoList_l2">
+                    <li class="todoList_l2"><div>Write 'vividRangeFinder' (a percentage bar -input field really- with 2 percentage stops)</div></li>
+                </ol>
             </div></li>
 
-            <li class="todoList_l1"><div>(CURRENT) (2023 Dec / 2024 Jan) Extend the current limited permissions system to a full CMS, Web User Interfaced, permissions system for the WebOS.</div></li>
+            <li class="todoList_l1"><div>(CURRENT) (2023 Nov,Dec) Extend the current limited permissions system to a full CMS, Web User Interfaced, permissions system for the WebOS.
+                <ol class="todoList_l2">
+                    <li class="todoList_l2"><div>(CURRENT) (2023 Nov,Dec) Extend vividButton to bring up vividDialogs and vividMenus when hovered over. In fact, it shouldn't matter anymore whether you've hovering from a vividMenu through a vividDialog filled with vividButtons to a goal either anymore.<br/>So I need to create a new 'vividUI' (vividUserInterface) component, that will direct all of this.<br/>
+                    I've already started on this, and it seems to be easy going :)</div></li>
+                </ol>
+            </div></li>
         </ol>
-
     </div></li>
 
+    <li class="todoList"><div>(CURRENT) (Early Nov 2023) Fix the security leak (that i admit to have accidentally caused myself ;) ) on my server. Happened at zoned.at, which i don't look often enough at apparently! :D</div></li>
+
     <li class="todoList"><div>Make the musicPlayer app work on smartphone vertical screens as well.</div></li>
+
+    <li class="todoList"><div>Add the next set of animations to .todoList p, span, h1, h2, and h3 HTML elements (config data for which is to be visualized and interacted with in the theme editor by the way).<br/>
+    These will be javascript + PHP generated visualizations for SVG (animated) graphics.<br/>
+    I promise to bring you all some level of CSS animations in the generation config language :)<br/>
+    Maybe even a real translation of CSS animations (they're easy to parse), into SVG color and transparency animations! :D</div></li>
 
     <li class="todoList"><div>Create a webshop app with a subscription model (that i'll publish as https://nicer.app/shop), in collaboration with paypal.com</div></li>
 
@@ -39,10 +54,12 @@
     <li class="todoList"><div>Add a checkbox in the Theme Editor to select backgrounds and stretch instead of tile them for any DIV.</div></li>
 
     <li class="todoList"><div>Work my WebOS to be more Windows(tm)(r) compatible in terms of it's user-interface.<br/>
-    Specifically, i want to move the date-time indicator on my web-pages to the bottom-right of the screen.<br/>
+    Specifically, I want to move the date-time indicator on my web-pages to the bottom-right of the screen.<br/>
     The only downside of this is that i'll lose pixel space for content/apps. But there's ways around that, like only showing the time indicator when the page is F11-ed, shown fullscreen without browser menus.
     </div>
     </li>
+
+
 
     <li class="todoList"><div>Restore the automatic retrieval of new backgrounds download routines for nicerapp via free to use methods of delivery at Google image search and (TODO :)Bing image search.</div></li>
 
@@ -53,10 +70,6 @@
     - let users search for backgrounds based on filepath, then save those searches in their account settings and make them viewable as photoalbums.
     </pre></div>
     </li>
-
-
-    <li class="todoList"><div>Write 'vividRangeFinder' (a percentage bar with 2 percentage stops)</div></li>
-
 
     <li class="todoList"><div>Upgrade the news app and vividDialog : add siteToolbarLeft functionality :<br/>
         <ol class="todoList_l1">
@@ -90,13 +103,13 @@
         '.todoList > li, '
         +'.contentSectionTitle3, '
         +'p.todoList, h1.todoList, h2.todoList, h3.todoList, '
-        +'.todoList > li > div, '
-        +'.todoList > li > pre, '
+        +'.todoList > lI > div, '
+        +'.todoList > lI > pre, '
         +'.todoList_l1 > li, '
-        +'.todoList_l1 > li > div, '
-        +'.todoList_l1 > li > pre, '
+        +'.todoList_l1 > lI > div, '
+        +'.todoList_l1 > lI > pre, '
         +'.todoList_l2 > li, '
-        +'.todoList_l2 > li > div, '
-        +'.todoList_l2 > li > pre '
+        +'.todoList_l2 > lI > div, '
+        +'.todoList_l2 > lI > pre '
     );
 </script>

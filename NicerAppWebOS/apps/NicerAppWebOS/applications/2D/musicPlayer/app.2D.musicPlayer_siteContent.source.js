@@ -584,8 +584,8 @@ na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/musicPlayer'] 
         if (!window.top || !$(window.top.document.getElementById('siteContent'))[0]) return false;
 		var 
 		myWidth = $('#siteContent').width(),
-		myHeight = $('#siteContent').height()- $('#horizontalMover__containmentBox2').height() - $('#horizontalMover__containmentBox2')[0].offsetTop - 50 -$('#titlebar').height() - 10,
-		contentWidth = 20 + 240 + 40 + 300 + 20,
+		myHeight = $('#siteContent').height()- $('#horizontalMover__containmentBox2').height() - $('#horizontalMover__containmentBox2')[0].offsetTop - 50 -$('#titlebar').height() - 30,
+		contentWidth = 20 + 240 + 40 + 300 + 30,
         contentInnerWidth = 240 + 40 + 300 - 10,
         sc_scrollpane = $('#siteContent', window.top.document.body),
 		sc_scrollpaneContainer = $('#siteContent', window.top.document.body),
@@ -609,13 +609,13 @@ na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/musicPlayer'] 
 			else var dialogPlayer = '#app__musicPlayer__player, #app__musicPlayer__player__CSS3';
             
         var 
-        leftOffset = masterLeftOffset + 20,
-        playerLeft = (leftOffset + 250 + 20),
+        leftOffset = masterLeftOffset + 30,
+        playerLeft = (leftOffset + 250 + 30),
 		dialogsLeft = Math.round (leftOffset);
         $('#titlebar').css ({
             width : contentInnerWidth,
             left : dialogsLeft,
-            top : 45
+            top : 55
         });
         $('#titlebar .vividDialogContent').css ({
             overflow : 'hidden'
@@ -630,8 +630,8 @@ na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/musicPlayer'] 
 		$dialogPlaylist = $(dialogPlaylist),
 		$dialogPlayer = $(dialogPlayer),
 		centerDialogsWidth = $(dialogMP3sList).width() + $dialogPlaylist.width() + $dialogPlayer.width(),
-		dialogsTop = $('#titlebar').position().top + $('#titlebar').height() + 30,
-		dialogsHeight = (myHeight - dialogsTop - 40);
+		dialogsTop = $('#titlebar').position().top + $('#titlebar').height() + 40,
+		dialogsHeight = (myHeight - dialogsTop - 20);
         
 		$('#horizontalMover__containmentBox2').css({
 			left : 25,
@@ -659,24 +659,24 @@ na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/musicPlayer'] 
         $('#app__musicPlayer__description, #app__musicPlayer__description__CSS3, #app__musicPlayer__description__item__0, #app__musicPlayer__description__item__0__img1, app__musicPlayer__desc__item__0__img2, #app__musicPlayer__description, #app__musicPlayer__description').css({
             position : 'absolute',
             width : 300,
-            height : (myHeight - 40 - 120) /2                                                                                                                                                                                                                          
+            height : (myHeight - 20 - 120) /2
         });
         $('#app__musicPlayer__description').css({
-            left : leftOffset + 250 + 20,
-            top : dialogsTop + $('#app__musicPlayer__player')[0].offsetHeight + 20,
+            left : leftOffset + 250 + 30,
+            top : dialogsTop + $('#app__musicPlayer__player')[0].offsetHeight + 30,
             width : 300,
-            height : ((myHeight - 40 - 120) /2)
+            height : ((myHeight - 20 - 120) /2)
         });
         $('#app__musicPlayer__description__CSS3').css({
             width : 300,
-            height : (myHeight - 40 - 120) /2
+            height : (myHeight - 20 - 120) /2
         });
         //$('#mp3descText').css({ marginLeft : 40 });
         
         
         $('#app__musicPlayer__description > table').css({
             width : '',
-            height : ((myHeight - 40 - 120) /2)
+            height : ((myHeight - 20 - 120) /2)
         });
 	 
         $('#horizontalMover').css({
@@ -695,10 +695,10 @@ na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/musicPlayer'] 
         });
         
         $dialogPlaylist.css ({
-            left : leftOffset + 250 + 20,
+            left : leftOffset + 250 + 30,
             width : 300,
-            height : (myHeight - 40 - 120 - $('#titlebar').height()) /2,
-            top : ($dialogMP3desc[0].offsetTop + $dialogMP3desc.height() + 20) + 'px'
+            height : (myHeight - 20 - 120 - $('#titlebar').height()) /2,
+            top : ($dialogMP3desc[0].offsetTop + $dialogMP3desc.height() + 30) + 'px'
         });
         $('ul', $dialogPlaylist).css ({
             height : 'calc(100% - '+$('h2', $dialogPlaylist).outerHeight()+'px - 10px - '+$('h2', $dialogPlaylist).css('marginBottom')+' - '+$('h2', $dialogPlaylist).css('marginBottom')+')'

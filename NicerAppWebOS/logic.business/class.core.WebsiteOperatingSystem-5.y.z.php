@@ -1365,7 +1365,7 @@ class NicerAppWebOS {
                 //$r .= 'h1::before, h2::before, h3::before {'."\r\n".PHP_EOL;
                     //$r .= "\t".'content : \'\''."\r\n".PHP_EOL;
                 //$r .= '}'."\r\n".PHP_EOL;
-                $r .= '#divFor_neCompanyLogo, #headerSiteDiv, li span, .backdropped, p, h1::before, h2::before, h3::before {'."\r\n".PHP_EOL;
+                $r .= '#divFor_neCompanyLogo, #headerSiteDiv:not(.backdropped, .vividTextCSS), li span:not(.backdropped, .vividTextCSS), p:not(.backdropped, .vividTextCSS), h1:not(.backdropped, .vividTextCSS)::before, h2:not(.backdropped, .vividTextCSS)::before, h3:not(.backdropped, .vividTextCSS)::before {'."\r\n".PHP_EOL;
                     $r .= "\t".'background : rgba(0,0,0,'.$theme['textBackgroundOpacity'].');'."\r\n".PHP_EOL;
                     $r .= "\t".'border-radius : 10px !important;'."\r\n".PHP_EOL;
                 $r .= '}'."\r\n".PHP_EOL;
