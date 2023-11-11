@@ -1,4 +1,6 @@
 <?php
+// Copyright (C) 2002-2023 and All Rights Reserved (R) by Rene AJM Veerman <rene.veerman.netherlands@gmail.com>
+
 // This file is part of jsonViewer
 //	Written & copyrighted (c) 2010-2013 by Rene AJM Veerman <rene.veerman.netherlands@gmail.com>
 //	License: LGPL, free for any type of use

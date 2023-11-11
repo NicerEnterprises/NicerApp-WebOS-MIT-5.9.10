@@ -1,3 +1,4 @@
+// Copyright (C) 2002-2023 and All Rights Reserved (R) by Rene AJM Veerman <rene.veerman.netherlands@gmail.com>
 NicerApp_WebOS.vt = NicerApp_WebOS.vividText = {
 	about : {
 		whatsThis : 'nicerapp.vt = nicerapp.vividText = cool color animations for HTML texts',

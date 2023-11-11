@@ -1,4 +1,6 @@
 <?php
+// Copyright (C) 2002-2023 and All Rights Reserved (R) by Rene AJM Veerman <rene.veerman.netherlands@gmail.com>
+
 // 	This file is part of jsonViewer
 //	Written & copyrighted (c) 2010-2013 by [the owner of NicerApp.com] <NicerApp@gmail.com>
 //	License: LGPL, free for any type of use
@@ -208,7 +210,7 @@ hm (bigArrayOrObject, title, {
 			
 			<p>
 			Use this link to generate test-data:<br/>
-			<a class="nomod" target="_parent" href="/NicerApp/com/jsonViewer/index.php?fresh=true&mem=30&file=hm_testdata_30mb.html">/NicerApp/com/jsonViewer/index.php?fresh=true&mem=30&file=hm_testdata_30mb.html</a><br/>
+			<a class="nomod" target="_parent" href="/NicerApp/com/jsonViewer/index.php?fresh=true&mem=35&file=hm_testdata_30mb.html">/NicerApp/com/jsonViewer/index.php?fresh=true&mem=35&file=hm_testdata_30mb.html</a><br/>
 			You can check the source of that index.php to see more options. &mem=30 specifies to use 30mb of memory for that run.
 			</p>
 			

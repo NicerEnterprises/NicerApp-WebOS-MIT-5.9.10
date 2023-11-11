@@ -1,3 +1,5 @@
+// Copyright (C) 2002-2023 and All Rights Reserved (R) by Rene AJM Veerman <rene.veerman.netherlands@gmail.com>
+
 class naVividMenu__behavior_rainbowPanels {
     constructor(el, callback7) {
         var t = this;
@@ -704,7 +706,7 @@ class naVividMenu__behavior_rainbowPanels {
                 top : 0,
                 width : window.innerWidth,
                 height : window.innerHeight,
-                zIndex : parseFloat($('#'+el.id).css('zIndex')) - 100 ,
+                zIndex : parseFloat($('#'+el.id).css('zIndex')) - 20 ,
                 background : 'rgba(0,0,0,0.0001)'
             });
             $(bp).bind('mouseover', function (event) {

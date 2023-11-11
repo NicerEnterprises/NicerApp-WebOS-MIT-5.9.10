@@ -121,6 +121,18 @@ NicerApp WCS (Website Control System) from Nicer Enterprises
         $naWebOS->initializeDatabases();
         $naWebOS->initializeGlobals();
     }
+
+    $appName = '[UNKNOWN_APP]';
+    if (is_object($naWebOS) && is_array($naWebOS->view))
+    foreach ($naWebOS->view as $an => $ar) {
+        if ($an=='/') $appName = '-';
+        else {
+            $ap = explode('/', $an);
+            $appName = $ap[count($ap)-1];
+        }
+        break;
+    }
+
     if ($_SERVER['SCRIPT_NAME']=='/NicerAppWebOS/index.php') {
         $_SESSION['started'] = microtime(true);
 
@@ -137,10 +149,10 @@ NicerApp WCS (Website Control System) from Nicer Enterprises
 
         $_SESSION['na_error_log_filepath_html'] =
             '/var/www/'.$naWebOS->domain.'/NicerAppWebOS/siteLogs/'
-            .$date.'-'.$naIP.($naBot?'-BOT':'').'.html';
+            .$date.'-'.$appName.'-'.$naIP.($naBot?'-BOT':'').'.html';
         $_SESSION['na_error_log_filepath_txt'] =
             '/var/www/'.$naWebOS->domain.'/NicerAppWebOS/siteLogs/'
-            .$date.'-'.$naIP.($naBot?'-BOT':'').'.txt';
+            .$date.'-'.$appName.'-'.$naIP.($naBot?'-BOT':'').'.txt';
 
         $_SESSION['dbgNum'] = 0;
         $_SESSION['dbgNum2'] = 0;

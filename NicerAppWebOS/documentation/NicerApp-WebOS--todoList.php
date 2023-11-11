@@ -73,6 +73,8 @@
 
     <li class="todoList"><div>Upgrade the news app and vividDialog : add siteToolbarLeft functionality :<br/>
         <ol class="todoList_l1">
+            <li class="todoList_l1"><div>add a 'translate' dropdown box (language selection) and button to each news item</div></li>
+            <li class="todoList_l1"><div>add French news sources</div></li>
             <li class="todoList_l1"><div>add/enable/disable/remove any URL to a combination of lists that are each given a name, which get stored in several database-stored dataSubSets (records/documents) inside a dataSet (table/couchdb-database).<br/>
             </li>
             <li class="todoList_l1"><div>the ability to assign specific 'theme' and 'sub-theme' settings to such a URL.</div></li>

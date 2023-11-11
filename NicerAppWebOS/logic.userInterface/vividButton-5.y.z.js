@@ -395,7 +395,7 @@ class naVividButton_icon_svg {
         t.p = parentObject;
 
         t.globals = {
-            debug : false,
+            debug : true,
             themes : {}
         };
 
@@ -466,9 +466,12 @@ class naVividButton_icon_svg {
         var
         t = this;
         switch (layerID) {
-            case 'b.btnCode.circumstances.normal.layers.circleIcon_background' : return b.btnCode.circumstances.normal.layers.circleIcon_background;
-            case 'b.btnCode.circumstances.hover.layers.circleIcon_background' : return b.btnCode.circumstances.hover.layers.circleIcon_background;
-            case 'b.btnCode.layers.circleIcon_svg' : return b.btnCode.layers.circleIcon_svg;
+            case 'b.btnCode.circumstances.normal.layers.circleIcon_background' :
+                return b.btnCode.circumstances.normal.layers.circleIcon_background;
+            case 'b.btnCode.circumstances.hover.layers.circleIcon_background' :
+                return b.btnCode.circumstances.hover.layers.circleIcon_background;
+            case 'b.btnCode.layers.circleIcon_svg' :
+                return b.btnCode.layers.circleIcon_svg;
         }
         return false;
     }
@@ -489,7 +492,6 @@ class naVividButton_icon_svg {
                 $(b.el).addClass('hover');
             }
         }, 1000);*/
-        $(b.el).addClass('hover');
 
         var
         c = b.btnCode.states[b.state].circumstances,
@@ -498,25 +500,31 @@ class naVividButton_icon_svg {
         ato = scl.animTo[b.to.circumstance];
         if (!ato) debugger;
 
-        if (t.globals.debug) debugger;
         ato.step = 0;
         if (
-            !$(b.el).is('.disabled')
-            //&& !$(b.el).is('.selected')
-            //&& !$(b.el).is('.hover')
+            !$(b.el).is('.'+b.btnCode.selectedState)
+            //&& !$(b.el).is('.'+b.btnCode.startupState)
         ) {
-            l.animDirection = 'increase';
-            t.anim_increaseGradient(b, l, ato);
-        } else if (!$(b.el).is('.hover')) {
-            l.animDirection = 'decrease';
-            b.circumstance = 'hover';
-            b.to.circumstance = 'normal';
-            t.anim_decreaseGradient(b, l, ato);
+            if (
+                !$(b.el).is('.disabled')
+                //&& !$(b.el).is('.selected')
+                && !$(b.el).is('.'+b.btnCode.startupState)
+
+            ) {
+                l.animDirection = 'increase';
+                t.anim_increaseGradient(b, l, ato);
+            } else {
+                l.animDirection = 'decrease';
+                b.circumstance = 'hover';
+                b.to.circumstance = 'normal';
+                t.anim_decreaseGradient(b, l, ato);
+            };
         };
 
-        if (t.globals.debug) debugger;
         var l2 = b.btnCode.layers.circleIcon_svg;
         if (!$(b.el).is('.disabled') && typeof l2.onmouseover=='function') l2.onmouseover();
+
+        $(b.el).addClass('hover');
     }
 
     hoverOut (b) {
@@ -526,6 +534,7 @@ class naVividButton_icon_svg {
         //if ($(b.el).is('.recentlyClicked')) return false;
         b.circumstance = 'hover';
         b.to.circumstance = 'normal';
+        $(b.el).removeClass('selected');
 
         /*
         t.settings.hoverOutFiredRecently = true;
@@ -541,7 +550,6 @@ class naVividButton_icon_svg {
         ato = scl.animTo[b.to.circumstance];
         if (!ato) debugger;
 
-        if (t.globals.debug) debugger;
         ato.step = 0;
         l.animDirection = 'decrease';
         if (
@@ -549,16 +557,14 @@ class naVividButton_icon_svg {
                 !$(b.el).is('.disabled')
                 //&& !$(b.el).is('.selected')
 //                 //&& !$(b.el).is('.recentlyClicked')
-                //&& !$(b.el).is('.'+b.btnCode.selectedState)
+                && !$(b.el).is('.'+b.btnCode.selectedState)
                 //&& !$(b.el).is('.'+b.btnCode.startupState)
             )
 
         ) {
-            if (t.globals.debug) debugger;
             t.anim_decreaseGradient(b, l, ato);
         }
 
-        if (t.globals.debug) debugger;
         var l2 = b.btnCode.layers.circleIcon_svg;
         if (
             typeof l2.onmouseout == 'function'
@@ -602,7 +608,6 @@ class naVividButton_icon_svg {
         ato = l.circleIcon_background.animTo[selected?'hover':'normal'];
 
 
-        if (t.globals.debug) debugger;
         if (selected) {
             //if ( !$(b.el).is('.hover') ) {
                 b.circumstance = 'normal';
@@ -610,17 +615,14 @@ class naVividButton_icon_svg {
 
                 ato.step = 0;
                 l.animDirection = 'increase';
-                if (t.globals.debug) debugger;
                 t.anim_increaseGradient(b, l, ato);
             //}
         } else {
             ato.step = 0;
             l.animDirection = 'decrease';
-            if (t.globals.debug) debugger;
             t.anim_decreaseGradient(b, l, ato);
         }
 
-        if (t.globals.debug) debugger;
         l = b.btnCode.layers.circleIcon_svg;
         if (typeof l.onclick=='function') {
             l.onclick();
@@ -628,7 +630,7 @@ class naVividButton_icon_svg {
 
         setTimeout (function() {
             $(b.el).removeClass(b.btnCode.startupState).removeClass(b.btnCode.selectedState).addClass(b.state);
-        }, 1000);
+        }, 100);
         if ( $(b.el).is('.featureIsActive') ) $(b.el).removeClass('featureIsActive'); else $(b.el).addClass('featureIsActive');
 
         //if (!selected) {
@@ -636,7 +638,7 @@ class naVividButton_icon_svg {
             clearTimeout (t.settings.timeoutRecentlyClicked);
             t.settings.timeoutRecentlyClicked = setTimeout(function() {
                 $(b.el).removeClass('recentlyClicked');
-            }, 3000);
+            }, 300);
         //}
     }
 

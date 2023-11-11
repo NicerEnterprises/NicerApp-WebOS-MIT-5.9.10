@@ -54,14 +54,17 @@ import { DragControls } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples
                 // and when the data has loaded, do the following.. :
                 na.site.closeAll_3D_apps();
                 $('.na3D').each(function(idx,el){
-                    var parameters = {
-                        views : [
-                            na.site.settings.backgroundsRecursive
-                        ]
-                    };
+                    var ac = {
+                        type : 'GET',
+                        url : '/NicerAppWebOS/apps/NicerAppWebOS/applications/3D/app.3D.fileExplorer/ajax_getBackgroundsRecursive.php',
+                        success : function (data, ts) {
+                            var parameters = { views : [ JSON.parse(data) ] };
 
-                    na.site.settings.na3D['#app_3D_fileExplorer'] =
-                        new na3D_fileBrowser(el, $(el).parent()[0], parameters);
+                            na.site.settings.na3D['#app_3D_fileExplorer'] =
+                                new na3D_fileBrowser(el, $(el).parent()[0], parameters);
+                        }
+                    };
+                    $.ajax(ac);
 
 
                 });

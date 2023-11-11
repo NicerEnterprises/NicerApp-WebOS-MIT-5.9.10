@@ -77,11 +77,11 @@ na.site = {
             $.cookie('agreedToPolicies')!=='true'
             ? '<table style="width:99%;"><tr><td><a href="/" style="padding:0;text-shadow:0px 0px 5px rgba(0,0,0,0.8);">'+na.site.globals.domain+'</a> only uses cookies for remembering user settings.</td>'
                 + '<td style="width:66px;"><div class="vividButton" theme="dark" style="position:relative;color:white;width:40px;height:20px;" onclick="na.site.dismissCookieWarning();">Ok</div></td></table>'
-            : '<table style="height:100%;"><tr><td><a href="https://opensource.org/license/mit/" target="_new" class="nomod noPushState contentSectionTitle1_a"><span class="contentSectionTitle1_span">MIT-Licensed</span></a>, Opensourced <a href="https://github.com/NicerEnterprises/NicerApp-WebOS" target="_new" class="nomod noPushState contentSectionTitle1_a"><span class="contentSectionTitle1_span">here</span></a>, Copyright 2023 by <a href="mailto:rene.veerman.netherlands@gmail.com" class ="contentSectionTitle3_a"><span class="contentSectionTitle3_span">Rene A.J.M. Veerman</span></a></td><td style="width:40px;"><div class="vividButton" theme="dark" style="position:relative;color:white;height:20px;width:40px;" onclick="na.site.dismissCopyrightMessage();">Ok</div></td></table>'
+            : '<table style="height:100%;"><tr><td>Opensourced <a href="https://github.com/NicerEnterprises/NicerApp-WebOS" target="_new" class="nomod noPushState contentSectionTitle1_a"><span class="contentSectionTitle1_span">here</span></a>, Copyright 2002-2023 by <a href="mailto:rene.veerman.netherlands@gmail.com" class ="contentSectionTitle3_a"><span class="contentSectionTitle3_span">Rene A.J.M. Veerman</span></a></td><td style="width:40px;"><div class="vividButton" theme="dark" style="position:relative;color:white;height:20px;width:40px;" onclick="na.site.dismissCopyrightMessage();">Ok</div></td></table>'
         );
 
 
-        $('p, h1, h2, h3').addClass('todoList');
+
 
         /*if ($('#siteToolbarTop > .vividDialogContent').html().trim()==='{$div_siteToolbarTop}') {
             na.d.s.visibleDivs.remove('#siteToolbarTop'); $.cookie('visible_siteToolbarTop','', na.m.cookieOptions());
@@ -469,21 +469,7 @@ na.site = {
                             startLogo('neCompanyLogo', 'countryOfOriginColors');
                         }, 50);
                         */
-                        startLogo('neCompanyLogo', 'countryOfOriginColors');
-                        na.site.bindTodoListAnimations (
-                            '.todoList, '
-                            +'.contentSectionTitle3, '
-                            +'p.todoList, h1.todoList, h2.todoList, h3.todoList, '
-                            +'.todoList > li, '
-                            +'.todoList > li > div, '
-                            +'.todoList > li > pre, '
-                            +'.todoList_l1 > li, '
-                            +'.todoList_l1 > li > div, '
-                            +'.todoList_l1 > li > pre, '
-                            +'.todoList_l2 > li, '
-                            +'.todoList_l2 > li > div, '
-                            +'.todoList_l2 > li > pre '
-                        );
+                        na.site.startUIvisuals();
 
                         na.site.initializeApps(null, null, null, null, na.site.resizeApps);
                     }, 50);
@@ -514,21 +500,7 @@ na.site = {
                         startLogo('neCompanyLogo', 'countryOfOriginColors');
                     }, 50);
                     */
-                    startLogo('neCompanyLogo', 'countryOfOriginColors');
-                    na.site.bindTodoListAnimations (
-                        '.todoList, '
-                            +'.contentSectionTitle3, '
-                            +'p.todoList, h1.todoList, h2.todoList, h3.todoList, '
-                        +'.todoList > li, '
-                        +'.todoList > li > div, '
-                        +'.todoList > li > pre, '
-                        +'.todoList_l1 > li, '
-                        +'.todoList_l1 > li > div, '
-                        +'.todoList_l1 > li > pre, '
-                        +'.todoList_l2 > li, '
-                        +'.todoList_l2 > li > div, '
-                        +'.todoList_l2 > li > pre '
-                    );
+                    na.site.startUIvisuals();
                     na.site.initializeApps(null, null, null, null, na.site.resizeApps);
                 }
             }, 50);
@@ -1264,9 +1236,14 @@ onclick_btnFullResetOfAllThemes : function (event) {
         $('a', rootElement).not('.contentMenu').not('.noPushState').each(function(idx, el){
             
             let x = el.href, y = el.target;
-            if (el.href.match(document.location.origin)) {
+
+            if (
+                el.href.match(document.location.origin)
+                && !el.href.match(document.location.origin+'\/#')
+            ) {
                 let h = "javascript:na.site.loadContent(event,'"+el.href.replace(document.location.origin,'').replace('/view/','')+"');";
-                el.href = h;
+                //el.href = '#';
+                $(el).attr('onclick', h);
                 $(el).attr('targetDisabled',$(el).attr('target'));
                 $(el).attr('target','');
                 
@@ -1478,6 +1455,7 @@ onclick_btnFullResetOfAllThemes : function (event) {
                 url : url3,
                 success : na.site.loadContent_displayContent, 
                 error : function (xhr, textStatus, errorThrown) {
+                    var fncn = 'na.site.loadContent_getContent_do()::error()';
 
                     $('.lds-facebook').fadeOut('normal');
 
@@ -1504,7 +1482,6 @@ onclick_btnFullResetOfAllThemes : function (event) {
                 }                
             };
             ac.url = ac.url.replace('\/\/','/');
-            //debugger;
             $.ajax(ac);
             if (!url1.match(/\/view\//) && url1.indexOf('/')===0) {
                 na.analytics.logMetaEvent('na.site.loadContent() : url='+url1);
@@ -1611,6 +1588,8 @@ onclick_btnFullResetOfAllThemes : function (event) {
         lcc.ec.events.push(naEventData);
         na.site.settings.current.running_loadTheme = true;
         na.site.settings.current.running_loadContent = true;
+
+
         na.m.runFunctions (lcc.ec, na.m.updateEvent (dt, {
             loadContent_displayContent : {
                 labels : { marker : { whatsThis : fncn+'::na.m.runFunctions() called' } },
@@ -1627,7 +1606,7 @@ onclick_btnFullResetOfAllThemes : function (event) {
                     { loadTheme : [na.m.newEventFunction (function() {
                         na.m.waitForCondition ('loadContent_displayContent : na.m.HTMLidle() && !na.site.settings.current.running_loadContent?', function () { var r1 = na.m.HTMLidle(); var r2=!na.site.settings.current.running_loadContent; return r1 && r2;}, function () {
                             na.site.loadTheme (null, null, false, false);
-                        }, 500);
+                        }, 100);
                     })] },
                     { reloadMenu : [na.m.newEventFunction(na.site.reloadMenu)] },
                     { loadTheme_cleanup : [na.m.newEventFunction (function() {
@@ -1641,7 +1620,7 @@ onclick_btnFullResetOfAllThemes : function (event) {
                         na.m.waitForCondition ('na.site.initializeVivids() : na.m.HTMLidle()?', function () { return na.m.HTMLidle() && !na.site.settings.current.running_loadContent}, na.site.startUIvisuals, 100);
                     })] },
                     { renderAllCustomHeadingsAndLinks : [na.m.newEventFunction(function(){
-                        na.m.waitForCondition ('na.site.renderAllCustomHeadingsAndLinks() : na.m.HTMLidle()?', na.m.HTMLidle, na.site.renderAllCustomHeadingsAndLinks, 100);
+                        na.m.waitForCondition ('na.site.renderAllCustomHeadingsAndLinks() : na.m.HTMLidle()?', function () { return na.m.HTMLidle() && !na.site.settings.current.running_loadContent}, na.site.renderAllCustomHeadingsAndLinks, 100);
                     })] }
                 ]
             }
@@ -1664,6 +1643,26 @@ onclick_btnFullResetOfAllThemes : function (event) {
         $('.vividButton4, .vividButton, .vividButton_icon_50x50_siteTop, .vividButton_icon_50x50').each(function(idx,el){
             if (!na.site.settings.buttons['#'+el.id]) na.site.settings.buttons['#'+el.id] = new naVividButton(el);
         });
+
+        var sel = document.querySelectorAll('.contentSectionTitle3_a');
+        if (sel) for (let i = 0; i < sel.length; i++) { var sel2 = sel[i]; sel2.addEventListener('click',na.m.handleGalleryLinkClick); }
+
+        $('p, h1, h2, h3').addClass('todoList');
+
+        na.site.bindTodoListAnimations (
+            '.todoList, '
+            +'.contentSectionTitle3, '
+            +'p.todoList, h1.todoList, h2.todoList, h3.todoList, '
+            +'.todoList > li, '
+            +'.todoList > li > div, '
+            +'.todoList > li > pre, '
+            +'.todoList_l1 > li, '
+            +'.todoList_l1 > li > div, '
+            +'.todoList_l1 > li > pre, '
+            +'.todoList_l2 > li, '
+            +'.todoList_l2 > li > div, '
+            +'.todoList_l2 > li > pre '
+        );
     },
     
     initializeScriptsForApps : function (ec, eventIdx, eventParams, f) {
@@ -3351,7 +3350,7 @@ onclick_btnFullResetOfAllThemes : function (event) {
             });
             */
 
-            $('#siteContent > .vividDialogContent > li > a, p, h1, h2, h3').not('.vt, .backdropped').each (function(idx,el) {
+            $('#siteContent > .vividDialogContent > li > a, p, h1, h2, h3').not('.naVividTextCSS, .contentSectionTitle1, .contentSectionTitle1_a, .contentSectionTitle1_span, .contentSectionTitle2, .contentSectionTitle2_a, .contentSectionTitle2_span, .contentSectionTitle3, .contentSectionTitle3_a, .contentSectionTitle3_span, .backdropped').each (function(idx,el) {
                 var bg = na.m.adjustColorOpacity(el, dat.textBackgroundOpacity);
                 if (bg) $(el).css({background:bg});
             });

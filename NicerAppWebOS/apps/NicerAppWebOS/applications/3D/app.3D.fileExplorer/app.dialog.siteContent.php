@@ -49,6 +49,6 @@
     </script>
     <div id="site3D_backgroundsBrowser" class="na3D" theme="<?php echo $theme;?>">
     </div>
-    <div id="site3D_label" class="vividDialog vividScrollpane" theme="<?php echo $theme;?>"></div>
+    <div id="site3D_label" class="label" theme="<?php echo $theme;?>"></div>
     <script type="module" src="/NicerAppWebOS/3rd-party/3D/libs/three.js/build/three.module.js"></script>
     <script type="module" src="/NicerAppWebOS/apps/NicerAppWebOS/applications/3D/app.3D.fileExplorer/main.js"></script>

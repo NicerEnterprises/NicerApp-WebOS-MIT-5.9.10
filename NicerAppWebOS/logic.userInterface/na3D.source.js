@@ -17,9 +17,11 @@ import {
   Scene,
   SkeletonHelper,
   UnsignedByteType,
+  Vector2,
   Vector3,
   WebGLRenderer,
-  sRGBEncoding
+  sRGBEncoding,
+  Raycaster
 } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/build/three.module.js';
 
 import * as THREE from '/NicerAppWebOS/3rd-party/3D/libs/three.js/build/three.module.js';
@@ -31,6 +33,18 @@ import { OrbitControls } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/example
 import { RGBELoader } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/loaders/RGBELoader.js';
 import { DragControls } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/controls/DragControls.js';
 //import { GLTFLoader } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/loaders/GLTFLoader.js';
+
+
+
+  import {
+    CSS2DRenderer,
+    CSS2DObject,
+  } from 'https://unpkg.com/three@0.125.2/examples/jsm/renderers/CSS2DRenderer.js';
+
+
+
+
+
 /*import {
   AmbientLight,
   AnimationMixer,
@@ -78,7 +92,7 @@ export class na3D_portraitFrame {
         var maxZ = centerY + Math.round(sizeZ/2);
         var max = new Vector3 (maxX, maxY, maxZ);
         
-        this.box = new Box3 (min,max);
+        t.box = new Box3 (min,max);
         return this;
     }
     
@@ -89,12 +103,12 @@ export class na3D_fileBrowser {
     constructor(el, parent, parameters) {
         var t = this;
         
-        t.autoRotate = true;
+        t.autoRotate = false;
         t.showLines = true;
         
         t.p = parent;
         t.el = el;
-        t.t = $(this.el).attr('theme');
+        t.t = $(t.el).attr('theme');
         t.settings = { parameters : parameters };
         t.data = parameters.views[0];
         t.loading = false;
@@ -106,7 +120,7 @@ export class na3D_fileBrowser {
 
 
         
-        this.items = [ {
+        t.items = [ {
             name : 'backgrounds',
             offsetY : 0,
             offsetX : 0,
@@ -118,34 +132,34 @@ export class na3D_fileBrowser {
             idxPath : ''
         } ];
         
-        this.lines = []; // onhover lines only in here
-        this.permaLines = []; // permanent lines, the lines that show all of the parent-child connections.
+        t.lines = []; // onhover lines only in here
+        t.permaLines = []; // permanent lines, the lines that show all of the parent-child connections.
         
         var 
         c = $.cookie('3DFDM_lineColors');
         if (typeof c=='string' && c!=='') {
-            this.lineColors = JSON.parse(c);
+            t.lineColors = JSON.parse(c);
         }
         
-        this.scene = new THREE.Scene();
-        this.camera = new THREE.PerspectiveCamera( 75, $(el).width() / $(el).height(), 0.1, 10 * 1000 );
+        t.scene = new THREE.Scene();
+        t.s2 = [];
+        t.camera = new THREE.PerspectiveCamera( 50, $(el).width() / $(el).height(), 0.01, 100 * 1000 );
         
 
-        this.renderer = new THREE.WebGLRenderer({alpha:true, antialias : true});
-        this.renderer.physicallyCorrectLights = true;
-        debugger;
-        this.renderer.outputEncoding = sRGBEncoding;
-        this.renderer.setPixelRatio (window.devicePixelRatio);
-        this.renderer.setSize( $(el).width()-20, $(el).height()-20 );
-        this.renderer.toneMappingExposure = 1.0;
+        t.renderer = new THREE.WebGLRenderer({alpha:true, antialias : true});
+        t.renderer.physicallyCorrectLights = true;
+        t.renderer.outputEncoding = sRGBEncoding;
+        t.renderer.setPixelRatio (window.devicePixelRatio);
+        t.renderer.setSize( $(el).width()-20, $(el).height()-20 );
+        t.renderer.toneMappingExposure = 1.0;
         
-        el.appendChild( this.renderer.domElement );
+        el.appendChild( t.renderer.domElement );
         
-        $(this.renderer.domElement).bind('mousemove', function() {
+        $(t.renderer.domElement).bind('mousemove', function() {
             //event.preventDefault(); 
             t.onMouseMove (event, t)
         });
-        $(this.renderer.domElement).click (function(event) {  
+        $(t.renderer.domElement).click (function(event) {
             event.preventDefault(); 
             if (event.detail === 2) { // double click
                 t.controls.autoRotate = !t.controls.autoRotate 
@@ -185,48 +199,116 @@ export class na3D_fileBrowser {
             clearInterval(t.zoomInterval);
         });
         
-        this.loader = new GLTFLoader();
-        this.initializeItems (this, this.items, this.data, 0, 0, 0, '0', '');
+        t.loader = new GLTFLoader();
+        t.initializeItems (this, t.items, t.data, 0, 0, 0, '0', '');
 
         const light1  = new AmbientLight(0xFFFFFF, 0.3);
         light1.name = 'ambient_light';
         light1.intensity = 0.3;
         light1.color = 0xFFFFFF;
-        this.camera.add( light1 );
+        t.camera.add( light1 );
 
         const light2  = new DirectionalLight(0xFFFFFF, 0.8 * Math.PI);
         light2.position.set(0.5, 0, 0.866); // ~60º
         light2.name = 'main_light';
         light2.intensity = 0.8 * Math.PI;
         light2.color = 0xFFFFFF;
-        this.camera.add( light2 );
+        t.camera.add( light2 );
         
-        this.lights.push(light1, light2);        
+        t.lights.push(light1, light2);
         
-        this.pmremGenerator = new PMREMGenerator( this.renderer );
-        this.pmremGenerator.compileEquirectangularShader();
+        t.pmremGenerator = new PMREMGenerator( t.renderer );
+        t.pmremGenerator.compileEquirectangularShader();
         
-        //this.updateEnvironment(this);
+        //t.updateEnvironment(this);
         
-        this.raycaster = new THREE.Raycaster();
-        this.mouse = new THREE.Vector2();
-        this.mouse.x = 0;
-        this.mouse.y = 0;
-        this.mouse.z = 0;
+        t.raycaster = new THREE.Raycaster();
+        t.mouse = new THREE.Vector2();
+        t.mouse.x = 0;
+        t.mouse.y = 0;
+        t.mouse.z = 0;
 
-        this.camera.position.z = 1500;
-        this.camera.position.y = 200;
-        
-        this.animate(this);
+        t.camera.position.z = 1500;
+        t.camera.position.y = 200;
+
+        /*
+  // Setup labels
+  t.labelRenderer = new CSS2DRenderer();
+  t.labelRenderer.setSize(innerWidth, innerHeight);
+  t.labelRenderer.domElement.style.position = 'absolute';
+  t.labelRenderer.domElement.style.top = '0px';
+  t.labelRenderer.domElement.style.backgroundColor = 'rgba(0,0,50,0.5)';
+  t.labelRenderer.domElement.style.boxShadow = 'inset 3px 3px 2px 2px rgba(255,255,255,0.55), 4px 4px 3px 2px rgba(0,0,0,0.7)';
+  t.labelRenderer.domElement.style.pointerEvents = 'none';
+  document.body.appendChild(t.labelRenderer.domElement);
+
+  t.labelDiv = document.createElement('div');
+  t.labelDiv.className = 'label';
+  t.labelDiv.style.backgroundColor = 'rgba(0,0,50,0.5)';
+  t.labelDiv.style.boxShadow = 'inset 3px 3px 2px 2px rgba(255,255,255,0.55), 4px 4px 3px 2px rgba(0,0,0,0.7)';
+  t.labelDiv.style.marginTop = '-1em';
+
+  t.label = new CSS2DObject(t.labelDiv);
+  t.label.visible = false;
+  t.scene.add(t.label);
+  */
+
+  // Track mouse movement to pick objects
+  //t.raycaster = new Raycaster();
+  //t.mouse = new Vector2();
+
+  window.addEventListener('mousemove', ({ clientX, clientY }) => {
+    //const { innerWidth, innerHeight } = window;
+      var innerWidth = $('#siteContent .vividDialogContent').width();
+      var innerHeight = $('#siteContent .vividDialogContent').height();
+
+    t.mouse.x = ((clientX-$('#siteContent .vividDialogContent').offset().left) / innerWidth) * 2 - 1;
+    t.mouse.y = (-1 * ((clientY-$('#siteContent .vividDialogContent').offset().top) / innerHeight) * 2) + 1;
+    //t.animate(t);
+  });
+
+  // Handle window resize
+  window.addEventListener('resize', () => {
+    //const { innerWidth, innerHeight } = window;
+      var innerWidth = $('#siteContent .vividDialogContent').width();
+      var innerHeight = $('#siteContent .vividDialogContent').height();
+
+    t.renderer.setSize(innerWidth, innerHeight);
+    t.camera.aspect = innerWidth / innerHeight;
+    t.camera.updateProjectionMatrix();
+  });
+
+  t.renderer.setAnimationLoop(() => {
+    //controls.update();
+
+    // Pick objects from view using normalized mouse coordinates
+    t.raycaster.setFromCamera(t.mouse, t.camera);
+
+  });
+
+
+        t.animate(this);
     }
     
     animate(t) {
         requestAnimationFrame( function() { t.animate (t) } );
+
         if (t.mouse.x!==0 || t.mouse.y!==0) {        
+            t.camera.updateProjectionMatrix();
+
+            for (var i=0; i<t.s2.length; i++) {
+                var it = t.s2[i];
+                it.updateMatrixWorld();
+            };
             t.raycaster.setFromCamera (t.mouse, t.camera);
-            
-            const intersects = t.raycaster.intersectObjects (t.scene.children, true);
-            //debugger;
+
+            t.scene.matrixWorldAutoUpdate = true;;
+            t.camera.matrixWorldAutoUpdate = true;
+            t.camera.lookAt (t.s2[0].position);
+
+            const intersects = t.raycaster.intersectObjects (t.s2);
+            //if (intersects[0] && intersects[0].object.type!=='Line') alert (intersects[0].object.it.name);
+
             //if (intersects[0]) {
             if (intersects[0] && intersects[0].object.type!=='Line') 
             for (var i=0; i<1/*intersects.length <-- this just gets an endless series of hits from camera into the furthest reaches of what's visible behind the mouse pointer */; i++) {
@@ -249,7 +331,7 @@ export class na3D_fileBrowser {
                     if (hoveredItem && hoveredItem.it && !done) {
                         let p = hoveredItem.it.model.position;
                         t.hoverOverName = '('+hoveredItem.it.column+':'+hoveredItem.it.row+') ('+p.x+', '+p.y+', '+p.z + ') : ' + hoveredItem.it.name;
-                        //t.hoverOverName = hoveredItem.it.name;
+                        t.hoverOverName = hoveredItem.it.name;
                     //debugger;    
                         var 
                         it = hoveredItem.it,
@@ -344,7 +426,36 @@ export class na3D_fileBrowser {
                 }
                 
                 // show folder name for item under mouse and closest to the country
-                $('#site3D_label').html(t.hoverOverName).css({display:'flex'});
+                $('#site3D_label').html(t.hoverOverName).css({display:'flex',opacity:1});
+
+                const [hovered] = t.raycaster.intersectObjects(t.s2);
+                if (hovered && hovered.object.type!=='Line') {
+                    // Setup label
+                    t.renderer.domElement.className = 'hovered';
+                    $('#site3D_label')[0].textContent = hovered.object.it.name;
+                    //debugger;
+
+                    // Get offset from object's dimensions
+                    const offset = new Vector3();
+                    new Box3().setFromObject(hovered.object).getSize(offset);
+
+                    // Move label over hovered element
+                    $('#site3D_label').css({
+                        left : t.mouse.layerX + 20,
+                        top : t.mouse.layerY + 20
+                    });
+                } else {
+                    // Reset label
+                    t.renderer.domElement.className = '';
+                    t.label.visible = false;
+                    t.labelDiv.textContent = '';
+                }
+
+                // Render scene
+                t.renderer.render(t.scene, t.camera);
+
+                // Render labels
+                //t.labelRenderer.render(t.scene, t.camera);
             }
             if (!intersects[0]) {
                 $('#site3D_label').fadeOut();
@@ -375,10 +486,16 @@ export class na3D_fileBrowser {
         var rect = t.renderer.domElement.getBoundingClientRect();
         t.mouse.x = ( ( event.clientX - rect.left ) / ( rect.width - rect.left ) ) * 2 - 1;
         t.mouse.y = - ( ( event.clientY - rect.top ) / ( rect.bottom - rect.top) ) * 2 + 1;        
+
+
+        t.mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+        t.mouse.y = ( event.clientY / window.innerHeight ) * 2 + 1;
+        t.raycaster.setFromCamera (t.mouse.clone(), t.camera);
+
         t.mouse.layerX =  event.layerX;
         t.mouse.layerY =  event.layerY;
 
-        $('#site3D_label').html(t.hoverOverName).css({ position:'absolute', padding : 10, zIndex : 5000, top : event.layerY + 10, left : event.layerX + 30 });
+        //$('#site3D_label').html(t.hoverOverName).css({ position:'absolute', padding : 10, zIndex : 5000, top : event.layerY + 10, left : event.layerX + 30 });
     }
     
     onMouseWheel( event, t ) {
@@ -415,7 +532,7 @@ export class na3D_fileBrowser {
         if (!t.ld3) t.ld3 = {};
         if (!t.ld3[idxPath]) t.ld3[idxPath] = { itemCount : 0, items : [] };
         t.ld3[idxPath].itemCount++;
-         
+loop1:
         while (t.ld2[level].initItemsDoingIdx < t.ld2[level].keys.length) {
             var 
             keyIdx = t.ld2[level].initItemsDoingIdx,
@@ -437,7 +554,7 @@ export class na3D_fileBrowser {
                     levelIdx : t.ld2[level].levelIdx,
                     parent : parent
                 };
-                
+
                 itd.it = it;
                 
                 items[items.length] = it;
@@ -469,7 +586,7 @@ export class na3D_fileBrowser {
                 for (var i=0; i<6; i++) textures[i] = '/NicerAppWebOS/siteMedia/folderIcon.png';
                 for (var i=0; i<6; i++) {
                     var p = null;
-                    if (itd[''+i] && typeof itd[''+i]=='object' && Object.keys(itd[''+i])[0].match(/.*\.png|.*\.jpeg|.*\.jpg|.*\.gif$/)) {
+                    if (Object.keys(itd)[i] && Object.keys(itd)[i].match(/.*\.png|.*\.jpeg|.*\.jpg|.*\.gif$/)) {
                         var
                         fullPath = '/NicerAppWebOS/siteMedia/backgrounds' + itd[''+i],
                         filename = fullPath.replace(/^.*[\\\/]/, ''),
@@ -504,7 +621,8 @@ export class na3D_fileBrowser {
                     })
                 ];
                 var cube = new THREE.Mesh( new THREE.BoxGeometry( 50, 50, 50 ), materials );
-                this.scene.add( cube );
+                t.scene.add( cube );
+                t.s2.push(cube);
                 cube.it = it;
                 it.model = cube;
                     console.log (items.length + ' - ' + it.name);
@@ -558,7 +676,7 @@ export class na3D_fileBrowser {
                 for (var i=0; i<t.items.length; i++) if (t.items[i].model) objs[objs.length] = t.items[i].model;
                                                
                 t.controls = new OrbitControls( t.camera, t.renderer.domElement );
-                t.controls.autoRotate = true;
+                //t.controls.autoRotate = true;
                 //$('#autoRotate').removeClass('vividButtonSelected').addClass('vividButton');
                 //t.controls.listenToKeyEvents( window ); // optional
                 t.controls.enabled = false;
@@ -629,7 +747,7 @@ export class na3D_fileBrowser {
                 t.dragndrop.addEventListener( 'dragend', function ( event ) {
                     //event.object.material.emissive.set( 0x000000 );
                     t.controls = new OrbitControls( t.camera, t.renderer.domElement );
-                    //this.controls.autoRotate = true;
+                    //t.controls.autoRotate = true;
                     $('#autoRotate').removeClass('vividButtonSelected').addClass('vividButton');
                     //t.controls.listenToKeyEvents( window ); // optional
                     t.controls.enabled = true;
@@ -1222,7 +1340,6 @@ export class na3D_fileBrowser {
 
                     t.onresize_applyBestOverlapFix2 (t, y, itaQuadrant, itbQuadrant);
                     //t.onresize_applyBestOverlapFix2 (t, y, strategyA, strategyA);
-                    debugger;
                     return true;
                 }
             }
@@ -1592,7 +1709,7 @@ export class na3D_fileBrowser {
             parent = t.items[it.parent],
             haveThisLineAlready = false;
             
-            if (!this.showLines) return false;
+            if (!t.showLines) return false;
             if (!it.model) return false;
             
             if (it.parent===0 || typeof it.parent === 'undefined') continue;
@@ -1677,7 +1794,7 @@ export class na3D_fileBrowser {
     }
     
     updateTextureEncoding (t, content) {
-        /*const encoding = this.state.textureEncoding === 'sRGB'
+        /*const encoding = t.state.textureEncoding === 'sRGB'
         ? sRGBEncoding
         : LinearEncoding;*/
         const encoding = LinearEncoding;
@@ -1715,14 +1832,14 @@ export class na3D_fileBrowser {
 
         t.getCubeMapTexture( environment ).then(( { envMap } ) => {
 
-            /*if ((!envMap || !this.state.background) && this.activeCamera === this.defaultCamera) {
-                t.scene.add(this.vignette);
+            /*if ((!envMap || !t.state.background) && t.activeCamera === t.defaultCamera) {
+                t.scene.add(t.vignette);
             } else {
-                t.scene.remove(this.vignette);
+                t.scene.remove(t.vignette);
             }*/
 
             t.scene.environment = envMap;
-            //this.scene.background = this.state.background ? envMap : null;
+            //t.scene.background = t.state.background ? envMap : null;
 
         });
 
@@ -1739,8 +1856,8 @@ export class na3D_fileBrowser {
                 .setDataType( UnsignedByteType )
                 .load( path, ( texture ) => {
 
-                    const envMap = this.pmremGenerator.fromEquirectangular( texture ).texture;
-                    this.pmremGenerator.dispose();
+                    const envMap = t.pmremGenerator.fromEquirectangular( texture ).texture;
+                    t.pmremGenerator.dispose();
 
                     resolve( { envMap } );
 
@@ -1768,37 +1885,37 @@ export class na3D_fileBrowser_extensionApp_crimeboard {
 export class na3D_demo_models {
     constructor(el, parent, data) {
         var t = this;
-        this.p = parent;
-        this.el = el;
-        this.t = $(this.el).attr('theme');
+        t.p = parent;
+        t.el = el;
+        t.t = $(t.el).attr('theme');
         
-        this.data = data;
+        t.data = data;
         
-        this.lights = [];
-        this.folders = [];
+        t.lights = [];
+        t.folders = [];
    
-        this.items = [];
+        t.items = [];
         
-        this.scene = new THREE.Scene();
-        this.camera = new THREE.PerspectiveCamera( 75, $(el).width() / $(el).height(), 0.1, 1000 );
+        t.scene = new THREE.Scene();
+        t.camera = new THREE.PerspectiveCamera( 75, $(el).width() / $(el).height(), 0.1, 1000 );
         
 
-        this.renderer = new THREE.WebGLRenderer({alpha:true, antialias : true});
-        this.renderer.physicallyCorrectLights = true;
-        this.renderer.outputEncoding = sRGBEncoding;
-        this.renderer.setPixelRatio (window.devicePixelRatio);
-        this.renderer.setSize( $(el).width()-20, $(el).height()-20 );
+        t.renderer = new THREE.WebGLRenderer({alpha:true, antialias : true});
+        t.renderer.physicallyCorrectLights = true;
+        t.renderer.outputEncoding = sRGBEncoding;
+        t.renderer.setPixelRatio (window.devicePixelRatio);
+        t.renderer.setSize( $(el).width()-20, $(el).height()-20 );
         
-        this.renderer.toneMappingExposure = 1.0;
+        t.renderer.toneMappingExposure = 1.0;
         
-        el.appendChild( this.renderer.domElement );
+        el.appendChild( t.renderer.domElement );
         
-        this.controls = new OrbitControls( this.camera, this.renderer.domElement );
-        //this.controls.listenToKeyEvents( window ); // optional
+        t.controls = new OrbitControls( t.camera, t.renderer.domElement );
+        //t.controls.listenToKeyEvents( window ); // optional
         
-        this.loader = new GLTFLoader();
+        t.loader = new GLTFLoader();
         
-        this.loader.load( '/NicerAppWebOS/3rd-party/3D/models/human armor/scene.gltf', function ( gltf ) {
+        t.loader.load( '/NicerAppWebOS/3rd-party/3D/models/human armor/scene.gltf', function ( gltf ) {
             gltf.scene.position.x = -150;
             gltf.scene.scale.setScalar (10);
             t.cube = gltf.scene;
@@ -1810,7 +1927,7 @@ export class na3D_demo_models {
         }, function ( error ) {
             console.error( error );
         } );
-        this.loader.load( '/NicerAppWebOS/3rd-party/3D/models/photoCamera/scene.gltf', function ( gltf ) {
+        t.loader.load( '/NicerAppWebOS/3rd-party/3D/models/photoCamera/scene.gltf', function ( gltf ) {
             gltf.scene.position.x = 200;
             t.cube2 = gltf.scene;
             t.scene.add (t.cube2);
@@ -1827,39 +1944,39 @@ export class na3D_demo_models {
         light1.name = 'ambient_light';
         light1.intensity = 0.3;
         light1.color = 0xFFFFFF;
-        this.camera.add( light1 );
+        t.camera.add( light1 );
 
         const light2  = new DirectionalLight(0xFFFFFF, 0.8 * Math.PI);
         light2.position.set(0.5, 0, 0.866); // ~60º
         light2.name = 'main_light';
         light2.intensity = 0.8 * Math.PI;
         light2.color = 0xFFFFFF;
-        this.camera.add( light2 );
+        t.camera.add( light2 );
 
-        this.lights.push(light1, light2);        
+        t.lights.push(light1, light2);
         
-        this.pmremGenerator = new PMREMGenerator( this.renderer );
-        this.pmremGenerator.compileEquirectangularShader();
+        t.pmremGenerator = new PMREMGenerator( t.renderer );
+        t.pmremGenerator.compileEquirectangularShader();
         
-        this.updateEnvironment(this);
+        t.updateEnvironment(this);
         
         $(el).bind('mousemove', function() { t.onMouseMove (event, t) });
         
-        this.raycaster = new THREE.Raycaster();
-        this.mouse = new THREE.Vector2();
-        this.mouse.x = 0;
-        this.mouse.y = 0;
+        t.raycaster = new THREE.Raycaster();
+        t.mouse = new THREE.Vector2();
+        t.mouse.x = 0;
+        t.mouse.y = 0;
 
-        this.camera.position.z = 700;
+        t.camera.position.z = 700;
         
-        this.animate(this);
+        t.animate(this);
     }
     
     animate(t) {
         requestAnimationFrame( function() { t.animate (t) } );
         
         t.raycaster.setFromCamera (t.mouse, t.camera);
-        
+
         const intersects = t.raycaster.intersectObjects (t.scene.children, true);
         if (intersects[0] && t.cube && t.cube2) {
             t.cube.rotation.x += 0.015;
@@ -1874,7 +1991,7 @@ export class na3D_demo_models {
     
     
     updateTextureEncoding (t, content) {
-        /*const encoding = this.state.textureEncoding === 'sRGB'
+        /*const encoding = t.state.textureEncoding === 'sRGB'
         ? sRGBEncoding
         : LinearEncoding;*/
         const encoding = sRGBEncoding;
@@ -1914,15 +2031,15 @@ export class na3D_demo_models {
         t.getCubeMapTexture( environment ).then(( { envMap } ) => {
 
             /*
-            if (!envMap || !this.state.background) && this.activeCamera === this.defaultCamera) {
-                t.scene.add(this.vignette);
+            if (!envMap || !t.state.background) && t.activeCamera === t.defaultCamera) {
+                t.scene.add(t.vignette);
             } else {
-                t.scene.remove(this.vignette);
+                t.scene.remove(t.vignette);
             }*/
-            t.scene.add(this.vignette);
+            t.scene.add(t.vignette);
 
             t.scene.environment = envMap;
-            //this.scene.background = envMap;//this.state.background ? envMap : null;
+            //t.scene.background = envMap;//t.state.background ? envMap : null;
 
         });
 
@@ -1939,8 +2056,8 @@ export class na3D_demo_models {
                 //.setDataType( UnsignedByteType )
                 .load( path, ( texture ) => {
 
-                    const envMap = this.pmremGenerator.fromEquirectangular( texture ).texture;
-                    this.pmremGenerator.dispose();
+                    const envMap = t.pmremGenerator.fromEquirectangular( texture ).texture;
+                    t.pmremGenerator.dispose();
 
                     resolve( { envMap } );
 
@@ -1968,16 +2085,16 @@ export class na3D_demo_models {
 
 export class na3D_demo_cube {
     constructor(el,parent) {
-        this.p = parent;
-        this.el = el;
-        this.t = $(this.el).attr('theme');
+        t.p = parent;
+        t.el = el;
+        t.t = $(t.el).attr('theme');
         
-        this.scene = new THREE.Scene();
-        this.camera = new THREE.PerspectiveCamera( 75, $(el).width() / $(el).height(), 0.1, 1000 );
+        t.scene = new THREE.Scene();
+        t.camera = new THREE.PerspectiveCamera( 75, $(el).width() / $(el).height(), 0.1, 1000 );
 
-        this.renderer = new THREE.WebGLRenderer({ alpha : true });
-        this.renderer.setSize( $(el).width()-20, $(el).height()-20 );
-        el.appendChild( this.renderer.domElement );
+        t.renderer = new THREE.WebGLRenderer({ alpha : true });
+        t.renderer.setSize( $(el).width()-20, $(el).height()-20 );
+        el.appendChild( t.renderer.domElement );
         
         const geometry = new THREE.BoxGeometry();
         const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
@@ -2001,18 +2118,18 @@ export class na3D_demo_cube {
                 map: new THREE.TextureLoader().load('/NicerAppWebOS/siteMedia/backgrounds/tiled/green/leaves007.jpg')
             })
         ];
-        this.cube = new THREE.Mesh( new THREE.BoxGeometry( 1, 1, 1 ), materials );
-        this.scene.add( this.cube );
+        t.cube = new THREE.Mesh( new THREE.BoxGeometry( 1, 1, 1 ), materials );
+        t.scene.add( t.cube );
         var t = this;
         $(el).bind('mousemove', function() { t.onMouseMove (event, t) });
         
-        this.raycaster = new THREE.Raycaster();
-        this.mouse = new THREE.Vector2();
+        t.raycaster = new THREE.Raycaster();
+        t.mouse = new THREE.Vector2();
 
-        this.camera.position.z = 5;
-        this.cube.rotation.x = 0.3;
-        this.cube.rotation.y = 0.4;
-        this.animate(this);
+        t.camera.position.z = 5;
+        t.cube.rotation.x = 0.3;
+        t.cube.rotation.y = 0.4;
+        t.animate(this);
     }
     
     onMouseMove( event, t ) {

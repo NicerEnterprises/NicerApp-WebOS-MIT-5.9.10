@@ -40,7 +40,16 @@ na.ui.vividButton.buttonTypes['btn_audioVideo_repeat'] = {
         circleIcon_svg : {
             layerID : 'b.btnCode.layers.circleIcon_svg',
             animType : 'svg',
-            src : '/NicerAppWebOS/logic.userInterface/vividButton-4.1.0/btn_audioVideo_repeat.svg'
+            src : '/NicerAppWebOS/logic.userInterface/vividButton-4.1.0/btn_audioVideo_repeat.svg',
+            onclick : function() {
+                if (na.ui.vb.globals.debug) debugger;
+            },
+            onmouseover : function() {
+                if (na.ui.vb.globals.debug) debugger;
+            },
+            onmouseout : function() {
+                if (na.ui.vb.globals.debug) debugger;
+            }
         }
     },
     states : {

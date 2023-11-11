@@ -1224,27 +1224,30 @@ another example:
 		$path = realpath($path);
 
 		if (!is_null($excludeFolders)) {
-            preg_match_all($excludeFolders, $path, $ms);
+            $r = preg_match_all($excludeFolders, $path, $ms);
             if ($debug) {
-                echo '<pre>';
+                echo '<pre style="color:yellow;background:navy;border-radius:10px;">';
                 //var_dump (debug_backtrace()); echo PHP_EOL;
-                var_dump ($path); echo PHP_EOL;
-                var_dump ($excludeFolders); echo PHP_EOL;
-                var_dump($ms);//exit();
+                echo '$r='; var_dump($r); echo PHP_EOL;
+                echo '$path='; var_dump ($path); echo PHP_EOL;
+                echo '$excludeFolders='; var_dump ($excludeFolders); echo PHP_EOL;
+                echo '$ms='; var_dump($ms);//exit();
                 echo '</pre>';
             }
         }
+
 
         $result = array();
 		if (is_null($excludeFolders) || (
             is_array($ms)
             && is_array($ms[0])
-            && count($ms[0]) === 2
-            && $ms[0][0] == $path
-            && $ms[0][1] == ''
+            && count($ms) === 1
+            && $ms[0] == []
 		)) {
             //if (!in_array("file",$fileTypesFilter)) $fileTypesFilter[count($fileTypesFilter)]="file";
             //htmlOut (" --== $path ==--");
+
+
             if ($path[strlen($path)-1]!="/") $path.="/";
             //echo $path.'<br/>';
             if ($handle = opendir($path)) {
@@ -1256,16 +1259,23 @@ another example:
                         $pass = true;
                         //echo $path.$file.'<br/>';
                         $ft = filetype($path.$file);
+
                         if (!in_array ($ft, $fileTypesFilter)) $pass = false;
-                        // htmlDump ($ft, "filesys");
+                        if ($debug) { echo '<pre style="color:red">'; var_dump ($ft); var_dump($fileTypesFilter); echo '</pre>'; };
                         if ($ft=="dir") $filepath = $path.$file."/"; else $filepath = $path.$file;
 
-                        //echo '<pre>';
-                        //var_dump ($file); echo PHP_EOL;
-                        //var_dump ($fileSpecRE); echo PHP_EOL;
-                        if ($pass) $pass = preg_match ($fileSpecRE, strToLower($file))!==0;
-                        //var_dump ($pass); echo PHP_EOL;
-                        //echo '</pre>';
+                        if ($debug) {
+                            echo '<pre style="color:yellow;background:red;border-radius:10px">';
+                            var_dump ($file); echo PHP_EOL;
+                            var_dump ($fileSpecRE); echo PHP_EOL;
+                            var_dump ($excludeFolders); echo PHP_EOL;
+                            var_dump ($pass); echo PHP_EOL;
+                        }
+                        if ($pass) $pass = preg_match ($fileSpecRE, $file);
+                        if ($debug) { echo '#p1='; var_dump ($pass); echo PHP_EOL; }
+                        if ($pass) $pass = !preg_match ($excludeFolders, $file);
+                        if ($debug) { echo '#p2='; var_dump ($pass); echo PHP_EOL; }
+                        if ($debug) echo '</pre>';
                         if ($pass && count($ownerFilter)>0) {
                             $fo = fileowner ($filepath);
                             if ($fo!=false) {
@@ -1296,6 +1306,7 @@ another example:
                             $pass=evalDate ("filectime", $filepath, "<=", $cTimeMax, "cTimeMax");
 
                         $r = "";
+
                         if ($pass==true) {
                             //htmlOut ("PASSED");
 
@@ -1304,34 +1315,59 @@ another example:
                             if (!empty($listCall)) eval ($ev);
                             $idx = count ($result);
                             if (!empty($r)) $r = " - [listCall=$r]";
-                            if (!$returnRecursive) {
+                            /*if (!$returnRecursive) {
                                 $result[$idx] = $filepath.$r;
                             } else {
                                 $result[$idx] = basename($filepath.$r);
-                            }
+                            }*/
+                            $result[basename($filepath)] = $filepath;
                         }
-                        if (is_string($pass)) {
+                        /*
+                        if (false && $debug) {
+                            echo '$excludeFolders='; var_dump($excludeFolders); echo '<br/>'.PHP_EOL;
+                            echo '$pass='; var_dump($pass); echo '<br/>'.PHP_EOL;
+                            echo '$filepath='; var_dump($filepath); echo '<br/>'.PHP_EOL;
+                        };
+
+
+                        if (false && is_string($pass)) {
                             //htmlOut ("PASSED - checks failed");
                             $result[count($result)] = "[$pass]".$filepath;
                         }
+                        */
 
-                        if ($recursive && $ft=="dir" && (is_null($depth) || $level<$depth)) {
+                        if (false && $debug) { echo 'preg_match($excludeFolders, $filepath.$r)='; var_dump(preg_match($excludeFolders, $filepath.$r)); echo '<br/>'.PHP_EOL; }
+                        if (
+                            $recursive
+                            && $ft=="dir"
+                            && $pass
+                            && (
+                                is_null($depth)
+                                || $level<$depth
+                            )
+                            //&& preg_match($excludeFolders, $filepath.$r)===1
+                        ) {
                             $subdir = @getFilePathList ($filepath,$recursive, $fileSpecRE, $excludeFolders,
                                 $fileTypesFilter, $depth, $level+1, $returnRecursive, $ownerFilter, $fileSizeMin, $fileSizeMax,
                                 $aTimeMin, $aTimeMax, $mTimeMin, $mTimeMax,
                                 $cTimeMin, $cTimeMax, $listCall);
-                            if (!$returnRecursive) {
-                                if (!is_null($subdir)) array_splice ($result, count($result)+1, 0, $subdir);
-                            } else {
-                                if (!is_null($subdir)) $result[basename($filepath.$r)] = $subdir;
-                            }
+                            if ($debug) { echo '<pre>$subdir='; var_dump($subdir); echo '</pre>'.PHP_EOL; };
+                            if (count($subdir) > 0)
+                                if (!$returnRecursive) {
+                                    if (!is_null($subdir) && count($subdir)>0) array_splice ($result, count($result)+1, 0, $subdir);
+                                } else {
+                                    if (
+                                        !is_null($subdir)
+                                        && count($subdir)>0
+                                    ) $result[basename($filepath.$r)] = $subdir;
+                                }
                         }
                     } // !dot-files ('.' && '..', current & parent path on OS commandline)
                 } //!preg_match($excludeFolders, $path)
 			}
 		}
 		//htmlDump ($result, "result");
-		if ($debug) { echo '<pre style="color:purple">'; var_dump ($result); echo '</pre>'; };
+		if ($debug) { echo '<pre style="color:purple">$path='.$path.'; $result='; var_dump ($result); echo '</pre>'; };
 		return $result;
 	//}
 	//$result = array();

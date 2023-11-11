@@ -1,3 +1,4 @@
+// Copyright (C) 2002-2023 and All Rights Reserved (R) by Rene AJM Veerman <rene.veerman.netherlands@gmail.com>
 nicerapp.hms = nicerapp.jsonViewer = {
 	about : {
 		whatsThis : 'hm() and na.hms = na.jsonViewer = a way to send larg	e recursive data objects to the browser from PHP and view them in a collapsed-expansible view with many bells and whistles.',
@@ -549,7 +550,7 @@ nicerapp.hms = nicerapp.jsonViewer = {
 		expandMore: function (expandCmd) {
 			var k = (expandCmd.gotYTR ? expandCmd.ytrIdx : expandCmd.curr);
 			//na.hms.log (195, 'tools.expandMore():'+k+' - '+expandCmd.ids[k].levels+' - '+expandCmd.ids[k].id);
-			//na.hms.log (195, na.m.stacktrace());
+			na.hms.log (195, na.m.stacktrace());
 
 			if (expandCmd.ids[k].levels > 0) {
 				var htmlID = expandCmd.ids[k].id;
@@ -875,7 +876,7 @@ nicerapp.hms = nicerapp.jsonViewer = {
 					keyNameOrType: 'ROOT-TRACE',
 					keyName: '',
 					theme: localTheme,
-					levelsAtOnce: 2,
+					levelsAtOnce: 1,
 					hmo: cmd.trace.hmo,
 					subPrintID: 'hm_' + na.hms.settings.cs.debugID
 				});	

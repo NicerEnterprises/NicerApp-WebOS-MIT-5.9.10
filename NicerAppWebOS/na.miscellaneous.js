@@ -20,6 +20,28 @@ na.m = {
 		}
     },
 
+    handleGalleryLinkClick : function(e){
+        e.preventDefault();
+        const $thisLink = e.currentTarget;
+        const linkID = $thisLink.dataset.id;
+        let curStorage = localStorage.getItem("visitedItems");
+        if (curStorage) {
+            //ADD:
+            //create an array from comma separated string
+            //(i.e. 'item1,item2,item3')
+            curStorage = curStorage.split(",");
+        } else {
+            //ADD:
+            curStorage = []; //create new array
+        }
+        //ADD:
+        if (!curStorage.includes(linkID)) { //if ID is not in storage...
+            curStorage.push(linkID); //add it...
+            //then resubmit the local storage entry as a string...
+            localStorage.setItem("visitedItems", curStorage.toString());
+        }
+    },
+
     adjustColorOpacity : function (el, opacityValue) {
         var
         rgbaRegEx = /rgba\((\d{1,3})\,\s*(\d{1,3})\,\s*(\d{1,3})\,\s*([\d\.]+)\)(.*)/,

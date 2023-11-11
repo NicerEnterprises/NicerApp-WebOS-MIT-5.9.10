@@ -1,3 +1,4 @@
+// Copyright (C) 2002-2023 and All Rights Reserved (R) by Rene AJM Veerman <rene.veerman.netherlands@gmail.com>
 class naVividDialog {
     constructor(el,html,parent) {
         if ($('.vdSettings',el)[0]) return this;

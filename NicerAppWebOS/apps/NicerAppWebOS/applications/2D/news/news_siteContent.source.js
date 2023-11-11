@@ -1219,7 +1219,7 @@ na.m.preventScreenLock();
                 na.site.loadTheme_applySettings (na.site.globals.themes[na.site.globals.themeName], null, false);
                 //na.te.reApplySelectorsTree();
             }, 100);
-        }, 50);
+        }, 500);
         return true;
     },
 
