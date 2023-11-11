@@ -33,8 +33,10 @@ import { OrbitControls } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/example
 import { RGBELoader } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/loaders/RGBELoader.js';
 import { DragControls } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/controls/DragControls.js';
 //import { GLTFLoader } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/loaders/GLTFLoader.js';
-
-
+//import { FlyControls } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/controls/FlyControls.js';
+//import { FirstPersonControls} from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/controls/FirstPersonControls.js';
+import gsap from "https://unpkg.com/gsap@3.12.2/index.js";
+import { CameraControls } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/dist_camera-controls.module.js';
 
   import {
     CSS2DRenderer,
@@ -232,60 +234,63 @@ export class na3D_fileBrowser {
         t.camera.position.y = 200;
 
         /*
-  // Setup labels
-  t.labelRenderer = new CSS2DRenderer();
-  t.labelRenderer.setSize(innerWidth, innerHeight);
-  t.labelRenderer.domElement.style.position = 'absolute';
-  t.labelRenderer.domElement.style.top = '0px';
-  t.labelRenderer.domElement.style.backgroundColor = 'rgba(0,0,50,0.5)';
-  t.labelRenderer.domElement.style.boxShadow = 'inset 3px 3px 2px 2px rgba(255,255,255,0.55), 4px 4px 3px 2px rgba(0,0,0,0.7)';
-  t.labelRenderer.domElement.style.pointerEvents = 'none';
-  document.body.appendChild(t.labelRenderer.domElement);
+        // Setup labels
+        t.labelRenderer = new CSS2DRenderer();
+        t.labelRenderer.setSize(innerWidth, innerHeight);
+        t.labelRenderer.domElement.style.position = 'absolute';
+        t.labelRenderer.domElement.style.top = '0px';
+        t.labelRenderer.domElement.style.backgroundColor = 'rgba(0,0,50,0.5)';
+        t.labelRenderer.domElement.style.boxShadow = 'inset 3px 3px 2px 2px rgba(255,255,255,0.55), 4px 4px 3px 2px rgba(0,0,0,0.7)';
+        t.labelRenderer.domElement.style.pointerEvents = 'none';
+        document.body.appendChild(t.labelRenderer.domElement);
 
-  t.labelDiv = document.createElement('div');
-  t.labelDiv.className = 'label';
-  t.labelDiv.style.backgroundColor = 'rgba(0,0,50,0.5)';
-  t.labelDiv.style.boxShadow = 'inset 3px 3px 2px 2px rgba(255,255,255,0.55), 4px 4px 3px 2px rgba(0,0,0,0.7)';
-  t.labelDiv.style.marginTop = '-1em';
+        t.labelDiv = document.createElement('div');
+        t.labelDiv.className = 'label';
+        t.labelDiv.style.backgroundColor = 'rgba(0,0,50,0.5)';
+        t.labelDiv.style.boxShadow = 'inset 3px 3px 2px 2px rgba(255,255,255,0.55), 4px 4px 3px 2px rgba(0,0,0,0.7)';
+        t.labelDiv.style.marginTop = '-1em';
 
-  t.label = new CSS2DObject(t.labelDiv);
-  t.label.visible = false;
-  t.scene.add(t.label);
-  */
+        t.label = new CSS2DObject(t.labelDiv);
+        t.label.visible = false;
+        t.scene.add(t.label);
+        */
 
-  // Track mouse movement to pick objects
-  //t.raycaster = new Raycaster();
-  //t.mouse = new Vector2();
+        // Track mouse movement to pick objects
+        //t.raycaster = new Raycaster();
+        //t.mouse = new Vector2();
 
-  window.addEventListener('mousemove', ({ clientX, clientY }) => {
-    //const { innerWidth, innerHeight } = window;
-      var innerWidth = $('#siteContent .vividDialogContent').width();
-      var innerHeight = $('#siteContent .vividDialogContent').height();
+        window.addEventListener('mousemove', ({ clientX, clientY }) => {
+            //const { innerWidth, innerHeight } = window;
+            var innerWidth = $('#siteContent .vividDialogContent').width();
+            var innerHeight = $('#siteContent .vividDialogContent').height();
 
-    t.mouse.x = ((clientX-$('#siteContent .vividDialogContent').offset().left) / innerWidth) * 2 - 1;
-    t.mouse.y = (-1 * ((clientY-$('#siteContent .vividDialogContent').offset().top) / innerHeight) * 2) + 1;
-    //t.animate(t);
-  });
+            t.mouse.x = ((clientX-$('#siteContent .vividDialogContent').offset().left) / innerWidth) * 2 - 1;
+            t.mouse.y = (-1 * ((clientY-$('#siteContent .vividDialogContent').offset().top) / innerHeight) * 2) + 1;
+            //t.animate(t);
+        });
 
-  // Handle window resize
-  window.addEventListener('resize', () => {
-    //const { innerWidth, innerHeight } = window;
-      var innerWidth = $('#siteContent .vividDialogContent').width();
-      var innerHeight = $('#siteContent .vividDialogContent').height();
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            //const { innerWidth, innerHeight } = window;
+            var innerWidth = $('#siteContent .vividDialogContent').width();
+            var innerHeight = $('#siteContent .vividDialogContent').height();
 
-    t.renderer.setSize(innerWidth, innerHeight);
-    t.camera.aspect = innerWidth / innerHeight;
-    t.camera.updateProjectionMatrix();
-  });
+            t.renderer.setSize(innerWidth, innerHeight);
+            t.camera.aspect = innerWidth / innerHeight;
+            t.camera.updateProjectionMatrix();
+        });
 
-  t.renderer.setAnimationLoop(() => {
-    //controls.update();
+        t.renderer.setAnimationLoop(() => {
+            //controls.update();
 
-    // Pick objects from view using normalized mouse coordinates
-    t.raycaster.setFromCamera(t.mouse, t.camera);
+            // Pick objects from view using normalized mouse coordinates
+            t.raycaster.setFromCamera(t.mouse, t.camera);
 
-  });
+        });
 
+        CameraControls.install ({ THREE : THREE });
+        t.clock = new THREE.Clock();
+        t.cameraControls = new CameraControls (t.camera, t.renderer.domElement);
 
         t.animate(this);
     }
@@ -304,12 +309,13 @@ export class na3D_fileBrowser {
 
             t.scene.matrixWorldAutoUpdate = true;;
             t.camera.matrixWorldAutoUpdate = true;
-            t.camera.lookAt (t.s2[0].position);
+            //t.camera.lookAt (t.s2[0].position);
+            //t.flycontrols.update(0.05);
+            //t.fpcontrols.update(0.3);
+            const delta = t.clock.getDelta();
+            const hasControlsUpdated = t.cameraControls.update(delta);
 
             const intersects = t.raycaster.intersectObjects (t.s2);
-            //if (intersects[0] && intersects[0].object.type!=='Line') alert (intersects[0].object.it.name);
-
-            //if (intersects[0]) {
             if (intersects[0] && intersects[0].object.type!=='Line') 
             for (var i=0; i<1/*intersects.length <-- this just gets an endless series of hits from camera into the furthest reaches of what's visible behind the mouse pointer */; i++) {
                 var hoveredItem = intersects[i].object, done = false;
@@ -432,7 +438,7 @@ export class na3D_fileBrowser {
                 if (hovered && hovered.object.type!=='Line') {
                     // Setup label
                     t.renderer.domElement.className = 'hovered';
-                    $('#site3D_label')[0].textContent = hovered.object.it.name;
+                    //$('#site3D_label')[0].textContent = hovered.object.it.name;
                     //debugger;
 
                     // Get offset from object's dimensions
@@ -480,6 +486,10 @@ export class na3D_fileBrowser {
 
         
         t.renderer.render( t.scene, t.camera );
+    }
+
+    rotate (event, t) {
+        t.pathAnimation.play(0);
     }
     
     onMouseMove( event, t ) {
@@ -685,6 +695,9 @@ loop1:
                 }, 1000);
                                                
                 t.dragndrop = new DragControls( objs, t.camera, t.renderer.domElement );
+                //t.flycontrols = new FlyControls (t.camera, t.renderer.domElement);
+                //t.flycontrols.dragToLook = true;
+                //t.fpcontrols = new FirstPersonControls (t.camera, t.renderer.domElement);
                 
                 $(t.renderer.domElement).contextmenu(function() {
                     return false;
@@ -984,6 +997,9 @@ loop1:
                 //if (p && (p.name=='tiled'||p.name=='iframe')) debugger;
                 //if (p && (p.name=='landscape' || p.name=='scenery'||p.name=='animals')) debugger;
                 //if (p && p.name=='space stars night sky darkmode') debugger;
+
+
+
         }
         
         //t.drawLines(t);
@@ -1191,6 +1207,102 @@ loop1:
             }, 10);
         } else {
             t.drawLines(t);
+
+
+        t.winners = {
+            north : 0,
+            east : 0,
+            south : 0,
+            west : 0,
+            front : 0,
+            behind : 0
+        };
+        for (var i=0; i < t.items.length; i++) {
+            var it = t.items[i];
+            if (!it.model) continue;
+            if (it.model.position.y > t.winners.north) t.winners.north = it.model.position.y;
+            if (it.model.position.x > t.winners.east) t.winners.east = it.model.position.x;
+            if (it.model.position.y < t.winners.south) t.winners.south = it.model.position.y;
+            if (it.model.position.x < t.winners.west) t.winners.west = it.model.position.x;
+            if (it.model.position.z > t.winners.front) t.winners.front = it.model.position.z;
+            if (it.model.position.z < t.winners.behind) t.winners.behind = it.model.position.z;
+        };
+        var
+        tf = t.winners.behind + Math.round((t.winners.behind - t.winners.front) / 2),
+        middle = {
+            x : Math.round((t.winners.east + t.winners.west) / 2),
+            y : Math.round((t.winners.north + t.winners.south) / 2),
+            z : Math.round((t.winners.front + t.winners.behind) /2)
+        };
+debugger;
+
+        t.curve = new THREE.CatmullRomCurve3( [
+            new THREE.Vector3 (0, 0, 1000),
+            new THREE.Vector3 (t.winners.west - 1000, 0, t.winners.behind - 1000),
+            new THREE.Vector3 (t.winners.east + 1000, 0, t.winners.behind - 1000),
+            new THREE.Vector3 (t.winners.east + 1000, 0, 1000),
+            new THREE.Vector3 (0, 0, 1000)
+        ]);
+        t.points = t.curve.getPoints(50);
+
+const geometry = new THREE.BufferGeometry().setFromPoints( t.points );
+
+const material = new THREE.LineBasicMaterial( { color: 0xff0000 } );
+
+// Create the final object to add to the scene
+const curveObject = new THREE.Line( geometry, material );
+t.scene.add(curveObject);
+
+        t._tmp = new THREE.Vector3();
+        t.animationProgress = { value: 0 };
+        t.pathAnimation = gsap.fromTo(
+            t.animationProgress,
+            {
+                value: 0,
+            },
+            {
+                value: 1,
+                duration: 30,
+                overwrite: true,
+                paused: true,
+                onUpdateParams: [ t.animationProgress ],
+                onUpdate( { value } ) {
+
+                    if ( ! this.isActive() ) return;
+
+                    t.curve.getPoint ( value, t._tmp );
+                    const cameraX = t._tmp.x;
+                    const cameraY = t._tmp.y;
+                    const cameraZ = t._tmp.z;
+                    const lookAtX = middle.x;
+                    const lookAtY = middle.y;
+                    const lookAtZ = middle.z;
+
+                    t.cameraControls.setLookAt(
+                        cameraX,
+                        cameraY,
+                        cameraZ,
+                        lookAtX,
+                        lookAtY,
+                        lookAtZ,
+                        false, // IMPORTANT! disable cameraControls's transition and leave it to gsap.
+                    );
+
+                },
+                onStart() {
+
+                    t.cameraControls.enabled = false;
+
+                },
+                onComplete() {
+
+                    t.cameraControls.enabled = true;
+
+                },
+            }
+        );
+
+            //t.pathAnimation.play(0);
             if (typeof callback=='function') callback(t);
         }
     }
