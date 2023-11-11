@@ -1233,7 +1233,7 @@ onclick_btnFullResetOfAllThemes : function (event) {
 
     transformLinks : function (rootElement) {
         if (!na.site.globals.useLoadContent) return false;
-        $('a', rootElement).not('.contentMenu').not('.noPushState').each(function(idx, el){
+        $('a', rootElement).not('.contentMenu, .noPushState, .hmNavE').each(function(idx, el){
             
             let x = el.href, y = el.target;
 

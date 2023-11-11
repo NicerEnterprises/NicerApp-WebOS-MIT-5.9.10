@@ -1225,7 +1225,7 @@ another example:
 
 		if (!is_null($excludeFolders)) {
             $r = preg_match_all($excludeFolders, $path, $ms);
-            if ($debug) {
+            if (false && $debug) {
                 echo '<pre style="color:yellow;background:navy;border-radius:10px;">';
                 //var_dump (debug_backtrace()); echo PHP_EOL;
                 echo '$r='; var_dump($r); echo PHP_EOL;
@@ -1261,10 +1261,10 @@ another example:
                         $ft = filetype($path.$file);
 
                         if (!in_array ($ft, $fileTypesFilter)) $pass = false;
-                        if ($debug) { echo '<pre style="color:red">'; var_dump ($ft); var_dump($fileTypesFilter); echo '</pre>'; };
+                        if (false && $debug) { echo '<pre style="color:red">'; var_dump ($ft); var_dump($fileTypesFilter); echo '</pre>'; };
                         if ($ft=="dir") $filepath = $path.$file."/"; else $filepath = $path.$file;
 
-                        if ($debug) {
+                        if (false && $debug) {
                             echo '<pre style="color:yellow;background:red;border-radius:10px">';
                             var_dump ($file); echo PHP_EOL;
                             var_dump ($fileSpecRE); echo PHP_EOL;
