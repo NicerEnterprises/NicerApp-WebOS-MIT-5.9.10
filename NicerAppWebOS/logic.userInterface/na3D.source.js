@@ -1230,20 +1230,40 @@ loop1:
         var
         tf = t.winners.behind + Math.round((t.winners.behind - t.winners.front) / 2),
         middle = {
-            x : Math.round((t.winners.east + t.winners.west) / 2),
+            x : Math.round((t.winners.west + t.winners.east) / 2),
             y : Math.round((t.winners.north + t.winners.south) / 2),
             z : Math.round((t.winners.front + t.winners.behind) /2)
-        };
-debugger;
+        },
+        ol = 1500;
+        console.log ('t778', t.winners, middle);
 
-        t.curve = new THREE.CatmullRomCurve3( [
-            new THREE.Vector3 (0, 0, 1000),
-            new THREE.Vector3 (t.winners.west - 1000, 0, t.winners.behind - 1000),
-            new THREE.Vector3 (t.winners.east + 1000, 0, t.winners.behind - 1000),
-            new THREE.Vector3 (t.winners.east + 1000, 0, 1000),
-            new THREE.Vector3 (0, 0, 1000)
+
+        t.curve2 = new THREE.CatmullRomCurve3( [
+            new THREE.Vector3 (0, 0, 0),
+            new THREE.Vector3 (middle.x, middle.y, middle.z),
         ]);
-        t.points = t.curve.getPoints(50);
+        t.points2 = t.curve2.getPoints(50);
+        t.curves = [];
+        var
+        numPoints = 180,
+        radius = 500;
+        for (var i=0; i<numPoints; i++) {
+            var
+            x = radius * Math.cos (2 * Math.PI * i / numPoints),
+            y = radius * Math.sin (2 * Math.PI * i / numPoints),
+            z = 3 * radius;
+            t.curves.push (new THREE.Vector3(x,y,z));
+        }
+        t.curve = new THREE.CatmullRomCurve3( [
+            new THREE.Vector3 (0, 0, ol),
+            new THREE.Vector3 (t.winners.west - ol, 0, ol),
+            new THREE.Vector3 (t.winners.west - ol, 0, t.winners.behind - ol),
+            new THREE.Vector3 (t.winners.east + ol, 0, t.winners.behind - ol),
+            new THREE.Vector3 (t.winners.east + ol, 0, ol),
+            new THREE.Vector3 (0, 0, ol),
+        ]);
+        t.curve = new THREE.CatmullRomCurve3(t.curves);
+        t.points = t.curve.getPoints(numPoints);
 
 const geometry = new THREE.BufferGeometry().setFromPoints( t.points );
 
@@ -1252,6 +1272,14 @@ const material = new THREE.LineBasicMaterial( { color: 0xff0000 } );
 // Create the final object to add to the scene
 const curveObject = new THREE.Line( geometry, material );
 t.scene.add(curveObject);
+
+const geometry2 = new THREE.BufferGeometry().setFromPoints( t.points2 );
+
+const material2 = new THREE.LineBasicMaterial( { color: 0xffffff } );
+
+// Create the final object to add to the scene
+const curveObject2 = new THREE.Line( geometry2, material2 );
+t.scene.add(curveObject2);
 
         t._tmp = new THREE.Vector3();
         t.animationProgress = { value: 0 };
