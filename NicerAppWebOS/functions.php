@@ -173,7 +173,10 @@ function mainErrorHandler ($errno, $errstr, $errfile, $errline) {
     }*/
 
     if (
-        stripos($_SERVER['HTTP_USER_AGENT'], 'bot')===false
+        (
+            !array_key_exists('HTTP_USER_AGENT',$_SERVER)
+            || stripos($_SERVER['HTTP_USER_AGENT'], 'bot')===false
+        )
         && stripos($_SERVER['SCRIPT_NAME'], 'logs.php')===false
     ) {
         $err = $naErr->add ($errno, $errstr, $errfile, $errline);
@@ -1179,7 +1182,8 @@ function getFilePathList (
 	/*	on windows XP, cTime = creation time; mTime = modified time; aTime = access time.
 		I also noted some BUGS in retrieving these dates from my system.
 	*/
-	$listCall = ""						// interesting feature; lets you include results from any informational file function(s).
+	$listCall = "",						// interesting feature; lets you include results from any informational file function(s).
+    $pathStart = null
 /*	TODO : fix $*Date* parameter handling,
 	returns an array consisting of all files in a directory structure, filtered by the parameters given.
 	results are returned in directory order. if ($recursive) then subdirectory content is listed before file content.
@@ -1217,6 +1221,7 @@ another example:
 ) {
     $fncn = '.../NicerAppWebOS/functions.php/getFilePathList()';
     $debug = false;
+    if (is_null($pathStart)) $pathStart = $path;
 
 	//if (stripos($path, $pathStart)!==false) {
 		//echo '<pre style="color:cyan;">'; var_dump ($path); echo '</pre>'; exit();
@@ -1273,7 +1278,7 @@ another example:
                         }
                         if ($pass) $pass = preg_match ($fileSpecRE, $file);
                         if ($debug) { echo '#p1='; var_dump ($pass); echo PHP_EOL; }
-                        if ($pass) $pass = !preg_match ($excludeFolders, $file);
+                        if ($pass && !is_null($excludeFolders) && $excludeFolders!=='') $pass = !preg_match ($excludeFolders, $file);
                         if ($debug) { echo '#p2='; var_dump ($pass); echo PHP_EOL; }
                         if ($debug) echo '</pre>';
                         if ($pass && count($ownerFilter)>0) {
@@ -1320,7 +1325,7 @@ another example:
                             } else {
                                 $result[$idx] = basename($filepath.$r);
                             }*/
-                            $result[basename($filepath)] = $filepath;
+                            $result[basename($filepath)] = $filepath;//DON'T! str_replace($pathStart,'',$filepath);
                         }
                         /*
                         if (false && $debug) {
@@ -1350,7 +1355,7 @@ another example:
                             $subdir = @getFilePathList ($filepath,$recursive, $fileSpecRE, $excludeFolders,
                                 $fileTypesFilter, $depth, $level+1, $returnRecursive, $ownerFilter, $fileSizeMin, $fileSizeMax,
                                 $aTimeMin, $aTimeMax, $mTimeMin, $mTimeMax,
-                                $cTimeMin, $cTimeMax, $listCall);
+                                $cTimeMin, $cTimeMax, $listCall, $pathStart);
                             if ($debug) { echo '<pre>$subdir='; var_dump($subdir); echo '</pre>'.PHP_EOL; };
                             if (count($subdir) > 0)
                                 if (!$returnRecursive) {
