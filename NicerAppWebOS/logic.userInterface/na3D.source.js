@@ -590,7 +590,8 @@ loop1:
                 
                 clearTimeout (t.onresizeInitTimeout);
                 clearTimeout (t.linedrawTimeout);
-                
+
+
                 var 
                 textures = [];
                 for (var i=0; i<6; i++) textures[i] = '/NicerAppWebOS/siteMedia/folderIcon.png';
@@ -681,6 +682,7 @@ loop1:
             t.ld2[level].initItemsDoingIdx++;
             
             clearTimeout (t.onresizeInitTimeout);
+
             t.onresizeInitTimeout = setTimeout(function() {
                 var objs = [];
                 for (var i=0; i<t.items.length; i++) if (t.items[i].model) objs[objs.length] = t.items[i].model;
@@ -773,7 +775,8 @@ loop1:
                 });*/
                 t.onresize(t);
                 
-            }, 200);
+            }, 50);
+
         }
     }
     
@@ -783,7 +786,7 @@ loop1:
         na.m.waitForCondition ('waiting for other onresize commands to finish',
             function () { return t.resizing === false; },
             function () { t.onresize_do (t, levels); }, 
-            200
+            50
         );
     }
 

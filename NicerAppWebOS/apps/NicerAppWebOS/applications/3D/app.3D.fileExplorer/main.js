@@ -100,5 +100,5 @@ import { DragControls } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples
                 
             }, 100
         );
-    }, 3999);
+    }, 200);
  
