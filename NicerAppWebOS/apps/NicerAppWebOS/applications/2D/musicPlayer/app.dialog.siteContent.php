@@ -26,7 +26,7 @@ if ($view['set']==='index') {
     */
     //var_dump ($setPath); //exit();
     //var_dump (FILE_FORMATS_mp3s); exit();
-    $files = getFilePathList ($setPath.'/', true, FILE_FORMATS_mp3s, null, array('file'));
+    $files = getFilePathList ($setPath.'/', true, FILE_FORMATS_mp3s, null, array('file'))['files'];
     //var_dump ($files); exit();
     foreach ($files as $idx => $filepath) {
         $files[$idx] = str_replace(realpath(dirname(__FILE__.'/../..')), '', $files[$idx]);

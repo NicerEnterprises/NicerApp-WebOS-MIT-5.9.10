@@ -700,7 +700,7 @@ class NicerAppWebOS {
             if ($viewID==='/') {
                 // output frontpage.dialog.*.php
                 $folder = $this->basePath.'/NicerAppWebOS/domainConfigs/'.$naWebOS->domain.'/';
-                $files = getFilePathList($folder, false, '/frontpage.dialog.*\.php/', null, array('file'), 1);
+                $files = getFilePathList($folder, false, '/frontpage.dialog.*\.php/', null, array('file'), 1)['files'];
                 //if ($debug) { echo $folder.'<br/>'.PHP_EOL; echo json_encode($files); echo PHP_EOL.PHP_EOL; };
 
                 foreach ($files as $idx2 => $filepath) {
@@ -741,7 +741,7 @@ class NicerAppWebOS {
                                 .' BACKTRACE='.json_encode(debug_backtrace(), JSON_PRETTY_PRINT);
                             trigger_error ($msg, E_USER_WARNING);
                         } else {
-                            $files = getFilePathList ($this->basePath.'/'.$viewsFolder, true, '/app.*/', null, array('file'), 1);
+                            $files = getFilePathList ($this->basePath.'/'.$viewsFolder, true, '/app.*/', null, array('file'), 1)['files'];
                             //if ($debug) { var_dump ($rootPath.'/'.$viewsFolder); echo '<pre style="color:yellow;background:red;">'; var_dump ($files); echo '</pre>'.PHP_EOL.PHP_EOL;  }; die();
 
                             $titleFile = $this->basePath.'/'.$viewsFolder.'/app.title.site.php';

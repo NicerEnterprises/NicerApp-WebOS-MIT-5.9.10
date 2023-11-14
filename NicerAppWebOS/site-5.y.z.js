@@ -3349,7 +3349,7 @@ onclick_btnFullResetOfAllThemes : function (event) {
                 background : 'rgba(0,0,0,'+dat.textBackgroundOpacity+')'
             });
             */
-debugger;
+//debugger;
             $('#siteContent > .vividDialogContent > li > a, p, h1, h2, h3').not('.naVividTextCSS, .contentSectionTitle1, .contentSectionTitle1_a, .contentSectionTitle1_span, .contentSectionTitle2, .contentSectionTitle2_a, .contentSectionTitle2_span, .contentSectionTitle3, .contentSectionTitle3_a, .contentSectionTitle3_span, .backdropped').each (function(idx,el) {
                 var bg = na.m.adjustColorOpacity(el, dat.textBackgroundOpacity);
                 if (bg) $(el).css({background:bg});

@@ -45,7 +45,7 @@ if (array_key_exists('file', $_GET)) {
     //$excl = '/(?!.*thumbs).*/'; // exclude anything that includes 'thumbs' in it's filepath.
     $excl = null;
     $folder = dirname(__FILE__).'/siteLogs/';
-    $files = getFilePathList ($folder, true, FILE_FORMATS_html, $excl, array('file'));
+    $files = getFilePathList ($folder, true, FILE_FORMATS_html, $excl, array('file'))['files'];
     asort($files);
     $html = '';
     foreach ($files as $i => $fp) {

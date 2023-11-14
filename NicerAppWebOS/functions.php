@@ -778,6 +778,7 @@ function naWebOS_photoAlbum_resizeFiles ($totalFileCount, $totalJobsCount, $jobs
     $msgJobs = ($jobsDoneCount+1).'of'.$totalJobsCount;
     $fncn = 'naWebOS_photoAlbum_convert() job '.$msgJobs.' :: ';
     echo $fncn.'Figuring out which files to convert.'.PHP_EOL;
+    //var_dump ($delThumbs); var_dump ($excl); die();
 
     if ($delThumbs) {
         $files = getFilePathList ($root, true, FILE_FORMATS_photos, $excl2, ['file']);
@@ -792,6 +793,7 @@ function naWebOS_photoAlbum_resizeFiles ($totalFileCount, $totalJobsCount, $jobs
     } else {
         $files = getFilePathList ($root, true, FILE_FORMATS_photos, $excl, ['file']);
     }
+    //echo '<pre>'; var_dump ($files); echo '</pre>';
 
     foreach ($files as $idx => $file) {
         if (strpos($file,'/thumbs/thumbs')!==false) {
@@ -878,6 +880,22 @@ function naWebOS_photoAlbum_resizeFiles ($totalFileCount, $totalJobsCount, $jobs
             'x2' => $x2,
             'x3' => $x3
         ];
+
+        $dbg2 = [
+            '$file2' => $file2,
+            'file_exists($file2)' => file_exists($file2),
+            '$file3' => $file3,
+            'file_exists($file3)' => file_exists($file3),
+            '$file4' => $file4,
+            'file_exists($file4)' => file_exists($file4),
+            '$file5' => $file5,
+            'file_exists($file5)' => file_exists($file5)
+        ];
+        echo '<pre style="color:cyan;background:navy;border-radius:10px;margin:10px;">';
+        var_dump ($dbg2);
+        echo '</pre>';
+
+
         //var_dump ($dbg);
 
         try {
@@ -994,6 +1012,7 @@ function naWebOS_photoAlbum_resizeFiles ($totalFileCount, $totalJobsCount, $jobs
             }
 
             if (!$didAny) echo '(no resizings were necessary)';
+            echo '<br/>';
             echo PHP_EOL;
 
             if ($didAny) sleep (2);
@@ -1229,8 +1248,8 @@ another example:
 		$path = realpath($path);
 
 		if (!is_null($excludeFolders)) {
-            $r = preg_match_all($excludeFolders, $path, $ms);
-            if (false && $debug) {
+            $r = preg_match($excludeFolders, $path, $ms);
+            if ($debug) {
                 echo '<pre style="color:yellow;background:navy;border-radius:10px;">';
                 //var_dump (debug_backtrace()); echo PHP_EOL;
                 echo '$r='; var_dump($r); echo PHP_EOL;
@@ -1242,12 +1261,9 @@ another example:
         }
 
 
-        $result = array();
+        $result = [];
 		if (is_null($excludeFolders) || (
-            is_array($ms)
-            && is_array($ms[0])
-            && count($ms) === 1
-            && $ms[0] == []
+            $r === 0
 		)) {
             //if (!in_array("file",$fileTypesFilter)) $fileTypesFilter[count($fileTypesFilter)]="file";
             //htmlOut (" --== $path ==--");
@@ -1265,20 +1281,20 @@ another example:
                         //echo $path.$file.'<br/>';
                         $ft = filetype($path.$file);
 
-                        if (!in_array ($ft, $fileTypesFilter)) $pass = false;
-                        if (false && $debug) { echo '<pre style="color:red">'; var_dump ($ft); var_dump($fileTypesFilter); echo '</pre>'; };
+                        if (!$recursive && !in_array ($ft, $fileTypesFilter)) $pass = false;
+                        if ($debug) { echo '<pre style="color:red">'; var_dump ($ft); var_dump($fileTypesFilter); echo '</pre>'; };
                         if ($ft=="dir") $filepath = $path.$file."/"; else $filepath = $path.$file;
 
-                        if (false && $debug) {
+                        if ($debug) {
                             echo '<pre style="color:yellow;background:red;border-radius:10px">';
-                            var_dump ($file); echo PHP_EOL;
+                            var_dump ($filepath); echo PHP_EOL;
                             var_dump ($fileSpecRE); echo PHP_EOL;
                             var_dump ($excludeFolders); echo PHP_EOL;
                             var_dump ($pass); echo PHP_EOL;
                         }
-                        if ($pass) $pass = preg_match ($fileSpecRE, $file);
+                        if ($pass && !$recursive) $pass = preg_match ($fileSpecRE, $filepath) === 1;
                         if ($debug) { echo '#p1='; var_dump ($pass); echo PHP_EOL; }
-                        if ($pass && !is_null($excludeFolders) && $excludeFolders!=='') $pass = !preg_match ($excludeFolders, $file);
+                        if ($pass && !is_null($excludeFolders) && $excludeFolders!=='') $pass = preg_match ($excludeFolders, $filepath) === 0;
                         if ($debug) { echo '#p2='; var_dump ($pass); echo PHP_EOL; }
                         if ($debug) echo '</pre>';
                         if ($pass && count($ownerFilter)>0) {
@@ -1312,21 +1328,6 @@ another example:
 
                         $r = "";
 
-                        if ($pass==true) {
-                            //htmlOut ("PASSED");
-
-                            $ev = "\$r = $listCall";
-                            //htmlDump ($ev);
-                            if (!empty($listCall)) eval ($ev);
-                            $idx = count ($result);
-                            if (!empty($r)) $r = " - [listCall=$r]";
-                            /*if (!$returnRecursive) {
-                                $result[$idx] = $filepath.$r;
-                            } else {
-                                $result[$idx] = basename($filepath.$r);
-                            }*/
-                            $result[basename($filepath)] = $filepath;//DON'T! str_replace($pathStart,'',$filepath);
-                        }
                         /*
                         if (false && $debug) {
                             echo '$excludeFolders='; var_dump($excludeFolders); echo '<br/>'.PHP_EOL;
@@ -1364,8 +1365,30 @@ another example:
                                     if (
                                         !is_null($subdir)
                                         && count($subdir)>0
-                                    ) $result[basename($filepath.$r)] = $subdir;
+                                    ) {
+                                        if (!array_key_exists('folders',$result))
+                                            $result['folders'] = [];
+                                        $result['folders'][basename($filepath.$r)] = $subdir;
+                                    }
                                 }
+                        } else {
+                            if ($pass==true) {
+                                //htmlOut ("PASSED");
+
+                                $ev = "\$r = $listCall";
+                                //htmlDump ($ev);
+                                if (!empty($listCall)) eval ($ev);
+                                $idx = count ($result);
+                                if (!empty($r)) $r = " - [listCall=$r]";
+                                /*if (!$returnRecursive) {
+                                    $result[$idx] = $filepath.$r;
+                                } else {
+                                    $result[$idx] = basename($filepath.$r);
+                                }*/
+                                if (!array_key_exists('files',$result)) $result['files'] = [];
+                                $result['files'][basename($filepath)] = $filepath;//DON'T! str_replace($pathStart,'',$filepath);
+                            }
+
                         }
                     } // !dot-files ('.' && '..', current & parent path on OS commandline)
                 } //!preg_match($excludeFolders, $path)

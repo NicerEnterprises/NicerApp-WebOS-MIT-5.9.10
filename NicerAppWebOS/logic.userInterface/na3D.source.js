@@ -29,7 +29,7 @@ import { Stats } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/li
 import { GLTFLoader } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/loaders/GLTFLoader.js';
 import { KTX2Loader } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/loaders/KTX2Loader.js';
 import { DRACOLoader } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/loaders/DRACOLoader.js';
-import { OrbitControls } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/controls/OrbitControls.js';
+//import { OrbitControls } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/controls/OrbitControls.js';
 import { RGBELoader } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/loaders/RGBELoader.js';
 import { DragControls } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/controls/DragControls.js';
 //import { GLTFLoader } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/loaders/GLTFLoader.js';
@@ -164,12 +164,12 @@ export class na3D_fileBrowser {
         $(t.renderer.domElement).click (function(event) {
             event.preventDefault(); 
             if (event.detail === 2) { // double click
-                t.controls.autoRotate = !t.controls.autoRotate 
-                if (t.controls.autoRotate) $('#autoRotate').removeClass('vividButton').addClass('vividButtonSelected'); 
-                else $('#autoRotate').removeClass('vividButtonSelected').addClass('vividButton');
+                //t.controls.autoRotate = !t.controls.autoRotate
+                //if (t.controls.autoRotate) $('#autoRotate').removeClass('vividButton').addClass('vividButtonSelected');
+                //else $('#autoRotate').removeClass('vividButtonSelected').addClass('vividButton');
                     
             } else if (event.detail === 3) { // triple click
-                if (t.controls.autoRotateSpeed<0) t.controls.autoRotateSpeed = 1; else t.controls.autoRotateSpeed = -1;
+                //if (t.controls.autoRotateSpeed<0) t.controls.autoRotateSpeed = 1; else t.controls.autoRotateSpeed = -1;
             }
             
         });
@@ -473,7 +473,7 @@ export class na3D_fileBrowser {
             }
         }
         
-        if (t.controls) t.controls.update();
+        //if (t.controls) t.controls.update();
 
         for (var i=0; i<t.lines.length; i++) {
             var it = t.lines[i];
@@ -529,11 +529,13 @@ export class na3D_fileBrowser {
 
     initializeItems_do (t, items, data, parent, level, levelDepth, idxPath, filepath) {
         if (data.model) { alert ('data.model!'); return false; };
-        if (!t.ld2[level]) t.ld2[level] = { parent : parent, initItemsDoingIdx : 0, idxPath : idxPath };
-        if (!t.ld2[level].keys) t.ld2[level].keys = Object.keys(data);
-        if (t.ld2[level].initItemsDoingIdx >= t.ld2[level].keys.length) return false;
+        if (!t.ld2[idxPath]) t.ld2[idxPath] = { parent : parent, initItemsDoingIdx : 0, idxPath : idxPath };
+        if (!t.ld2[idxPath].keys) t.ld2[idxPath].keys = Object.keys(data);
+        if (t.ld2[idxPath].initItemsDoingIdx >= t.ld2[idxPath].keys.length) {
+            return false;
+        }
         
-        if (!t.ld2[level].levelIdx) t.ld2[level].levelIdx = 0;
+        if (!t.ld2[idxPath].levelIdx) t.ld2[idxPath].levelIdx = 0;
         
         if (!t.ld1[level]) t.ld1[level] = { levelIdx : 0 };
         
@@ -543,17 +545,33 @@ export class na3D_fileBrowser {
         if (!t.ld3[idxPath]) t.ld3[idxPath] = { itemCount : 0, items : [] };
         t.ld3[idxPath].itemCount++;
 loop1:
-        while (t.ld2[level].initItemsDoingIdx < t.ld2[level].keys.length) {
+        while (t.ld2[idxPath].initItemsDoingIdx < t.ld2[idxPath].keys.length) {
             var 
-            keyIdx = t.ld2[level].initItemsDoingIdx,
-            key = t.ld2[level].keys[ keyIdx ],
+            keyIdx = t.ld2[idxPath].initItemsDoingIdx,
+            key = t.ld2[idxPath].keys[ keyIdx ],
             itd = data[key];
-            
-            if (itd.files) t.initializeItems_do (t, items, itd.files, items.length-1, level+1, levelDepth+1, '0', itd.root); 
-            else if (key!=='it' && key!=='thumbs')
-            if (typeof itd == 'object' && itd!==null) {
-                let 
+                    console.log ('T211 - ' + filepath+'/'+key);
+                    if (key=='portrait favorites') debugger;
+                var
                 idxPath2 = !t.items[parent]||t.items[parent].idxPath===''?''+parent:t.items[parent].idxPath+','+parent,
+                idxs = idxPath2.split(','),
+                relPath = '';
+
+                for (var i=1; i<idxs.length; i++) {
+                    var x = t.items[idxs[i]].name;
+                    if (x!=='folders') relPath += '/' + x;
+                };
+                relPath += '/' + key;
+
+            if (itd.filesAtRoot) t.initializeItems_do (t, items, itd.filesAtRoot, t.items[items.length-1].name, level+1, levelDepth+1, '0', itd.root);
+            else if (itd.folders) {
+                t.initializeItems_do (t, items, itd.folders, 'folders,'+t.items[items.length-1].name, level*level, levelDepth+1, idxPath2, filepath+'/folders/'+key);
+            }
+            else if (key!=='it' && key!=='thumbs' && key!=='files')
+            if (typeof itd == 'object' && itd!==null) {
+                //debugger;
+
+                var
                 it = {
                     data : itd,
                     level : levelDepth,
@@ -561,14 +579,14 @@ loop1:
                     idx : items.length,
                     idxPath : idxPath2,
                     filepath : filepath,
-                    levelIdx : t.ld2[level].levelIdx,
+                    levelIdx : t.ld2[idxPath].levelIdx,
                     parent : parent
                 };
 
                 itd.it = it;
                 
                 items[items.length] = it;
-                t.ld2[level].levelIdx++;
+                t.ld2[idxPath].levelIdx++;
 
                 if (!t.ld3[idxPath2]) t.ld3[idxPath2] = { itemCount : 0, items : [] };
                 //t.ld3[path2].itemCount++;
@@ -595,16 +613,20 @@ loop1:
                 var 
                 textures = [];
                 for (var i=0; i<6; i++) textures[i] = '/NicerAppWebOS/siteMedia/folderIcon.png';
+                if (key=='landscape favorites') debugger;
                 for (var i=0; i<6; i++) {
                     var p = null;
-                    if (Object.keys(itd)[i] && Object.keys(itd)[i].match(/.*\.png|.*\.jpeg|.*\.jpg|.*\.gif$/)) {
+                    //debugger;
+                    if (itd.files && itd.files[i] && itd.files[i].match(/.*\.png|.*\.jpeg|.*\.jpg|.*\.gif$/)) {
                         var
-                        fullPath = '/NicerAppWebOS/siteMedia/backgrounds' + itd[''+i],
+                        fullPath = filepath.replace('/folders','')+'/'+relPath+'/'+itd.files[i],
                         filename = fullPath.replace(/^.*[\\\/]/, ''),
                         path = fullPath.replace('/'+filename,''),
                         pathThumb = path+'/thumbs/300/'+filename;
                         textures[i] = pathThumb;//'/NicerAppWebOS/'+filepath+'/'+key+'/thumbs/'+itd[''+i];//fn;
                         textures[i] = textures[i].replace(/\/\//g, '/');
+                        //console.log ('t7734:' + fullPath);
+                        //if (itd.files[i] && itd.files[i].match(/streetfighter/)) debugger;
                         //alert (JSON.stringify(textures,null,2));
                     } else {
                         //alert (itd[''+i]);
@@ -636,7 +658,7 @@ loop1:
                 t.s2.push(cube);
                 cube.it = it;
                 it.model = cube;
-                    console.log (items.length + ' - ' + it.name);
+                    console.log (items.length + ' - ' + filepath+'/'+key);
                 
                     var
                     newLevel = (
@@ -648,7 +670,7 @@ loop1:
                 //setTimeout (function() {
                     //t.loading = false;
                     cd.t.initializeItems_do (cd.t, cd.items, cd.itd, cd.it.idx, newLevel, cd.levelDepth, cd.idxPath, filepath+'/'+key);
-                //}, 50);
+                //}, 10);
                 
                 /*
                 t.loading = true;
@@ -679,7 +701,7 @@ loop1:
                     console.error( error );
                 },  cd );*/
             } 
-            t.ld2[level].initItemsDoingIdx++;
+            t.ld2[idxPath].initItemsDoingIdx++;
             
             clearTimeout (t.onresizeInitTimeout);
 
@@ -687,15 +709,16 @@ loop1:
                 var objs = [];
                 for (var i=0; i<t.items.length; i++) if (t.items[i].model) objs[objs.length] = t.items[i].model;
                                                
-                t.controls = new OrbitControls( t.camera, t.renderer.domElement );
+                //t.controls = new OrbitControls( t.camera, t.renderer.domElement );
                 //t.controls.autoRotate = true;
                 //$('#autoRotate').removeClass('vividButtonSelected').addClass('vividButton');
                 //t.controls.listenToKeyEvents( window ); // optional
+                /*
                 t.controls.enabled = false;
                 setTimeout (function(){
                      t.controls.enabled = true;
                 }, 1000);
-                                               
+                */
                 t.dragndrop = new DragControls( objs, t.camera, t.renderer.domElement );
                 //t.flycontrols = new FlyControls (t.camera, t.renderer.domElement);
                 //t.flycontrols.dragToLook = true;
@@ -744,7 +767,7 @@ loop1:
                     }
                     clearTimeout (t.posDataToDB);
                     t.posDataToDB = setTimeout(function() {
-                        t.posDataToDatabase(t);
+                        //t.posDataToDatabase(t);
                     }, 1000);
                     
                     if (t.showLines) {
@@ -1286,6 +1309,7 @@ t.scene.add(curveObject2);
 
         t._tmp = new THREE.Vector3();
         t.animationProgress = { value: 0 };
+        debugger;
         t.pathAnimation = gsap.fromTo(
             t.animationProgress,
             {
@@ -1438,6 +1462,7 @@ t.scene.add(curveObject2);
                     var
                     rnda = Math.floor(Math.random() * po.length),
                     rndb = Math.floor(Math.random() * po.length),
+                    rnda = po.length-1,
                     strategyA = po[rnda],
                     itaQuadrant = '',
                     itbQuadrant = '',
@@ -1453,6 +1478,17 @@ t.scene.add(curveObject2);
                         case 'bottomleft' : var strategyB = 'topright'; break;
                         case 'middleleft' : var strategyB = 'middleright'; break;
                         case 'topleft' : var strategyB = 'bottomright'; break;
+                    }
+                    /*
+                    switch (strategyA) {
+                        case 'top' : var strategyB = 'top'; break;
+                        case 'topright' : var strategyB = 'topright'; break;
+                        case 'middleright' : var strategyB = 'middleright'; break;
+                        case 'bottomright' : var strategyB = 'bottomright'; break;
+                        case 'bottom' : var strategyB = 'bottom'; break;
+                        case 'bottomleft' : var strategyB = 'bottomleft'; break;
+                        case 'middleleft' : var strategyB = 'middleleft'; break;
+                        case 'topleft' : var strategyB = 'topleft'; break;
                     }
                     /*
                     if (x.ita.upDown < 0) itaQuadrant += 'bottom';
@@ -1588,6 +1624,8 @@ t.scene.add(curveObject2);
         var ld3a = t.ld3[patha];
         var ld3b = t.ld3[pathb];
         var psi = null;
+        var offset = 100 + Math.floor(Math.random() * 100);//t.items[pidx];
+
         for (var i=0; i<ld3a.items.length; i++) {
             var ita = t.items[ld3a.items[i]];
             if (!ita.model) continue;
@@ -1601,8 +1639,7 @@ t.scene.add(curveObject2);
             ps = ita.idxPath.split(','),
             //psi = !psi ? Math.round(Math.random() * (ps.length + 1)) : psi,
             pidx = ps[ps.length-1],
-            itaParent = null,
-            offset = 55;//t.items[pidx];
+            itaParent = null;
 
             if (itaParent) {
                 ita1.xOffset = itaParent.leftRight * offset;
@@ -1665,11 +1702,11 @@ t.scene.add(curveObject2);
                             //&& itb.model.position.y === ofd4quadrant.itemsb[k].y
                             (
                                 ita.model.position.x >= itb.model.position.x
-                                && ita.model.position.x <= itb.model.position.x + 70
+                                && ita.model.position.x <= itb.model.position.x + (offset*1.4)
                             )
                             && (
                                 ita.model.position.y >= itb.model.position.y
-                                && ita.model.position.y <= itb.model.position.y + 70
+                                && ita.model.position.y <= itb.model.position.y + (offset*1.4)
                             )
                             && itb.model.position.z === ofd4quadrant.itemsb[k].z
                         ) itb1 = ofd4quadrant.itemsb[k];

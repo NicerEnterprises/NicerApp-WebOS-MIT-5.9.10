@@ -17,25 +17,24 @@ $jobs = [
         'thumbnails' => './thumbs',
         'delThumbs' => $delThumbs,
         'arguments' => $aStr
-    ],
+    ]/*,
 
     [
         'path' => $rootPath.'/apps/NicerAppWebOS/application-programmer-interfaces/data-validation/imagesMetaInfo/output',
         'thumbnails' => './thumbs',
         'delThumbs' => $delThumbs,
         'arguments' => $aStr
-    ]
+    ]*/
 ];
-/*
-echo 'recalculate_backgrounds_thumbs.php :: Job Listing : '.PHP_EOL; var_dump ($jobs); echo PHP_EOL.PHP_EOL;
-*/
-$totalFileCount = naWebOS_photoAlbum_countFiles ($jobs);
+//echo 'recalculate_backgrounds_thumbs.php :: Job Listing : '.PHP_EOL; var_dump ($jobs); echo PHP_EOL.PHP_EOL; die();
+
+//$totalFileCount = naWebOS_photoAlbum_countFiles ($jobs);
 
 
 $jobsDoneCount = 0;
 foreach ($jobs as $jobIdx => $job) {
     //echo PHP_EOL.$jobIdx.PHP_EOL;
-    //var_dump ($job); var_dump (is_dir($job['path']));
+    //var_dump ($job); var_dump (is_dir($job['path'])); die();
 
     if (is_dir($job['path']))
         $jobsDoneCount +=

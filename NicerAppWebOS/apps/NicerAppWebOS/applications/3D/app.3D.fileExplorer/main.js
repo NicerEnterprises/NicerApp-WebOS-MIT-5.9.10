@@ -59,6 +59,7 @@ import { DragControls } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples
                         url : '/NicerAppWebOS/apps/NicerAppWebOS/applications/3D/app.3D.fileExplorer/ajax_getBackgroundsRecursive.php',
                         success : function (data, ts) {
                             var parameters = { views : [ JSON.parse(data) ] };
+                            //debugger;
 
                             na.site.settings.na3D['#app_3D_fileExplorer'] =
                                 new na3D_fileBrowser(el, $(el).parent()[0], parameters);
@@ -71,14 +72,14 @@ import { DragControls } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples
                 
                 var 
                 html = 
-                    '<h2 id="titleHowTo">How To</h2>'
-                    + '<p>Drag and drop folders to re-arrange them.<br/>'
+                    '<h2 id="titleHowTo" class="vividTextCSS">How To</h2>'
+                    + '<p class="vividTextCSS backdropped">Drag and drop folders to re-arrange them.<br/>'
                    // + 'Your folder-arrangement will be saved for your next visit to this page.</p>'
-                    + '<p>Hold the left mouse button and drag to manually rotate the data.</p>'
-                    + '<p>Hold the right mouse button and drag to manually pan the camera.</p>'
-                    + '<p>Double click a mouse button to toggle automatic rotation of the data.</p>'
-                    + '<p>Triple click a mouse button to reverse direction for automatic rotation of the data.</p>'
-                    + '<p>Use the mouse wheel to zoom in or out.</p>'
+                    + '<p class="vividTextCSS backdropped">Hold the left mouse button and drag to manually rotate the data.</p>'
+                    + '<p class="vividTextCSS backdropped">Hold the right mouse button and drag to manually pan the camera.</p>'
+                    + '<p class="vividTextCSS backdropped">Double click a mouse button to toggle automatic rotation of the data.</p>'
+                    + '<p class="vividTextCSS backdropped">Triple click a mouse button to reverse direction for automatic rotation of the data.</p>'
+                    + '<p class="vividTextCSS backdropped">Use the mouse wheel to zoom in or out.</p>'
                     + '<div id="threedfm_buttons">'
                     + '<div id="newColors" class="vividButton" theme="dark" style="position:relative;" onclick="for (var id in na.site.settings.na3D) { var td = na.site.settings.na3D[id]; td.useNewColors(); }">New Colors</div>'
                     + '<div id="newArrangement" class="vividButton" theme="dark" style="position:relative;" onclick="for (var id in na.site.settings.na3D) { var td = na.site.settings.na3D[id]; td.useNewArrangement(); }">New Arrangement</div>'
@@ -98,7 +99,7 @@ import { DragControls } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples
                 };
                 na.vividText.initElement (vividTextCmd);
                 
-            }, 100
+            }, 50
         );
-    }, 200);
+    }, 50);
  
