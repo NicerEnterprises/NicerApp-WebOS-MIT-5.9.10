@@ -529,13 +529,13 @@ export class na3D_fileBrowser {
 
     initializeItems_do (t, items, data, parent, level, levelDepth, idxPath, filepath) {
         if (data.model) { alert ('data.model!'); return false; };
-        if (!t.ld2[idxPath]) t.ld2[idxPath] = { parent : parent, initItemsDoingIdx : 0, idxPath : idxPath };
-        if (!t.ld2[idxPath].keys) t.ld2[idxPath].keys = Object.keys(data);
-        if (t.ld2[idxPath].initItemsDoingIdx >= t.ld2[idxPath].keys.length) {
+        if (!t.ld2[level]) t.ld2[level] = { parent : parent, initItemsDoingIdx : 0, idxPath : idxPath };
+        /*if (!t.ld2[level].keys)*/ t.ld2[level].keys = Object.keys(data);
+        if (t.ld2[level].initItemsDoingIdx >= t.ld2[level].keys.length) {
             return false;
         }
         
-        if (!t.ld2[idxPath].levelIdx) t.ld2[idxPath].levelIdx = 0;
+        if (!t.ld2[level].levelIdx) t.ld2[level].levelIdx = 0;
         
         if (!t.ld1[level]) t.ld1[level] = { levelIdx : 0 };
         
@@ -545,10 +545,10 @@ export class na3D_fileBrowser {
         if (!t.ld3[idxPath]) t.ld3[idxPath] = { itemCount : 0, items : [] };
         t.ld3[idxPath].itemCount++;
 loop1:
-        while (t.ld2[idxPath].initItemsDoingIdx < t.ld2[idxPath].keys.length) {
+        while (t.ld2[level].initItemsDoingIdx < t.ld2[level].keys.length) {
             var 
-            keyIdx = t.ld2[idxPath].initItemsDoingIdx,
-            key = t.ld2[idxPath].keys[ keyIdx ],
+            keyIdx = t.ld2[level].initItemsDoingIdx,
+            key = t.ld2[level].keys[ keyIdx ],
             itd = data[key];
                     console.log ('T211 - ' + filepath+'/'+key);
                     if (key=='portrait favorites') debugger;
@@ -563,13 +563,13 @@ loop1:
                 };
                 relPath += '/' + key;
 
-            if (itd.filesAtRoot) t.initializeItems_do (t, items, itd.filesAtRoot, t.items[items.length-1].name, level+1, levelDepth+1, '0', itd.root);
+            if (itd.filesAtRoot) t.initializeItems_do (t, items, itd.filesAtRoot, items.length-1, level+1, levelDepth+1, '0', itd.root);
             else if (itd.folders) {
-                t.initializeItems_do (t, items, itd.folders, 'folders,'+t.items[items.length-1].name, level*level, levelDepth+1, idxPath2, filepath+'/folders/'+key);
+                t.initializeItems_do (t, items, itd.folders, items.length-1, level+1, levelDepth+1, idxPath2, filepath+'/'+key);
             }
             else if (key!=='it' && key!=='thumbs' && key!=='files')
             if (typeof itd == 'object' && itd!==null) {
-                //debugger;
+                debugger;
 
                 var
                 it = {
@@ -579,14 +579,14 @@ loop1:
                     idx : items.length,
                     idxPath : idxPath2,
                     filepath : filepath,
-                    levelIdx : t.ld2[idxPath].levelIdx,
+                    levelIdx : t.ld2[level].levelIdx,
                     parent : parent
                 };
 
                 itd.it = it;
                 
                 items[items.length] = it;
-                t.ld2[idxPath].levelIdx++;
+                t.ld2[level].levelIdx++;
 
                 if (!t.ld3[idxPath2]) t.ld3[idxPath2] = { itemCount : 0, items : [] };
                 //t.ld3[path2].itemCount++;
@@ -701,7 +701,7 @@ loop1:
                     console.error( error );
                 },  cd );*/
             } 
-            t.ld2[idxPath].initItemsDoingIdx++;
+            t.ld2[level].initItemsDoingIdx++;
             
             clearTimeout (t.onresizeInitTimeout);
 
