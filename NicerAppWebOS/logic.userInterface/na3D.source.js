@@ -497,7 +497,10 @@ export class na3D_fileBrowser {
     rotate (event, t) {
         t.pathAnimation.play(0);
     }
-    
+    rotate2 (event, t) {
+        t.pathAnimation2.play(0);
+    }
+
     onMouseMove( event, t ) {
         var rect = t.renderer.domElement.getBoundingClientRect();
         t.mouse.x = ( ( event.clientX - rect.left ) / ( rect.width - rect.left ) ) * 2 - 1;
@@ -1134,21 +1137,20 @@ export class na3D_fileBrowser {
             new THREE.Vector3 (t.winners.east + ol, 0, ol),
             new THREE.Vector3 (0, 0, ol),
         ]);
-        t.curve = new THREE.CatmullRomCurve3(t.curves);
+        t.curve2 = new THREE.CatmullRomCurve3(t.curves);
         t.points = t.curve.getPoints(numPoints);
+        t.points2 = t.curve2.getPoints(numPoints);
 
+        /*
         const geometry = new THREE.BufferGeometry().setFromPoints( t.points );
-
         const material = new THREE.LineBasicMaterial( { color: 0xff0000 } );
-
         // Create the final object to add to the scene
         const curveObject = new THREE.Line( geometry, material );
         t.scene.add(curveObject);
+        */
 
         //const geometry2 = new THREE.BufferGeometry().setFromPoints( t.points2 );
-
         //const material2 = new THREE.LineBasicMaterial( { color: 0xffffff } );
-
         // Create the final object to add to the scene
         //const curveObject2 = new THREE.Line( geometry2, material2 );
         //t.scene.add(curveObject2);
@@ -1202,6 +1204,53 @@ export class na3D_fileBrowser {
             }
         );
 
+        t.animationProgress2 = { value: 0 };
+        t.pathAnimation2 = gsap.fromTo(
+            t.animationProgress2,
+            {
+                value: 0,
+            },
+            {
+                value: 1,
+                duration: 30,
+                overwrite: true,
+                paused: true,
+                onUpdateParams: [ t.animationProgress2 ],
+                onUpdate( { value } ) {
+
+                    if ( ! this.isActive() ) return;
+
+                    t.curve2.getPoint ( value, t._tmp );
+                    const cameraX = t._tmp.x;
+                    const cameraY = t._tmp.y;
+                    const cameraZ = t._tmp.z;
+                    const lookAtX = middle.x;
+                    const lookAtY = middle.y;
+                    const lookAtZ = middle.z;
+
+                    t.cameraControls.setLookAt(
+                        cameraX,
+                        cameraY,
+                        cameraZ,
+                        lookAtX,
+                        lookAtY,
+                        lookAtZ,
+                        false, // IMPORTANT! disable cameraControls's transition and leave it to gsap.
+                    );
+
+                },
+                onStart() {
+
+                    t.cameraControls.enabled = false;
+
+                },
+                onComplete() {
+
+                    t.cameraControls.enabled = true;
+
+                },
+            }
+        );
             //t.pathAnimation.play(0);
             if (typeof callback=='function') callback(t);
         //}
