@@ -730,7 +730,7 @@ export class na3D_fileBrowser {
             it = t.items[i],
             p = (it.parent ? t.items[it.parent.idx] : null);
 
-            if (it.parent && !po[it.parent.idx]) po[it.parent.idx] = Math.abs(Math.random() * 1000);
+            if (it.parent && !po[it.parent.idx]) po[it.parent.idx] = Math.abs(Math.random() * 800);
 
             if (it.parent) var rnd = po[it.parent.idx]; else var rnd = 0;
             
@@ -829,7 +829,7 @@ export class na3D_fileBrowser {
                     //+ pitc
                      //+ ((p.column-1)*offsetXY) + ((p.column-1)*pOffsetX_now)
                     + ( ( it.leftRight * (it.column-1) * offsetXY))
-                    + ( ( it.parentColumOffset * 4))
+                    + ( ( it.parentColumOffset * 3))
                     //+ ( p.leftRight * p.columnOffsetValue * offsetXY )
                 );
                 it.model.position.y = Math.round(
@@ -837,10 +837,10 @@ export class na3D_fileBrowser {
                     //+ pitr
                     //+ ((p.row-1)*offsetXY) + ((p.row-1)*pOffsetY_now)
                     + ( (it.upDown *  (it.row-1) * offsetXY))
-                    + ( it.parentRowOffset * 4)
+                    + ( it.parentRowOffset * 3)
                     //+ ( p.upDown * p.rowOffsetValue * offsetXY )
                 );
-                it.model.position.z = -1 * ((it.level+1) * 300 ) - rnd;
+                it.model.position.z = -1 * ((it.level+1) * 140 ) - rnd;
                 if (it.name=='simple' || it.name=='anime') debugger;
 
                 var x = it.data.it;
