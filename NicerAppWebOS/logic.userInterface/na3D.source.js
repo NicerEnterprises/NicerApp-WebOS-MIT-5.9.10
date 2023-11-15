@@ -135,7 +135,9 @@ export class na3D_fileBrowser {
             leftRight : 0,
             upDown : 0,
             columnOffsetValue : 100,
-            rowOffsetValue : 100
+            rowOffsetValue : 100,
+            parentRowOffset : 0,
+            parentColumOffset : 0
         } ];
         
         t.lines = []; // onhover lines only in here
@@ -721,12 +723,16 @@ export class na3D_fileBrowser {
         },
         its3 = its2.sort (compare2);
         
-        
+        var po = {};
         for (var i=0; i<t.items.length; i++) {
             var
-            offsetXY = 500,
+            offsetXY = 140,
             it = t.items[i],
             p = (it.parent ? t.items[it.parent.idx] : null);
+
+            if (it.parent && !po[it.parent.idx]) po[it.parent.idx] = Math.abs(Math.random() * 1000);
+
+            if (it.parent) var rnd = po[it.parent.idx]; else var rnd = 0;
             
             if (p && p.parent && t.items[p.parent.idx]) {
                 var
@@ -755,7 +761,7 @@ export class na3D_fileBrowser {
                         : 1
                 ),
                 pitcp = (
-                      pModifierC * -1 * ((pmaxc / 2) - p.column)
+                      /*pModifierC */ -1 * ((pmaxc / 2) - p.column)
                 ),
                 pitcPercentage = (pitcp*1.00) / pmaxc,
                 pModifierR = (
@@ -766,7 +772,7 @@ export class na3D_fileBrowser {
                         : 1
                 ),
                 pitrp = (
-                      pModifierR * -1 * ((pmaxr / 2) - p.row)
+                      /*pModifierR **/ -1 * ((pmaxr / 2) - p.row)
                 ),
                 pitrPercentage = (pitrp*1.00) / pmaxr,
                 pitc = offsetXY * pitcPercentage * p.maxColumnIta.maxColumn,
@@ -820,21 +826,21 @@ export class na3D_fileBrowser {
 
                 it.model.position.x = Math.round(
                     p.model.position.x 
-                    + pitc 
-                     + ((p.column-1)*offsetXY) + ((p.column-1)*pOffsetX_now)
-                    + ( ( p.leftRight * (it.column-1) * offsetXY))
-                    + ( p.leftRight * ( it.parentColumOffset ))
-                    + ( p.leftRight * p.columnOffsetValue * 300 )
+                    //+ pitc
+                     //+ ((p.column-1)*offsetXY) + ((p.column-1)*pOffsetX_now)
+                    + ( ( it.leftRight * (it.column-1) * offsetXY))
+                    + ( ( it.parentColumOffset * 4))
+                    //+ ( p.leftRight * p.columnOffsetValue * offsetXY )
                 );
                 it.model.position.y = Math.round(
                     p.model.position.y 
-                    + pitr 
-                    + ((p.row-1)*offsetXY) + ((p.row-1)*pOffsetY_now)
-                    + ( (p.upDown *  (it.row-1) * offsetXY))
-                    + ( p.upDown * (it.parentRowOffset ))
-                    + ( p.upDown * p.rowOffsetValue * 200 )
+                    //+ pitr
+                    //+ ((p.row-1)*offsetXY) + ((p.row-1)*pOffsetY_now)
+                    + ( (it.upDown *  (it.row-1) * offsetXY))
+                    + ( it.parentRowOffset * 4)
+                    //+ ( p.upDown * p.rowOffsetValue * offsetXY )
                 );
-                it.model.position.z = -1 * ((it.level+1) * 200 );
+                it.model.position.z = -1 * ((it.level+1) * 300 ) - rnd;
                 if (it.name=='simple' || it.name=='anime') debugger;
 
                 var x = it.data.it;
@@ -878,7 +884,6 @@ export class na3D_fileBrowser {
 
     onresize_do_overlapChecks2 (t, callback) {
         //t.overlaps = [];
-        /*
         for (var i=0; i < t.overlaps.length; i++) {
             var it = t.overlaps[i];
             it.overlappingItems_count = 0;
@@ -911,7 +916,7 @@ export class na3D_fileBrowser {
                                     && (
                                         ita.model.position.y >= itb.model.position.y
                                         && ita.model.position.y <= itb.model.position.y + 60
-                                    )* /
+                                    )*/
 
                                     && (
                                         ita.model.position.x >= itb.model.position.x - 20
@@ -924,7 +929,7 @@ export class na3D_fileBrowser {
                                     /*
                                     && ita.model.position.x === itb.model.position.x
                                     && ita.model.position.y === itb.model.position.y
-                                    * /
+                                    */
                                     && ita.model.position.z === itb.model.position.z
                                 ) {
                                     var have = false;
@@ -1006,7 +1011,6 @@ export class na3D_fileBrowser {
             };
                 
         }
-        debugger;*/
         
         /*
         // this for loop can be commented out for speed optimization, it's only here for debugging purposes
