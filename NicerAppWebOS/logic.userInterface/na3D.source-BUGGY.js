@@ -131,11 +131,7 @@ export class na3D_fileBrowser {
             row : 0,
             columnCount : 1,
             rowCount : 1,
-            idxPath : '',
-            leftRight : 0,
-            upDown : 0,
-            columnOffsetValue : 100,
-            rowOffsetValue : 100
+            idxPath : ''
         } ];
         
         t.lines = []; // onhover lines only in here
@@ -206,7 +202,7 @@ export class na3D_fileBrowser {
         });
         
         t.loader = new GLTFLoader();
-        t.initializeItems (t);
+        t.initializeItems (this, t.items, t.data, 0, 0, 0, '0', '');
 
         const light1  = new AmbientLight(0xFFFFFF, 0.3);
         light1.name = 'ambient_light';
@@ -349,7 +345,7 @@ export class na3D_fileBrowser {
                         haveLine = false;
                         
                         // draw line to parent(s)
-                        while (it && it.parent && it.parent!==0 && typeof it.parent !== 'undefined') {
+                        while (it.parent && it.parent!==0 && typeof it.parent !== 'undefined') {
                             var 
                             parent = t.items[it.parent],
                             haveLine = false;
@@ -515,115 +511,302 @@ export class na3D_fileBrowser {
     onMouseWheel( event, t ) {
         debugger;
     }
-
-    initializeItems (t) {
-        var p = { t : t, ld2 : {}, idxPath : '', idxPath2 : '/0' };
-        na.m.walkArray (t.data, t.data, t.initializeItems_walkKey, t.initializeItems_walkValue, false, p);
-        t.onresize(t);
-    }
-    initializeItems_walkKey (cd) {
-        var ps = cd.path.split('/');
-        if (ps[ps.length-1]=='folders') {
-            console.log ('key', cd);
-            cd.params.idxPath = cd.params.idxPath2;
-            //cd.params.idxPath = cd.params.idxPath + '/' + cd.params.t.items.length;
-
-            var ps2 = $.extend([],ps);
-            delete ps2[ps2.length-1];
-            var level = ps2.length;
-            var ps2Str = ps2.join('/');
-            var parent = na.m.chaseToPath (cd.root, ps2Str, false);
-
-            if (!cd.params.ld2[level]) cd.params.ld2[level] = { levelIdx : 0 };
-
-
-
-            cd.at[cd.k].idxPath = cd.params.idxPath;
-            cd.at[cd.k].idx = cd.params.t.items.length;
-
-            var
-            it = {
-                data : cd.at[cd.k],
-                level : ps2.length,
-                name : cd.k,
-                idx : cd.params.t.items.length,
-                idxPath : cd.params.idxPath,// + '/' + cd.params.t.items.length,
-                filepath : cd.path,
-                levelIdx : ++cd.params.ld2[level].levelIdx,
-                parent : parent,
-                leftRight : 0,
-                upDown : 0,
-                columnOffsetValue : 1000,
-                rowOffsetValue : 1000
-            };
-
-            for (var i=0; i<cd.params.t.items.length; i++) {
-                var it2 = cd.params.t.items[i];
-                if (it2.filepath===it.filepath) {
-                    it.idxPath = it2.idxPath;
-                    break;
-                }
-            }
-
-            if (!cd.params.t.ld3) cd.params.t.ld3 = {};
-            if (!cd.params.t.ld3[it.idxPath]) cd.params.t.ld3[it.idxPath] = { itemCount : 0, items : [] };
-            cd.params.t.ld3[it.idxPath].itemCount++;
-            cd.params.t.ld3[it.idxPath].items.push (it.idx);
-            cd.params.idxPath2 += '/' + it.idx;
-
-            var
-            textures = [];
-            for (var i=0; i<6; i++) textures[i] = '/NicerAppWebOS/siteMedia/folderIcon.png';
-            for (var i=0; i<6; i++) {
-                var p = null;
+    
+    initializeItems (t, items, data, parent, level, levelDepth, idxPath, filepath) {
+        if (!t) t = this;
+        //debugger;
+        na.m.waitForCondition ('waiting for other initializeItems_do() commands to finish',
+            function () {
                 //debugger;
-                if (it.data.files && it.data.files[i] && it.data.files[i].match(/.*\.png|.*\.jpeg|.*\.jpg|.*\.gif$/)) {
-                    var
-                    fullPath = cd.params.t.data[0].root+'/'+cd.path.replace('0/filesAtRoot/','').replace(/\/folders/g,'')+'/'+cd.k+'/'+it.data.files[i],
-                    filename = fullPath.replace(/^.*[\\\/]/, ''),
-                    path = fullPath.replace('/'+filename,''),
-                    pathThumb = path+'/thumbs/300/'+filename;
-                    textures[i] = pathThumb;//'/NicerAppWebOS/'+filepath+'/'+key+'/thumbs/'+itd[''+i];//fn;
-                    textures[i] = textures[i].replace(/\/\//g, '/');
-                    it.fullPath = fullPath;
-                    console.log ('t7734:' + fullPath);
-                    //if (itd.files[i] && itd.files[i].match(/streetfighter/)) debugger;
-                    //alert (JSON.stringify(textures,null,2));
-                } else {
-                    //alert (itd[''+i]);
-                }
-            }
-            var
-            materials = [
-                new THREE.MeshBasicMaterial({
-                    map: new THREE.TextureLoader().load(textures[0])
-                }),
-                new THREE.MeshBasicMaterial({
-                    map: new THREE.TextureLoader().load(textures[1])
-                }),
-                new THREE.MeshBasicMaterial({
-                    map: new THREE.TextureLoader().load(textures[2])
-                }),
-                new THREE.MeshBasicMaterial({
-                    map: new THREE.TextureLoader().load(textures[3])
-                }),
-                new THREE.MeshBasicMaterial({
-                    map: new THREE.TextureLoader().load(textures[4])
-                }),
-                new THREE.MeshBasicMaterial({
-                    map: new THREE.TextureLoader().load(textures[5])
-                })
-            ];
-            var cube = new THREE.Mesh( new THREE.BoxGeometry( 50, 50, 50 ), materials );
-            cd.params.t.scene.add( cube );
-            cd.params.t.s2.push(cube);
-            cube.it = it;
-            it.model = cube;
-            cd.params.t.items.push (it);
-        }
+                return t.loading === false;
+            },
+            function () {
+                //debugger;
+                t.initializeItems_do (t, items, data[0], parent, level, levelDepth, idxPath, filepath);
+            }, 100
+        );
     }
-    initializeItems_walkValue (cd) {
-        //console.log ('value', cd);
+
+    initializeItems_do (t, items, data, parent, level, levelDepth, idxPath, filepath) {
+        debugger;
+        if (data.model) { alert ('data.model!'); return false; };
+        if (!data.folders && !data.filesAtRoot) { alert ('!data.folders && !data.filesAtRoot'); return false; };
+
+        if (!t.ld2[level]) t.ld2[level] = { parent : parent, initItemsDoingIdx : 0, idxPath : idxPath };
+        /*if (!t.ld2[level].keys)*/ t.ld2[level].keys = Object.keys(data.folders || data.filesAtRoot);
+        if (t.ld2[level].initItemsDoingIdx >= t.ld2[level].keys.length) {
+            return false;
+        }
+        
+        if (!t.ld2[level].levelIdx) t.ld2[level].levelIdx = 0;
+        
+        if (!t.ld1[level]) t.ld1[level] = { levelIdx : 0 };
+        
+        if (!t.initCounter) t.initCounter=0;
+        
+        if (!t.ld3) t.ld3 = {};
+        if (!t.ld3[idxPath]) t.ld3[idxPath] = { itemCount : 0, items : [] };
+        t.ld3[idxPath].itemCount++;
+loop1:
+        while (t.ld2[level].initItemsDoingIdx < t.ld2[level].keys.length) {
+            var 
+            keyIdx = t.ld2[level].initItemsDoingIdx,
+            key = t.ld2[level].keys[ keyIdx ],
+            itd = (
+                data.folders  ? data.folders[key] : data.filesAtRoot[key]
+            );
+                    console.log ('T211 - ' + filepath+'/'+key);
+                    if (key=='portrait favorites') debugger;
+                var
+                idxPath2 = !t.items[parent]||t.items[parent].idxPath===''?''+parent:t.items[parent].idxPath+','+parent,
+                idxs = idxPath2.split(','),
+                relPath = '';
+
+                for (var i=1; i<idxs.length; i++) {
+                    var x = t.items[idxs[i]].name;
+                    if (x!=='folders') relPath += '/' + x;
+                };
+                relPath += '/' + key;
+
+            if (itd.filesAtRoot) t.initializeItems_do (t, items, itd.filesAtRoot, items.length-1, level+1, levelDepth+1, '0', itd.root);
+            else if (itd.folders) {
+                t.initializeItems_do (t, items, itd.folders, items.length-1, level+1, levelDepth+1, idxPath2, filepath+'/'+key);
+            }
+            else if (key!=='it' && key!=='thumbs' && key!=='files')
+            if (typeof itd == 'object' && itd!==null) {
+                debugger;
+
+                var
+                it = {
+                    data : itd,
+                    level : levelDepth,
+                    name : key,
+                    idx : items.length,
+                    idxPath : idxPath2,
+                    filepath : filepath,
+                    levelIdx : t.ld2[level].levelIdx,
+                    parent : parent
+                };
+
+                itd.it = it;
+                
+                items[items.length] = it;
+                t.ld2[level].levelIdx++;
+
+                if (!t.ld3[idxPath2]) t.ld3[idxPath2] = { itemCount : 0, items : [] };
+                //t.ld3[path2].itemCount++;
+
+                t.ld3[idxPath2].items.push (it.idx);
+                
+                
+                let 
+                cd = { //call data
+                    t : t,
+                    it : it,
+                    items : items,
+                    itd : itd,
+                    parent : parent,
+                    idxPath : idxPath2,
+                    filepath : filepath,
+                    levelDepth : levelDepth + 1
+                };
+                
+                clearTimeout (t.onresizeInitTimeout);
+                clearTimeout (t.linedrawTimeout);
+
+
+                var 
+                textures = [];
+                for (var i=0; i<6; i++) textures[i] = '/NicerAppWebOS/siteMedia/folderIcon.png';
+                if (key=='landscape favorites') debugger;
+                for (var i=0; i<6; i++) {
+                    var p = null;
+                    //debugger;
+                    if (itd.files && itd.files[i] && itd.files[i].match(/.*\.png|.*\.jpeg|.*\.jpg|.*\.gif$/)) {
+                        var
+                        fullPath = filepath.replace('/folders','')+'/'+relPath+'/'+itd.files[i],
+                        filename = fullPath.replace(/^.*[\\\/]/, ''),
+                        path = fullPath.replace('/'+filename,''),
+                        pathThumb = path+'/thumbs/300/'+filename;
+                        textures[i] = pathThumb;//'/NicerAppWebOS/'+filepath+'/'+key+'/thumbs/'+itd[''+i];//fn;
+                        textures[i] = textures[i].replace(/\/\//g, '/');
+                        //console.log ('t7734:' + fullPath);
+                        //if (itd.files[i] && itd.files[i].match(/streetfighter/)) debugger;
+                        //alert (JSON.stringify(textures,null,2));
+                    } else {
+                        //alert (itd[''+i]);
+                    }
+                }
+                var
+                materials = [
+                    new THREE.MeshBasicMaterial({
+                        map: new THREE.TextureLoader().load(textures[0])
+                    }),
+                    new THREE.MeshBasicMaterial({
+                        map: new THREE.TextureLoader().load(textures[1])
+                    }),
+                    new THREE.MeshBasicMaterial({
+                        map: new THREE.TextureLoader().load(textures[2])
+                    }),
+                    new THREE.MeshBasicMaterial({
+                        map: new THREE.TextureLoader().load(textures[3])
+                    }),
+                    new THREE.MeshBasicMaterial({
+                        map: new THREE.TextureLoader().load(textures[4])
+                    }),
+                    new THREE.MeshBasicMaterial({
+                        map: new THREE.TextureLoader().load(textures[5])
+                    })
+                ];
+                var cube = new THREE.Mesh( new THREE.BoxGeometry( 50, 50, 50 ), materials );
+                t.scene.add( cube );
+                t.s2.push(cube);
+                cube.it = it;
+                it.model = cube;
+                    console.log (items.length + ' - ' + filepath+'/'+key);
+                
+                    var
+                    newLevel = (
+                        Object.keys(t.ld2).length > 1
+                        ? parseInt(Object.keys(t.ld2).reduce(function(a, b){ return t.ld2[a] > t.ld2[b] ? a : b }))+1
+                        : 2
+                    );
+                    cd.level = newLevel;
+                //setTimeout (function() {
+                    //t.loading = false;
+                    debugger;
+                    if (cd.itd.folders) cd.t.initializeItems_do (cd.t, cd.items, cd.itd.folders, cd.it.idx, newLevel, cd.levelDepth, cd.idxPath, filepath+'/'+key+'/folders');
+                //}, 10);
+                
+                /*
+                t.loading = true;
+                t.loader.load( '/NicerAppWebOS/3rd-party/3D/models/folder icon/scene.gltf', function ( gltf, cd) {
+                    clearTimeout (t.onresizeInitTimeout);
+                    
+                    gltf.scene.scale.setScalar (10);
+                    t.scene.add (gltf.scene);
+                    cd.it.model = gltf.scene;
+                    cd.it.model.it = cd.it;
+                    cd.t.updateTextureEncoding(t, gltf.scene);
+                    t.initCounter++;
+                    
+                    var
+                    newLevel = (
+                        Object.keys(t.ld2).length > 1
+                        ? parseInt(Object.keys(t.ld2).reduce(function(a, b){ return t.ld2[a] > t.ld2[b] ? a : b }))+1
+                        : 2
+                    );
+                    cd.level = newLevel;
+                    
+                    t.loading = false;                
+                    cd.t.initializeItems (cd.t, cd.items, cd.itd, cd.it.idx, newLevel, cd.levelDepth, cd.path);
+                    
+                }, function ( xhr ) {
+                    console.log( 'model "folder icon" : ' + ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+                }, function ( error ) {
+                    console.error( error );
+                },  cd );*/
+            } 
+            t.ld2[level].initItemsDoingIdx++;
+            
+            clearTimeout (t.onresizeInitTimeout);
+
+            t.onresizeInitTimeout = setTimeout(function() {
+                var objs = [];
+                for (var i=0; i<t.items.length; i++) if (t.items[i].model) objs[objs.length] = t.items[i].model;
+                                               
+                //t.controls = new OrbitControls( t.camera, t.renderer.domElement );
+                //t.controls.autoRotate = true;
+                //$('#autoRotate').removeClass('vividButtonSelected').addClass('vividButton');
+                //t.controls.listenToKeyEvents( window ); // optional
+                /*
+                t.controls.enabled = false;
+                setTimeout (function(){
+                     t.controls.enabled = true;
+                }, 1000);
+                */
+                t.dragndrop = new DragControls( objs, t.camera, t.renderer.domElement );
+                //t.flycontrols = new FlyControls (t.camera, t.renderer.domElement);
+                //t.flycontrols.dragToLook = true;
+                //t.fpcontrols = new FirstPersonControls (t.camera, t.renderer.domElement);
+                
+                $(t.renderer.domElement).contextmenu(function() {
+                    return false;
+                });
+                
+                t.dragndrop.addEventListener( 'dragstart', function ( event ) {
+                    if (t.controls) t.controls.dispose();
+                                             
+                    t.dragndrop.cube = event.object;
+                    t.dragndrop.mouseX = t.mouse.layerX;
+                    t.dragndrop.mouseY = t.mouse.layerY;
+                    
+                    let cube = event.object;
+                    $(cube).hover(function() {
+                        na.site.setStatusMsg ('Folder : '+cube.it.filepath);
+                    }, function () {
+                        na.site.setStatusMsg (na.site.settings.defaultStatusMsg);
+                    });
+
+                    for (let i=0; i<t.items.length; i++) {
+                        let it2 = t.items[i];
+                        if (it2.parent === cube.it.parent) {
+                            //debugger;
+                            it2.model.position.dragStartX = it2.model.position.x;
+                            it2.model.position.dragStartY = it2.model.position.y;
+                            it2.model.position.dragStartZ = it2.model.position.z;
+                        }
+                    }                    
+                } );
+                
+                t.dragndrop.addEventListener( 'drag', function (event) {
+                    let cube = event.object;
+
+                    for (let i=0; i<t.items.length; i++) {
+                        let it2 = t.items[i];
+                        if (it2.parent === cube.it.parent) {
+                            //debugger;
+                            it2.model.position.x = it2.model.position.dragStartX - (t.dragndrop.mouseX - t.mouse.layerX);
+                            it2.model.position.y = it2.model.position.dragStartY + (t.dragndrop.mouseY - t.mouse.layerY);
+                            it2.model.position.z = cube.position.z;
+                        }
+                    }
+                    clearTimeout (t.posDataToDB);
+                    t.posDataToDB = setTimeout(function() {
+                        //t.posDataToDatabase(t);
+                    }, 1000);
+                    
+                    if (t.showLines) {
+                        for (var i=0; i<t.permaLines.length; i++) {
+                            var l = t.permaLines[i];
+                            t.scene.remove (l.line);
+                            l.geometry.dispose();
+                            l.material.dispose();
+                        }
+                        t.permaLines = [];
+                        t.drawLines(t);
+                    }
+                });
+
+                t.dragndrop.addEventListener( 'dragend', function ( event ) {
+                    //event.object.material.emissive.set( 0x000000 );
+                    t.controls = new OrbitControls( t.camera, t.renderer.domElement );
+                    //t.controls.autoRotate = true;
+                    $('#autoRotate').removeClass('vividButtonSelected').addClass('vividButton');
+                    //t.controls.listenToKeyEvents( window ); // optional
+                    t.controls.enabled = true;
+                    
+                    if (t.showLines) t.drawLines(t);
+                } );
+                
+                /*t.databaseToPosData(t, function(loadedPosData) {
+                    if (!loadedPosData) t.onresize (t); else if (t.showLines) t.drawLines(t);
+                });*/
+                t.onresize(t);
+                
+            }, 50);
+
+        }
     }
     
     onresize (t, levels) {
@@ -669,7 +852,7 @@ export class na3D_fileBrowser {
                     
                     it.row = row;
                     it.column = column;
-                    //if (it.name=='gull' || it.name=='owl') debugger;
+                    //if (it.filepath=='siteMedia/backgrounds/tiled/active') debugger;
                 }
             }
         }
@@ -724,13 +907,13 @@ export class na3D_fileBrowser {
         
         for (var i=0; i<t.items.length; i++) {
             var
-            offsetXY = 500,
+            offsetXY = 100,
             it = t.items[i],
-            p = (it.parent ? t.items[it.parent.idx] : null);
+            p = t.items[it.parent];
             
-            if (p && p.parent && t.items[p.parent.idx]) {
+            if (p && p.parent && t.items[p.parent]) {
                 var
-                it2 = t.items[p.parent.idx],
+                it2 = t.items[p.parent],
                 ppLeftRight = it2.leftRight,
                 ppUpDown = it2.upDown;                
             } else {
@@ -817,47 +1000,32 @@ export class na3D_fileBrowser {
                     
                     }
                 }
-
+                
                 it.model.position.x = Math.round(
                     p.model.position.x 
                     + pitc 
                      + ((p.column-1)*offsetXY) + ((p.column-1)*pOffsetX_now)
                     + ( ( p.leftRight * (it.column-1) * offsetXY))
-                    + ( p.leftRight * ( it.parentColumOffset ))
-                    + ( p.leftRight * p.columnOffsetValue * 300 )
+                    + ( p.leftRight * t.items[it.parent].columnOffsetValue * 300 )
                 );
                 it.model.position.y = Math.round(
                     p.model.position.y 
                     + pitr 
                     + ((p.row-1)*offsetXY) + ((p.row-1)*pOffsetY_now)
                     + ( (p.upDown *  (it.row-1) * offsetXY))
-                    + ( p.upDown * (it.parentRowOffset ))
-                    + ( p.upDown * p.rowOffsetValue * 200 )
+                    + ( p.upDown * t.items[it.parent].rowOffsetValue * 200 )
                 );
-                it.model.position.z = -1 * ((it.level+1) * 200 );
-                if (it.name=='simple' || it.name=='anime') debugger;
-
+                it.model.position.z = -1 * ((it.level+1) * 500 );
+                
                 var x = it.data.it;
                 //debugger;
                 //if (p.name=='space stars night sky darkmode') debugger;
                 //if (p.name=='sunrise sunset') debugger;
             }else if (it.model) {
-                //debugger;
                 it.model.position.x = (it.column+1) * 100;
                 it.model.position.y = (it.row-1) * 100;
                 it.model.position.z = -1 * (it.level+1) * 100;
             }
-
-            if (it.model) {
-                var dbg = {
-                    px : it.model.position.x,
-                    py : it.model.position.y,
-                    pz : it.model.position.z,
-                    it : it
-                };
-                console.log (it.filepath, dbg);
-            }
-
                 //if (p && (p.name=='tiled'||p.name=='iframe')) debugger;
                 //if (p && (p.name=='landscape' || p.name=='scenery'||p.name=='animals')) debugger;
                 //if (p && p.name=='space stars night sky darkmode') debugger;
@@ -868,17 +1036,15 @@ export class na3D_fileBrowser {
         
         //t.drawLines(t);
 
-        clearTimeout (t.timeout_onresize_do_overlapChecks2);
-        t.timeout_onresize_do_overlapChecks2 = setTimeout(function() {
+        setTimeout(function() {
             t.onresize_do_overlapChecks2(t, callback);
             //if (typeof callback=='function') callback(t);
-        }, 500);
+        }, 10);
     }
     
 
     onresize_do_overlapChecks2 (t, callback) {
         //t.overlaps = [];
-        /*
         for (var i=0; i < t.overlaps.length; i++) {
             var it = t.overlaps[i];
             it.overlappingItems_count = 0;
@@ -911,7 +1077,7 @@ export class na3D_fileBrowser {
                                     && (
                                         ita.model.position.y >= itb.model.position.y
                                         && ita.model.position.y <= itb.model.position.y + 60
-                                    )* /
+                                    )*/
 
                                     && (
                                         ita.model.position.x >= itb.model.position.x - 20
@@ -924,7 +1090,7 @@ export class na3D_fileBrowser {
                                     /*
                                     && ita.model.position.x === itb.model.position.x
                                     && ita.model.position.y === itb.model.position.y
-                                    * /
+                                    */
                                     && ita.model.position.z === itb.model.position.z
                                 ) {
                                     var have = false;
@@ -1006,7 +1172,6 @@ export class na3D_fileBrowser {
             };
                 
         }
-        debugger;*/
         
         /*
         // this for loop can be commented out for speed optimization, it's only here for debugging purposes
@@ -1019,7 +1184,7 @@ export class na3D_fileBrowser {
                 if (it.path === o.patha) { o.itemsa.push(it); o.parenta = t.items[it.parent]; }
                 if (it.path === o.pathb) { o.itemsb.push(it); o.parentb = t.items[it.parent]; }
             }
-        };* /
+        };*/
         
         for (var j=0; j<t.items.length; j++) {
             t.items[j].adjustedModXmin = 0;
@@ -1074,8 +1239,7 @@ export class na3D_fileBrowser {
             }, 10);
         } else {
             t.drawLines(t);
-        */
-        t.drawLines(t);
+
 
         t.winners = {
             north : 0,
@@ -1133,24 +1297,25 @@ export class na3D_fileBrowser {
         t.curve = new THREE.CatmullRomCurve3(t.curves);
         t.points = t.curve.getPoints(numPoints);
 
-        const geometry = new THREE.BufferGeometry().setFromPoints( t.points );
+const geometry = new THREE.BufferGeometry().setFromPoints( t.points );
 
-        const material = new THREE.LineBasicMaterial( { color: 0xff0000 } );
+const material = new THREE.LineBasicMaterial( { color: 0xff0000 } );
 
-        // Create the final object to add to the scene
-        const curveObject = new THREE.Line( geometry, material );
-        t.scene.add(curveObject);
+// Create the final object to add to the scene
+const curveObject = new THREE.Line( geometry, material );
+t.scene.add(curveObject);
 
-        //const geometry2 = new THREE.BufferGeometry().setFromPoints( t.points2 );
+const geometry2 = new THREE.BufferGeometry().setFromPoints( t.points2 );
 
-        //const material2 = new THREE.LineBasicMaterial( { color: 0xffffff } );
+const material2 = new THREE.LineBasicMaterial( { color: 0xffffff } );
 
-        // Create the final object to add to the scene
-        //const curveObject2 = new THREE.Line( geometry2, material2 );
-        //t.scene.add(curveObject2);
+// Create the final object to add to the scene
+const curveObject2 = new THREE.Line( geometry2, material2 );
+t.scene.add(curveObject2);
 
         t._tmp = new THREE.Vector3();
         t.animationProgress = { value: 0 };
+        debugger;
         t.pathAnimation = gsap.fromTo(
             t.animationProgress,
             {
@@ -1200,7 +1365,7 @@ export class na3D_fileBrowser {
 
             //t.pathAnimation.play(0);
             if (typeof callback=='function') callback(t);
-        //}
+        }
     }
     
     onresize_applyBestOverlapFix (t, overlapFix) {
@@ -1410,9 +1575,9 @@ export class na3D_fileBrowser {
     translateIdxPathToText (t, idxPath) {
         var
         r = '',
-        parts = idxPath.split('/');
+        parts = idxPath.split(',');
 
-        for (var i=1; i<parts.length; i++) {
+        for (var i=0; i<parts.length; i++) {
             if (r!=='') r+='/';
             r+=t.items[parseInt(parts[i])].name;
         }
@@ -1502,15 +1667,15 @@ export class na3D_fileBrowser {
 
                 var
                 itan = '',
-                itap = ita.idxPath.split('/'),
+                itap = ita.idxPath.split(','),
                 itbn = '',
-                itbp = itb.idxPath.split('/');
-                for (var k=1; k<itap.length; k++) {
+                itbp = itb.idxPath.split(',');
+                for (var k=0; k<itap.length; k++) {
                     if (itan!=='') itan += '/';
                     itan += t.items[parseInt(itap[k])].name;
                 }
                 itan += '/' + ita.name;
-                for (var k=1; k<itbp.length; k++) {
+                for (var k=0; k<itbp.length; k++) {
                     if (itbn!=='') itbn += '/';
                     itbn += t.items[parseInt(itbp[k])].name;
                 }
@@ -1723,18 +1888,17 @@ export class na3D_fileBrowser {
             l.geometry.dispose();
             l.material.dispose();
         };
-
-debugger;
+        
         for (var i=1; i<t.items.length; i++) {
             var 
             it = t.items[i],
-            parent = t.items[it.parent.idx],
+            parent = t.items[it.parent],
             haveThisLineAlready = false;
             
             if (!t.showLines) return false;
             if (!it.model) return false;
             
-            if (it.parent.idx===0 || typeof it.parent === 'undefined') continue;
+            if (it.parent===0 || typeof it.parent === 'undefined') continue;
             
             for (var j=0; j<t.permaLines.length; j++) {
                 if (t.permaLines[j].it === it) {
@@ -1763,15 +1927,15 @@ debugger;
                 //geometry.verticesNeedUpdate = true;
                 
                 if (!t.lineColors) t.lineColors = {};
-                if (!t.lineColors[it.parent.idx]) {
+                if (!t.lineColors[it.parent]) {
                     var x=Math.round(0xffffff * Math.random()).toString(16);
                     var y=(6-x.length);
                     var z="000000";
                     var z1 = z.substring(0,y);
                     var color= z1 + x;                    
-                    t.lineColors[it.parent.idx] = color;
+                    t.lineColors[it.parent] = color;
                 }
-                var color = t.lineColors[it.parent.idx];
+                var color = t.lineColors[it.parent];
                 
                 var
                 material = new THREE.LineBasicMaterial({ color: '#'+color, linewidth :2 }),
