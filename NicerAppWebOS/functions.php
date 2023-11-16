@@ -1292,7 +1292,7 @@ another example:
                             var_dump ($excludeFolders); echo PHP_EOL;
                             var_dump ($pass); echo PHP_EOL;
                         }
-                        if ($pass && !$recursive) $pass = preg_match ($fileSpecRE, $filepath) === 1;
+                        if ($pass/* && !$recursive*/) $pass = preg_match ($fileSpecRE, $filepath) === 1;
                         if ($debug) { echo '#p1='; var_dump ($pass); echo PHP_EOL; }
                         if ($pass && !is_null($excludeFolders) && $excludeFolders!=='') $pass = preg_match ($excludeFolders, $filepath) === 0;
                         if ($debug) { echo '#p2='; var_dump ($pass); echo PHP_EOL; }

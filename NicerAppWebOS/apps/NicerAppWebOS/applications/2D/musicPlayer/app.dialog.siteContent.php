@@ -45,7 +45,7 @@ if ($view['set']==='index') {
         }
         */
     }
-    //var_dump ($files); exit();
+    //echo '<pre>'; var_dump ($files); exit();
 
 $authorEmail = 'rene.veerman.netherlands@gmail.com';
 $spacer = "\n\t\t\t\t";
@@ -85,15 +85,18 @@ $spacer = "\n\t\t\t\t";
 	<div id="mp3s" class="vividMenu vividScrollpane noFlex naNoComments" type="vertical" theme="dark" style="overflow:hidden;overflow-y:auto;opacity:0.001;position:absolute;text-align:center;width:100%;">
 <?php
 
-			$filez = array();
+			$filez = $filez2 = array();
             if (file_exists($setPath.'/regex_filenameFilter.js-regexps.json'))
                 $ff = safeLoadJSONfile($setPath.'/regex_filenameFilter.js-regexps.json');
             else $ff = [];
 
-			foreach ($files as $idx=>$file) {
-				$fn = basename($file);
-
+            $idx = 0;
+			foreach ($files as $file=>$fp) {
+				$fn = basename($fp);
+//echo '<pre>'; var_dump($fn);die();
                 $fileLabel = $fn;//$filez[$idx];
+                $filez2[$idx] = $fileLabel;
+
                 foreach ($ff as $i => $it) {
                     //foreach ($ffIt as $j => $it) {
                         //note: $it === $ff[$i][$j];
@@ -101,17 +104,24 @@ $spacer = "\n\t\t\t\t";
                         //echo '<pre>';var_dump ($itRegExps); die();
                         $itReplaceString = $it[1];
                         foreach ($itRegExps as $k => $regExp) {
+                            //echo '1:'.$fileLabel.'<br/>';
                             $fileLabel = preg_replace ($regExp, $itReplaceString, $fileLabel);
+                            //echo '2:'.$fileLabel.'<br/>';
                         }
                     //}
                 }
                 $fileLabel = preg_replace('/\.mp3$/','',$fileLabel);
                 $filez[$idx] = $fileLabel;
+
+                $idx++;
 			}
 			asort ($filez);
+            //echo '<pre>'; var_dump($filez); die();
+            $idx = 0;
 			foreach ($filez as $idx=>$fn) {
 				$id = 'mp3_'.$idx;
-				echo "\t\t".'<div id="'.$id.'" file="'.basename($files[$idx]).'" class="mp3 vividButton" theme="dark" style="" onclick="na.mp.selectMP3(\''.$id.'\', \''.basename($files[$idx]).'\');" style="width:220px"><div class="vdBackground"></div><span style="opacity:1">'.$fn.'</span></div>'.PHP_EOL;
+				echo "\t\t".'<div id="'.$id.'" file="'.$filez2[$idx].'" class="mp3 vividButton" theme="dark" style="" onclick="na.mp.selectMP3(\''.$id.'\', \''.$filez2[$idx].'\');" style="width:220px"><div class="vdBackground"></div><span style="opacity:1">'.$fn.'</span></div>'.PHP_EOL;
+                $idx++;
 			}
 ?> 
 	</div>
@@ -119,10 +129,10 @@ $spacer = "\n\t\t\t\t";
 	<div id="app__musicPlayer__player" class="vividDialog naNoComments" style="overflow:visible;position:absolute;width:320px;height:120px;">
         <audio id="audioTag">
             <?php 
-            foreach ($filez as $idx=>$fn) {
+            foreach ($filez2 as $idx=>$fn) {
                 $id = 'mp3Source_'.$idx;
                 echo PHP_EOL;
-                echo "\t\t\t".'<source id="'.$id.'" src="/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/musicPlayer/music/'.$view['set'].'/'.basename($files[$idx]).'" type="audio/mpeg">'.PHP_EOL;
+                echo "\t\t\t".'<source id="'.$id.'" src="/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/musicPlayer/music/'.$view['set'].'/'.$filez2[$idx].'" type="audio/mpeg">'.PHP_EOL;
             }
             ?>
         </audio>

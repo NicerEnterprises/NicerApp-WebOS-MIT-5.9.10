@@ -2,7 +2,7 @@
     $naRoot = realpath(dirname(__FILE__).'/../../../../../..');
     require_once($naRoot.'/NicerAppWebOS/boot.php');
     global $naWebOS;
-    $debug = true;
+    $debug = false;
     global $debug;
 
     $fp = $naRoot.'/NicerAppWebOS/siteCache/app.3D.fileBrowser.json';
