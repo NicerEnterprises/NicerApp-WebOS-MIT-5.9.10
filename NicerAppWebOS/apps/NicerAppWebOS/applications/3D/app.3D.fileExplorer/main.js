@@ -36,7 +36,7 @@ import { DragControls } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples
 		
     //$(document).ready(function() {
         setTimeout (function() {
-        /*
+
         na.m.waitForCondition ('app.3D.fileExplorer : Filesystem index loaded?',
             function () { 
 				var r =
@@ -50,7 +50,7 @@ import { DragControls } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples
                 return r;
             },
             function () {
-                debugger;*/
+
                 na.desktop.setConfig ('contentAndToolbarRight');
 
                 // and when the data has loaded, do the following.. :
@@ -100,9 +100,9 @@ import { DragControls } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples
                         animationSpeed : 4 * 1000
                 };
                 na.vividText.initElement (vividTextCmd);
-                /*
+
             }, 50
         );
-*/
+
     }, 50);
  

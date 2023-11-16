@@ -303,6 +303,7 @@ export class na3D_fileBrowser {
     
     animate(t) {
         requestAnimationFrame( function() { t.animate (t) } );
+
         if (t.mouse.x!==0 || t.mouse.y!==0) {        
             t.camera.updateProjectionMatrix();
 
@@ -346,13 +347,13 @@ export class na3D_fileBrowser {
                     //debugger;    
                         var 
                         it = hoveredItem.it,
-                        parent = t.items[it.parent.idx],
+                        parent = t.items[it.parent],
                         haveLine = false;
                         
                         // draw line to parent(s)
                         while (it && it.parent && it.parent!==0 && typeof it.parent !== 'undefined') {
                             var 
-                            parent = t.items[it.parent.idx],
+                            parent = t.items[it.parent],
                             haveLine = false;
                             
                             if (parent && parent.model) {
@@ -390,7 +391,7 @@ export class na3D_fileBrowser {
                                     }
                                 }
                             }
-                            it = t.items[it.parent.idx];
+                            it = t.items[it.parent];
                         }
                                                 
                         // draw lines to children
@@ -398,7 +399,7 @@ export class na3D_fileBrowser {
                             var child = t.items[j];
                             if (
                                 hoveredItem && hoveredItem.it && hoveredItem.it.model && child.model
-                                && hoveredItem.it.idx === child.parent.idx
+                                && hoveredItem.it.idx === child.parent
                             ) {
                                 var
                                 p1 = child.model.position,
@@ -433,7 +434,7 @@ export class na3D_fileBrowser {
                         done = true;
                     }
                     
-                    hoveredItem = t.items[hoveredItem.parent.idx];
+                    hoveredItem = hoveredItem.parent;
                 }
                 
                 // show folder name for item under mouse and closest to the country
@@ -843,7 +844,7 @@ export class na3D_fileBrowser {
                     //+ ( p.upDown * p.rowOffsetValue * offsetXY )
                 );
                 it.model.position.z = -1 * ((it.level+1) * 140 ) - rnd;
-                //if (it.name=='simple' || it.name=='anime') debugger;
+                if (it.name=='simple' || it.name=='anime') debugger;
 
                 var x = it.data.it;
                 //debugger;

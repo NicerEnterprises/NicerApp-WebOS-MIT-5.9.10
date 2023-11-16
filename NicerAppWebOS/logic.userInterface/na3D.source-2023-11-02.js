@@ -17,11 +17,9 @@ import {
   Scene,
   SkeletonHelper,
   UnsignedByteType,
-  Vector2,
   Vector3,
   WebGLRenderer,
-  sRGBEncoding,
-  Raycaster
+  sRGBEncoding
 } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/build/three.module.js';
 
 import * as THREE from '/NicerAppWebOS/3rd-party/3D/libs/three.js/build/three.module.js';
@@ -29,24 +27,10 @@ import { Stats } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/li
 import { GLTFLoader } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/loaders/GLTFLoader.js';
 import { KTX2Loader } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/loaders/KTX2Loader.js';
 import { DRACOLoader } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/loaders/DRACOLoader.js';
-//import { OrbitControls } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/controls/OrbitControls.js';
+import { OrbitControls } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/controls/OrbitControls.js';
 import { RGBELoader } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/loaders/RGBELoader.js';
 import { DragControls } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/controls/DragControls.js';
 //import { GLTFLoader } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/loaders/GLTFLoader.js';
-//import { FlyControls } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/controls/FlyControls.js';
-//import { FirstPersonControls} from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/controls/FirstPersonControls.js';
-import gsap from "https://unpkg.com/gsap@3.12.2/index.js";
-import { CameraControls } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/dist_camera-controls.module.js';
-
-  import {
-    CSS2DRenderer,
-    CSS2DObject,
-  } from 'https://unpkg.com/three@0.125.2/examples/jsm/renderers/CSS2DRenderer.js';
-
-
-
-
-
 /*import {
   AmbientLight,
   AnimationMixer,
@@ -94,7 +78,7 @@ export class na3D_portraitFrame {
         var maxZ = centerY + Math.round(sizeZ/2);
         var max = new Vector3 (maxX, maxY, maxZ);
         
-        t.box = new Box3 (min,max);
+        this.box = new Box3 (min,max);
         return this;
     }
     
@@ -105,12 +89,12 @@ export class na3D_fileBrowser {
     constructor(el, parent, parameters) {
         var t = this;
         
-        t.autoRotate = false;
+        t.autoRotate = true;
         t.showLines = true;
         
         t.p = parent;
         t.el = el;
-        t.t = $(t.el).attr('theme');
+        t.t = $(this.el).attr('theme');
         t.settings = { parameters : parameters };
         t.data = parameters.views[0];
         t.loading = false;
@@ -122,7 +106,7 @@ export class na3D_fileBrowser {
 
 
         
-        t.items = [ {
+        this.items = [ {
             name : 'backgrounds',
             offsetY : 0,
             offsetX : 0,
@@ -131,51 +115,45 @@ export class na3D_fileBrowser {
             row : 0,
             columnCount : 1,
             rowCount : 1,
-            idxPath : '',
-            leftRight : 0,
-            upDown : 0,
-            columnOffsetValue : 100,
-            rowOffsetValue : 100,
-            parentRowOffset : 0,
-            parentColumOffset : 0
+            idxPath : ''
         } ];
         
-        t.lines = []; // onhover lines only in here
-        t.permaLines = []; // permanent lines, the lines that show all of the parent-child connections.
+        this.lines = []; // onhover lines only in here
+        this.permaLines = []; // permanent lines, the lines that show all of the parent-child connections.
         
         var 
         c = $.cookie('3DFDM_lineColors');
         if (typeof c=='string' && c!=='') {
-            t.lineColors = JSON.parse(c);
+            this.lineColors = JSON.parse(c);
         }
         
-        t.scene = new THREE.Scene();
-        t.s2 = [];
-        t.camera = new THREE.PerspectiveCamera( 50, $(el).width() / $(el).height(), 0.01, 100 * 1000 );
+        this.scene = new THREE.Scene();
+        this.camera = new THREE.PerspectiveCamera( 75, $(el).width() / $(el).height(), 0.1, 10 * 1000 );
         
 
-        t.renderer = new THREE.WebGLRenderer({alpha:true, antialias : true});
-        t.renderer.physicallyCorrectLights = true;
-        t.renderer.outputEncoding = sRGBEncoding;
-        t.renderer.setPixelRatio (window.devicePixelRatio);
-        t.renderer.setSize( $(el).width()-20, $(el).height()-20 );
-        t.renderer.toneMappingExposure = 1.0;
+        this.renderer = new THREE.WebGLRenderer({alpha:true, antialias : true});
+        this.renderer.physicallyCorrectLights = true;
+        debugger;
+        this.renderer.outputEncoding = sRGBEncoding;
+        this.renderer.setPixelRatio (window.devicePixelRatio);
+        this.renderer.setSize( $(el).width()-20, $(el).height()-20 );
+        this.renderer.toneMappingExposure = 1.0;
         
-        el.appendChild( t.renderer.domElement );
+        el.appendChild( this.renderer.domElement );
         
-        $(t.renderer.domElement).bind('mousemove', function() {
+        $(this.renderer.domElement).bind('mousemove', function() {
             //event.preventDefault(); 
             t.onMouseMove (event, t)
         });
-        $(t.renderer.domElement).click (function(event) {
+        $(this.renderer.domElement).click (function(event) {  
             event.preventDefault(); 
             if (event.detail === 2) { // double click
-                //t.controls.autoRotate = !t.controls.autoRotate
-                //if (t.controls.autoRotate) $('#autoRotate').removeClass('vividButton').addClass('vividButtonSelected');
-                //else $('#autoRotate').removeClass('vividButtonSelected').addClass('vividButton');
+                t.controls.autoRotate = !t.controls.autoRotate 
+                if (t.controls.autoRotate) $('#autoRotate').removeClass('vividButton').addClass('vividButtonSelected'); 
+                else $('#autoRotate').removeClass('vividButtonSelected').addClass('vividButton');
                     
             } else if (event.detail === 3) { // triple click
-                //if (t.controls.autoRotateSpeed<0) t.controls.autoRotateSpeed = 1; else t.controls.autoRotateSpeed = -1;
+                if (t.controls.autoRotateSpeed<0) t.controls.autoRotateSpeed = 1; else t.controls.autoRotateSpeed = -1;
             }
             
         });
@@ -207,120 +185,49 @@ export class na3D_fileBrowser {
             clearInterval(t.zoomInterval);
         });
         
-        t.loader = new GLTFLoader();
-        t.initializeItems (t);
+        this.loader = new GLTFLoader();
+        this.initializeItems (this, this.items, this.data, 0, 0, 0, '0', '');
 
         const light1  = new AmbientLight(0xFFFFFF, 0.3);
         light1.name = 'ambient_light';
         light1.intensity = 0.3;
         light1.color = 0xFFFFFF;
-        t.camera.add( light1 );
+        this.camera.add( light1 );
 
         const light2  = new DirectionalLight(0xFFFFFF, 0.8 * Math.PI);
         light2.position.set(0.5, 0, 0.866); // ~60º
         light2.name = 'main_light';
         light2.intensity = 0.8 * Math.PI;
         light2.color = 0xFFFFFF;
-        t.camera.add( light2 );
+        this.camera.add( light2 );
         
-        t.lights.push(light1, light2);
+        this.lights.push(light1, light2);        
         
-        t.pmremGenerator = new PMREMGenerator( t.renderer );
-        t.pmremGenerator.compileEquirectangularShader();
+        this.pmremGenerator = new PMREMGenerator( this.renderer );
+        this.pmremGenerator.compileEquirectangularShader();
         
-        //t.updateEnvironment(this);
+        //this.updateEnvironment(this);
         
-        t.raycaster = new THREE.Raycaster();
-        t.mouse = new THREE.Vector2();
-        t.mouse.x = 0;
-        t.mouse.y = 0;
-        t.mouse.z = 0;
+        this.raycaster = new THREE.Raycaster();
+        this.mouse = new THREE.Vector2();
+        this.mouse.x = 0;
+        this.mouse.y = 0;
+        this.mouse.z = 0;
 
-        t.camera.position.z = 1500;
-        t.camera.position.y = 200;
-
-        /*
-        // Setup labels
-        t.labelRenderer = new CSS2DRenderer();
-        t.labelRenderer.setSize(innerWidth, innerHeight);
-        t.labelRenderer.domElement.style.position = 'absolute';
-        t.labelRenderer.domElement.style.top = '0px';
-        t.labelRenderer.domElement.style.backgroundColor = 'rgba(0,0,50,0.5)';
-        t.labelRenderer.domElement.style.boxShadow = 'inset 3px 3px 2px 2px rgba(255,255,255,0.55), 4px 4px 3px 2px rgba(0,0,0,0.7)';
-        t.labelRenderer.domElement.style.pointerEvents = 'none';
-        document.body.appendChild(t.labelRenderer.domElement);
-
-        t.labelDiv = document.createElement('div');
-        t.labelDiv.className = 'label';
-        t.labelDiv.style.backgroundColor = 'rgba(0,0,50,0.5)';
-        t.labelDiv.style.boxShadow = 'inset 3px 3px 2px 2px rgba(255,255,255,0.55), 4px 4px 3px 2px rgba(0,0,0,0.7)';
-        t.labelDiv.style.marginTop = '-1em';
-
-        t.label = new CSS2DObject(t.labelDiv);
-        t.label.visible = false;
-        t.scene.add(t.label);
-        */
-
-        // Track mouse movement to pick objects
-        //t.raycaster = new Raycaster();
-        //t.mouse = new Vector2();
-
-        window.addEventListener('mousemove', ({ clientX, clientY }) => {
-            //const { innerWidth, innerHeight } = window;
-            var innerWidth = $('#siteContent .vividDialogContent').width();
-            var innerHeight = $('#siteContent .vividDialogContent').height();
-
-            t.mouse.x = ((clientX-$('#siteContent .vividDialogContent').offset().left) / innerWidth) * 2 - 1;
-            t.mouse.y = (-1 * ((clientY-$('#siteContent .vividDialogContent').offset().top) / innerHeight) * 2) + 1;
-            //t.animate(t);
-        });
-
-        // Handle window resize
-        window.addEventListener('resize', () => {
-            //const { innerWidth, innerHeight } = window;
-            var innerWidth = $('#siteContent .vividDialogContent').width();
-            var innerHeight = $('#siteContent .vividDialogContent').height();
-
-            t.renderer.setSize(innerWidth, innerHeight);
-            t.camera.aspect = innerWidth / innerHeight;
-            t.camera.updateProjectionMatrix();
-        });
-
-        t.renderer.setAnimationLoop(() => {
-            //controls.update();
-
-            // Pick objects from view using normalized mouse coordinates
-            t.raycaster.setFromCamera(t.mouse, t.camera);
-
-        });
-
-        CameraControls.install ({ THREE : THREE });
-        t.clock = new THREE.Clock();
-        t.cameraControls = new CameraControls (t.camera, t.renderer.domElement);
-
-        t.animate(this);
+        this.camera.position.z = 1500;
+        this.camera.position.y = 200;
+        
+        this.animate(this);
     }
     
     animate(t) {
         requestAnimationFrame( function() { t.animate (t) } );
         if (t.mouse.x!==0 || t.mouse.y!==0) {        
-            t.camera.updateProjectionMatrix();
-
-            for (var i=0; i<t.s2.length; i++) {
-                var it = t.s2[i];
-                it.updateMatrixWorld();
-            };
             t.raycaster.setFromCamera (t.mouse, t.camera);
-
-            t.scene.matrixWorldAutoUpdate = true;;
-            t.camera.matrixWorldAutoUpdate = true;
-            //t.camera.lookAt (t.s2[0].position);
-            //t.flycontrols.update(0.05);
-            //t.fpcontrols.update(0.3);
-            const delta = t.clock.getDelta();
-            const hasControlsUpdated = t.cameraControls.update(delta);
-
-            const intersects = t.raycaster.intersectObjects (t.s2);
+            
+            const intersects = t.raycaster.intersectObjects (t.scene.children, true);
+            //debugger;
+            //if (intersects[0]) {
             if (intersects[0] && intersects[0].object.type!=='Line') 
             for (var i=0; i<1/*intersects.length <-- this just gets an endless series of hits from camera into the furthest reaches of what's visible behind the mouse pointer */; i++) {
                 var hoveredItem = intersects[i].object, done = false;
@@ -342,17 +249,17 @@ export class na3D_fileBrowser {
                     if (hoveredItem && hoveredItem.it && !done) {
                         let p = hoveredItem.it.model.position;
                         t.hoverOverName = '('+hoveredItem.it.column+':'+hoveredItem.it.row+') ('+p.x+', '+p.y+', '+p.z + ') : ' + hoveredItem.it.name;
-                        t.hoverOverName = hoveredItem.it.name;
+                        //t.hoverOverName = hoveredItem.it.name;
                     //debugger;    
                         var 
                         it = hoveredItem.it,
-                        parent = t.items[it.parent.idx],
+                        parent = t.items[it.parent],
                         haveLine = false;
                         
                         // draw line to parent(s)
-                        while (it && it.parent && it.parent!==0 && typeof it.parent !== 'undefined') {
+                        while (it.parent && it.parent!==0 && typeof it.parent !== 'undefined') {
                             var 
-                            parent = t.items[it.parent.idx],
+                            parent = t.items[it.parent],
                             haveLine = false;
                             
                             if (parent && parent.model) {
@@ -390,7 +297,7 @@ export class na3D_fileBrowser {
                                     }
                                 }
                             }
-                            it = t.items[it.parent.idx];
+                            it = t.items[it.parent];
                         }
                                                 
                         // draw lines to children
@@ -398,7 +305,7 @@ export class na3D_fileBrowser {
                             var child = t.items[j];
                             if (
                                 hoveredItem && hoveredItem.it && hoveredItem.it.model && child.model
-                                && hoveredItem.it.idx === child.parent.idx
+                                && hoveredItem.it.idx === child.parent
                             ) {
                                 var
                                 p1 = child.model.position,
@@ -433,40 +340,11 @@ export class na3D_fileBrowser {
                         done = true;
                     }
                     
-                    hoveredItem = t.items[hoveredItem.parent.idx];
+                    hoveredItem = hoveredItem.parent;
                 }
                 
                 // show folder name for item under mouse and closest to the country
-                $('#site3D_label').html(t.hoverOverName).css({display:'flex',opacity:1});
-
-                const [hovered] = t.raycaster.intersectObjects(t.s2);
-                if (hovered && hovered.object.type!=='Line') {
-                    // Setup label
-                    t.renderer.domElement.className = 'hovered';
-                    //$('#site3D_label')[0].textContent = hovered.object.it.name;
-                    //debugger;
-
-                    // Get offset from object's dimensions
-                    const offset = new Vector3();
-                    new Box3().setFromObject(hovered.object).getSize(offset);
-
-                    // Move label over hovered element
-                    $('#site3D_label').css({
-                        left : t.mouse.layerX + 20,
-                        top : t.mouse.layerY + 20
-                    });
-                } else {
-                    // Reset label
-                    t.renderer.domElement.className = '';
-                    t.label.visible = false;
-                    t.labelDiv.textContent = '';
-                }
-
-                // Render scene
-                t.renderer.render(t.scene, t.camera);
-
-                // Render labels
-                //t.labelRenderer.render(t.scene, t.camera);
+                $('#site3D_label').html(t.hoverOverName).css({display:'flex'});
             }
             if (!intersects[0]) {
                 $('#site3D_label').fadeOut();
@@ -478,7 +356,7 @@ export class na3D_fileBrowser {
             }
         }
         
-        //if (t.controls) t.controls.update();
+        if (t.controls) t.controls.update();
 
         for (var i=0; i<t.lines.length; i++) {
             var it = t.lines[i];
@@ -492,142 +370,280 @@ export class na3D_fileBrowser {
         
         t.renderer.render( t.scene, t.camera );
     }
-
-    rotate (event, t) {
-        t.pathAnimation.play(0);
-    }
-    rotate2 (event, t) {
-        t.pathAnimation2.play(0);
-    }
-
+    
     onMouseMove( event, t ) {
         var rect = t.renderer.domElement.getBoundingClientRect();
         t.mouse.x = ( ( event.clientX - rect.left ) / ( rect.width - rect.left ) ) * 2 - 1;
         t.mouse.y = - ( ( event.clientY - rect.top ) / ( rect.bottom - rect.top) ) * 2 + 1;        
-
-
-        t.mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-        t.mouse.y = ( event.clientY / window.innerHeight ) * 2 + 1;
-        t.raycaster.setFromCamera (t.mouse.clone(), t.camera);
-
         t.mouse.layerX =  event.layerX;
         t.mouse.layerY =  event.layerY;
 
-        //$('#site3D_label').html(t.hoverOverName).css({ position:'absolute', padding : 10, zIndex : 5000, top : event.layerY + 10, left : event.layerX + 30 });
+        $('#site3D_label').html(t.hoverOverName).css({ position:'absolute', padding : 10, zIndex : 5000, top : event.layerY + 10, left : event.layerX + 30 });
     }
     
     onMouseWheel( event, t ) {
         debugger;
     }
-
-    initializeItems (t) {
-        var p = { t : t, ld2 : {}, idxPath : '', idxPath2 : '/0' };
-        na.m.walkArray (t.data, t.data, t.initializeItems_walkKey, t.initializeItems_walkValue, false, p);
-        t.onresize(t);
-    }
-    initializeItems_walkKey (cd) {
-        var ps = cd.path.split('/');
-        if (ps[ps.length-1]=='folders') {
-            console.log ('key', cd);
-            cd.params.idxPath = cd.params.idxPath2;
-            //cd.params.idxPath = cd.params.idxPath + '/' + cd.params.t.items.length;
-
-            var ps2 = $.extend([],ps);
-            delete ps2[ps2.length-1];
-            var level = ps2.length;
-            var ps2Str = ps2.join('/');
-            var parent = na.m.chaseToPath (cd.root, ps2Str, false);
-
-            if (!cd.params.ld2[level]) cd.params.ld2[level] = { levelIdx : 0 };
-
-
-
-            cd.at[cd.k].idxPath = cd.params.idxPath;
-            cd.at[cd.k].idx = cd.params.t.items.length;
-
-            var
-            it = {
-                data : cd.at[cd.k],
-                level : ps2.length,
-                name : cd.k,
-                idx : cd.params.t.items.length,
-                idxPath : cd.params.idxPath,// + '/' + cd.params.t.items.length,
-                filepath : cd.path,
-                levelIdx : ++cd.params.ld2[level].levelIdx,
-                parent : parent,
-                leftRight : 0,
-                upDown : 0,
-                columnOffsetValue : 1000,
-                rowOffsetValue : 1000
-            };
-
-            for (var i=0; i<cd.params.t.items.length; i++) {
-                var it2 = cd.params.t.items[i];
-                if (it2.filepath===it.filepath) {
-                    it.idxPath = it2.idxPath;
-                    break;
-                }
-            }
-
-            if (!cd.params.t.ld3) cd.params.t.ld3 = {};
-            if (!cd.params.t.ld3[it.idxPath]) cd.params.t.ld3[it.idxPath] = { itemCount : 0, items : [] };
-            cd.params.t.ld3[it.idxPath].itemCount++;
-            cd.params.t.ld3[it.idxPath].items.push (it.idx);
-            cd.params.idxPath2 += '/' + it.idx;
-
-            var
-            textures = [];
-            for (var i=0; i<6; i++) textures[i] = '/NicerAppWebOS/siteMedia/folderIcon.png';
-            for (var i=0; i<6; i++) {
-                var p = null;
+    
+    initializeItems (t, items, data, parent, level, levelDepth, idxPath, filepath) {
+        if (!t) t = this;
+        //debugger;
+        na.m.waitForCondition ('waiting for other initializeItems_do() commands to finish',
+            function () {
                 //debugger;
-                if (it.data.files && it.data.files[i] && it.data.files[i].match(/.*\.png|.*\.jpeg|.*\.jpg|.*\.gif$/)) {
-                    var
-                    fullPath = cd.params.t.data[0].root+'/'+cd.path.replace('0/filesAtRoot/','').replace(/\/folders/g,'')+'/'+cd.k+'/'+it.data.files[i],
-                    filename = fullPath.replace(/^.*[\\\/]/, ''),
-                    path = fullPath.replace('/'+filename,''),
-                    pathThumb = path+'/thumbs/300/'+filename;
-                    textures[i] = pathThumb;//'/NicerAppWebOS/'+filepath+'/'+key+'/thumbs/'+itd[''+i];//fn;
-                    textures[i] = textures[i].replace(/\/\//g, '/');
-                    it.fullPath = fullPath;
-                    console.log ('t7734:' + fullPath);
-                    //if (itd.files[i] && itd.files[i].match(/streetfighter/)) debugger;
-                    //alert (JSON.stringify(textures,null,2));
-                } else {
-                    //alert (itd[''+i]);
-                }
-            }
-            var
-            materials = [
-                new THREE.MeshBasicMaterial({
-                    map: new THREE.TextureLoader().load(textures[0])
-                }),
-                new THREE.MeshBasicMaterial({
-                    map: new THREE.TextureLoader().load(textures[1])
-                }),
-                new THREE.MeshBasicMaterial({
-                    map: new THREE.TextureLoader().load(textures[2])
-                }),
-                new THREE.MeshBasicMaterial({
-                    map: new THREE.TextureLoader().load(textures[3])
-                }),
-                new THREE.MeshBasicMaterial({
-                    map: new THREE.TextureLoader().load(textures[4])
-                }),
-                new THREE.MeshBasicMaterial({
-                    map: new THREE.TextureLoader().load(textures[5])
-                })
-            ];
-            var cube = new THREE.Mesh( new THREE.BoxGeometry( 50, 50, 50 ), materials );
-            cd.params.t.scene.add( cube );
-            cd.params.t.s2.push(cube);
-            cube.it = it;
-            it.model = cube;
-            cd.params.t.items.push (it);
-        }
+                return t.loading === false;
+            },
+            function () {
+                //debugger;
+                t.initializeItems_do (t, items, data, parent, level, levelDepth, idxPath, filepath);
+            }, 100
+        );
     }
-    initializeItems_walkValue (cd) {
-        //console.log ('value', cd);
+
+    initializeItems_do (t, items, data, parent, level, levelDepth, idxPath, filepath) {
+        if (data.model) { alert ('data.model!'); return false; };
+        if (!t.ld2[level]) t.ld2[level] = { parent : parent, initItemsDoingIdx : 0, idxPath : idxPath };
+        if (!t.ld2[level].keys) t.ld2[level].keys = Object.keys(data);
+        if (t.ld2[level].initItemsDoingIdx >= t.ld2[level].keys.length) return false;
+        
+        if (!t.ld2[level].levelIdx) t.ld2[level].levelIdx = 0;
+        
+        if (!t.ld1[level]) t.ld1[level] = { levelIdx : 0 };
+        
+        if (!t.initCounter) t.initCounter=0;
+        
+        if (!t.ld3) t.ld3 = {};
+        if (!t.ld3[idxPath]) t.ld3[idxPath] = { itemCount : 0, items : [] };
+        t.ld3[idxPath].itemCount++;
+         
+        while (t.ld2[level].initItemsDoingIdx < t.ld2[level].keys.length) {
+            var 
+            keyIdx = t.ld2[level].initItemsDoingIdx,
+            key = t.ld2[level].keys[ keyIdx ],
+            itd = data[key];
+            
+            if (itd.files) t.initializeItems_do (t, items, itd.files, items.length-1, level+1, levelDepth+1, '0', itd.root); 
+            else if (key!=='it' && key!=='thumbs')
+            if (typeof itd == 'object' && itd!==null) {
+                let 
+                idxPath2 = !t.items[parent]||t.items[parent].idxPath===''?''+parent:t.items[parent].idxPath+','+parent,
+                it = {
+                    data : itd,
+                    level : levelDepth,
+                    name : key,
+                    idx : items.length,
+                    idxPath : idxPath2,
+                    filepath : filepath,
+                    levelIdx : t.ld2[level].levelIdx,
+                    parent : parent
+                };
+                
+                itd.it = it;
+                
+                items[items.length] = it;
+                t.ld2[level].levelIdx++;
+
+                if (!t.ld3[idxPath2]) t.ld3[idxPath2] = { itemCount : 0, items : [] };
+                //t.ld3[path2].itemCount++;
+
+                t.ld3[idxPath2].items.push (it.idx);
+                
+                
+                let 
+                cd = { //call data
+                    t : t,
+                    it : it,
+                    items : items,
+                    itd : itd,
+                    parent : parent,
+                    idxPath : idxPath2,
+                    filepath : filepath,
+                    levelDepth : levelDepth + 1
+                };
+                
+                clearTimeout (t.onresizeInitTimeout);
+                clearTimeout (t.linedrawTimeout);
+                
+                var 
+                textures = [];
+                for (var i=0; i<6; i++) textures[i] = '/NicerAppWebOS/siteMedia/folderIcon.png';
+                for (var i=0; i<6; i++) {
+                    var p = null;
+                    if (itd[''+i] && typeof itd[''+i]=='object' && Object.keys(itd[''+i])[0].match(/.*\.png|.*\.jpeg|.*\.jpg|.*\.gif$/)) {
+                        var
+                        fullPath = '/NicerAppWebOS/siteMedia/backgrounds' + itd[''+i],
+                        filename = fullPath.replace(/^.*[\\\/]/, ''),
+                        path = fullPath.replace('/'+filename,''),
+                        pathThumb = path+'/thumbs/300/'+filename;
+                        textures[i] = pathThumb;//'/NicerAppWebOS/'+filepath+'/'+key+'/thumbs/'+itd[''+i];//fn;
+                        textures[i] = textures[i].replace(/\/\//g, '/');
+                        //alert (JSON.stringify(textures,null,2));
+                    } else {
+                        //alert (itd[''+i]);
+                    }
+                }
+                var
+                materials = [
+                    new THREE.MeshBasicMaterial({
+                        map: new THREE.TextureLoader().load(textures[0])
+                    }),
+                    new THREE.MeshBasicMaterial({
+                        map: new THREE.TextureLoader().load(textures[1])
+                    }),
+                    new THREE.MeshBasicMaterial({
+                        map: new THREE.TextureLoader().load(textures[2])
+                    }),
+                    new THREE.MeshBasicMaterial({
+                        map: new THREE.TextureLoader().load(textures[3])
+                    }),
+                    new THREE.MeshBasicMaterial({
+                        map: new THREE.TextureLoader().load(textures[4])
+                    }),
+                    new THREE.MeshBasicMaterial({
+                        map: new THREE.TextureLoader().load(textures[5])
+                    })
+                ];
+                var cube = new THREE.Mesh( new THREE.BoxGeometry( 50, 50, 50 ), materials );
+                this.scene.add( cube );
+                cube.it = it;
+                it.model = cube;
+                    console.log (items.length + ' - ' + it.name);
+                
+                    var
+                    newLevel = (
+                        Object.keys(t.ld2).length > 1
+                        ? parseInt(Object.keys(t.ld2).reduce(function(a, b){ return t.ld2[a] > t.ld2[b] ? a : b }))+1
+                        : 2
+                    );
+                    cd.level = newLevel;
+                //setTimeout (function() {
+                    //t.loading = false;
+                    cd.t.initializeItems_do (cd.t, cd.items, cd.itd, cd.it.idx, newLevel, cd.levelDepth, cd.idxPath, filepath+'/'+key);
+                //}, 50);
+                
+                /*
+                t.loading = true;
+                t.loader.load( '/NicerAppWebOS/3rd-party/3D/models/folder icon/scene.gltf', function ( gltf, cd) {
+                    clearTimeout (t.onresizeInitTimeout);
+                    
+                    gltf.scene.scale.setScalar (10);
+                    t.scene.add (gltf.scene);
+                    cd.it.model = gltf.scene;
+                    cd.it.model.it = cd.it;
+                    cd.t.updateTextureEncoding(t, gltf.scene);
+                    t.initCounter++;
+                    
+                    var
+                    newLevel = (
+                        Object.keys(t.ld2).length > 1
+                        ? parseInt(Object.keys(t.ld2).reduce(function(a, b){ return t.ld2[a] > t.ld2[b] ? a : b }))+1
+                        : 2
+                    );
+                    cd.level = newLevel;
+                    
+                    t.loading = false;                
+                    cd.t.initializeItems (cd.t, cd.items, cd.itd, cd.it.idx, newLevel, cd.levelDepth, cd.path);
+                    
+                }, function ( xhr ) {
+                    console.log( 'model "folder icon" : ' + ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+                }, function ( error ) {
+                    console.error( error );
+                },  cd );*/
+            } 
+            t.ld2[level].initItemsDoingIdx++;
+            
+            clearTimeout (t.onresizeInitTimeout);
+            t.onresizeInitTimeout = setTimeout(function() {
+                var objs = [];
+                for (var i=0; i<t.items.length; i++) if (t.items[i].model) objs[objs.length] = t.items[i].model;
+                                               
+                t.controls = new OrbitControls( t.camera, t.renderer.domElement );
+                t.controls.autoRotate = true;
+                //$('#autoRotate').removeClass('vividButtonSelected').addClass('vividButton');
+                //t.controls.listenToKeyEvents( window ); // optional
+                t.controls.enabled = false;
+                setTimeout (function(){
+                     t.controls.enabled = true;
+                }, 1000);
+                                               
+                t.dragndrop = new DragControls( objs, t.camera, t.renderer.domElement );
+                
+                $(t.renderer.domElement).contextmenu(function() {
+                    return false;
+                });
+                
+                t.dragndrop.addEventListener( 'dragstart', function ( event ) {
+                    if (t.controls) t.controls.dispose();
+                                             
+                    t.dragndrop.cube = event.object;
+                    t.dragndrop.mouseX = t.mouse.layerX;
+                    t.dragndrop.mouseY = t.mouse.layerY;
+                    
+                    let cube = event.object;
+                    $(cube).hover(function() {
+                        na.site.setStatusMsg ('Folder : '+cube.it.filepath);
+                    }, function () {
+                        na.site.setStatusMsg (na.site.settings.defaultStatusMsg);
+                    });
+
+                    for (let i=0; i<t.items.length; i++) {
+                        let it2 = t.items[i];
+                        if (it2.parent === cube.it.parent) {
+                            //debugger;
+                            it2.model.position.dragStartX = it2.model.position.x;
+                            it2.model.position.dragStartY = it2.model.position.y;
+                            it2.model.position.dragStartZ = it2.model.position.z;
+                        }
+                    }                    
+                } );
+                
+                t.dragndrop.addEventListener( 'drag', function (event) {
+                    let cube = event.object;
+
+                    for (let i=0; i<t.items.length; i++) {
+                        let it2 = t.items[i];
+                        if (it2.parent === cube.it.parent) {
+                            //debugger;
+                            it2.model.position.x = it2.model.position.dragStartX - (t.dragndrop.mouseX - t.mouse.layerX);
+                            it2.model.position.y = it2.model.position.dragStartY + (t.dragndrop.mouseY - t.mouse.layerY);
+                            it2.model.position.z = cube.position.z;
+                        }
+                    }
+                    clearTimeout (t.posDataToDB);
+                    t.posDataToDB = setTimeout(function() {
+                        t.posDataToDatabase(t);
+                    }, 1000);
+                    
+                    if (t.showLines) {
+                        for (var i=0; i<t.permaLines.length; i++) {
+                            var l = t.permaLines[i];
+                            t.scene.remove (l.line);
+                            l.geometry.dispose();
+                            l.material.dispose();
+                        }
+                        t.permaLines = [];
+                        t.drawLines(t);
+                    }
+                });
+
+                t.dragndrop.addEventListener( 'dragend', function ( event ) {
+                    //event.object.material.emissive.set( 0x000000 );
+                    t.controls = new OrbitControls( t.camera, t.renderer.domElement );
+                    //this.controls.autoRotate = true;
+                    $('#autoRotate').removeClass('vividButtonSelected').addClass('vividButton');
+                    //t.controls.listenToKeyEvents( window ); // optional
+                    t.controls.enabled = true;
+                    
+                    if (t.showLines) t.drawLines(t);
+                } );
+                
+                /*t.databaseToPosData(t, function(loadedPosData) {
+                    if (!loadedPosData) t.onresize (t); else if (t.showLines) t.drawLines(t);
+                });*/
+                t.onresize(t);
+                
+            }, 200);
+        }
     }
     
     onresize (t, levels) {
@@ -636,7 +652,7 @@ export class na3D_fileBrowser {
         na.m.waitForCondition ('waiting for other onresize commands to finish',
             function () { return t.resizing === false; },
             function () { t.onresize_do (t, levels); }, 
-            50
+            200
         );
     }
 
@@ -673,7 +689,7 @@ export class na3D_fileBrowser {
                     
                     it.row = row;
                     it.column = column;
-                    //if (it.name=='gull' || it.name=='owl') debugger;
+                    //if (it.filepath=='siteMedia/backgrounds/tiled/active') debugger;
                 }
             }
         }
@@ -725,20 +741,16 @@ export class na3D_fileBrowser {
         },
         its3 = its2.sort (compare2);
         
-        var po = {};
+        
         for (var i=0; i<t.items.length; i++) {
             var
-            offsetXY = 140,
+            offsetXY = 100,
             it = t.items[i],
-            p = (it.parent ? t.items[it.parent.idx] : null);
-
-            if (it.parent && !po[it.parent.idx]) po[it.parent.idx] = Math.abs(Math.random() * 800);
-
-            if (it.parent) var rnd = po[it.parent.idx]; else var rnd = 0;
+            p = t.items[it.parent];
             
-            if (p && p.parent && t.items[p.parent.idx]) {
+            if (p && p.parent && t.items[p.parent]) {
                 var
-                it2 = t.items[p.parent.idx],
+                it2 = t.items[p.parent],
                 ppLeftRight = it2.leftRight,
                 ppUpDown = it2.upDown;                
             } else {
@@ -763,7 +775,7 @@ export class na3D_fileBrowser {
                         : 1
                 ),
                 pitcp = (
-                      /*pModifierC */ -1 * ((pmaxc / 2) - p.column)
+                      pModifierC * -1 * ((pmaxc / 2) - p.column)
                 ),
                 pitcPercentage = (pitcp*1.00) / pmaxc,
                 pModifierR = (
@@ -774,7 +786,7 @@ export class na3D_fileBrowser {
                         : 1
                 ),
                 pitrp = (
-                      /*pModifierR **/ -1 * ((pmaxr / 2) - p.row)
+                      pModifierR * -1 * ((pmaxr / 2) - p.row)
                 ),
                 pitrPercentage = (pitrp*1.00) / pmaxr,
                 pitc = offsetXY * pitcPercentage * p.maxColumnIta.maxColumn,
@@ -825,62 +837,43 @@ export class na3D_fileBrowser {
                     
                     }
                 }
-
+                
                 it.model.position.x = Math.round(
                     p.model.position.x 
-                    //+ pitc
-                     //+ ((p.column-1)*offsetXY) + ((p.column-1)*pOffsetX_now)
-                    + ( ( it.leftRight * (it.column-1) * offsetXY))
-                    + ( ( it.parentColumOffset * 3))
-                    //+ ( p.leftRight * p.columnOffsetValue * offsetXY )
+                    + pitc 
+                     + ((p.column-1)*offsetXY) + ((p.column-1)*pOffsetX_now)
+                    + ( ( p.leftRight * (it.column-1) * offsetXY))
+                    + ( p.leftRight * t.items[it.parent].columnOffsetValue * 300 )
                 );
                 it.model.position.y = Math.round(
                     p.model.position.y 
-                    //+ pitr
-                    //+ ((p.row-1)*offsetXY) + ((p.row-1)*pOffsetY_now)
-                    + ( (it.upDown *  (it.row-1) * offsetXY))
-                    + ( it.parentRowOffset * 3)
-                    //+ ( p.upDown * p.rowOffsetValue * offsetXY )
+                    + pitr 
+                    + ((p.row-1)*offsetXY) + ((p.row-1)*pOffsetY_now)
+                    + ( (p.upDown *  (it.row-1) * offsetXY))
+                    + ( p.upDown * t.items[it.parent].rowOffsetValue * 200 )
                 );
-                it.model.position.z = -1 * ((it.level+1) * 140 ) - rnd;
-                //if (it.name=='simple' || it.name=='anime') debugger;
-
+                it.model.position.z = -1 * ((it.level+1) * 500 );
+                
                 var x = it.data.it;
                 //debugger;
                 //if (p.name=='space stars night sky darkmode') debugger;
                 //if (p.name=='sunrise sunset') debugger;
             }else if (it.model) {
-                //debugger;
                 it.model.position.x = (it.column+1) * 100;
                 it.model.position.y = (it.row-1) * 100;
                 it.model.position.z = -1 * (it.level+1) * 100;
             }
-
-            if (it.model) {
-                var dbg = {
-                    px : it.model.position.x,
-                    py : it.model.position.y,
-                    pz : it.model.position.z,
-                    it : it
-                };
-                console.log (it.filepath, dbg);
-            }
-
                 //if (p && (p.name=='tiled'||p.name=='iframe')) debugger;
                 //if (p && (p.name=='landscape' || p.name=='scenery'||p.name=='animals')) debugger;
                 //if (p && p.name=='space stars night sky darkmode') debugger;
-
-
-
         }
         
         //t.drawLines(t);
 
-        clearTimeout (t.timeout_onresize_do_overlapChecks2);
-        t.timeout_onresize_do_overlapChecks2 = setTimeout(function() {
+        setTimeout(function() {
             t.onresize_do_overlapChecks2(t, callback);
             //if (typeof callback=='function') callback(t);
-        }, 500);
+        }, 10);
     }
     
 
@@ -1025,7 +1018,7 @@ export class na3D_fileBrowser {
                 if (it.path === o.patha) { o.itemsa.push(it); o.parenta = t.items[it.parent]; }
                 if (it.path === o.pathb) { o.itemsb.push(it); o.parentb = t.items[it.parent]; }
             }
-        };* /
+        };*/
         
         for (var j=0; j<t.items.length; j++) {
             t.items[j].adjustedModXmin = 0;
@@ -1080,179 +1073,8 @@ export class na3D_fileBrowser {
             }, 10);
         } else {
             t.drawLines(t);
-        */
-        t.drawLines(t);
-
-        t.winners = {
-            north : 0,
-            east : 0,
-            south : 0,
-            west : 0,
-            front : 0,
-            behind : 0
-        };
-        for (var i=0; i < t.items.length; i++) {
-            var it = t.items[i];
-            if (!it.model) continue;
-            if (it.model.position.y > t.winners.north) t.winners.north = it.model.position.y;
-            if (it.model.position.x > t.winners.east) t.winners.east = it.model.position.x;
-            if (it.model.position.y < t.winners.south) t.winners.south = it.model.position.y;
-            if (it.model.position.x < t.winners.west) t.winners.west = it.model.position.x;
-            if (it.model.position.z > t.winners.front) t.winners.front = it.model.position.z;
-            if (it.model.position.z < t.winners.behind) t.winners.behind = it.model.position.z;
-        };
-        var
-        tf = t.winners.behind + Math.round((t.winners.behind - t.winners.front) / 2),
-        middle = {
-            x : Math.round((t.winners.west + t.winners.east) / 2),
-            y : Math.round((t.winners.north + t.winners.south) / 2),
-            z : Math.round((t.winners.front + t.winners.behind) /2)
-        },
-        ol = 1500;
-        console.log ('t778', t.winners, middle);
-
-
-        t.curve2 = new THREE.CatmullRomCurve3( [
-            new THREE.Vector3 (0, 0, 0),
-            new THREE.Vector3 (middle.x, middle.y, middle.z),
-        ]);
-        t.points2 = t.curve2.getPoints(50);
-        t.curves = [];
-        var
-        numPoints = 180,
-        radius = 500;
-        for (var i=0; i<numPoints; i++) {
-            var
-            x = radius * Math.cos (2 * Math.PI * i / numPoints),
-            y = radius * Math.sin (2 * Math.PI * i / numPoints),
-            z = 3 * radius;
-            t.curves.push (new THREE.Vector3(x,y,z));
-        }
-        t.curve = new THREE.CatmullRomCurve3( [
-            new THREE.Vector3 (0, 0, ol),
-            new THREE.Vector3 (t.winners.west - ol, 0, ol),
-            new THREE.Vector3 (t.winners.west - ol, 0, t.winners.behind - ol),
-            new THREE.Vector3 (t.winners.east + ol, 0, t.winners.behind - ol),
-            new THREE.Vector3 (t.winners.east + ol, 0, ol),
-            new THREE.Vector3 (0, 0, ol),
-        ]);
-        t.curve2 = new THREE.CatmullRomCurve3(t.curves);
-        t.points = t.curve.getPoints(numPoints);
-        t.points2 = t.curve2.getPoints(numPoints);
-
-        /*
-        const geometry = new THREE.BufferGeometry().setFromPoints( t.points );
-        const material = new THREE.LineBasicMaterial( { color: 0xff0000 } );
-        // Create the final object to add to the scene
-        const curveObject = new THREE.Line( geometry, material );
-        t.scene.add(curveObject);
-        */
-
-        //const geometry2 = new THREE.BufferGeometry().setFromPoints( t.points2 );
-        //const material2 = new THREE.LineBasicMaterial( { color: 0xffffff } );
-        // Create the final object to add to the scene
-        //const curveObject2 = new THREE.Line( geometry2, material2 );
-        //t.scene.add(curveObject2);
-
-        t._tmp = new THREE.Vector3();
-        t.animationProgress = { value: 0 };
-        t.pathAnimation = gsap.fromTo(
-            t.animationProgress,
-            {
-                value: 0,
-            },
-            {
-                value: 1,
-                duration: 30,
-                overwrite: true,
-                paused: true,
-                onUpdateParams: [ t.animationProgress ],
-                onUpdate( { value } ) {
-
-                    if ( ! this.isActive() ) return;
-
-                    t.curve.getPoint ( value, t._tmp );
-                    const cameraX = t._tmp.x;
-                    const cameraY = t._tmp.y;
-                    const cameraZ = t._tmp.z;
-                    const lookAtX = middle.x;
-                    const lookAtY = middle.y;
-                    const lookAtZ = middle.z;
-
-                    t.cameraControls.setLookAt(
-                        cameraX,
-                        cameraY,
-                        cameraZ,
-                        lookAtX,
-                        lookAtY,
-                        lookAtZ,
-                        false, // IMPORTANT! disable cameraControls's transition and leave it to gsap.
-                    );
-
-                },
-                onStart() {
-
-                    t.cameraControls.enabled = false;
-
-                },
-                onComplete() {
-
-                    t.cameraControls.enabled = true;
-
-                },
-            }
-        );
-
-        t.animationProgress2 = { value: 0 };
-        t.pathAnimation2 = gsap.fromTo(
-            t.animationProgress2,
-            {
-                value: 0,
-            },
-            {
-                value: 1,
-                duration: 30,
-                overwrite: true,
-                paused: true,
-                onUpdateParams: [ t.animationProgress2 ],
-                onUpdate( { value } ) {
-
-                    if ( ! this.isActive() ) return;
-
-                    t.curve2.getPoint ( value, t._tmp );
-                    const cameraX = t._tmp.x;
-                    const cameraY = t._tmp.y;
-                    const cameraZ = t._tmp.z;
-                    const lookAtX = middle.x;
-                    const lookAtY = middle.y;
-                    const lookAtZ = middle.z;
-
-                    t.cameraControls.setLookAt(
-                        cameraX,
-                        cameraY,
-                        cameraZ,
-                        lookAtX,
-                        lookAtY,
-                        lookAtZ,
-                        false, // IMPORTANT! disable cameraControls's transition and leave it to gsap.
-                    );
-
-                },
-                onStart() {
-
-                    t.cameraControls.enabled = false;
-
-                },
-                onComplete() {
-
-                    t.cameraControls.enabled = true;
-
-                },
-            }
-        );
-            //t.pathAnimation.play(0);
             if (typeof callback=='function') callback(t);
-        //}
+        }
     }
     
     onresize_applyBestOverlapFix (t, overlapFix) {
@@ -1355,7 +1177,6 @@ export class na3D_fileBrowser {
                     var
                     rnda = Math.floor(Math.random() * po.length),
                     rndb = Math.floor(Math.random() * po.length),
-                    rnda = po.length-1,
                     strategyA = po[rnda],
                     itaQuadrant = '',
                     itbQuadrant = '',
@@ -1371,17 +1192,6 @@ export class na3D_fileBrowser {
                         case 'bottomleft' : var strategyB = 'topright'; break;
                         case 'middleleft' : var strategyB = 'middleright'; break;
                         case 'topleft' : var strategyB = 'bottomright'; break;
-                    }
-                    /*
-                    switch (strategyA) {
-                        case 'top' : var strategyB = 'top'; break;
-                        case 'topright' : var strategyB = 'topright'; break;
-                        case 'middleright' : var strategyB = 'middleright'; break;
-                        case 'bottomright' : var strategyB = 'bottomright'; break;
-                        case 'bottom' : var strategyB = 'bottom'; break;
-                        case 'bottomleft' : var strategyB = 'bottomleft'; break;
-                        case 'middleleft' : var strategyB = 'middleleft'; break;
-                        case 'topleft' : var strategyB = 'topleft'; break;
                     }
                     /*
                     if (x.ita.upDown < 0) itaQuadrant += 'bottom';
@@ -1412,6 +1222,7 @@ export class na3D_fileBrowser {
 
                     t.onresize_applyBestOverlapFix2 (t, y, itaQuadrant, itbQuadrant);
                     //t.onresize_applyBestOverlapFix2 (t, y, strategyA, strategyA);
+                    debugger;
                     return true;
                 }
             }
@@ -1462,9 +1273,9 @@ export class na3D_fileBrowser {
     translateIdxPathToText (t, idxPath) {
         var
         r = '',
-        parts = idxPath.split('/');
+        parts = idxPath.split(',');
 
-        for (var i=1; i<parts.length; i++) {
+        for (var i=0; i<parts.length; i++) {
             if (r!=='') r+='/';
             r+=t.items[parseInt(parts[i])].name;
         }
@@ -1517,8 +1328,6 @@ export class na3D_fileBrowser {
         var ld3a = t.ld3[patha];
         var ld3b = t.ld3[pathb];
         var psi = null;
-        var offset = 100 + Math.floor(Math.random() * 100);//t.items[pidx];
-
         for (var i=0; i<ld3a.items.length; i++) {
             var ita = t.items[ld3a.items[i]];
             if (!ita.model) continue;
@@ -1532,7 +1341,8 @@ export class na3D_fileBrowser {
             ps = ita.idxPath.split(','),
             //psi = !psi ? Math.round(Math.random() * (ps.length + 1)) : psi,
             pidx = ps[ps.length-1],
-            itaParent = null;
+            itaParent = null,
+            offset = 55;//t.items[pidx];
 
             if (itaParent) {
                 ita1.xOffset = itaParent.leftRight * offset;
@@ -1554,15 +1364,15 @@ export class na3D_fileBrowser {
 
                 var
                 itan = '',
-                itap = ita.idxPath.split('/'),
+                itap = ita.idxPath.split(','),
                 itbn = '',
-                itbp = itb.idxPath.split('/');
-                for (var k=1; k<itap.length; k++) {
+                itbp = itb.idxPath.split(',');
+                for (var k=0; k<itap.length; k++) {
                     if (itan!=='') itan += '/';
                     itan += t.items[parseInt(itap[k])].name;
                 }
                 itan += '/' + ita.name;
-                for (var k=1; k<itbp.length; k++) {
+                for (var k=0; k<itbp.length; k++) {
                     if (itbn!=='') itbn += '/';
                     itbn += t.items[parseInt(itbp[k])].name;
                 }
@@ -1595,11 +1405,11 @@ export class na3D_fileBrowser {
                             //&& itb.model.position.y === ofd4quadrant.itemsb[k].y
                             (
                                 ita.model.position.x >= itb.model.position.x
-                                && ita.model.position.x <= itb.model.position.x + (offset*1.4)
+                                && ita.model.position.x <= itb.model.position.x + 70
                             )
                             && (
                                 ita.model.position.y >= itb.model.position.y
-                                && ita.model.position.y <= itb.model.position.y + (offset*1.4)
+                                && ita.model.position.y <= itb.model.position.y + 70
                             )
                             && itb.model.position.z === ofd4quadrant.itemsb[k].z
                         ) itb1 = ofd4quadrant.itemsb[k];
@@ -1775,18 +1585,17 @@ export class na3D_fileBrowser {
             l.geometry.dispose();
             l.material.dispose();
         };
-
-debugger;
+        
         for (var i=1; i<t.items.length; i++) {
             var 
             it = t.items[i],
-            parent = t.items[it.parent.idx],
+            parent = t.items[it.parent],
             haveThisLineAlready = false;
             
-            if (!t.showLines) return false;
+            if (!this.showLines) return false;
             if (!it.model) return false;
             
-            if (it.parent.idx===0 || typeof it.parent === 'undefined') continue;
+            if (it.parent===0 || typeof it.parent === 'undefined') continue;
             
             for (var j=0; j<t.permaLines.length; j++) {
                 if (t.permaLines[j].it === it) {
@@ -1815,15 +1624,15 @@ debugger;
                 //geometry.verticesNeedUpdate = true;
                 
                 if (!t.lineColors) t.lineColors = {};
-                if (!t.lineColors[it.parent.idx]) {
+                if (!t.lineColors[it.parent]) {
                     var x=Math.round(0xffffff * Math.random()).toString(16);
                     var y=(6-x.length);
                     var z="000000";
                     var z1 = z.substring(0,y);
                     var color= z1 + x;                    
-                    t.lineColors[it.parent.idx] = color;
+                    t.lineColors[it.parent] = color;
                 }
-                var color = t.lineColors[it.parent.idx];
+                var color = t.lineColors[it.parent];
                 
                 var
                 material = new THREE.LineBasicMaterial({ color: '#'+color, linewidth :2 }),
@@ -1868,7 +1677,7 @@ debugger;
     }
     
     updateTextureEncoding (t, content) {
-        /*const encoding = t.state.textureEncoding === 'sRGB'
+        /*const encoding = this.state.textureEncoding === 'sRGB'
         ? sRGBEncoding
         : LinearEncoding;*/
         const encoding = LinearEncoding;
@@ -1906,14 +1715,14 @@ debugger;
 
         t.getCubeMapTexture( environment ).then(( { envMap } ) => {
 
-            /*if ((!envMap || !t.state.background) && t.activeCamera === t.defaultCamera) {
-                t.scene.add(t.vignette);
+            /*if ((!envMap || !this.state.background) && this.activeCamera === this.defaultCamera) {
+                t.scene.add(this.vignette);
             } else {
-                t.scene.remove(t.vignette);
+                t.scene.remove(this.vignette);
             }*/
 
             t.scene.environment = envMap;
-            //t.scene.background = t.state.background ? envMap : null;
+            //this.scene.background = this.state.background ? envMap : null;
 
         });
 
@@ -1930,8 +1739,8 @@ debugger;
                 .setDataType( UnsignedByteType )
                 .load( path, ( texture ) => {
 
-                    const envMap = t.pmremGenerator.fromEquirectangular( texture ).texture;
-                    t.pmremGenerator.dispose();
+                    const envMap = this.pmremGenerator.fromEquirectangular( texture ).texture;
+                    this.pmremGenerator.dispose();
 
                     resolve( { envMap } );
 
@@ -1959,37 +1768,37 @@ export class na3D_fileBrowser_extensionApp_crimeboard {
 export class na3D_demo_models {
     constructor(el, parent, data) {
         var t = this;
-        t.p = parent;
-        t.el = el;
-        t.t = $(t.el).attr('theme');
+        this.p = parent;
+        this.el = el;
+        this.t = $(this.el).attr('theme');
         
-        t.data = data;
+        this.data = data;
         
-        t.lights = [];
-        t.folders = [];
+        this.lights = [];
+        this.folders = [];
    
-        t.items = [];
+        this.items = [];
         
-        t.scene = new THREE.Scene();
-        t.camera = new THREE.PerspectiveCamera( 75, $(el).width() / $(el).height(), 0.1, 1000 );
+        this.scene = new THREE.Scene();
+        this.camera = new THREE.PerspectiveCamera( 75, $(el).width() / $(el).height(), 0.1, 1000 );
         
 
-        t.renderer = new THREE.WebGLRenderer({alpha:true, antialias : true});
-        t.renderer.physicallyCorrectLights = true;
-        t.renderer.outputEncoding = sRGBEncoding;
-        t.renderer.setPixelRatio (window.devicePixelRatio);
-        t.renderer.setSize( $(el).width()-20, $(el).height()-20 );
+        this.renderer = new THREE.WebGLRenderer({alpha:true, antialias : true});
+        this.renderer.physicallyCorrectLights = true;
+        this.renderer.outputEncoding = sRGBEncoding;
+        this.renderer.setPixelRatio (window.devicePixelRatio);
+        this.renderer.setSize( $(el).width()-20, $(el).height()-20 );
         
-        t.renderer.toneMappingExposure = 1.0;
+        this.renderer.toneMappingExposure = 1.0;
         
-        el.appendChild( t.renderer.domElement );
+        el.appendChild( this.renderer.domElement );
         
-        t.controls = new OrbitControls( t.camera, t.renderer.domElement );
-        //t.controls.listenToKeyEvents( window ); // optional
+        this.controls = new OrbitControls( this.camera, this.renderer.domElement );
+        //this.controls.listenToKeyEvents( window ); // optional
         
-        t.loader = new GLTFLoader();
+        this.loader = new GLTFLoader();
         
-        t.loader.load( '/NicerAppWebOS/3rd-party/3D/models/human armor/scene.gltf', function ( gltf ) {
+        this.loader.load( '/NicerAppWebOS/3rd-party/3D/models/human armor/scene.gltf', function ( gltf ) {
             gltf.scene.position.x = -150;
             gltf.scene.scale.setScalar (10);
             t.cube = gltf.scene;
@@ -2001,7 +1810,7 @@ export class na3D_demo_models {
         }, function ( error ) {
             console.error( error );
         } );
-        t.loader.load( '/NicerAppWebOS/3rd-party/3D/models/photoCamera/scene.gltf', function ( gltf ) {
+        this.loader.load( '/NicerAppWebOS/3rd-party/3D/models/photoCamera/scene.gltf', function ( gltf ) {
             gltf.scene.position.x = 200;
             t.cube2 = gltf.scene;
             t.scene.add (t.cube2);
@@ -2018,39 +1827,39 @@ export class na3D_demo_models {
         light1.name = 'ambient_light';
         light1.intensity = 0.3;
         light1.color = 0xFFFFFF;
-        t.camera.add( light1 );
+        this.camera.add( light1 );
 
         const light2  = new DirectionalLight(0xFFFFFF, 0.8 * Math.PI);
         light2.position.set(0.5, 0, 0.866); // ~60º
         light2.name = 'main_light';
         light2.intensity = 0.8 * Math.PI;
         light2.color = 0xFFFFFF;
-        t.camera.add( light2 );
+        this.camera.add( light2 );
 
-        t.lights.push(light1, light2);
+        this.lights.push(light1, light2);        
         
-        t.pmremGenerator = new PMREMGenerator( t.renderer );
-        t.pmremGenerator.compileEquirectangularShader();
+        this.pmremGenerator = new PMREMGenerator( this.renderer );
+        this.pmremGenerator.compileEquirectangularShader();
         
-        t.updateEnvironment(this);
+        this.updateEnvironment(this);
         
         $(el).bind('mousemove', function() { t.onMouseMove (event, t) });
         
-        t.raycaster = new THREE.Raycaster();
-        t.mouse = new THREE.Vector2();
-        t.mouse.x = 0;
-        t.mouse.y = 0;
+        this.raycaster = new THREE.Raycaster();
+        this.mouse = new THREE.Vector2();
+        this.mouse.x = 0;
+        this.mouse.y = 0;
 
-        t.camera.position.z = 700;
+        this.camera.position.z = 700;
         
-        t.animate(this);
+        this.animate(this);
     }
     
     animate(t) {
         requestAnimationFrame( function() { t.animate (t) } );
         
         t.raycaster.setFromCamera (t.mouse, t.camera);
-
+        
         const intersects = t.raycaster.intersectObjects (t.scene.children, true);
         if (intersects[0] && t.cube && t.cube2) {
             t.cube.rotation.x += 0.015;
@@ -2065,7 +1874,7 @@ export class na3D_demo_models {
     
     
     updateTextureEncoding (t, content) {
-        /*const encoding = t.state.textureEncoding === 'sRGB'
+        /*const encoding = this.state.textureEncoding === 'sRGB'
         ? sRGBEncoding
         : LinearEncoding;*/
         const encoding = sRGBEncoding;
@@ -2105,15 +1914,15 @@ export class na3D_demo_models {
         t.getCubeMapTexture( environment ).then(( { envMap } ) => {
 
             /*
-            if (!envMap || !t.state.background) && t.activeCamera === t.defaultCamera) {
-                t.scene.add(t.vignette);
+            if (!envMap || !this.state.background) && this.activeCamera === this.defaultCamera) {
+                t.scene.add(this.vignette);
             } else {
-                t.scene.remove(t.vignette);
+                t.scene.remove(this.vignette);
             }*/
-            t.scene.add(t.vignette);
+            t.scene.add(this.vignette);
 
             t.scene.environment = envMap;
-            //t.scene.background = envMap;//t.state.background ? envMap : null;
+            //this.scene.background = envMap;//this.state.background ? envMap : null;
 
         });
 
@@ -2130,8 +1939,8 @@ export class na3D_demo_models {
                 //.setDataType( UnsignedByteType )
                 .load( path, ( texture ) => {
 
-                    const envMap = t.pmremGenerator.fromEquirectangular( texture ).texture;
-                    t.pmremGenerator.dispose();
+                    const envMap = this.pmremGenerator.fromEquirectangular( texture ).texture;
+                    this.pmremGenerator.dispose();
 
                     resolve( { envMap } );
 
@@ -2159,16 +1968,16 @@ export class na3D_demo_models {
 
 export class na3D_demo_cube {
     constructor(el,parent) {
-        t.p = parent;
-        t.el = el;
-        t.t = $(t.el).attr('theme');
+        this.p = parent;
+        this.el = el;
+        this.t = $(this.el).attr('theme');
         
-        t.scene = new THREE.Scene();
-        t.camera = new THREE.PerspectiveCamera( 75, $(el).width() / $(el).height(), 0.1, 1000 );
+        this.scene = new THREE.Scene();
+        this.camera = new THREE.PerspectiveCamera( 75, $(el).width() / $(el).height(), 0.1, 1000 );
 
-        t.renderer = new THREE.WebGLRenderer({ alpha : true });
-        t.renderer.setSize( $(el).width()-20, $(el).height()-20 );
-        el.appendChild( t.renderer.domElement );
+        this.renderer = new THREE.WebGLRenderer({ alpha : true });
+        this.renderer.setSize( $(el).width()-20, $(el).height()-20 );
+        el.appendChild( this.renderer.domElement );
         
         const geometry = new THREE.BoxGeometry();
         const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
@@ -2192,18 +2001,18 @@ export class na3D_demo_cube {
                 map: new THREE.TextureLoader().load('/NicerAppWebOS/siteMedia/backgrounds/tiled/green/leaves007.jpg')
             })
         ];
-        t.cube = new THREE.Mesh( new THREE.BoxGeometry( 1, 1, 1 ), materials );
-        t.scene.add( t.cube );
+        this.cube = new THREE.Mesh( new THREE.BoxGeometry( 1, 1, 1 ), materials );
+        this.scene.add( this.cube );
         var t = this;
         $(el).bind('mousemove', function() { t.onMouseMove (event, t) });
         
-        t.raycaster = new THREE.Raycaster();
-        t.mouse = new THREE.Vector2();
+        this.raycaster = new THREE.Raycaster();
+        this.mouse = new THREE.Vector2();
 
-        t.camera.position.z = 5;
-        t.cube.rotation.x = 0.3;
-        t.cube.rotation.y = 0.4;
-        t.animate(this);
+        this.camera.position.z = 5;
+        this.cube.rotation.x = 0.3;
+        this.cube.rotation.y = 0.4;
+        this.animate(this);
     }
     
     onMouseMove( event, t ) {
