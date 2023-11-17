@@ -25,16 +25,16 @@
                 </ol>
             </div></li>
 
-            <li class="todoList_l1"><div>(2023 Nov,Dec) Extend the current limited permissions system to a full CMS, Web User Interfaced, permissions system for the WebOS.
+            <li class="todoList_l1"><div>(CURRENT) (2023 Nov,Dec) Extend the current limited permissions system to a full CMS, Web User Interfaced, permissions system for the WebOS.
                 <ol class="todoList_l2">
-                    <li class="todoList_l2"><div>(2023 Nov,Dec) Extend vividButton to bring up vividDialogs and vividMenus when hovered over. In fact, it shouldn't matter anymore whether you've hovering from a vividMenu through a vividDialog filled with vividButtons to a goal either anymore.<br/>So I need to create a new 'vividUI' (vividUserInterface) component, that will direct all of this.<br/>
+                    <li class="todoList_l2"><div>(CURRENT) (2023 Nov,Dec) Extend vividButton to bring up vividDialogs and vividMenus when hovered over. In fact, it shouldn't matter anymore whether you've hovering from a vividMenu through a vividDialog filled with vividButtons to a goal either anymore.<br/>So I need to create a new 'vividUI' (vividUserInterface) component, that will direct all of this.<br/>
                     I've already started on this, and it seems to be easy going :)</div></li>
                 </ol>
             </div></li>
         </ol>
     </div></li>
 
-    <li class="todoList"><div>(CURRENT) Fix the 3D file and data browser/viewer app
+    <li class="todoList"><div>(2024 January and beyond) Fix the 3D file and data browser/viewer app
         <ol class="todoList_l1">
             <li class="todoList_l1"><div>Perhaps one day write a 3D tree generator, like the ThreeJS cube generator, that produces a ThreeJS model that actually looks like a tree, with figurines representing the folders sitting at strategic spots along the branches of that tree. possibly use animal figurines.
             </div></li>
