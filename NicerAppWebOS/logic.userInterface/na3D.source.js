@@ -162,6 +162,15 @@ export class na3D_fileBrowser {
         t.renderer.toneMappingExposure = 1.0;
         
         el.appendChild( t.renderer.domElement );
+
+        const sphere1 = new THREE.Mesh(
+            new THREE.SphereGeometry(1, 300, 300),
+            new THREE.MeshNormalMaterial({wireframe: true})
+        );
+        debugger;
+        t.scene.add (sphere1);
+
+        alert ('2023-07-17 07:01am CET : This app is currently being improved. It might be a bit buggy over the course of the next week.');
         
         $(t.renderer.domElement).bind('mousemove', function() {
             //event.preventDefault(); 
@@ -173,9 +182,13 @@ export class na3D_fileBrowser {
                 //t.controls.autoRotate = !t.controls.autoRotate
                 //if (t.controls.autoRotate) $('#autoRotate').removeClass('vividButton').addClass('vividButtonSelected');
                 //else $('#autoRotate').removeClass('vividButtonSelected').addClass('vividButton');
+                t.onclick_double (t, event);
                     
             } else if (event.detail === 3) { // triple click
                 //if (t.controls.autoRotateSpeed<0) t.controls.autoRotateSpeed = 1; else t.controls.autoRotateSpeed = -1;
+                t.onclick_triple (t, event);
+            } else {
+                t.onclick (t, event);
             }
             
         });
@@ -298,11 +311,11 @@ export class na3D_fileBrowser {
         t.clock = new THREE.Clock();
         t.cameraControls = new CameraControls (t.camera, t.renderer.domElement);
 
-        t.animate(this);
+        t.animate(this, null);
     }
     
-    animate(t) {
-        requestAnimationFrame( function() { t.animate (t) } );
+    animate(t, evt) {
+        requestAnimationFrame( function(evt) { t.animate (t,evt) } );
         if (t.mouse.x!==0 || t.mouse.y!==0) {        
             t.camera.updateProjectionMatrix();
 
@@ -518,6 +531,27 @@ export class na3D_fileBrowser {
     
     onMouseWheel( event, t ) {
         debugger;
+    }
+
+    onclick (t, event) {
+        const intersects = t.raycaster.intersectObjects (t.s2);
+        if (intersects[0] && intersects[0].object.type!=='Line')
+        for (var i=0; i<1/*intersects.length <-- this just gets an endless
+        series of hits from camera into the furthest reaches of what's visible
+        behind the mouse pointer */; i++) {
+            var cit/*clickedItem*/ = intersects[i].object, done = false;
+            while (cit && !done) {
+                debugger;
+                na.site.statusMsg (cit.it.fullpath);
+
+                done = true;
+            }
+        }
+
+    }
+    onclick_double (t, event) {
+    }
+    onclick_triple (t, event) {
     }
 
     initializeItems (t) {
@@ -909,7 +943,7 @@ export class na3D_fileBrowser {
                     + ( it.parentRowOffset * 3)
                     //+ ( p.upDown * p.rowOffsetValue * offsetXY )
                 );
-                it.model.position.z = -1 * ((it.level+1) * 100 ) - rnd;
+                it.model.position.z = -1 * ((it.level+1) * 200 );
                 //if (it.name=='simple' || it.name=='anime') debugger;
 
                 var x = it.data.it;
@@ -941,15 +975,16 @@ export class na3D_fileBrowser {
 
         }
         
-        t.onresize_postDo(t);
-        //t.drawLines(t);
-        /*
-        clearTimeout (t.timeout_onresize_do_overlapChecks2);
-        t.timeout_onresize_do_overlapChecks2 = setTimeout(function() {
-            t.onresize_do_overlapChecks2(t, callback);
-            //if (typeof callback=='function') callback(t);
-        }, 500);
-        */
+        if (true) {
+            t.onresize_postDo(t);
+            //t.drawLines(t);
+        } else {
+            clearTimeout (t.timeout_onresize_do_overlapChecks2);
+            t.timeout_onresize_do_overlapChecks2 = setTimeout(function() {
+                t.onresize_do_overlapChecks2(t, callback);
+                //if (typeof callback=='function') callback(t);
+            }, 500);
+        };
     }
 
     onresize_postDo (t) {
@@ -1164,12 +1199,12 @@ export class na3D_fileBrowser {
                                     )*/
 
                                     && (
-                                        ita.model.position.x >= itb.model.position.x - 20
-                                        && ita.model.position.x <= itb.model.position.x + 90
+                                        ita.model.position.x >= itb.model.position.x
+                                        && ita.model.position.x <= itb.model.position.x + 50
                                     )
                                     && (
-                                        ita.model.position.y >= itb.model.position.y - 20
-                                        && ita.model.position.y <= itb.model.position.y + 90
+                                        ita.model.position.y >= itb.model.position.y
+                                        && ita.model.position.y <= itb.model.position.y + 50
                                     )
                                     /*
                                     && ita.model.position.x === itb.model.position.x
@@ -1195,7 +1230,8 @@ export class na3D_fileBrowser {
                                             
                                     };
                                     if (!have) {
-                                        t.overlaps.push ({overlappingItems_count : 0, patha : patha, pathb : pathb, conflicts : 1});
+                                        var d = {overlappingItems_count : 0, patha : patha, pathb : pathb, conflicts : 1};
+                                        t.overlaps.push (d);
                                         var o = t.overlaps[t.overlaps.length-1];
                                     } else {
                                         var 
@@ -1204,7 +1240,8 @@ export class na3D_fileBrowser {
                                         o.ita = ita;
                                         o.itb = itb;
                                     }
-                                    t.overlaps[k].overlappingItems_count++;
+                                    o.overlappingItems_count++;
+                                    console.log (o);
                                 }
                             }
                         }
@@ -1212,51 +1249,10 @@ export class na3D_fileBrowser {
                 }
             }
         }
-        
-        var 
-        leastOverlappingItems = { overlappingItems_count : 200, j : -1 }, 
-        mostOverlappingItems = { overlappingItems_count : 0, j : -1 }, 
-        mostConflicts = {conflicts : 1, j : -1}, 
-        largest = null, 
-        smallest = null;
-        
-        for (var j=0; j<t.overlaps.length; j++) {
-            if (t.overlaps[j].overlappingItems_count > mostOverlappingItems.overlappingItems_count)
-                mostOverlappingItems = { overlappingItems_count : t.overlaps[j].overlappingItems_count, j : j};
+        debugger;
 
-            if (t.overlaps[j].overlappingItems_count < leastOverlappingItems.overlappingItems_count)
-                leastOverlappingItems = { overlappingItems_count : t.overlaps[j].overlappingItems_count, j : j};
-            
-            if (t.overlaps[j].conflicts > mostConflicts.conflicts) mostConflicts = {conflicts:t.overlaps[j].conflicts, j : j};
-            
-            if (
-                !largest 
-                || (
-                    t.ld3[t.overlaps[j].patha].itemCountA > largest.itemCountA 
-                    && t.ld3[t.overlaps[j].pathb].itemCountB > largest.itemCountB
-                )
-            ) largest = { 
-                pathb : t.overlaps[j].pathb, 
-                itemCountA : t.ld3[t.overlaps[j].patha].itemCount, 
-                itemCountB : t.ld3[t.overlaps[j].pathb].itemCount, 
-                j : j 
-            };
-            
-            if (
-                !smallest 
-                || (
-                    t.ld3[t.overlaps[j].patha].itemCountA < smallest.itemCountA 
-                    && t.ld3[t.overlaps[j].pathb].itemCountB < smallest.itemCountB
-                )
-            ) smallest = { 
-                pathb : t.overlaps[j].pathb, 
-                itemCountA : t.ld3[t.overlaps[j].patha].itemCount, 
-                itemCountB : t.ld3[t.overlaps[j].pathb].itemCount, 
-                j : j 
-            };
-                
-        }
-        
+        t.onresize_calculateStatistics (t);
+
         /*
         // this for loop can be commented out for speed optimization, it's only here for debugging purposes
         for (var i=0; i<t.overlaps.length; i++) {
@@ -1278,14 +1274,12 @@ export class na3D_fileBrowser {
             t.items[j].assignments = [];
         };
 
+        var rnd2 = Math.floor(Math.random() * t.overlaps.length);
         for (var i=0; i<t.overlaps.length; i++) {
             //if (i===mostConflicts.j) {
-
-            if (i===largest.j) {
-
-
+            if (i===rnd2) {//t.largest.j) {
                 var 
-                x = mostOverlappingItems,
+                x = t.mostOverlappingItems,
                 overlapFixes = [ 'top', 'topright', 'middleright', 'bottomright', 'bottom', 'bottomleft', 'middleleft', 'topleft'],
                 overlapFixData = [],
                 overlapFix = null;
@@ -1304,19 +1298,24 @@ export class na3D_fileBrowser {
                 }
                 
                 overlapFix = t.onresize_calculateBestOverlapFix (t, i, overlapFixData);
+                console.log (t.overlaps[i], overlapFix);
                 if (overlapFix) {
                     if (!t.overlaps[i].history) t.overlaps[i].history = [];
                     if (overlapFix[0]) t.overlaps[i].history.push (overlapFix[0].quadrant);
                     t.onresize_applyBestOverlapFix (t, overlapFix);
+                    t.onresize_calculateStatistics (t);
+                    rnd2 = Math.floor(Math.random() * t.overlaps.length);
                 } else {
                     t.overlaps.splice (i, 1);
-                    break;
+                    t.onresize_calculateStatistics (t);
+                    rnd2 = Math.floor(Math.random() * t.overlaps.length);
                 }
                 //debugger;
             }
         }   
+
+        debugger;
         if (t.overlaps.length > 0) {
-            debugger;
             //console.log ('onresize_do_overlapChecks2() : t.overlaps.length='+t.overlaps.length, t.overlaps);
             setTimeout (function() {
                 t.onresize_do_overlapChecks2(t, callback);
@@ -1324,175 +1323,221 @@ export class na3D_fileBrowser {
         } else {
             t.drawLines(t);
 
-        t.winners = {
-            north : 0,
-            east : 0,
-            south : 0,
-            west : 0,
-            front : 0,
-            behind : 0
-        };
-        for (var i=0; i < t.items.length; i++) {
-            var it = t.items[i];
-            if (!it.model) continue;
-            if (it.model.position.y > t.winners.north) t.winners.north = it.model.position.y;
-            if (it.model.position.x > t.winners.east) t.winners.east = it.model.position.x;
-            if (it.model.position.y < t.winners.south) t.winners.south = it.model.position.y;
-            if (it.model.position.x < t.winners.west) t.winners.west = it.model.position.x;
-            if (it.model.position.z > t.winners.front) t.winners.front = it.model.position.z;
-            if (it.model.position.z < t.winners.behind) t.winners.behind = it.model.position.z;
-        };
-        var
-        tf = t.winners.behind + Math.round((t.winners.behind - t.winners.front) / 2),
-        middle = {
-            x : Math.round((t.winners.west + t.winners.east) / 2),
-            y : Math.round((t.winners.north + t.winners.south) / 2),
-            z : Math.round((t.winners.front + t.winners.behind) /2)
-        },
-        ol = 1500;
-        console.log ('t778', t.winners, middle);
-
-
-        t.curve2 = new THREE.CatmullRomCurve3( [
-            new THREE.Vector3 (0, 0, 0),
-            new THREE.Vector3 (middle.x, middle.y, middle.z),
-        ]);
-        t.points2 = t.curve2.getPoints(50);
-        t.curves = [];
-        var
-        numPoints = 180,
-        radius = 500;
-        for (var i=0; i<numPoints; i++) {
+            t.winners = {
+                north : 0,
+                east : 0,
+                south : 0,
+                west : 0,
+                front : 0,
+                behind : 0
+            };
+            for (var i=0; i < t.items.length; i++) {
+                var it = t.items[i];
+                if (!it.model) continue;
+                if (it.model.position.y > t.winners.north) t.winners.north = it.model.position.y;
+                if (it.model.position.x > t.winners.east) t.winners.east = it.model.position.x;
+                if (it.model.position.y < t.winners.south) t.winners.south = it.model.position.y;
+                if (it.model.position.x < t.winners.west) t.winners.west = it.model.position.x;
+                if (it.model.position.z > t.winners.front) t.winners.front = it.model.position.z;
+                if (it.model.position.z < t.winners.behind) t.winners.behind = it.model.position.z;
+            };
             var
-            x = radius * Math.cos (2 * Math.PI * i / numPoints),
-            y = radius * Math.sin (2 * Math.PI * i / numPoints),
-            z = 3 * radius;
-            t.curves.push (new THREE.Vector3(x,y,z));
-        }
-        t.curve = new THREE.CatmullRomCurve3( [
-            new THREE.Vector3 (0, 0, ol),
-            new THREE.Vector3 (t.winners.west - ol, 0, ol),
-            new THREE.Vector3 (t.winners.west - ol, 0, t.winners.behind - ol),
-            new THREE.Vector3 (t.winners.east + ol, 0, t.winners.behind - ol),
-            new THREE.Vector3 (t.winners.east + ol, 0, ol),
-            new THREE.Vector3 (0, 0, ol),
-        ]);
-        t.curve2 = new THREE.CatmullRomCurve3(t.curves);
-        t.points = t.curve.getPoints(numPoints);
-        t.points2 = t.curve2.getPoints(numPoints);
-
-        /*
-        const geometry = new THREE.BufferGeometry().setFromPoints( t.points );
-        const material = new THREE.LineBasicMaterial( { color: 0xff0000 } );
-        // Create the final object to add to the scene
-        const curveObject = new THREE.Line( geometry, material );
-        t.scene.add(curveObject);
-        */
-
-        //const geometry2 = new THREE.BufferGeometry().setFromPoints( t.points2 );
-        //const material2 = new THREE.LineBasicMaterial( { color: 0xffffff } );
-        // Create the final object to add to the scene
-        //const curveObject2 = new THREE.Line( geometry2, material2 );
-        //t.scene.add(curveObject2);
-
-        t._tmp = new THREE.Vector3();
-        t.animationProgress = { value: 0 };
-        t.pathAnimation = gsap.fromTo(
-            t.animationProgress,
-            {
-                value: 0,
+            tf = t.winners.behind + Math.round((t.winners.behind - t.winners.front) / 2),
+            middle = {
+                x : Math.round((t.winners.west + t.winners.east) / 2),
+                y : Math.round((t.winners.north + t.winners.south) / 2),
+                z : Math.round((t.winners.front + t.winners.behind) /2)
             },
-            {
-                value: 1,
-                duration: 30,
-                overwrite: true,
-                paused: true,
-                onUpdateParams: [ t.animationProgress ],
-                onUpdate( { value } ) {
+            ol = 1500;
+            console.log ('t778', t.winners, middle);
 
-                    if ( ! this.isActive() ) return;
 
-                    t.curve.getPoint ( value, t._tmp );
-                    const cameraX = t._tmp.x;
-                    const cameraY = t._tmp.y;
-                    const cameraZ = t._tmp.z;
-                    const lookAtX = middle.x;
-                    const lookAtY = middle.y;
-                    const lookAtZ = middle.z;
-
-                    t.cameraControls.setLookAt(
-                        cameraX,
-                        cameraY,
-                        cameraZ,
-                        lookAtX,
-                        lookAtY,
-                        lookAtZ,
-                        false, // IMPORTANT! disable cameraControls's transition and leave it to gsap.
-                    );
-
-                },
-                onStart() {
-
-                    t.cameraControls.enabled = false;
-
-                },
-                onComplete() {
-
-                    t.cameraControls.enabled = true;
-
-                },
+            t.curve2 = new THREE.CatmullRomCurve3( [
+                new THREE.Vector3 (0, 0, 0),
+                new THREE.Vector3 (middle.x, middle.y, middle.z),
+            ]);
+            t.points2 = t.curve2.getPoints(50);
+            t.curves = [];
+            var
+            numPoints = 180,
+            radius = 500;
+            for (var i=0; i<numPoints; i++) {
+                var
+                x = radius * Math.cos (2 * Math.PI * i / numPoints),
+                y = radius * Math.sin (2 * Math.PI * i / numPoints),
+                z = 3 * radius;
+                t.curves.push (new THREE.Vector3(x,y,z));
             }
-        );
+            t.curve = new THREE.CatmullRomCurve3( [
+                new THREE.Vector3 (0, 0, ol),
+                new THREE.Vector3 (t.winners.west - ol, 0, ol),
+                new THREE.Vector3 (t.winners.west - ol, 0, t.winners.behind - ol),
+                new THREE.Vector3 (t.winners.east + ol, 0, t.winners.behind - ol),
+                new THREE.Vector3 (t.winners.east + ol, 0, ol),
+                new THREE.Vector3 (0, 0, ol),
+            ]);
+            t.curve2 = new THREE.CatmullRomCurve3(t.curves);
+            t.points = t.curve.getPoints(numPoints);
+            t.points2 = t.curve2.getPoints(numPoints);
 
-        t.animationProgress2 = { value: 0 };
-        t.pathAnimation2 = gsap.fromTo(
-            t.animationProgress2,
-            {
-                value: 0,
-            },
-            {
-                value: 1,
-                duration: 30,
-                overwrite: true,
-                paused: true,
-                onUpdateParams: [ t.animationProgress2 ],
-                onUpdate( { value } ) {
+            /*
+            const geometry = new THREE.BufferGeometry().setFromPoints( t.points );
+            const material = new THREE.LineBasicMaterial( { color: 0xff0000 } );
+            // Create the final object to add to the scene
+            const curveObject = new THREE.Line( geometry, material );
+            t.scene.add(curveObject);
+            */
 
-                    if ( ! this.isActive() ) return;
+            //const geometry2 = new THREE.BufferGeometry().setFromPoints( t.points2 );
+            //const material2 = new THREE.LineBasicMaterial( { color: 0xffffff } );
+            // Create the final object to add to the scene
+            //const curveObject2 = new THREE.Line( geometry2, material2 );
+            //t.scene.add(curveObject2);
 
-                    t.curve2.getPoint ( value, t._tmp );
-                    const cameraX = t._tmp.x;
-                    const cameraY = t._tmp.y;
-                    const cameraZ = t._tmp.z;
-                    const lookAtX = middle.x;
-                    const lookAtY = middle.y;
-                    const lookAtZ = middle.z;
-
-                    t.cameraControls.setLookAt(
-                        cameraX,
-                        cameraY,
-                        cameraZ,
-                        lookAtX,
-                        lookAtY,
-                        lookAtZ,
-                        false, // IMPORTANT! disable cameraControls's transition and leave it to gsap.
-                    );
-
+            t._tmp = new THREE.Vector3();
+            t.animationProgress = { value: 0 };
+            t.pathAnimation = gsap.fromTo(
+                t.animationProgress,
+                {
+                    value: 0,
                 },
-                onStart() {
+                {
+                    value: 1,
+                    duration: 30,
+                    overwrite: true,
+                    paused: true,
+                    onUpdateParams: [ t.animationProgress ],
+                    onUpdate( { value } ) {
 
-                    t.cameraControls.enabled = false;
+                        if ( ! this.isActive() ) return;
 
+                        t.curve.getPoint ( value, t._tmp );
+                        const cameraX = t._tmp.x;
+                        const cameraY = t._tmp.y;
+                        const cameraZ = t._tmp.z;
+                        const lookAtX = middle.x;
+                        const lookAtY = middle.y;
+                        const lookAtZ = middle.z;
+
+                        t.cameraControls.setLookAt(
+                            cameraX,
+                            cameraY,
+                            cameraZ,
+                            lookAtX,
+                            lookAtY,
+                            lookAtZ,
+                            false, // IMPORTANT! disable cameraControls's transition and leave it to gsap.
+                        );
+
+                    },
+                    onStart() {
+
+                        t.cameraControls.enabled = false;
+
+                    },
+                    onComplete() {
+
+                        t.cameraControls.enabled = true;
+
+                    },
+                }
+            );
+
+            t.animationProgress2 = { value: 0 };
+            t.pathAnimation2 = gsap.fromTo(
+                t.animationProgress2,
+                {
+                    value: 0,
                 },
-                onComplete() {
+                {
+                    value: 1,
+                    duration: 30,
+                    overwrite: true,
+                    paused: true,
+                    onUpdateParams: [ t.animationProgress2 ],
+                    onUpdate( { value } ) {
 
-                    t.cameraControls.enabled = true;
+                        if ( ! this.isActive() ) return;
 
-                },
-            }
-        );
-            //t.pathAnimation.play(0);
+                        t.curve2.getPoint ( value, t._tmp );
+                        const cameraX = t._tmp.x;
+                        const cameraY = t._tmp.y;
+                        const cameraZ = t._tmp.z;
+                        const lookAtX = middle.x;
+                        const lookAtY = middle.y;
+                        const lookAtZ = middle.z;
+
+                        t.cameraControls.setLookAt(
+                            cameraX,
+                            cameraY,
+                            cameraZ,
+                            lookAtX,
+                            lookAtY,
+                            lookAtZ,
+                            false, // IMPORTANT! disable cameraControls's transition and leave it to gsap.
+                        );
+
+                    },
+                    onStart() {
+
+                        t.cameraControls.enabled = false;
+
+                    },
+                    onComplete() {
+
+                        t.cameraControls.enabled = true;
+
+                    },
+                }
+            );
             if (typeof callback=='function') callback(t);
+        }
+    }
+
+    onresize_calculateStatistics (t) {
+        t.leastOverlappingItems = { overlappingItems_count : 200, j : -1 };
+        t.mostOverlappingItems = { overlappingItems_count : 0, j : -1 };
+        t.mostConflicts = {conflicts : 1, j : -1};
+        t.leastConflicts = {conflicts : 200, j : -1};
+        t.largest = null;
+        t.smallest = null;
+
+        for (var j=0; j<t.overlaps.length; j++) {
+            if (t.overlaps[j].overlappingItems_count > t.mostOverlappingItems.overlappingItems_count)
+                t.mostOverlappingItems = { overlappingItems_count : t.overlaps[j].overlappingItems_count, j : j};
+
+            if (t.overlaps[j].overlappingItems_count < t.leastOverlappingItems.overlappingItems_count)
+                t.leastOverlappingItems = { overlappingItems_count : t.overlaps[j].overlappingItems_count, j : j};
+
+            if (t.overlaps[j].conflicts > t.mostConflicts.conflicts) t.mostConflicts = {conflicts:t.overlaps[j].conflicts, j : j};
+            if (t.overlaps[j].conflicts < t.leastConflicts.conflicts) t.leastConflicts = {conflicts:t.overlaps[j].conflicts, j : j};
+
+            if (
+                !t.largest
+                || (
+                    t.ld3[t.overlaps[j].patha].itemCountA > t.largest.itemCountA
+                    && t.ld3[t.overlaps[j].pathb].itemCountB > t.largest.itemCountB
+                )
+            ) t.largest = {
+                pathb : t.overlaps[j].pathb,
+                itemCountA : t.ld3[t.overlaps[j].patha].itemCount,
+                itemCountB : t.ld3[t.overlaps[j].pathb].itemCount,
+                j : j
+            };
+
+            if (
+                !t.smallest
+                || (
+                    t.ld3[t.overlaps[j].patha].itemCountA < t.smallest.itemCountA
+                    && t.ld3[t.overlaps[j].pathb].itemCountB < t.smallest.itemCountB
+                )
+            ) t.smallest = {
+                pathb : t.overlaps[j].pathb,
+                itemCountA : t.ld3[t.overlaps[j].patha].itemCount,
+                itemCountB : t.ld3[t.overlaps[j].pathb].itemCount,
+                j : j
+            };
+
         }
     }
     
@@ -1666,7 +1711,9 @@ export class na3D_fileBrowser {
         for (var i=0; i<overlapFix.length; i++) {
             if (overlapFix[i].quadrant==itaQuadrant) fix = overlapFix[i];
         }
-        if (!fix) return false;
+        if (!fix) {
+            return false;
+        }
 
         for (var i=0; i<fix.itemsa.length; i++) {
             var ita = t.items[fix.itemsa[i].idx];
@@ -1675,6 +1722,7 @@ export class na3D_fileBrowser {
                 && typeof fix.itemsa[i].yOffset==='number'
                 && ita.model
             ) {
+                debugger;
                 ita.model.position.x += fix.itemsa[i].xOffset;
                 ita.model.position.y += fix.itemsa[i].yOffset;
                 ita.model.position.z = fix.itemsa[i].z;
@@ -1760,7 +1808,7 @@ export class na3D_fileBrowser {
         var ld3a = t.ld3[patha];
         var ld3b = t.ld3[pathb];
         var psi = null;
-        var offset = 100 + Math.floor(Math.random() * 100);//t.items[pidx];
+        var offset = 50;//50 + Math.floor(Math.random() * 50);//t.items[pidx];
 
         for (var i=0; i<ld3a.items.length; i++) {
             var ita = t.items[ld3a.items[i]];
@@ -1853,11 +1901,11 @@ export class na3D_fileBrowser {
                     ita1 && itb1 &&
                     (
                         ita1.x >= itb1.x - 20
-                        && ita1.x <= itb1.x + 90
+                        && ita1.x <= itb1.x + 20
                     )
                     && (
                         ita1.y >= itb1.y - 20
-                        && ita1.y <= itb1.y + 90
+                        && ita1.y <= itb1.y + 20
                     )
                     && ita1.z === itb1.z
                 ) {
@@ -2019,7 +2067,6 @@ export class na3D_fileBrowser {
             l.material.dispose();
         };
 
-debugger;
         for (var i=1; i<t.items.length; i++) {
             var 
             it = t.items[i],
@@ -2473,3 +2520,32 @@ export class na3D_demo_cube {
         t.renderer.render( t.scene, t.camera );
     }
 }
+
+
+(function (api) {
+    // position a mesh to a sphere mesh with a given lat, long, and alt
+    var api = {};
+    api.positionToSphere = function(sphereMesh, mesh, lat, long, alt){
+        // defaults for lat, long, and alt
+        lat = lat === undefined ? 0 : lat;
+        long = long === undefined ? 0 : long;
+        alt = alt === undefined ? 0 : alt;
+        // get geometry of the sphere mesh
+        var sGeo = sphereMesh.geometry;
+        // computer bounding sphere for geometry of the sphere mesh
+        sGeo.computeBoundingSphere();
+        // use radius value of Sphere instance at
+        // boundingSphere of the geometry of sphereMesh
+        var radius = sGeo.boundingSphere.radius;
+        // position mesh to position of sphereMesh, and translate
+        // from there using lat, long, alt, and radius of sphereMesh
+        // using the copy, add, and apply Euler methods of the Vector3 class
+        var v1 = new THREE.Vector3(0, radius + alt, 0);
+        var x = Math.PI * lat;
+        var z = Math.PI * 2 * long;
+        var e1 = new THREE.Euler(x, 0, z)
+        mesh.position.copy(sphereMesh.position).add(v1).applyEuler(e1);
+    };
+}
+    ()
+);

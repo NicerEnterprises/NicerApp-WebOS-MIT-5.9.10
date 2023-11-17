@@ -546,6 +546,7 @@ class naVividMenu__behavior_rainbowPanels {
         i = pit.levelIdx;
         panel.it = pit;
         $(panel).bind('mouseover', function (event) {
+            t.cancelHidings();
             $('#'+t.currentEl.id+'__backPanel').fadeOut(t.fadingSpeed);
 
             $('#'+t.el.id+'__backPanel').remove();
