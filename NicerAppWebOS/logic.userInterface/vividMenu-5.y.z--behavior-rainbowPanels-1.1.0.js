@@ -89,7 +89,8 @@ class naVividMenu__behavior_rainbowPanels {
             $(li).attr('id', t.el.id+'__li__'+idx);
             var btnType = $(li).attr('buttonType');
             if (!btnType || btnType=='') btnType = 'vividButton_text';
-            var html2 = '<div id="'+t.el.id+'__'+idx+'" class="vividButton '+btnType+' vividMenu_item backdropped"  theme="dark" style="display:none;"><div class="vdBackground" style="z-index:-1"></div>'+$(li).children('a')[0].outerHTML.replace('<a ', '<a style="z-index:-1" ').replace($(li).children('a')[0].innerHTML+'</a>', '<span class="contentSectionTitle3_span" style="z-index:-1">'+$(li).children('a')[0].innerText+'</span></a>').replace('class="linkToNewPage"', 'class="linkToNewPage contentSectionTitle3_a"')+'</div>';
+            var html2 = '<div id="'+t.el.id+'__'+idx+'" class="vividButton '+btnType+' vividMenu_item backdropped"  theme="dark" style="display:none;"><div class="vdBackground" style="z-index:-1"></div>'+$(li).children('a')[0].outerHTML.replace('<a ', '<a style="z-index:-1" ').replace($(li).children('a')[0].innerHTML+'</a>', '<span class="contentSectionTitle3_span" style="z-index:-1">'+$(li).children('a')[0].innerText+'</span></a>').replace('class="', 'class="linkToNewPage contentSectionTitle3_a ')+'</div>';
+            debugger;
             html += html2;
 
             t.items[idx] = {
@@ -548,9 +549,8 @@ class naVividMenu__behavior_rainbowPanels {
         i = pit.levelIdx;
         panel.it = pit;
         $(panel).bind('mouseover', function (event) {
-            t.cancelHidings(t);
-            $('#'+t.currentEl.id+'__backPanel').fadeOut(t.fadingSpeed);
-
+            debugger;
+            //t.cancelHidings(t);
             $('#'+t.el.id+'__backPanel').remove();
             t.showBackPanel(t, t.currentEl);
 
@@ -709,18 +709,23 @@ class naVividMenu__behavior_rainbowPanels {
                 top : 0,
                 width : window.innerWidth,
                 height : window.innerHeight,
-                zIndex : parseFloat($('#'+el.id).css('zIndex')) - 20 ,
+                zIndex : parseFloat($('#'+t.el.id).css('zIndex')) - 20 ,
                 background : 'rgba(0,0,0,0.0001)'
             });
             $(bp).bind('mouseover', function (event) {
                 var bp = event.currentTarget;
-                t.hideAll(t,bp);
+                debugger;
+                //t.cancelHidings(t);
+                //t.timeout_hideAll[t.el.id][t.timeout_hideAll[t.el.id].length] = setTimeout (function () {
+                    t.hideAll(t,bp);
+                //}, 300);
             });
         }
 
     }
 
     hideAll (t, bp) {
+        debugger;
         if (!bp || !(typeof bp.id=='string')) return false;
         if (!t.timeout_hideAll[bp.id]) {
             t.timeout_hideAll[bp.id] = [];
@@ -972,7 +977,7 @@ class naVividMenu__behavior_rainbowPanels {
                 }
             }
 
-            t.showBackPanel(t, el);
+            //t.showBackPanel(t, el);
         }, 100, t, el, event);
     }
 
@@ -1208,6 +1213,7 @@ class naVividMenu__behavior_rainbowPanels {
                 .not(rootLevel).not(rootPath).not(myPeers).not(myKids);
 
         if (t.useFading) {
+            debugger;
             $(currs).stop(true,true).fadeOut(t.fadingSpeed);
         } else {
             $(currs).css({display:'none'});

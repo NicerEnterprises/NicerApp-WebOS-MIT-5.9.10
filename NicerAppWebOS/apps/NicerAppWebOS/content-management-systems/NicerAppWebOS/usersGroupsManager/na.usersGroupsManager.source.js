@@ -1,4 +1,4 @@
-//delete na.apps.loaded['applications/content-management-systems/NicerAppWebOS/blogEditor'];
+//delete na.apps.loaded['applications/content-management-systems/NicerAppWebOS/usersGroupsManager'];
 na.apps.loaded['applications/content-management-systems/NicerAppWebOS/usersGroupsManager'] = na.usersGroupsManager = na.ugm = {
     //settings : { current : { mediaFolderView : 'view' } },
     settings : {
@@ -13,14 +13,14 @@ na.apps.loaded['applications/content-management-systems/NicerAppWebOS/usersGroup
 				},
 
 				onload : function (settings) {
-                    na.m.waitForCondition ('applications/content-management-systems/NicerAppWebOS/blogEditor start', na.m.HTMLidle, function () {
+                    na.m.waitForCondition ('applications/content-management-systems/NicerAppWebOS/usersGroupsManager start', na.m.HTMLidle, function () {
                         var
-                        na1 = na.apps.loaded['applications/content-management-systems/NicerAppWebOS/blogEditor'], g = na1.globals, s = na1.settings, c = s.current, db = c.db,
+                        na1 = na.apps.loaded['applications/content-management-systems/NicerAppWebOS/usersGroupManager'], g = na1.globals, s = na1.settings, c = s.current, db = c.db,
                         loadedIn = s.loadedIn['#siteContent'];
 
                         s.settings_onload = settings;
                         settings.onHold = true; // signals a wait for na.site.loadTheme() has started
-                        na.site.settings.current.app = 'applications/content-management-systems/NicerAppWebOS/blogEditor';
+                        na.site.settings.current.app = 'applications/content-management-systems/NicerAppWebOS/usersGroupsManager';
 
                         $('#siteContent > .vividDialogContent, #siteToolbarLeft > .vividDialogContent').css({opacity:1,display:'none'}).fadeIn('slow');
 
@@ -50,12 +50,12 @@ na.apps.loaded['applications/content-management-systems/NicerAppWebOS/usersGroup
                             );
                             //return true;
                         }, function () {*/
-                            na.apps.loaded['applications/content-management-systems/NicerAppWebOS/blogEditor'].settings.loadedIn['#siteContent'].settings.initialized = true;
-                            na.apps.loaded['applications/content-management-systems/NicerAppWebOS/blogEditor'].settings.loadedIn['#siteContent'].settings.ready = true;
-                            document.addEventListener ('keyup', na.apps.loaded['applications/content-management-systems/NicerAppWebOS/blogEditor'].onkeyup);
+                            na.apps.loaded['applications/content-management-systems/NicerAppWebOS/usersGroupsManager'].settings.loadedIn['#siteContent'].settings.initialized = true;
+                            na.apps.loaded['applications/content-management-systems/NicerAppWebOS/usersGroupsManager'].settings.loadedIn['#siteContent'].settings.ready = true;
+                            document.addEventListener ('keyup', na.apps.loaded['applications/content-management-systems/NicerAppWebOS/usersGroupsManager'].onkeyup);
 
-                            na.apps.loaded['applications/content-management-systems/NicerAppWebOS/blogEditor'].onload(settings);
-                            //na.analytics.logMetaEvent ('applications/content-management-systems/NicerAppWebOS/blogEditor (version '+na.apps.loaded['applications/content-management-systems/NicerAppWebOS/blogEditor'].about.version+' is starting.');
+                            na.apps.loaded['applications/content-management-systems/NicerAppWebOS/usersGroupsManager'].onload(settings);
+                            //na.analytics.logMetaEvent ('applications/content-management-systems/NicerAppWebOS/usersGroupsManager (version '+na.apps.loaded['applications/content-management-systems/NicerAppWebOS/usersGroupsManager'].about.version+' is starting.');
 
                             settings.onHold = false; // signals a wait for na.site.loadTheme() has ended
                             //});
@@ -64,7 +64,7 @@ na.apps.loaded['applications/content-management-systems/NicerAppWebOS/usersGroup
 				},
                 ondestroy : function (settings) {
                     var
-                    na1 = na.apps.loaded['applications/content-management-systems/NicerAppWebOS/blogEditor'], g = na1.globals, s = na1.settings, c = s.current, db = c.db;
+                    na1 = na.apps.loaded['applications/content-management-systems/NicerAppWebOS/usersGroupsManager'], g = na1.globals, s = na1.settings, c = s.current, db = c.db;
 
                     $('#siteContent .vividButton_icon_50x50').each(function(idx,el){
                         var elID = el.id;
@@ -72,8 +72,8 @@ na.apps.loaded['applications/content-management-systems/NicerAppWebOS/usersGroup
                         delete na.site.settings.buttons['#'+elID];
                     });
 
-                    clearInterval(na.apps.loaded['applications/content-management-systems/NicerAppWebOS/blogEditor'].settings.countDownInterval);
-                    clearTimeout (na.apps.loaded['applications/content-management-systems/NicerAppWebOS/blogEditor'].settings.refreshTimer);
+                    clearInterval(na.apps.loaded['applications/content-management-systems/NicerAppWebOS/usersGroupsManager'].settings.countDownInterval);
+                    clearTimeout (na.apps.loaded['applications/content-management-systems/NicerAppWebOS/usersGroupsManager'].settings.refreshTimer);
                     clearTimeout (c.adsTimer1);
                     clearTimeout (c.adsTimer2);
                     clearInterval(c.adsInterval1);
@@ -86,14 +86,14 @@ na.apps.loaded['applications/content-management-systems/NicerAppWebOS/usersGroup
                     clearInterval (c.newItemsInterval);
                     clearInterval (c.intervalMailLogCountdown);
 
-                    document.removeEventListener ('keyup', na.apps.loaded['applications/content-management-systems/NicerAppWebOS/blogEditor'].onkeyup);
-                    $(na.apps.loaded['applications/content-management-systems/NicerAppWebOS/blogEditor'].settings.loaderIcon).remove();
+                    document.removeEventListener ('keyup', na.apps.loaded['applications/content-management-systems/NicerAppWebOS/usersGroupsManager'].onkeyup);
+                    $(na.apps.loaded['applications/content-management-systems/NicerAppWebOS/usersGroupsManager'].settings.loaderIcon).remove();
                 },
 				onresize : function (settings) {
 					// TODO : what's settings.isManualResize ???
 					//if ($('#appGame').css('display')=='none') $('#appGame').fadeIn('slow');
 
-                    na.apps.loaded['applications/content-management-systems/NicerAppWebOS/blogEditor'].onresize(settings);
+                    na.apps.loaded['applications/content-management-systems/NicerAppWebOS/usersGroupsManager'].onresize(settings);
 
 				}
 			}
@@ -103,7 +103,7 @@ na.apps.loaded['applications/content-management-systems/NicerAppWebOS/usersGroup
     onload : async function(settings) {
         var 
         fncn = 'na.ugm.onload()',
-        url1 = '/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/NicerAppWebOS/blogEditor/ajax_getTreeNodes.php',
+        url1 = '/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/NicerAppWebOS/usersGroupsManager/ajax_getTreeNodes.php',
         ac = {
             type : 'GET',
             url : url1,
@@ -243,7 +243,7 @@ na.apps.loaded['applications/content-management-systems/NicerAppWebOS/usersGroup
                     tree = $('#jsTree').jstree(true),
                     oldPath = na.ugm.currentPath(tree.get_node(data.old_parent)),
                     newPath = na.ugm.currentPath(tree.get_node(data.parent)),
-                    url2 = '/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/NicerAppWebOS/blogEditor/ajax_moveNode.php',
+                    url2 = '/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/NicerAppWebOS/usersGroupsManager/ajax_moveNode.php',
                     ac = {
                         type : 'POST',
                         url : url2,
@@ -280,7 +280,7 @@ na.apps.loaded['applications/content-management-systems/NicerAppWebOS/usersGroup
     onchange_selectedNode : function (settings, data,rec, callback) {
         var
         fncn = 'na.ugm.onchange_selectedNode()',
-        url2 = '/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/NicerAppWebOS/blogEditor/ajax_changeNodeStatus_selectedNode.php',
+        url2 = '/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/NicerAppWebOS/usersGroupsManager/ajax_changeNodeStatus_selectedNode.php',
         db = na.ugm.settings.current.db,
         dbs = [],
         ac = {
@@ -359,7 +359,7 @@ na.apps.loaded['applications/content-management-systems/NicerAppWebOS/usersGroup
 
 
                 var
-                url1 = '/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/NicerAppWebOS/blogEditor/ajax_getPageTitle.php',
+                url1 = '/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/NicerAppWebOS/usersGroupsManager/ajax_getPageTitle.php',
                 ac = {
                     type : 'POST',
                     url : url1,
@@ -636,7 +636,7 @@ na.apps.loaded['applications/content-management-systems/NicerAppWebOS/usersGroup
         $('#siteToolbarLeft .lds-facebook').fadeIn('slow');
         var 
         fncn = 'na.ugm.refresh(callback)',
-        url = '/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/NicerAppWebOS/blogEditor/ajax_getTreeNodes.php',
+        url = '/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/NicerAppWebOS/usersGroupsManager/ajax_getTreeNodes.php',
         ac = {
             type : 'GET',
             url : url,
@@ -676,7 +676,7 @@ na.apps.loaded['applications/content-management-systems/NicerAppWebOS/usersGroup
     loadEditorContent : function (rec, callback) {
         var
         fncn = 'na.ugm.loadEditorContent(rec, callback)',
-        url = '/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/NicerAppWebOS/blogEditor/ajax_loadDocument.php',
+        url = '/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/NicerAppWebOS/usersGroupsManager/ajax_loadDocument.php',
         ac = {
             type : 'POST',
             url : url,
@@ -708,7 +708,7 @@ na.apps.loaded['applications/content-management-systems/NicerAppWebOS/usersGroup
     saveEditorContent : function (rec, callback) {
         var 
         fncn = 'na.ugm.saveEditorContent(rec,callback)',
-        url = '/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/NicerAppWebOS/blogEditor/ajax_editDocument.php',
+        url = '/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/NicerAppWebOS/usersGroupsManager/ajax_editDocument.php',
         ac = {
             type : 'POST',
             url : url,
@@ -781,7 +781,7 @@ na.apps.loaded['applications/content-management-systems/NicerAppWebOS/usersGroup
         fncn = 'na.ugm.onchange_folderStatus_openOrClosed(event,data)',
         tree = $('#jsTree').jstree(true),
         //sel = tree.get_node(tree.get_selected()[0]),
-        url = '/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/NicerAppWebOS/blogEditor/ajax_changeNodeStatus_openOrClosed.php',
+        url = '/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/NicerAppWebOS/usersGroupsManager/ajax_changeNodeStatus_openOrClosed.php',
         ac = {
             type : 'POST',
             url : url,
@@ -804,7 +804,7 @@ na.apps.loaded['applications/content-management-systems/NicerAppWebOS/usersGroup
         fncn = 'na.ugm.onchange_rename_node(event,data)',
         tree = $('#jsTree').jstree(true),
         sel = tree.get_node(tree.get_selected()[0]),
-        url = '/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/NicerAppWebOS/blogEditor/ajax_changeNode_rename_node.php',
+        url = '/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/NicerAppWebOS/usersGroupsManager/ajax_changeNode_rename_node.php',
         rec = na.ugm.settings.current.selectedTreeNode,
         relFilePath = na.ugm.currentPath(rec),
         oldFolderName = data.old,
@@ -847,7 +847,7 @@ na.apps.loaded['applications/content-management-systems/NicerAppWebOS/usersGroup
         oldFolderName = rec.original.text,
         newFolderName = $('#mediaFolderLabel').val(),
         newRelFilePath = relFilePath.replace('/'+oldFolderName, '/'+newFolderName),
-        url = '/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/NicerAppWebOS/blogEditor/ajax_changeNode_mediaFolderLabel.php',
+        url = '/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/NicerAppWebOS/usersGroupsManager/ajax_changeNode_mediaFolderLabel.php',
         ac = {
             type : 'POST',
             url : url,
@@ -872,7 +872,7 @@ na.apps.loaded['applications/content-management-systems/NicerAppWebOS/usersGroup
         fncn = 'na.ugm.onchange_documentHeaders()',
         tree = $('#jsTree').jstree(true),
         sel = tree.get_node(tree.get_selected()[0]),
-        url = '/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/NicerAppWebOS/blogEditor/ajax_changeNode_documentHeaders.php',
+        url = '/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/NicerAppWebOS/usersGroupsManager/ajax_changeNode_documentHeaders.php',
         ac = {
             type : 'POST',
             url : url,
@@ -912,7 +912,7 @@ na.apps.loaded['applications/content-management-systems/NicerAppWebOS/usersGroup
         sel = tree.get_node(tree.get_selected()[0]),
         rec = na.ugm.settings.current.selectedTreeNode,
         relFilePath = na.ugm.currentPath(rec),
-        url = '/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/NicerAppWebOS/blogEditor/ajax_addNode.php',
+        url = '/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/NicerAppWebOS/usersGroupsManager/ajax_addNode.php',
         ac = {
             type : 'POST',
             url : url,
@@ -937,7 +937,7 @@ na.apps.loaded['applications/content-management-systems/NicerAppWebOS/usersGroup
         fncn = 'na.ugm.onclick_addDocument()',
         tree = $('#jsTree').jstree(true),
         sel = tree.get_node(tree.get_selected()[0]),
-        url = '/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/NicerAppWebOS/blogEditor/ajax_addNode.php',
+        url = '/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/NicerAppWebOS/usersGroupsManager/ajax_addNode.php',
         ac = {
             type : 'POST',
             url : url,
@@ -963,7 +963,7 @@ na.apps.loaded['applications/content-management-systems/NicerAppWebOS/usersGroup
         sel = tree.get_node(tree.get_selected()[0]),
         rec = na.ugm.settings.current.selectedTreeNode,
         relFilePath = na.ugm.currentPath(rec),
-        url = '/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/NicerAppWebOS/blogEditor/ajax_addNode.php',
+        url = '/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/NicerAppWebOS/usersGroupsManager/ajax_addNode.php',
         ac = {
             type : 'POST',
             url : url,
@@ -1007,7 +1007,7 @@ na.apps.loaded['applications/content-management-systems/NicerAppWebOS/usersGroup
         sel = tree.get_node(tree.get_selected()[0]),
         rec = na.ugm.settings.current.selectedTreeNode,
         path = na.ugm.currentPath(rec),
-        url = '/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/NicerAppWebOS/blogEditor/ajax_deleteNode.php',
+        url = '/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/NicerAppWebOS/usersGroupsManager/ajax_deleteNode.php',
         ac = {
             type : 'POST',
             url : url,
@@ -1270,7 +1270,7 @@ na.apps.loaded['applications/content-management-systems/NicerAppWebOS/usersGroup
                     state : { opened : true }
                 },
                 r = tree.create_node (cur.id, n),
-                url = '/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/NicerAppWebOS/blogEditor/ajax_addNode.php',
+                url = '/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/NicerAppWebOS/usersGroupsManager/ajax_addNode.php',
                 ac = {
                     type : 'POST',
                     url : url,
