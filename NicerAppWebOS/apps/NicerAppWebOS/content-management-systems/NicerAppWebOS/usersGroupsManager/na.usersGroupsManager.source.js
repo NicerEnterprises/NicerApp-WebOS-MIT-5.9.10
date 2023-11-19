@@ -13,9 +13,9 @@ na.apps.loaded['applications/content-management-systems/NicerAppWebOS/usersGroup
 				},
 
 				onload : function (settings) {
-                    na.m.waitForCondition ('applications/content-management-systems/NicerAppWebOS/usersGroupsManager start', na.m.HTMLidle, function () {
+                    na.m.waitForCondition ('applications/content-management-systems/NicerAppWebOS/usersGroupsManager start', na.m.HTMLidle, setTimeout(function () {
                         var
-                        na1 = na.apps.loaded['applications/content-management-systems/NicerAppWebOS/usersGroupManager'], g = na1.globals, s = na1.settings, c = s.current, db = c.db,
+                        na1 = na.apps.loaded['applications/content-management-systems/NicerAppWebOS/usersGroupsManager'], g = na1.globals, s = na1.settings, c = s.current, db = c.db,
                         loadedIn = s.loadedIn['#siteContent'];
 
                         s.settings_onload = settings;
@@ -60,7 +60,7 @@ na.apps.loaded['applications/content-management-systems/NicerAppWebOS/usersGroup
                             settings.onHold = false; // signals a wait for na.site.loadTheme() has ended
                             //});
                         //}, 30);
-                    }, 30);
+                    }, 30));
 				},
                 ondestroy : function (settings) {
                     var

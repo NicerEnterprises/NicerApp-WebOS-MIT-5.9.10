@@ -28,27 +28,73 @@ class naVividMenu__behavior_rainbowPanels {
 
         //t.initWatchFunctions(t);
         t.initItems(t);
-
-        $('.vividMenu_item', $('#menu__'+t.el.id)[0]).each(function(idx,itEl) {
-            if (itEl.it && itEl.it.level===1) {
-                var
-                dim = t.getDimensions(t, itEl, false);
-
-                $(itEl).css({position:'absolute'});
-                t.showMenuItem (t, itEl.it, dim, { currentTarget : null });
-                t.prevDisplayedEl = itEl;
-                if (t.useFading)
-                    $(itEl).stop(true,true).fadeIn(t.fadingSpeed);
-                else
-                    $(itEl).css({display:'block'});
-            }
-        });
+        if (!$(t.el).is('.noInitialShowing')) t.showMenu ();
+        var dbg = {
+            't.el'  : t.el,
+            '1' : (!$(t.el).is('.noInitialShowing')) ,
+            't' : t
+        };
 
         $(el).not('.noFlex').css({display:'flex',height:50,alignItems:'center'});
 
         if (typeof callback7=='function') callback7(t.el);
 
         return this;
+    }
+
+
+
+    showMenu (t, showMeAnyways) {
+        var t = this;
+        //na.m.waitForCondition('showMenu : htmlIdle()',  na.m.HTMLidle, function () {
+            var r =  null;
+            var x1 = null;
+            $('.vividMenu_item', t.el).each(function(idx,itEl) {
+                if (itEl.it && itEl.it.level===1 && ( !$(t.el).is('.noInitialShowing') || showMeAnyways)) {
+                    var
+                    dim = t.getDimensions(t, itEl, false);
+
+                    $(itEl).css({position:'absolute'});
+                    var x = t.showMenuItem (t, itEl.it, dim, { currentTarget : null });
+                    if (!r) r = x;
+                    if (!x1) x1 = x;
+                    t.prevDisplayedEl = itEl;
+                    if (t.useFading)
+                        $(itEl).stop(true,true).fadeIn(t.fadingSpeed);
+                    else
+                        $(itEl).css({display:'block'});
+                }
+            });
+            if ($(t.el).is('.noInitialShowing')) {
+                $(t.el).css ({
+                    left : $(t.el.parentNode).position().left + 10,
+                    top : $(t.el.parentNode).position().top + 60,
+                    width : 200
+                });
+
+                var
+                panelID = t.el.id+'__panel__'+t.el.id,
+                html = '<div id="'+panelID+'" class="vividMenu_subMenuPanel">&nbsp;</div>';
+                $('#'+panelID).remove();
+
+                //if (!panel[0]) {
+                    //if (!panel[0]) {
+                        t.childPanels[t.el.id] = $(t.el).append(html);
+                        var panel = $('#'+panelID)[0];
+                        panel.it = t.el;
+
+                        t.el.it = { parentDiv : t.el.parentNode };
+                        if (r) {
+                            t.showPanel (
+                                t, event, panel, r.it, {idx : t.el.id, b : { el : t.el }}, r.dim, r.numColumns, (r.numKids / r.numColumns),
+                                $(x1.it.b.el).offset().left - $(t.el).offset().left,
+                                $(x1.it.b.el).offset().top - $(t.el).offset().top
+                            );
+                        }
+                    //}
+                //}
+            };
+        //});
     }
 
     initWatchFunctions_circularReplacer(key,value) {
@@ -90,7 +136,6 @@ class naVividMenu__behavior_rainbowPanels {
             var btnType = $(li).attr('buttonType');
             if (!btnType || btnType=='') btnType = 'vividButton_text';
             var html2 = '<div id="'+t.el.id+'__'+idx+'" class="vividButton '+btnType+' vividMenu_item backdropped"  theme="dark" style="display:none;"><div class="vdBackground" style="z-index:-1"></div>'+$(li).children('a')[0].outerHTML.replace('<a ', '<a style="z-index:-1" ').replace($(li).children('a')[0].innerHTML+'</a>', '<span class="contentSectionTitle3_span" style="z-index:-1">'+$(li).children('a')[0].innerText+'</span></a>').replace('class="', 'class="linkToNewPage contentSectionTitle3_a ')+'</div>';
-            debugger;
             html += html2;
 
             t.items[idx] = {
@@ -186,7 +231,7 @@ class naVividMenu__behavior_rainbowPanels {
         it.b.el.idx = it.idx;
         it.b.el.subMenuIdx = i;
         it.b.el.level = it.level;
-        if (it.level === 1) $(it.b.el).css({ display : 'block' }); else $(it.b.el).css({ display : 'none' });
+        if (it.level === 1 && !$(t.el).is('.noInitialShowing')) $(it.b.el).css({ display : 'block' }); else $(it.b.el).css({ display : 'none' });
 
         $(it.b.el).bind('mouseenter', function(event) {
             event.stopPropagation();
@@ -381,7 +426,15 @@ class naVividMenu__behavior_rainbowPanels {
             numRows = 1,
             numColumns = $('#'+t.el.id+' > .vividMenu_mainUL > li').length,
             row = 1,
-            column = it.levelIdx + 1;
+            column = it.levelIdx + 1,
+            container = $('#menu__'+t.el.id)[0];
+
+            if ($(t.el).is('.noInitialShowing')) {
+                numRows = $('#'+t.el.id+' > .vividMenu_mainUL > li').length;
+                numColumns = 1;
+            }
+            $(it.b.el).css({display:'block',position:'absolute'}).detach().appendTo(container);
+
         };
         it.row = row;
         it.column = column;
@@ -413,7 +466,7 @@ class naVividMenu__behavior_rainbowPanels {
         ),
         tpde_bcr = t.prevDisplayedEl ? t.prevDisplayedEl.getBoundingClientRect() : { top : 0, left : 0 },
         tpade_bcr = it.parents && it.parents[0] ? p_bcr : { top : 0, left : 0 },
-        top = (it.parents&&it.parents[0] ? itp.level==1 ? offsetY + tpde_bcr.top : itp.level>=1 ? tpde_bcr.top + tpde_bcr.height : 0 : 0) + na.d.g.margin,
+        top = (it.parents&&it.parents[0]&&itp ? itp.level==1 ? offsetY + tpde_bcr.top : itp.level>=1 ? tpde_bcr.top + tpde_bcr.height : 0 : 0) + na.d.g.margin,
         position = (
             it.b.el.parentNode===document.body
             ? 'relative'
@@ -426,15 +479,16 @@ class naVividMenu__behavior_rainbowPanels {
                 position : position,
                 opacity : 1,
                 display : 'none',
-                zIndex : 700000 + (it.level * 5)
+                zIndex : t.el.style.zIndex + (it.level * 5)
             });
+            debugger;
             $(it.b.el).stop(true,true).fadeIn(t.fadingSpeed);
         } else {
             $(it.b.el).css ({
                 opacity : 1,
                 display : 'block',
                 position : position,
-                zIndex : 700000 + (it.level * 5)
+                zIndex : t.el.style.zIndex + (it.level * 5)
             });
         }
 
@@ -477,7 +531,7 @@ class naVividMenu__behavior_rainbowPanels {
 
             var
             parentIt = t.items[parentIdx],
-            parentKids = t.children[parentIt.idx];
+            parentKids = parentIt ? t.children[parentIt.idx] : t.children[t.el.id];
 
             for (var kidsIdx in parentKids) items_prevEl.push(kidsIdx);
         }
@@ -500,7 +554,7 @@ class naVividMenu__behavior_rainbowPanels {
 
             var
             parentIt = t.items[parentIdx],
-            parentKids = t.children[parentIt.idx];
+            parentKids = parentIt ? t.children[parentIt.idx] : t.children[t.el.id];
 
             for (var kidsIdx in parentKids) items_currentEl.push(kidsIdx);
         }
@@ -567,9 +621,9 @@ class naVividMenu__behavior_rainbowPanels {
         $(panel).bind('mouseout', function (event) {
             var
             panel = event.currentTarget,
-            elIdx = parseInt(panel.id.replace(/.*__/,'')),
-            panelKids = t.children[elIdx],
-            firstPanelKidIdx = parseInt(Object.keys(t.children[elIdx])[0]);
+            elIdx = parseInt(panel.id.replace(/.*__/,''));//,
+            //panelKids = t.children[elIdx],
+            //firstPanelKidIdx = parseInt(Object.keys(t.children[elIdx])[0]);
 
             if (!t.panelsShown[panel.id]) t.panelsShown[panel.id] = {};
             if (t.panelsShown[panel.id].hideAll) clearTimeout (t.panelsShown[panel.id].hideAll);
@@ -666,7 +720,7 @@ class naVividMenu__behavior_rainbowPanels {
             border : border,
             boxShadow : 'inset 2px 2px 4px 4px rgba(255,255,255,0.4), 2px 2px 1px 1px rgba(0,0,0,0.55)'
         },
-        panelID = t.el.id+'__panel__'+it.parents[0].idx,
+        panelID = it.parents ? t.el.id+'__panel__'+it.parents[0].idx : t.el.id+'__panel__'+t.el.id,
         itID = t.el.id+'__'+pit.idx,
         html = '<div id="'+panelID+'" class="vividMenu_subMenuPanel">&nbsp;</div>';
         if (t.percentageFor_rainbowPanels===0) {
@@ -700,11 +754,11 @@ class naVividMenu__behavior_rainbowPanels {
         var html = '<div id="'+t.el.id+'__backPanel" class="vividMenu_backPanel">&nbsp;</div>';
         var bp = $('#'+t.el.id+'__backPanel');
         if (!bp[0]) {
-            $('body').append(html);
+            $(t.el).append(html);
             var bp = $('#'+t.el.id+'__backPanel');
 
             $(bp).css({
-                position : 'absolute',
+                position : 'fixed',
                 left : 0,
                 top : 0,
                 width : window.innerWidth,
@@ -714,10 +768,11 @@ class naVividMenu__behavior_rainbowPanels {
             });
             $(bp).bind('mouseover', function (event) {
                 var bp = event.currentTarget;
-                debugger;
+
                 //t.cancelHidings(t);
                 //t.timeout_hideAll[t.el.id][t.timeout_hideAll[t.el.id].length] = setTimeout (function () {
-                    t.hideAll(t,bp);
+                debugger;
+                t.hideAll(t,bp);
                 //}, 300);
             });
         }
@@ -725,7 +780,6 @@ class naVividMenu__behavior_rainbowPanels {
     }
 
     hideAll (t, bp) {
-        debugger;
         if (!bp || !(typeof bp.id=='string')) return false;
         if (!t.timeout_hideAll[bp.id]) {
             t.timeout_hideAll[bp.id] = [];
@@ -738,13 +792,13 @@ class naVividMenu__behavior_rainbowPanels {
         var to = t.timeout_hideAll[bp.id];
         t.timeout_hideAll[bp.id].push( setTimeout(function (t, bp) {
             var hiding = [];
-            $('.vividMenu_item', $('#menu_'+t.el.id)[0]).each(function(idx,button) {
+            $('.vividMenu_item', t.el).each(function(idx,button) {
                 var
                 it = t.items[idx],
                 panelID = (it ? t.el.id+'__panel__'+it.idx : null),
                 panel = $('#'+panelID)[0];
                 if (panel) hiding.push(panel);
-                if (it && it.level!==1 && it.b) hiding.push (it.b.el);
+                if (it && (it.level!==1 || $(t.el).is('.noInitialShowing')) && it.b) hiding.push (it.b.el);
             });
 
             $('.vividMenu_backPanel').each(function(idx,el){
@@ -753,7 +807,7 @@ class naVividMenu__behavior_rainbowPanels {
 
             if (t.useFading) {
                 $(hiding).stop(true,true).fadeOut(t.fadingSpeed);
-                $('.vividMenu_subMenuPanel').fadeOut(t.fadingSpeed);
+                $('.vividMenu_subMenuPanel', t.el).fadeOut(t.fadingSpeed);
             } else {
                 $(hiding).css({display:'none'});
             }
@@ -988,7 +1042,8 @@ class naVividMenu__behavior_rainbowPanels {
         if (t.timeout_onmouseout[el.it.idx]) clearTimeout (t.timeout_onmouseout[el.it.idx]);
         t.timeout_onmouseout[el.it.idx] = setTimeout (function(t, evt) {
             var toHide = t.mustHide (t, t.currentEl.it, evt);
-            if (t.currentEl.it.level > 1) {
+            debugger;
+            if (t.currentEl.it.level > 1 || $(t.el).is('.noInitialShowing')) {
                 if (t.debugMe) na.m.log (20, 'naVividMenu.onmouseout() : hiding sub-menu for "'+toHide.currentEl[0].it.label+'"', false);
                 if (
                     toHide.currentEl[0].length>0
@@ -1025,11 +1080,14 @@ class naVividMenu__behavior_rainbowPanels {
                 }
             }
 
-            currPanel = $('#'+t.el.id+'__panel__'+t.prevEl.it.idx)[0];
+            currPanel = t.prevEl
+                ? $('#'+t.el.id+'__panel__'+t.prevEl.it.idx)[0]
+                : $('#'+t.el.id+'__panel__'+t.el.id)[0];
             prevs.push (currPanel);
 
             if (
-                t.prevEl.it.parents
+                t.prevEl
+                && t.prevEl.it.parents
                 && t.prevEl.it.parents[0]
             ) {
                 currPanel = $('#'+t.el.id+'__panel__'+t.prevEl.it.parents[0].idx)[0];
@@ -1209,11 +1267,12 @@ class naVividMenu__behavior_rainbowPanels {
         }
 
         var currs =
-            $('.vividMenu_item', t.el).add('.vividMenu_subMenuPanel')
-                .not(rootLevel).not(rootPath).not(myPeers).not(myKids);
+            $('.vividMenu_item', t.el).add('.vividMenu_subMenuPanel', t.el)
+                .not(myKids);
+        currs = $(currs).not(rootLevel).not('#'+t.el.id+'__panel__'+t.el.id).not(myPeers).not(rootPath);
+        debugger;
 
         if (t.useFading) {
-            debugger;
             $(currs).stop(true,true).fadeOut(t.fadingSpeed);
         } else {
             $(currs).css({display:'none'});

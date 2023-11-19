@@ -1636,7 +1636,10 @@ onclick_btnFullResetOfAllThemes : function (event) {
         });
 
         $('.vividMenu'/*, vdc[0]*/).each(function(idx,el){
-            if (!na.site.settings.menus['#'+el.id]) na.site.settings.menus['#'+el.id] = new naVividMenu(el)
+            if (el.id!=='siteMenu') {
+                if (!na.site.settings.menus) na.site.settings.menus = {};
+                if (!na.site.settings.menus['#'+el.id]) na.site.settings.menus['#'+el.id] = new naVividMenu(el)
+            }
         });
 
 
@@ -2379,6 +2382,7 @@ onclick_btnFullResetOfAllThemes : function (event) {
                 na.m.log (210, 'STARTING TO RE-INITIALIZE #siteMenu', false);
 
                 setTimeout (function() {
+                    $('#siteMenu').css({zIndex:800*1000});
                     na.site.settings.menus['#siteMenu'] = new naVividMenu($('#siteMenu')[0], function(menu) {
                         na.m.log (210, 'DONE RE-INITIALIZING #siteMenu', false);
                         var topLevelItemCount = $('.vividMenu_mainUL > li', menu).length;

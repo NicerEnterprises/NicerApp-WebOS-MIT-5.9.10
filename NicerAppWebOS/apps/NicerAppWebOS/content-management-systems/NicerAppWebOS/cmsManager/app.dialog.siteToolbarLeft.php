@@ -14,7 +14,7 @@ $ip = (array_key_exists('X-Forwarded-For',apache_request_headers())?apache_reque
 <link rel="stylesheet" href="/NicerAppWebOS/3rd-party/jsTree-3.3.15/dist/themes/default/style.css" /> <!-- has style.min.css -->
 <script type="text/javascript" src="/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/NicerAppWebOS/usersGroupsManager/na.usersGroupsManager.source.js"></script>
 <div id="jsTree_navBar">
-    <div id="btnAddUser_menu" style="display:none;position:absolute;height:100px; z-index:800000" type="vertical">
+    <div id="btnAddUser_menu" class="vividMenu noInitialShowing" style="display:none;position:absolute;height:100px; z-index:800000" type="vertical">
     <ul id="btnAddUser_menu_ul" class="vividMenu_mainUL" style="display:none;">
         <li><a href="javascript:na.ugm.onclick_btnAddUser(event)" class="noPushState">Add</a></li>
         <li><a href="javascript:na.ugm.onclick_btnRemoveUser(event)" class="noPushState">Remove</a></li>
@@ -29,7 +29,7 @@ $ip = (array_key_exists('X-Forwarded-For',apache_request_headers())?apache_reque
         'vividButton_icon_50x50 grouped btnOptions', '_50x50', 'grouped',
         '',
         'na.ugm.onclick_btnAddUser(event)',
-        'na.site.menus[\'#btnAddUser_menu\'].showMenu($(\'#btnAddUser_menu\')[0])',
+        'na.site.settings.menus[\'#btnAddUser_menu\'].showMenu(null, true)',
         '',
 
         403, 'Add user',
@@ -158,12 +158,12 @@ $ip = (array_key_exists('X-Forwarded-For',apache_request_headers())?apache_reque
     $(document).ready(function() {
     //setTimeout (function () {
         na.desktop.settings.visibleDivs.push('#siteToolbarLeft');
-        setTimeout(function() {
-            $('#btnAddUser_menu').css({
-                top : $('#btnAddUser').offset().top + $('#btnAddUser').height() + 10,
-                left : $('#btnAddUser').offset().left + ($('#btnAddUser').width() * 0.66)
-            });
-        }, 1000);
+                $('#btnAddUser_menu').addClass('noInitialShowing');
+                $('#btnAddUser_menu').css({
+                    top : $('#btnAddUser_menu').offset().top + $('#btnAddUser_menu').height() + 10,
+                    left : $('#btnAddUser_menu').offset().left + ($('#btnAddUser_menu').width() * 0.62),
+                    width : $('#btnAddUser_menu').width()
+                });
 
         $('#siteToolbarLeft .vividButton4, #siteToolbarLeft .vividButton, #siteToolbarLeft .vividButton_icon_50x50').each(function(idx,el){
             na.site.settings.buttons['#'+el.id] = new naVividButton(el);
