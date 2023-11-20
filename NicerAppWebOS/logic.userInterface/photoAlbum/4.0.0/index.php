@@ -15,9 +15,15 @@
 //var_dump ($targetDir);exit();
     $imgStyle = ''; // boxShadow perhaps
 
-    $files = getFilePathList ($targetDir, false, FILE_FORMATS_photos, null, array('file'))['files'];
-    //echo '<pre>'; var_dump($files);die();
-    sort($files);
+    $files = getFilePathList ($targetDir, false, FILE_FORMATS_photos, null, array('file'));
+    //echo '<pre>'; var_dump ($targetDir); var_dump($files);die();
+    if (!array_key_exists('files', $files)) {
+        $msg = 'No files found in this folder.';
+    } else {
+        $msg = null;
+        $files = $files['files'];
+        sort($files);
+    }
 ?>
 <html>
 <head>
@@ -45,6 +51,7 @@
         'files' => $files
     );
     if ($debug && false) { echo '<pre style="color:black;background:white;border-radius:3px;border:1px solid black;">'; var_dump ($dbg); echo '</pre>'; }
+    if (is_string($msg)) echo $msg.'<br/>';
     foreach ($files as $idx => $filePath) {
         $fileName = str_replace ($targetDir.'/', '', $filePath);
         $thumbPath = $thumbDir.'/'.$fileName;

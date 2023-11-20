@@ -325,7 +325,7 @@ debugger;
                             oldPath : oldPath,
                             newParent : data.parent,
                             newPath : newPath,
-                            target : data.node.original.id
+                            target : data.node.original._id || original.id
                         },
                         success : function (data, ts, xhr) {
                         },
@@ -370,7 +370,7 @@ debugger;
             url : url2,
             data : {
                 database : rec.original.database,
-                id : rec.original.id
+                id : rec.original._id || original.id
             },
             success : function (data, ts, xhr) {
                 if (typeof callback=='function') callback();
@@ -455,7 +455,7 @@ debugger;
                     url : url1,
                     data : {
                         database : rec.original.database,
-                        id : rec.original.id
+                        id : rec.original._id || original.id
                     },
                     success : function (data, ts, xhr) {
                         $('#documentTitle').val(data);
@@ -465,6 +465,7 @@ debugger;
                         na.site.ajaxFail(fncn, url2, xhr, textStatus, errorThrown);
                     }
                 };
+                debugger;
                 $.ajax(ac);
 
 
@@ -783,7 +784,7 @@ debugger;
             url : url,
             data : {
                 database : rec.original.database.replace('tree','documents'),
-                id : rec.original._id
+                id : rec.original._id || original.id
             },
             success : function (data, ts, xhr) {
                 na.m.waitForCondition ('tinymce ready',
@@ -816,7 +817,7 @@ debugger;
             url : url,
             data : {
                 database : rec.original.database.replace('tree','documents'),
-                id : rec.original.id,
+                id : rec.original._id || original.id,
                 dataID : rec.original.dataID,
                 parent : rec.original.parent,
                 url1 : $('#nb_url1_dropdown_selected').html(),
@@ -962,7 +963,7 @@ debugger;
             url : url,
             data : {
                 database : sel.original.database,
-                id : sel.original.id,
+                id : sel.original._id || original.id,
                 text : newFolderName,
                 relFilePath : relFilePath,
                 newRelFilePath : newRelFilePath
@@ -996,7 +997,7 @@ debugger;
             url : url,
             data : {
                 database : sel.original.database,
-                id : sel.original.id,
+                id : sel.original._id || original.id,
                 url1 : $('#nb_url1_dropdown_selected').html(),
                 seoValue : $('#nb_url2_value').val(),
                 pageTitle : $('#nb_documentTitle').val(),
@@ -1036,7 +1037,7 @@ debugger;
             url : url,
             data : {
                 database : sel.original.database,
-                parent : sel.original.id,
+                parent : sel.original._id || original.id,
                 relFilePath : relFilePath,
                 type : 'naFolder'
             },
@@ -1063,7 +1064,7 @@ debugger;
             url : url,
             data : {
                 database : sel.original.database,
-                parent : sel.original.id,
+                parent : sel.original._id || original.id,
                 type : 'naDocument'
             },
             success : function (data, ts, xhr) {
@@ -1089,7 +1090,7 @@ debugger;
             url : url,
             data : {
                 database : sel.original.database,
-                parent : sel.original.id,
+                parent : sel.original._id || original.id,
                 type : 'naMediaAlbum',
                 relFilePath : relFilePath
             },
@@ -1137,7 +1138,7 @@ debugger;
             url : url,
             data : {
                 database : sel.original.database,
-                id : sel.original.id,
+                id : sel.original._id || original.id,
                 currPath : path
             },
             success : function (data, ts, xhr) {
@@ -1176,7 +1177,7 @@ debugger;
             },
             cmsText : {
                 database : sel.original.database,
-                id : sel.original.id
+                id : sel.original._id || original.id
             }
         };
         if (user) arr.cmsText.user = user;
