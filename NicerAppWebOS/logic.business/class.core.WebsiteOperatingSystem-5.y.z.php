@@ -1369,6 +1369,9 @@ class NicerAppWebOS {
                     $r .= "\t".'background : rgba(0,0,0,'.$theme['textBackgroundOpacity'].');'."\r\n".PHP_EOL;
                     $r .= "\t".'border-radius : 10px !important;'."\r\n".PHP_EOL;
                 $r .= '}'."\r\n".PHP_EOL;
+                $r .= '.mce-content-body h1, .mce-content-body h2, .mce-content-body h3, .mce-content-body p {';
+                $r .= "\t".'background : inherit !important;';
+                $r .= '}'."\r\n".PHP_EOL;
 
                 $fn = dirname(__FILE__).'/../themes/nicerapp_default_animations__'.$themeName.'.css';
                 if (file_exists($fn) && is_readable($fn)) {

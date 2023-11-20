@@ -36,11 +36,13 @@ na.apps.loaded['applications/content-management-systems/NicerAppWebOS/usersGroup
                             na.desktop.resize();
                         };
 
+                        /*
                         setTimeout (function() {
                             $('#cssPageSpecific').clone().appendTo(
                                 $('#tinymce_ifr')[0].contentDocument.head
                             );
                         }, 1000);
+                        */
 
                         /*na.m.waitForCondition('siteContent dialog reappearance', function () {
                             return (

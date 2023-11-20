@@ -481,7 +481,6 @@ class naVividMenu__behavior_rainbowPanels {
                 display : 'none',
                 zIndex : t.el.style.zIndex + (it.level * 5)
             });
-            debugger;
             $(it.b.el).stop(true,true).fadeIn(t.fadingSpeed);
         } else {
             $(it.b.el).css ({

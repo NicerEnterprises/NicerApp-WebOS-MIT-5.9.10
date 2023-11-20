@@ -35,7 +35,6 @@ na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/Nic
                             na.desktop.settings.visibleDivs.push('#siteContent');
                             na.desktop.resize();
                         };
-
                         na.m.waitForCondition ('na.cms.settings.loadedIn[\'#siteContent\'].onload(settings) : tinymce started?', function() {
                             return $('#tinymce_ifr')[0];
                         }, function() {
@@ -237,6 +236,7 @@ na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/Nic
                                 || rec.type=='naMediaAlbum'
                             )
                         ) {
+                            debugger;
                             if ($(window).width() < 400) {
                                 na.cms.settings.current.activeDialog = '#siteContent';
                                 na.desktop.settings.visibleDivs.remove('#siteToolbarLeft');
@@ -460,6 +460,7 @@ na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/Nic
                     });
 
                 } else if (rec.original.type=='naMediaAlbum') {
+                    debugger;
                     $('#folder').css({display:'none'});
                     $('#upload').css({display:'block'});
                     $('#document').css({display:'none'});

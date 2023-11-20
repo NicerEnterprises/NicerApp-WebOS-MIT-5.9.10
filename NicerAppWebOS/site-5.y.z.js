@@ -1256,7 +1256,7 @@ onclick_btnFullResetOfAllThemes : function (event) {
         na.site.settings.current.url = url;
         //if (na.site.globals.debug['na.site.loadContent']) alert (url);
         
-        na.desktop.setConfig ('content');
+        //na.desktop.setConfig ('content');
 
         var 
         dateObj = new Date(),
@@ -1292,8 +1292,8 @@ onclick_btnFullResetOfAllThemes : function (event) {
         ec.isCurrentEventChain_for__na_site_loadContent = true;
         na.m.makeEventsChain_theCurrentOne (lc, ec);
 
-        na.desktop.settings.visibleDivs = na.desktop.globals.visibleDivs;
-        na.desktop.resize();
+        //na.desktop.settings.visibleDivs = na.desktop.globals.visibleDivs;
+        //na.desktop.resize();
 
         
    // debugger;
@@ -3070,11 +3070,14 @@ onclick_btnFullResetOfAllThemes : function (event) {
             )
         ) {
 */
+
+
+                        /*
             for (var themeID in na.site.globals.themes) break;
             na.site.globals.themes.default.themeSettings.Extras = {
                 'texts' : {
                     'css' : {
-                        '#siteContent > .vividDialogContent > li > a, p:not(.backdropped, .vividTextCSS), h1:not(.backdropped, .vividTextCSS), h2:not(.backdropped, .vividTextCSS), h3:not(.backdropped, .vividTextCSS)' : { opacity : na.site.globals.themes[themeID].textBackgroundOpacity, backgroundClip:'text' },
+                        '#siteContent > .vividDialogContent > li > a, p:not(.backdropped, .vividTextCSS), h1:not(.backdropped, .vividTextCSS), h2:not(.backdropped, .vividTextCSS), h3:not(.backdropped, .vividTextCSS)' : { opacity : // CULPRIT for blogging app na.site.globals.themes[themeID].textBackgroundOpacity, backgroundClip:'text' },
                         '#siteContent .newsApp__item__outer p' : { opacity : 1, backgroundClip:'none' }
                     }
                 },
@@ -3085,6 +3088,8 @@ onclick_btnFullResetOfAllThemes : function (event) {
                 }
             };
   //      };
+                        */
+
     },
     loadTheme_doGetPageSpecificSettings : function(callback, doSwitchSpecificities) {
         var

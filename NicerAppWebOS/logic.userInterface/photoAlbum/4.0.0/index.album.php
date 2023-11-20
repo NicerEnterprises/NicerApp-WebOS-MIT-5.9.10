@@ -16,7 +16,7 @@
     $dialogID = $_GET['dialogID'];
     $imgStyle = ''; // boxShadow perhaps
 
-    $files = getFilePathList ($targetDir, false, FILE_FORMATS_photos, null, array('file'));
+    $files = getFilePathList ($targetDir, false, FILE_FORMATS_photos, null, array('file'))['files'];
     
     ?>
     <style>

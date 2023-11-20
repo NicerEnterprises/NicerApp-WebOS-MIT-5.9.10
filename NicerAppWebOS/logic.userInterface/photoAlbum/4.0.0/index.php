@@ -15,7 +15,7 @@
 //var_dump ($targetDir);exit();
     $imgStyle = ''; // boxShadow perhaps
 
-    $files = getFilePathList ($targetDir, false, FILE_FORMATS_photos, null, array('file'));
+    $files = getFilePathList ($targetDir, false, FILE_FORMATS_photos, null, array('file'))['files'];
     sort($files);
 ?>
 <html>
