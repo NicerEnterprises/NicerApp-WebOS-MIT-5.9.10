@@ -465,6 +465,10 @@ na.apps.loaded['applications/content-management-systems/NicerAppWebOS/usersGroup
     
     onresize : function(settings) {
         //alert ('onr');
+        return false;
+
+
+
         na.m.waitForCondition ('na.ugm.onresize : HTMLidle?', na.m.desktopIdle, function () {
             //alert ('onres1');
             //na.desktop.resize(function (t) {
@@ -676,6 +680,9 @@ na.apps.loaded['applications/content-management-systems/NicerAppWebOS/usersGroup
     },
     
     loadEditorContent : function (rec, callback) {
+
+        return false;
+
         var
         fncn = 'na.ugm.loadEditorContent(rec, callback)',
         url = '/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/NicerAppWebOS/usersGroupsManager/ajax_loadDocument.php',

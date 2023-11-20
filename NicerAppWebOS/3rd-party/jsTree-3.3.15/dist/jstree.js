@@ -819,6 +819,7 @@
 													this.open_node(tmp[i], false, 0);
 												}
 											}
+											debugger;
 											this.trigger('changed', { 'action' : 'ready', 'selected' : this._data.core.selected });
 										}
 										/**
@@ -2147,6 +2148,7 @@
 			}
 			m[data.id] = data;
 			if(data.state.selected) {
+				debugger;
 				this._data.core.selected.push(data.id);
 			}
 			return data.id;
@@ -2245,6 +2247,7 @@
 			delete d.children;
 			m[tmp.id].original = d;
 			if(tmp.state.selected) {
+				debugger;
 				this._data.core.selected.push(tmp.id);
 			}
 			return tmp.id;
@@ -2355,6 +2358,7 @@
 			tmp.original = d;
 			m[tmp.id] = tmp;
 			if(tmp.state.selected) {
+				debugger;
 				this._data.core.selected.push(tmp.id);
 			}
 			return tmp.id;
@@ -3298,6 +3302,7 @@
 			dom = this.get_node(obj, true);
 			if(!obj.state.selected) {
 				obj.state.selected = true;
+				debugger;
 				this._data.core.selected.push(obj.id);
 				if(!prevent_open) {
 					dom = this._open_to(obj);
@@ -3522,6 +3527,7 @@
 							state.core.open.push(i);
 						}
 						if(this._model.data[i].state.selected) {
+							debugger;
 							state.core.selected.push(i);
 						}
 					}
@@ -5041,6 +5047,7 @@
 				}
 				for(i = 0, j = data.selected.length; i < j; i++) {
 					if(!tmp[data.selected[i]]) {
+						debugger;
 						data.changed.selected.push(data.selected[i]);
 					}
 					else {
@@ -5373,6 +5380,7 @@
 								}
 								if(j > 0 && c === j) {
 									p.state[ t ? 'selected' : 'checked' ] = true;
+									debugger;
 									this._data[ t ? 'core' : 'checkbox' ].selected.push(p.id);
 									tmp = this.get_node(p, true);
 									if(tmp && tmp.length) {
@@ -5401,6 +5409,7 @@
 									}
 									if(j > 0 && c === j) {
 										p.state[ t ? 'selected' : 'checked' ] = true;
+										debugger;
 										this._data[ t ? 'core' : 'checkbox' ].selected.push(p.id);
 										tmp = this.get_node(p, true);
 										if(tmp && tmp.length) {
@@ -5422,6 +5431,7 @@
 								if(c === j) {
 									if(!p.state[ t ? 'selected' : 'checked' ]) {
 										p.state[ t ? 'selected' : 'checked' ] = true;
+										debugger;
 										this._data[ t ? 'core' : 'checkbox' ].selected.push(p.id);
 										tmp = this.get_node(p, true);
 										if(tmp && tmp.length) {
@@ -5829,6 +5839,7 @@
 			dom = this.get_node(obj, true);
 			if(!obj.state.checked) {
 				obj.state.checked = true;
+				debugger;
 				this._data.checkbox.selected.push(obj.id);
 				if(dom && dom.length) {
 					dom.children('.jstree-anchor').addClass('jstree-checked');

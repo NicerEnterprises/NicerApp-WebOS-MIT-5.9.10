@@ -29,9 +29,17 @@ na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/Nic
                         });
 
                         $('#document_headers').detach().appendTo('body').css({display:'block',opacity:0.0001,zIndex:-1});
+                        debugger;
                         if ($(window).width() < 400) {
                             na.cms.settings.current.activeDialog = '#siteContent';
-                            na.desktop.settings.visibleDivs.remove('#siteToolbarLeft');
+                            arrayRemove(na.desktop.settings.visibleDivs, '#siteToolbarLeft');
+                            arrayRemove(na.desktop.settings.visibleDivs, '#siteContent');
+                            na.desktop.settings.visibleDivs.push('#siteContent');
+                            na.desktop.resize();
+                        } else {
+                            arrayRemove(na.desktop.settings.visibleDivs, '#siteToolbarLeft');
+                            arrayRemove(na.desktop.settings.visibleDivs, '#siteContent');
+                            na.desktop.settings.visibleDivs.push('#siteToolbarLeft');
                             na.desktop.settings.visibleDivs.push('#siteContent');
                             na.desktop.resize();
                         };
@@ -116,7 +124,7 @@ na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/Nic
                     na.site.fail (fncn+' : AJAX decode error in data returned for url='+url1+', error='+error.message+', in data='+data, xhr);
                     return false;
                 }
-
+debugger;
                 na.cms.settings.current.db = dat;
                 $.jstree.defaults.core.error = function (a,b,c,d) {
                     //debugger;
@@ -184,7 +192,11 @@ na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/Nic
                         "contextmenu", "dnd", "search", "state", "types", "wholerow"
                     ]
                 }).on('ready.jstree', function (e, data) {
-
+                    var tree = $('#jsTree').jstree(true);
+                    for (var i=0; i<tree.settings.core.data.length; i++) {
+                        var it = tree.settings.core.data[i];
+                        if (it.state.selected) tree.select_node(it._id);
+                    }
                 }).on('open_node.jstree', function (e, data) {
                     na.cms.onchange_folderStatus_openOrClosed(e, data);
 
@@ -197,8 +209,8 @@ na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/Nic
                 }).on('changed.jstree', function (e, data) {
 
                     if (
-                        data.action!=='ready'
-                        &&
+                        //data.action!=='ready'
+                        //&&
                         /*data.action!=='model'
                         && */data.action!=='select_node'
                     ) return false;
@@ -236,10 +248,17 @@ na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/Nic
                                 || rec.type=='naMediaAlbum'
                             )
                         ) {
-                            debugger;
                             if ($(window).width() < 400) {
                                 na.cms.settings.current.activeDialog = '#siteContent';
-                                na.desktop.settings.visibleDivs.remove('#siteToolbarLeft');
+                                arrayRemove(na.desktop.settings.visibleDivs, '#siteToolbarLeft');
+                                arrayRemove(na.desktop.settings.visibleDivs, '#siteContent');
+                                na.desktop.settings.visibleDivs.push('#siteContent');
+                                na.desktop.resize();
+                            } else {
+                                na.cms.settings.current.activeDialog = '#siteContent';
+                                arrayRemove(na.desktop.settings.visibleDivs, '#siteToolbarLeft');
+                                arrayRemove(na.desktop.settings.visibleDivs, '#siteContent');
+                                na.desktop.settings.visibleDivs.push('#siteToolbarLeft');
                                 na.desktop.settings.visibleDivs.push('#siteContent');
                                 na.desktop.resize();
                             };
@@ -285,7 +304,7 @@ na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/Nic
                                 || rec.type=='naMediaAlbum'
                             )
                         ) na.site.settings.buttons['#btnDeleteRecord'].enable();
-                    }, 250, data);
+                    }, 500, data);
 
                     //clearTimeout (na.cms.settings.current.timeoutRefresh);
                     //na.cms.settings.current.timeoutRefresh = setTimeout(na.cms.refresh,1000);
@@ -317,6 +336,8 @@ na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/Nic
                     $.ajax(ac);
 
                 });
+
+
 
                 $('#siteToolbarLeft .lds-facebook').fadeOut('slow');
             },
@@ -376,15 +397,24 @@ na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/Nic
             mce_bars_height += $(this).height();
         });
 
-        var l = data.selected.length;
+        var
+        l = data.selected.length,
+        tree = $('#jsTree').jstree(true);
+
+        if (l!==1 || data.node.id!==data.selected[0]) {
+            tree.deselect_all();
+            tree.select_node(data.node.id);
+        }
+
         for (var i=0; i<l; i++) {
             var
             d = data.selected[i],
             rec = data.instance.get_node(d),
             url0 = '',
-            tree = $('#jsTree').jstree(true),
             sel = tree.get_node(tree.get_selected()[0]);
-;
+
+            debugger;
+            if (sel)
             for (var i=0; i<sel.parents.length; i++) {
                 var p = tree.get_node(sel.parents[i]);
                 if (p.type == 'naUserRootFolder') url0 = p.text;
@@ -484,8 +514,8 @@ na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/Nic
                 }
 
                 if (c.divsInitializing)
-                for (var i=0; i < c.divsInitializing.length; i++) {
-                    var d = c.divsInitializing[i];
+                for (var j=0; j < c.divsInitializing.length; j++) {
+                    var d = c.divsInitializing[j];
                     if (d.divID=='siteContent') d.loaded = true;
                 }
 
@@ -753,7 +783,7 @@ na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/Nic
             url : url,
             data : {
                 database : rec.original.database.replace('tree','documents'),
-                id : rec.original.id
+                id : rec.original._id
             },
             success : function (data, ts, xhr) {
                 na.m.waitForCondition ('tinymce ready',
@@ -772,6 +802,7 @@ na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/Nic
                 na.site.ajaxFail(fncn, url, xhr, textStatus, errorThrown);
             }                
         };
+        debugger;
         $.ajax(ac);
     },
 
@@ -1153,6 +1184,7 @@ na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/Nic
         
         //var url = '/'+user+'/in/'+sel.original.dataID;//na.m.base64_encode_url (JSON.stringify(arr));
         na.cms.saveEditorContent(sel, function(rec) {
+            debugger;
             var url = '/'+user.replace(/ /g, '-')+'/'+$('#nb_url1_dropdown_selected')[0].innerText+'/'+rec.original.seo_value;
             na.site.loadContent(null, url);
 

@@ -1714,6 +1714,11 @@ onclick_btnFullResetOfAllThemes : function (event) {
             } else {
                 var scripts = dat[divID].match(/\/NicerAppWebOS\/.*\.js?.*"/g);
                 if (scripts) c.scriptsToLoadTotal += scripts.length;
+                if (scripts)
+                for (var i=0; i<scripts.length; i++) {
+                    var src = scripts[i].replace('"', '');
+                    c.scriptsToLoadTotal -= $('head script[src="'+src+'"]').length;
+                }
 
                 // did we perhaps not need to load any scripts at all for this set of DIVs that are now initializing for this page change?
                 //      if so, then go straight to [1], which is quite necessary as part of the app startup routine.
@@ -1752,6 +1757,7 @@ onclick_btnFullResetOfAllThemes : function (event) {
                                     script.onload = function () {
                                         var c = na.site.settings.current;
                                         c.scriptsLoaded++;
+                                        debugger;
                                         if (c.scriptsLoaded === c.scriptsToLoadTotal) {
                                             c.scriptsLoaded = true;
                                             c.startingApps = false;
