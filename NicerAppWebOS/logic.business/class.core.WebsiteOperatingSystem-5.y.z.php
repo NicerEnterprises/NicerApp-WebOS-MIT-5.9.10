@@ -907,7 +907,7 @@ class NicerAppWebOS {
                 foreach ($view as $viewsFolder => $viewSettings) {
                     $rootPath = str_replace('/NicerAppWebOS','',$rootPath_na);
                     if (file_exists($rootPath.'/'.$viewsFolder)) {
-                        $files = getFilePathList ($rootPath.'/'.$viewsFolder, true, '/app.*/', null, array('file'), 1);
+                        $files = getFilePathList ($rootPath.'/'.$viewsFolder, false, '/app.*/', null, array('file'), 1)['files'];
                         //if ($debug)
                         //{ var_dump ($rootPath.'/'.$viewsFolder); echo '<pre style="color:yellow;background:red;">'; var_dump ($files); echo '</pre>'.PHP_EOL.PHP_EOL;  };
 
