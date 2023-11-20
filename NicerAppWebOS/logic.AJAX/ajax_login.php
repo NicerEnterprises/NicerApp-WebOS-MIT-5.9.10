@@ -31,13 +31,14 @@ $cdb = $naWebOS->dbs->findConnection('couchdb')->cdb;
 $username = $_POST['loginName'];
 $username = str_replace(' ', '_', $username);
 $username = str_replace('.', '__', $username);
+
 //echo $cdbDomain.'___'.$username.'<br/>';
 
 try {
     $cdb_authSession_cookie = $cdb->login($cdbDomain.'___'.$username, $_POST['pw'], Sag::$AUTH_COOKIE);
 } catch (Exception $e) {
     echo 'status : Failed'.PHP_EOL;
-    echo '$e->getMessage() = '.$e->getMessage();
+    echo '$cdbDomain."___".$username='.$cdbDomain.'___'.$username.', $e->getMessage() = '.$e->getMessage();
     exit();
 }
 
@@ -52,7 +53,7 @@ try {
     echo 'status : Failed'.PHP_EOL;
     $dbg = [
         'database' => $dbName,
-        'username' => $username,
+        'username' => $cdbDomain.'___'.$username,
         'password' => 'HIDDEN',
         '$e->getMessage()' => $e->getMessage()
     ];

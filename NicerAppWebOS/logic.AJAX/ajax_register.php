@@ -2,7 +2,7 @@
 $rootPathNA = realpath(dirname(__FILE__).'/../..').'/NicerAppWebOS';
 require_once ($rootPathNA.'/boot.php');
 
-$debug = false;
+$debug = true;
 if ($debug) {
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
@@ -45,7 +45,10 @@ if (!$got) {
             'password' => $_POST['pw'],
             'realname' => $username,
             'email' => $_POST['email'],
-            'roles' => [ "guests"],
+            'roles' => [
+                $cdbDomain.'___Guests',
+                $cdbDomain.'___Users'
+            ],
             'type' => "user"
         );
         //echo '<pre style="color:blue;">'; var_dump ($rec); echo '</pre>';
@@ -58,7 +61,7 @@ if (!$got) {
     if ($debug) echo 'Already have this user record.<br/>'.PHP_EOL;
 }
 
-$dbName = $cdbDomain.'___cms_tree__user___'.strtolower($username);
+$dbName = $cdbDomain.'___cms_tree___user___'.strtolower($username);
 try { $cdb->deleteDatabase ($dbName); } catch (Exception $e) { };
 $cdb->setDatabase($dbName, true);
 try {
@@ -91,7 +94,7 @@ if ($do) try { $cdb->post($data); } catch (Exception $e) { if ($debug) { echo '<
 
 echo 'Created database '.$dbName.'<br/>'.PHP_EOL;
 
-$dbName = $cdbDomain.'___cms_documents__user___'.strtolower($username);
+$dbName = $cdbDomain.'___cms_documents___user___'.strtolower($username);
 try { $cdb->deleteDatabase ($dbName); } catch (Exception $e) { };
 $cdb->setDatabase($dbName, true);
 try {
@@ -134,4 +137,21 @@ try {
 }
 
 echo 'Created and populated database '.$dbName.'<br/>'.PHP_EOL;
+
+$dbName = $cdbDomain.'___themes';
+try {
+    //$call = $cdb->getSecurity();
+    $sec = [
+        'admins' => [ 'names' => [], 'roles' => [
+            $cdbDomain.'___Guests',
+            $cdbDomain.'___Users'
+        ] ],
+        'members' => [ 'names' => [], 'roles' => [] ]
+    ];
+    $call = $cdb->setSecurity($sec);
+    echo '<pre>'; var_dump ($call);
+} catch (Exception $e) {
+    echo '<pre>'; var_dump ($call);
+}
+
 ?>
