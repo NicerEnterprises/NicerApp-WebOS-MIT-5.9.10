@@ -1164,8 +1164,8 @@ na.site = {
             var 
             html = 
                 '<div id="siteLoginLogout__background" class="vividDialogPopup_background" style="display:grid;"></div>'
-                +'<div id="labelLoggedInAs" class="siteLoginLogout_label" style="grid-column:1;grid-row:1">Loggged in as : </div>'
-                +'<div id="loggedInAs" class="siteLoginLogout_labelText" style="grid-column:2;grid-row:1">'+$.cookie('cdb_loginName').replace(/.*___/g,'').replace(/__/g,' ')+'</div><br/>'
+                +'<div id="labelLoggedInAs" class="siteLoginLogout_label" style="grid-column:1;grid-row:1">Logged in as : </div>'
+                +'<div id="loggedInAs" class="siteLoginLogout_labelText" style="grid-column:2;grid-row:1">'+$.cookie('cdb_loginName').replace(/.*___/g,'').replace(/__/g,'.').replace(/_/g,' ')+'</div><br/>'
                 +'<div id="labelSpecificityName" class="siteLoginLogout_label" style="grid-column:1;grid-row:2">Specificity : </div>'
                 +'<div id="specificityName" class="siteLoginLogout_labelText" style="grid-column:2;grid-row:2">'+na.site.globals.specificityName+'</div><br/>'
                 +'<div id="labelThemeName" class="siteLoginLogout_label" style="grid-column:1;grid-row:3">Theme : </div>'
@@ -2957,7 +2957,7 @@ onclick_btnFullResetOfAllThemes : function (event) {
                         $('#siteLoginSuccessful').css({display:'block',opacity:0.0001});
                         na.desktop.resize();
                         na.site.settings.current.testDBsuccessful = true;
-                        $('#siteLoginSuccessful').html('Logged in as '+$('#username').val().replace(/.*___/g,'')+' <img src="/NicerAppWebOS/3rd-party/tinymce-4/plugins/naEmoticons/img/happy.gif"/>').css({opacity:1,display:'none'}).fadeIn('normal', function () {
+                        $('#siteLoginSuccessful').html('Logged in as '+$('#siteLogin #username').val().replace(/.*___/g,'').replace('_',' ')+' <img src="/NicerAppWebOS/3rd-party/tinymce-4/plugins/naEmoticons/img/happy.gif"/>').css({opacity:1,display:'none'}).fadeIn('normal', function () {
                             setTimeout (function() {
                                 $('#siteLoginSuccessful').css({opacity:1}).fadeOut('normal');
                                 if (typeof na.site.settings.postLoginSuccess=='function') {

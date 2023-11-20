@@ -1233,7 +1233,11 @@ class Sag {
     global $scriptName_SAG; $this->checkJSONencoding ($scriptName_SAG, 'setSecurity()', $data);
     return $this->procPacket ('PUT', '/'.$this->db.'/_security', $data);
   }
-  
+  public function getSecurity($data) {
+    global $scriptName_SAG; $this->checkJSONencoding ($scriptName_SAG, 'getSecurity()', $data);
+    return $this->procPacket ('GET', '/'.$this->db.'/_security', '');
+  }
+
   public function bulkDocs ($data) {
     if (!is_string($data)) $data = json_encode($data);
     global $scriptName_SAG; $this->checkJSONencoding ($scriptName_SAG, 'bulkDocs()', $data);
