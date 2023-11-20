@@ -36,7 +36,7 @@
     <script type="text/javascript" src="/NicerAppWebOS/logic.userInterface/photoAlbum/4.0.0/photoAlbum-4.0.0.source.js?c=<?php echo date('Ymd_His', filemtime(dirname(__FILE__).'/../../../logic.userInterface/photoAlbum/4.0.0/photoAlbum-4.0.0.source.js'));?>"></script>
 </head>
 <body style="overflow:hidden" onload="window.top.resizeIFrameToFitContent(window.top.$('#themeEditor_photoAlbum', window.top.document.body)[0]);">
-<div class="vividScrollpane" style="width:100%;height:auto;overflow:visible;">
+<div class="vividScrollpane" style="width:100%;height:100%;overflow:auto;">
     <style>
         .filename {
             color : white;

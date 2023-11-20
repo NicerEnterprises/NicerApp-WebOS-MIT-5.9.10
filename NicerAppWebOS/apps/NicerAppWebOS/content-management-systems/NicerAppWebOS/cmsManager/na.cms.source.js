@@ -404,6 +404,7 @@ debugger;
         if (l!==1 || data.node.id!==data.selected[0]) {
             tree.deselect_all();
             tree.select_node(data.node.id);
+            return false;
         }
 
         for (var i=0; i<l; i++) {
