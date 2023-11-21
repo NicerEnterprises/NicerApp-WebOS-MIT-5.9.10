@@ -33,11 +33,13 @@ $username = str_replace(' ', '_', $username);
 $username = str_replace('.', '__', $username);
 
 //echo $cdbDomain.'___'.$username.'<br/>';
+$_SESSION['cdb_pw'] = $_POST['pw'];
+
 
 try {
     $cdb_authSession_cookie = $cdb->login($cdbDomain.'___'.$username, $_POST['pw'], Sag::$AUTH_COOKIE);
 } catch (Exception $e) {
-    echo 'status : Failed'.PHP_EOL;
+    echo 'status : Failed<br/>'.PHP_EOL;
     echo '$cdbDomain."___".$username='.$cdbDomain.'___'.$username.', $e->getMessage() = '.$e->getMessage();
     exit();
 }

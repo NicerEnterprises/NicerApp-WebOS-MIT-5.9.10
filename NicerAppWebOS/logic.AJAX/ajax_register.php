@@ -31,7 +31,7 @@ $username = str_replace(' ', '_', $username);
 $username = str_replace('.', '__', $username);
 
 $security_role = '{ "admins": { "names": [], "roles": ["guests"] }, "members": { "names": [], "roles": [] } }';
-$security_user = '{ "admins": { "names": ["'.$cdbDomain.'___'.$username.'"], "roles": [] }, "members": { "names": ["'.$cdbDomain.'___'.$username.'"], "roles": [] } }';
+$security_user = '{ "admins": { "names": ["'.$cdbDomain.'___'.$username.'"], "roles": ["'.$cdbDomain.'___Guests", "'.$cdbDomain.'___Users"] }, "members": { "names": ["'.$cdbDomain.'___'.$username.'"], "roles": ["'.$cdbDomain.'___Guests", "'.$cdbDomain.'___Users"] } }';
 
 $uid = 'org.couchdb.user:'.$cdbDomain.'___'.$username;
 $got = true;
