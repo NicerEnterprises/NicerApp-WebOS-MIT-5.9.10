@@ -837,7 +837,7 @@ export class na3D_fileBrowser {
             it = t.items[i],
             p = (it.parent ? t.items[it.parent.idx] : null);
 
-            if (it.parent && !po[it.parent.idx]) po[it.parent.idx] = Math.abs(Math.random() * 40 * 10 * 10);
+            if (it.parent && !po[it.parent.idx]) po[it.parent.idx] = Math.abs(Math.random() * 550);
 
             if (it.parent) var rnd = po[it.parent.idx]; else var rnd = 0;
             
@@ -996,33 +996,18 @@ export class na3D_fileBrowser {
                 }
 
 
-                var z = -1 * ((it.level+1) * 300 ),
-                m = 2 * 10 * 10;
+                var z = -1 * ((it.level+1) * 300 );
                 it.model.position.x = Math.round(
                     p.model.position.x
                     //+ pitc
                      //+ ((p.column-1)*offsetXY) + ((p.column-1)*pOffsetX_now)
-                    //+ ( ( it.leftRight * (it.column-1) * 100))
-                    //+ ( ( it.columnOffsetValue *(it.column) * 200))
-                    //+ ( it.column * 100 )
-                    + ( it.column * m )
-                    //+ ( it.leftRight* ( it.columnOffsetValue * (it.level-4) * m))
-                    //+ ( it.leftRight* ( it.column * (it.level-4) * m))
-                    //+ ( p.leftRight* ( p.columnOffsetValue * (it.level-4) * m))
-                    //+ ( p.leftRight* ( p.column * (it.level-4) * m))
-
-                    + ( ( p.column * m))
-                   // + ( ( it.columnOffsetValue * m))
-
-                    //+itco
-                    //+ (p.leftRight * ((it.level-4) * 50))
-                    //+ (it.leftRight * ((it.level-4) * 50))
-                    //+ (p.leftRight * (it.level-1) * 150)
+                    + ( ( it.leftRight * (it.column-1) * 100))
+                    + (p.leftRight * 200)
                     //+ ( ( it.leftRight * it.columnOffsetValue * (it.column-1) * offsetXY))
                     //+ ( ( (it.columnOffsetValue) * 400))
                     //+ ( ( p.leftRight * 200))
                     //+ (p.columnOffsetValue * it.level * 200)
-                    //+ (it.level > 4 ? (p.columnOffsetValue * 300) : 0)
+                    + (p.columnOffsetValue * 200)
                     //+ (it.columnOffsetValue * 770)
                     //+ pOffsetX_now
                     //+ ( ( it.parentColumOffset * Math.floor(it.level*1.5)))
@@ -1034,29 +1019,13 @@ export class na3D_fileBrowser {
                     p.model.position.y 
                     //+ pitr
                     //+ ((p.row-1)*offsetXY) + ((p.row-1)*pOffsetY_now)
-                    //+ ( (it.upDown *  (it.row-1) * 100 ))
-                    //+ (it.rowOffsetValue *  ((it.row) * 200 ))
-                    //+ (it.row * 100)
-                    + (it.row * m)
-                    //+ (it.leftRight * it.row * (it.level-4) * m)
-                    //+ (it.leftRight * it.rowOffsetValue * (it.level-4) * m)
-                    //+ (p.leftRight * p.rowOffsetValue * (it.level-4) * m)
-                    //+ (p.leftRight * p.row * (it.level-4) * m)
-
-                    + ( p.row * m)
-                    //+ ( it.rowOffsetValue * m)
-
-                    //+ itro
-
-                    //+ (p.upDown * (p.rowOffsetValue * (it.level-4) * 50))
-                    //+ (it.upDown * (it.rowOffsetValue * (it.level-4) * 50))
-
-                    //+ ( p.upDown * (it.level-1) * 150)
+                    + ( (it.upDown *  (it.row-1) * 100 ))
+                    + (p.upDown * 200)
                     //+ ( (it.upDown *  it.rowOffsetValue * (it.row-1) * offsetXY ))
                     //+ ( ((it.rowOffsetValue) * 400 ))
                     //+ ( (p.upDown *  200 ))
                     //+ (p.rowOffsetValue * it.level * 200)
-                    //+ (it.level > 4 ? (p.rowOffsetValue * 300) : 0)
+                    + (p.rowOffsetValue * 200)
                     //+ (it.rowOffsetValue * 770)
                     //+ pOffsetY_now
                     //+ ( it.parentRowOffset * Math.floor(it.level*1.5))
@@ -1064,11 +1033,8 @@ export class na3D_fileBrowser {
                     //+ (it.rowOffsetValue * 100)
                     //+ ( p.upDown * p.rowOffsetValue * offsetXY )
                 );
-                it.model.position.z = -1 * ((it.level-4) * 750 ) - (rnd);
-                //if (it.name=='bricks rocks stones' || it.name=='space') debugger;
-                //if (it.name=='landscape' || it.name=='tiled') debugger;
-                //if (it.name=='misc' || it.name=='simple') debugger;
-                if (it.level===6) debugger;
+                it.model.position.z = -1 * ((it.level+1) * 500 ) - (rnd);
+                if (it.name=='bricks rocks stones' || it.name=='space') debugger;
 
                 var x = it.data.it;
                 //debugger;
