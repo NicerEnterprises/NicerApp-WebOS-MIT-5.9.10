@@ -56,7 +56,7 @@ $dbg = array (
 );
 //echo '<pre>'.json_encode($dbg,JSON_PRETTY_PRINT).'</pre>';
 
-$files = getFilePathList ($targetDir, false, FILE_FORMATS_photos, null, array('file'));
+$files = getFilePathList ($targetDir, false, FILE_FORMATS_photos, null, array('file'))['files'];
 
 foreach ($files as $idx => $file) {
     $prev = '';
