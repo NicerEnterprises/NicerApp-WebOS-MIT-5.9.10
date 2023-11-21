@@ -57,6 +57,7 @@ $findCommand = array (
     'fields' => array ( '_id', 'text' )    
 );
 $call = $cdb->find ($findCommand);
+if (!isset($text)) $text = '';
 $textFinal = $text;
 $textNum = 0;
 $found = true;
@@ -104,12 +105,16 @@ try { $call = $cdb->post($recordToAdd); } catch (Exception $e) {
     }
     exit();
 }
+//$msg = '$call='.json_encode($call, JSON_PRETTY_PRINT);
+//echo '<pre>'; var_dump ($recordToAdd); echo '<br/>'; var_dump ($msg); var_dump (debug_backtrace(), JSON_PRETTY_PRINT); echo '</pre>'; die();
+//trigger_error ($msg, E_USER_NOTICE);
 
 if ($_POST['type'] == 'naDocument') {
     $u = array_key_exists('cdb_loginName',$_SESSION) ? $_SESSION['cdb_loginName'] : $cdbConfig['username'];
     $u = preg_replace('/.*___/','',$u);
     $u = preg_replace('/__/',' ',$u);
-    $u2 = str_replace(' ', '-', $u);
+    $u1 = str_replace(' ', '-', $u);
+    $u2 = $naWebOS->domainForDB.'___'.$u1;
     $uid = '';
     if (strpos($_POST['database'], '_user')!==false) {
         $uid = ' -F \'user='.$u2.'\'';
@@ -118,8 +123,10 @@ if ($_POST['type'] == 'naDocument') {
         $role = preg_replace('/.*___/','', $_POST['database']);
         $uid = ' -F \'role='.$role.'\'';
     }
+
+
     $exec = 'curl -X POST "https://'.$naWebOS->domain.'/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/NicerAppWebOS/cmsManager/ajax_editDocument.php"';
-    $exec2 = ' -F \'database='.str_replace('_tree','_documents',$_POST['database']).'\' -F \'id='.$id.'\' -F \'parent='.$_POST['parent'].'\' '.$uid.' -F \'document=<h1>Heading 1</h1><p>Enter your text here.</p>\' -F \'url1=on\' -F \'seoValue='.$d.'\' -F \'pageTitle=Said.by/'.$u2.'/on/'.$d.'\'';
+    $exec2 = ' -F \'database='.str_replace('_tree','_documents',$_POST['database']).'\' -F \'id='.$id.'\' -F \'parent='.$_POST['parent'].'\' '.$uid.' -F \'document=<h1>Heading 1</h1><p>Enter your text here.</p>\' -F \'url1=on\' -F \'seoValue='.$d.'\' -F \'pageTitle=Said.by/'.$u1.'/on/'.$d.'\'';
     $exec2 = str_replace('>', '\\>', $exec2);
     $exec2 = str_replace('<', '\\<', $exec2);
     $exec2 = str_replace('(', '\\(', $exec2);
@@ -133,6 +140,7 @@ if ($_POST['type'] == 'naDocument') {
         'result' => $result,
         'r' => $r
     ];
+    //echo '<pre>'; var_dump ($dbg); echo '</pre>';
 }
 
 

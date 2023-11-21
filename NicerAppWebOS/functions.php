@@ -334,7 +334,7 @@ function cdb_login($cdb, $cRec, $username) {
             && is_string($_COOKIE['AuthSession'])
             && $_COOKIE['AuthSession']!==''
         ) {
-            // var_dump (123);
+            var_dump (123);
             $r = $cdb->loginByCookie ($_COOKIE['AuthSession']);
             //echo '<pre>'; var_dump ($r); exit();
             //if (!is_null($r)) {

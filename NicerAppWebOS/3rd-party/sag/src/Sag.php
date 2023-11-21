@@ -1233,7 +1233,7 @@ class Sag {
     global $scriptName_SAG; $this->checkJSONencoding ($scriptName_SAG, 'setSecurity()', $data);
     return $this->procPacket ('PUT', '/'.$this->db.'/_security', $data);
   }
-  public function getSecurity($data) {
+  public function getSecurity() {
     global $scriptName_SAG; $this->checkJSONencoding ($scriptName_SAG, 'getSecurity()', $data);
     return $this->procPacket ('GET', '/'.$this->db.'/_security', '');
   }

@@ -8,15 +8,17 @@ $cdb = $db->cdb;
 $adb = $naWebOS->dbsAdmin->findConnection('couchdb');
 $acdb = $adb->cdb;
 
-
+// //echo '<pre>'; var_dump ($_POST); die();
 $html = str_replace('&lt;','<',str_replace('&gt;','>',$_POST['document']));
 if (
-    strpos ($html, '<script') !== false
-    || strpos ($html, '<link') !== false
-    || strpos ($html, 'javascript:') !== false
-    || strpos ($html, '<?php') !== false
-    || strpos ($html, '<iframe') !== false
-) die ('403 Forbidden');
+    false && (
+        strpos ($html, '<script') !== false
+        || strpos ($html, '<link') !== false
+        || strpos ($html, 'javascript:') !== false
+        || strpos ($html, '<?php') !== false
+        || strpos ($html, '<iframe') !== false
+    )
+) die ('403 Forbidden - No <script>, <link>, javascript:, <?php and <iframe> allowed.');
 
 $illegal = false;
 $domain = $_SERVER['HTTP_HOST'];
@@ -47,8 +49,8 @@ if (!$illegal) foreach ($matches2[2] as $idx => $url) {
 // !! !! ! --- uncomment the next line to activate the 'open house' mode in the blogging apps of all sites that run this code-file.
 //$illegal = false;
 
-if ($illegal) {
-    die ('403 Forbidden');
+if (false && $illegal) {
+    die ('403 Forbidden - No links allowed.');
 } else {
 
     global $naWebOS;

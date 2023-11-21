@@ -79,6 +79,9 @@ abstract class SagHTTPAdapter {
       $response->headers->{'content-type'} == 'application/json'
     ) {
       $json = json_decode($response->body);
+      //$msg = '$response->body=\''.$response->body.'\', trace='.json_encode(debug_backtrace(), JSON_PRETTY_PRINT);
+      //trigger_error ($msg, E_USER_NOTICE);
+      //echo '<pre style="color:red">'; var_dump ($response); echo '</pre>';
 
       if(isset($json) && $json !== FALSE) {
         if(!empty($json->error)) {
@@ -123,7 +126,7 @@ abstract class SagHTTPAdapter {
    * @param string $url The URL to hit, not including the host info (ex.,
    * "/_all_docs").
    * @param string $data A serialized version of any data that needs to be sent
-   * in the packet's body.
+                  * in the packet's body.
    * @param array $reqHeaders An associative array of headers where the keys
    * are the header names.
    * @param mixed $specialHost Uses the provided host for this packet only -

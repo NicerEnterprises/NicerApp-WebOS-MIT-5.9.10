@@ -34,9 +34,17 @@ class SagCURLHTTPAdapter extends SagHTTPAdapter {
   }
 
   public function procPacket($method, $url, $data = null, $reqHeaders = array(), $specialHost = null, $specialPort = null) {
+    global $naWebOS;
     // the base cURL options
+    $url = (
+      array_key_exists('cdb_loginName', $_SESSION)
+      && array_key_exists('cdb_pw', $_SESSION)
+      ? "{$this->proto}://".$naWebOS->domainForDB.'___'.str_replace(' ','_',str_replace('.','__',$_SESSION['cdb_loginName'])).":".$_SESSION['cdb_pw']."@{$this->host}:{$this->port}{$url}"
+      : "{$this->proto}://{$this->host}:{$this->port}{$url}"
+    );
+
     $opts = array(
-      CURLOPT_URL => "{$this->proto}://{$this->host}:{$this->port}{$url}",
+      CURLOPT_URL => $url,
       CURLOPT_PORT => $this->port,
       CURLOPT_FOLLOWLOCATION => $this->followLocation,
       CURLOPT_HEADER => true,
@@ -101,8 +109,19 @@ class SagCURLHTTPAdapter extends SagHTTPAdapter {
     curl_setopt_array($this->ch, $opts);
     $chResponse = curl_exec($this->ch);
 
+    if (false && strpos($opts[CURLOPT_URL], 'logentries')===false) {
+      $msg = 'debug_backtrace()='.json_encode(debug_backtrace(), JSON_PRETTY_PRINT);
+      //echo PHP_EOL.$msg.'<br/>'.PHP_EOL;
+      //trigger_error ($msg, E_USER_NOTICE);
+      $msg = '$opts='.json_encode($opts, JSON_PRETTY_PRINT);
+      echo PHP_EOL.$msg.'<br/>'.PHP_EOL;
+      //trigger_error ($msg, E_USER_NOTICE);
+      $msg = '$chResponse='.json_encode($chResponse, JSON_PRETTY_PRINT);
+      echo PHP_EOL.$msg.'<br/>'.PHP_EOL;
+      //trigger_error ($msg, E_USER_NOTICE);
+    }
 
-    if($chResponse !== false) {
+   if($chResponse !== false) {
       // prepare the response object
       $response = new stdClass();
       $response->headers = new stdClass();
@@ -161,11 +180,11 @@ class SagCURLHTTPAdapter extends SagHTTPAdapter {
       && isset($_SESSION['na_error_log_filepath_html'])
       && is_object($naWebOS->dbs)
       && (
-        $naWebOS->dbs->findConnection('couchdb')->username=='said_by___Rene__AJM__Veerman'
+        $naWebOS->dbs->findConnection('couchdb')->username=='said_by___Rene_AJM_Veerman'
         || $naWebOS->dbs->findConnection('couchdb')->username=='said_by___Guest'
         || $naWebOS->dbs->findConnection('couchdb')->username=='nicer_app___Guest'
       )
-      && strpos($opts[CURLOPT_URL], 'log_entries')===false
+      && strpos($opts[CURLOPT_URL], 'logentries')===false
       && strpos($opts[CURLOPT_URL], '_session')===false
     ) {
 

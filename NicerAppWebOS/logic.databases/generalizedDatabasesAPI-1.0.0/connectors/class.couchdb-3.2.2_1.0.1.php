@@ -1201,7 +1201,7 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
         #TODO 1-2b // 1- = first to-do item, 2 = 2nd file-set, b = 1 level down into the file-set.
         $fncn = $this->cn.'->addLogEntries($entries)';
         $cdb = $this->cdb;
-        $dataSetName = $this->dataSetName('log_entries');
+        $dataSetName = $this->dataSetName('logentries');
         $cdb->setDatabase($dataSetName, false);
 
         $t = null; $to = null;
