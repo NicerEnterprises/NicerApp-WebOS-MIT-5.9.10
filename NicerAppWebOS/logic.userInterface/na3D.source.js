@@ -1022,9 +1022,9 @@ export class na3D_fileBrowser {
         }
         
         if (true) {
-            setTimeout(function(t) {
+            //setTimeout(function(t) {
                 t.onresize_postDo(t);
-            }, 5000, t);
+            //}, 500, t);
             //t.drawLines(t);
         } else {
             clearTimeout (t.timeout_onresize_do_overlapChecks2);
@@ -1155,10 +1155,6 @@ export class na3D_fileBrowser {
                 },
             }
         );
-        setTimeout (function() {
-            debugger;
-            t.pathAnimation.play(0);
-        }, 1000);
 
         t.animationProgress2 = { value: 0 };
         t.pathAnimation2 = gsap.fromTo(
@@ -1208,73 +1204,77 @@ export class na3D_fileBrowser {
             }
         );
 
-        if (!t.dragndrop) {
-            var objs = [];
-            for (var i=0; i<t.items.length; i++) if (t.items[i].model) objs[objs.length] = t.items[i].model;
+        setTimeout (function() {
+            t.pathAnimation.play(0);
+
+            if (!t.dragndrop) {
+                var objs = [];
+                for (var i=0; i<t.items.length; i++) if (t.items[i].model) objs[objs.length] = t.items[i].model;
 
 
-            t.dragndrop = new DragControls( objs, t.camera, t.renderer.domElement );
+                t.dragndrop = new DragControls( objs, t.camera, t.renderer.domElement );
 
-            $(t.renderer.domElement).contextmenu(function() {
-                return false;
-            });
+                $(t.renderer.domElement).contextmenu(function() {
+                    return false;
+                });
 
-            t.dragndrop.addEventListener( 'dragstart', function ( event ) {
-                if (t.controls) t.controls.dispose();
-                t.cameraControls.enabled = false;
+                t.dragndrop.addEventListener( 'dragstart', function ( event ) {
+                    if (t.controls) t.controls.dispose();
+                    t.cameraControls.enabled = false;
 
-                t.dragndrop.cube = event.object;
-                t.dragndrop.mouseX = t.mouse.layerX;
-                t.dragndrop.mouseY = t.mouse.layerY;
+                    t.dragndrop.cube = event.object;
+                    t.dragndrop.mouseX = t.mouse.layerX;
+                    t.dragndrop.mouseY = t.mouse.layerY;
 
-                let cube = event.object;
+                    let cube = event.object;
 
-                for (let i=0; i<t.items.length; i++) {
-                    let it2 = t.items[i];
-                    if (it2.parent === cube.it.parent) {
-                        //debugger;
-                        it2.model.position.dragStartX = it2.model.position.x;
-                        it2.model.position.dragStartY = it2.model.position.y;
-                        it2.model.position.dragStartZ = it2.model.position.z;
+                    for (let i=0; i<t.items.length; i++) {
+                        let it2 = t.items[i];
+                        if (it2.parent === cube.it.parent) {
+                            //debugger;
+                            it2.model.position.dragStartX = it2.model.position.x;
+                            it2.model.position.dragStartY = it2.model.position.y;
+                            it2.model.position.dragStartZ = it2.model.position.z;
+                        }
                     }
-                }
-            } );
+                } );
 
-            t.dragndrop.addEventListener( 'drag', function (event) {
-                let cube = event.object;
+                t.dragndrop.addEventListener( 'drag', function (event) {
+                    let cube = event.object;
 
-                for (let i=0; i<t.items.length; i++) {
-                    let it2 = t.items[i];
-                    if (it2.parent === cube.it.parent) {
-                        //debugger;
-                        it2.model.position.x = it2.model.position.dragStartX - (t.dragndrop.mouseX - t.mouse.layerX);
-                        it2.model.position.y = it2.model.position.dragStartY + (t.dragndrop.mouseY - t.mouse.layerY);
-                        it2.model.position.z = cube.position.z;
+                    for (let i=0; i<t.items.length; i++) {
+                        let it2 = t.items[i];
+                        if (it2.parent === cube.it.parent) {
+                            //debugger;
+                            it2.model.position.x = it2.model.position.dragStartX - (t.dragndrop.mouseX - t.mouse.layerX);
+                            it2.model.position.y = it2.model.position.dragStartY + (t.dragndrop.mouseY - t.mouse.layerY);
+                            it2.model.position.z = cube.position.z;
+                        }
                     }
-                }
-                clearTimeout (t.posDataToDB);
-                t.posDataToDB = setTimeout(function() {
-                    t.posDataToDatabase(t);
-                }, 1000);
+                    clearTimeout (t.posDataToDB);
+                    t.posDataToDB = setTimeout(function() {
+                        t.posDataToDatabase(t);
+                    }, 1000);
 
-                if (t.showLines) {
-                    for (var i=0; i<t.permaLines.length; i++) {
-                        var l = t.permaLines[i];
-                        t.scene.remove (l.line);
-                        l.geometry.dispose();
-                        l.material.dispose();
+                    if (t.showLines) {
+                        for (var i=0; i<t.permaLines.length; i++) {
+                            var l = t.permaLines[i];
+                            t.scene.remove (l.line);
+                            l.geometry.dispose();
+                            l.material.dispose();
+                        }
+                        t.permaLines = [];
+                        t.drawLines(t);
                     }
-                    t.permaLines = [];
-                    t.drawLines(t);
-                }
-            });
+                });
 
-            t.dragndrop.addEventListener( 'dragend', function ( event ) {
-                if (t.showLines) t.drawLines(t);
-                t.cameraControls.enabled = true;
-            } );
+                t.dragndrop.addEventListener( 'dragend', function ( event ) {
+                    if (t.showLines) t.drawLines(t);
+                    t.cameraControls.enabled = true;
+                } );
 
-        };
+            };
+        }, 50);
 
 
 
