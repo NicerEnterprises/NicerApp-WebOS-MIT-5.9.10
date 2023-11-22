@@ -982,13 +982,13 @@ export class na3D_fileBrowser {
 
                 it.model.position.x = Math.round(
                     p.model.position.x
-                    + (it.level > min ? (u * it.column * m1) : (it.column*m1))
+                    + (it.level > min ? (u * it.column * m1) : (it.column*m1a))
                     + (it.level > min ? (u * v * ((o * n))) : 0)
                     + (it.level > min ? (u * v * ((o * s))) : 0)
                 );
                 it.model.position.y = Math.round(
                     p.model.position.y
-                    + (it.level > min ? (w * it.row * m2) : (it.row*m2))
+                    + (it.level > min ? (w * it.row * m2) : (it.row*m2a))
                     + (it.level > min ? (w * x * ((o * n))) : 0)
                     + (it.level > min ? (w * x * ((o * s))) : 0)
                 );
