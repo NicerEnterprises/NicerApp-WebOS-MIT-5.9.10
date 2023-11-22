@@ -973,7 +973,7 @@ export class na3D_fileBrowser {
                 ilc = it.columnOffsetValue === 0 ? 0.01 : it.columnOffsetValue,
                 ilr = it.rowOffsetValue === 0 ? 0.01 : it.rowOffsetValue,
 
-                min = 6, m0 = (it.level-2) < 4 ? it.level-2 : 4, m1a = 500, m1 = 3000/m0, m2 = 3000/m0, m2a = 500, n = 1, o = 600, q = 500, s = 1,
+                min = 4, m0 = (it.level-2) < 4 ? it.level-2 : 4, m1a = 500, m1 = 3000/m0, m2 = 3000/m0, m2a = 500, n = 1, o = 600, q = 500, s = 1,
                 u = 1 * (p.leftRight===0?0.7:p.leftRight),
                 v = 1,
                 w = 1 * (p.upDown===0?0.7:p.upDown),
