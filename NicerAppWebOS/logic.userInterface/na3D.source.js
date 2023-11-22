@@ -973,9 +973,11 @@ export class na3D_fileBrowser {
                 ilc = it.columnOffsetValue === 0 ? 0.01 : it.columnOffsetValue,
                 ilr = it.rowOffsetValue === 0 ? 0.01 : it.rowOffsetValue,
 
-                min = 4, m0 = (it.level-2) < 4 ? it.level-2 : 4, m1a = 500, m1 = 3000/m0, m2 = 3000/m0, m2a = 500, n = 1, o = 600, q = 500, s = 1,
+                min = 4, m0 = (it.level-2) < 5 ? it.level-2 : 4, m1a = 750, m1 = 3000/m0, m2 = 3000/m0, m2a = 750, n = 1, o = 600, q = 500, s = 1,
+                //u = 1 * (p.leftRight===0?it.leftRight===0?0.7:it.lefRight:p.leftRight),
                 u = 1 * (p.leftRight===0?0.7:p.leftRight),
                 v = 1,
+                //w = 1 * (p.upDown===0?it.upDown===0?0.7:it.upDown:p.upDown),
                 w = 1 * (p.upDown===0?0.7:p.upDown),
                 x = 1;
                 //debugger;
@@ -983,12 +985,14 @@ export class na3D_fileBrowser {
                 it.model.position.x = Math.round(
                     p.model.position.x
                     + (it.level > min ? (u * it.column * m1) : (it.column*m1a))
+                    //+ (it.level > min ? (u * it.columnOffsetValue * m1) : (it.columnOffsetValue*m1a))
                     + (it.level > min ? (u * v * ((o * n))) : 0)
                     + (it.level > min ? (u * v * ((o * s))) : 0)
                 );
                 it.model.position.y = Math.round(
                     p.model.position.y
                     + (it.level > min ? (w * it.row * m2) : (it.row*m2a))
+                    //+ (it.level > min ? (w * it.rowOffsetValue * m2) : (it.rowOffsetValue*m2a))
                     + (it.level > min ? (w * x * ((o * n))) : 0)
                     + (it.level > min ? (w * x * ((o * s))) : 0)
                 );
@@ -997,6 +1001,7 @@ export class na3D_fileBrowser {
                 //if (it.name=='landscape' || it.name=='tiled') debugger;
                 //if (it.name=='misc' || it.name=='simple') debugger;
                 //if (it.level===4) debugger;
+                if (p.name=='scenery') debugger;
 
                 var x = it.data.it;
             }else if (it.model) {
