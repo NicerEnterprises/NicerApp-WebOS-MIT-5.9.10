@@ -217,6 +217,7 @@ Options +FollowSymLinks
             ##RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_URI} !^/NicerAppWebOS/apps/NicerAppWCS/applications/2D/musicPlayer/music/.*$
     RewriteRule ^view/(.*)$ NicerAppWebOS/index.php?seoValue=$1&%{QUERY_STRING} [L]
+    # https://nicer.app/view/3D-folders?relPath=siteMedia/backgrounds
 
     RewriteCond %{REQUEST_URI} !^/NicerAppWebOS/apps/NicerAppWCS/applications/2D/musicPlayer/music/.*$
     RewriteCond %{HTTP:X-Requested-With} XMLHttpRequest

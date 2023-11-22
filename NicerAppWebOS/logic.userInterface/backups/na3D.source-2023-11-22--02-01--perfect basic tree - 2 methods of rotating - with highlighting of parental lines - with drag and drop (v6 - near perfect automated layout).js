@@ -320,8 +320,8 @@ export class na3D_fileBrowser {
     }
     
     animate(t, evt) {
-        requestAnimationFrame( function(evt) { debugger; t.animate (t,evt) } );
-        //if (t.mouse.x!==0 || t.mouse.y!==0) {
+        requestAnimationFrame( function(evt) { t.animate (t,evt) } );
+        if (t.mouse.x!==0 || t.mouse.y!==0) {        
             t.camera.updateProjectionMatrix();
 
             for (var i=0; i<t.s2.length; i++) {
@@ -494,7 +494,7 @@ export class na3D_fileBrowser {
                     model.rotation.z += 0.02; //TODO : auto revert back to model.rotation.z = 0;
                 }
             }
-        //}
+        }
         
         //if (t.controls) t.controls.update();
 
@@ -546,7 +546,8 @@ export class na3D_fileBrowser {
         behind the mouse pointer */; i++) {
             var cit/*clickedItem*/ = intersects[i].object, done = false;
             while (cit && !done) {
-                na.site.setStatusMsg (cit.it.fullPath);
+                debugger;
+                na.site.statusMsg (cit.it.fullpath);
 
                 done = true;
             }
@@ -554,24 +555,6 @@ export class na3D_fileBrowser {
 
     }
     onclick_double (t, event) {
-        const intersects = t.raycaster.intersectObjects (t.s2);
-        if (intersects[0] && intersects[0].object.type!=='Line')
-        for (var i=0; i<1/*intersects.length <-- this just gets an endless
-        series of hits from camera into the furthest reaches of what's visible
-        behind the mouse pointer */; i++) {
-            var cit/*clickedItem*/ = intersects[i].object, done = false;
-            while (cit && !done) {
-                var msg = 'pos='+JSON.stringify(cit.it.model.position)
-                    +', p.leftRight='+t.items[cit.it.parent.idx].leftRight
-                    +', p.upDown='+t.items[cit.it.parent.idx].upDown
-                    +', it.maxColumnIta.maxColumn='+cit.it.maxColumnIta.maxColumn
-                    +', it.maxRowIta.maxRow='+cit.it.maxColumnIta.maxRow;
-
-                na.site.setStatusMsg (msg, true, 10 * 1000);
-
-                done = true;
-            }
-        }
     }
     onclick_triple (t, event) {
     }
@@ -860,7 +843,7 @@ export class na3D_fileBrowser {
 
             if (it.parent && !pox[it.parent.idx]) pox[it.parent.idx] = Math.abs(Math.random() * rndMax);
             if (it.parent && !poy[it.parent.idx]) poy[it.parent.idx] = Math.abs(Math.random() * rndMax);
-            if (it.parent && !poz[it.parent.idx]) poz[it.parent.idx] = Math.abs(Math.random() * rndMax );
+            if (it.parent && !poz[it.parent.idx]) poz[it.parent.idx] = Math.abs(Math.random() * rndMax);
 
             if (it.parent) var rndx = pox[it.parent.idx]; else var rndx = 0;
             if (it.parent) var rndy = pox[it.parent.idx]; else var rndy = 0;
@@ -922,14 +905,14 @@ export class na3D_fileBrowser {
                 var
                 itmaxc = it.maxColumnIta.maxColumn,
                 itmaxr = it.maxRowIta.maxRow,
-                itLeftRight = /*pLeftRight,/*/it.column-1 == itmaxc / 2 ? 0 : it.column-1 > itmaxc / 2 ? 1 : -1,
-                itUpDown = /*pUpDown, /*/it.row-1 == itmaxr / 2 ? 0 : it.row-1 > itmaxr / 2 ? 1 : -1,
+                itLeftRight = /*pLeftRight,/*/it.column == itmaxc / 2 ? 0 : it.column > Math.floor(itmaxc / 2) ? 1 : -1,
+                itUpDown = /*pUpDown, /*/it.row == itmaxr / 2 ? 0 : it.row > Math.floor(itmaxr / 2) ? 1 : -1,
                 itc = (
-                    ((itmaxc / 2) - it.column)
+                    itLeftRight * ((itmaxc / 2) - it.column)
                 ),
                 itcPercentage = (itc*1.00) / itmaxc,
                 itr = (
-                    ((itmaxr / 2) - it.row)
+                    itUpDown * ((itmaxr / 2) - it.row)
                 ),
                 itrPercentage = (itr*1.00) / itmaxr,
                 itco = offsetXY * itcPercentage * it.maxColumnIta.maxColumn,
@@ -986,14 +969,14 @@ export class na3D_fileBrowser {
                 var
                 itmaxc = it.maxColumnIta.maxColumn,
                 itmaxr = it.maxRowIta.maxRow,
-                itLeftRight = /*pLeftRight,/*/it.column-1 == itmaxc / 2 ? 0 : it.column-1 > itmaxc / 2 ? 1 : -1,
-                itUpDown = /*pUpDown, /*/it.row-1 == itmaxr / 2 ? 0 : it.row-1 > itmaxr / 2 ? 1 : -1,
+                itLeftRight = /*pLeftRight,/*/it.column == itmaxc / 2 ? 0 : it.column > Math.floor(itmaxc / 2) ? 1 : -1,
+                itUpDown = /*pUpDown, /*/it.row == itmaxr / 2 ? 0 : it.row > Math.floor(itmaxr / 2) ? 1 : -1,
                 itc = (
-                    ((itmaxc / 2) - (it.column))
+                    itLeftRight * ((itmaxc / 2) - it.column)
                 ),
                 itcPercentage = (itc*1.00) / itmaxc,
                 itr = (
-                    ((itmaxr / 2) - (it.row))
+                    itUpDown * ((itmaxr / 2) - it.row)
                 ),
                 itrPercentage = (itr*1.00) / itmaxr,
                 itco = offsetXY * itcPercentage * it.maxColumnIta.maxColumn,
@@ -1021,37 +1004,32 @@ export class na3D_fileBrowser {
                 }
 
 
-                var z = -1 * ((it.level+1) * 2400 ),
-                plc = p.columnOffsetValue === 0 ? 0.01 : p.columnOffsetValue,
-                plr = p.rowOffsetValue === 0 ? 0.01 : p.rowOffsetValue,
-                ilc = it.columnOffsetValue === 0 ? 0.01 : it.columnOffsetValue,
-                ilr = it.rowOffsetValue === 0 ? 0.01 : it.rowOffsetValue,
-                //min = 4, m = 500, n = 1, o = 500, q = 500, s = 1, u = it.leftRight===0?0:it.leftRight, v =1, w = it.upDown===0?0:it.upDown, x = 1,//p.leftRight,
-                min = 4, m1 = 700, m2 = 750, n = 1, o = 500, q = 500, s = 1,
-                u = p.leftRight===0?0.5:p.leftRight,// v =1,
-                v = 1,
-                w = p.upDown===0?0.5:p.upDown,
-                x = 1;
-
+                var z = -1 * ((it.level+1) * 1500 ),
+                m = 500, n = 1, o = 500, q = 125, s = 4,
                 //plc = p.leftRight === 0 ? 0 : p.leftRight,
                 //plr = p.upDown === 0 ? 0 : p.upDown;
+                plc = p.columnOffsetValue === 0 ? 0.25 : p.columnOffsetValue,
+                plr = p.rowOffsetValue === 0 ? 0.25 : p.rowOffsetValue,
+                ilc = it.columnOffsetValue === 0 ? 0.25 : it.columnOffsetValue,
+                ilr = it.rowOffsetValue === 0 ? 0.25 : it.rowOffsetValue;
                 it.model.position.x = Math.round(
                     p.model.position.x
-                    + (it.level > min ? (u * it.column * m1) : (it.column*m1))
-                    //+ (it.level > 4 ? (ilc * ((m * n)/ilc)) : 0)1
+                    + (it.level > 4 ? (-1 * it.leftRight * ilc * q) : (it.column*m))
+                    //+ (it.level > 4 ? (ilc * ((m * n)/ilc)) : 0)
                     //+ (it.level > 4 ? (ilc * ((m * s)/ilc)) : 0)
-                    + (it.level > min ? (u * v * ((o * n))) : 0)
-                    + (it.level > min ? (u * v * ((o * s))) : 0)
-                    //+ (it.level > min ? (ilc * n * o) : 0)
+                    + (it.level > 4 ? (p.leftRight * plc * ((m * n)/plc)) : 0)
+                    + (it.level > 4 ? (p.leftRight * plc * ((m * s)/plc)) : 0)
+                    + (it.level > 4 ? (-1 * it.leftRight * ilc * n * o) : 0)
+
                 );
                 it.model.position.y = Math.round(
                     p.model.position.y 
-                    + (it.level > min ? (w * it.row * m2) : (it.row*m2))
-                    + (it.level > min ? (w * x * ((o * n))) : 0)
-                    + (it.level > min ? (w * x * ((o * s))) : 0)
-                    //+ (it.level > min ? (ilr * n * o) : 0)
+                    + (it.level > 4 ? (-1 * it.upDown * ilr * q) : (it.row*m))
+                    + (it.level > 4 ? (p.upDown * plr * ((m * n)/plr)) : 0)
+                    + (it.level > 4 ? (p.upDown * plr * ((m * s)/plr)) : 0)
+                    + (it.level > 4 ? (-1 * it.upDown * ilr * n * o) : 0)
                 );
-                it.model.position.z = -1 * z - rndz;
+                it.model.position.z = -1 * ((it.level-4) * 666 * 5 ) - (rndz);
                 if (it.name=='black' || it.name=='space') debugger;
                 //if (it.name=='landscape' || it.name=='tiled') debugger;
                 //if (it.name=='misc' || it.name=='simple') debugger;
@@ -1084,9 +1062,7 @@ export class na3D_fileBrowser {
         }
         
         if (true) {
-            setTimeout(function(t) {
-                t.onresize_postDo(t);
-            }, 1000, t);
+            t.onresize_postDo(t);
             //t.drawLines(t);
         } else {
             clearTimeout (t.timeout_onresize_do_overlapChecks2);

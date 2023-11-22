@@ -563,10 +563,7 @@ export class na3D_fileBrowser {
             while (cit && !done) {
                 var msg = 'pos='+JSON.stringify(cit.it.model.position)
                     +', p.leftRight='+t.items[cit.it.parent.idx].leftRight
-                    +', p.upDown='+t.items[cit.it.parent.idx].upDown
-                    +', it.maxColumnIta.maxColumn='+cit.it.maxColumnIta.maxColumn
-                    +', it.maxRowIta.maxRow='+cit.it.maxColumnIta.maxRow;
-
+                    +', p.upDown='+t.items[cit.it.parent.idx].upDown;
                 na.site.setStatusMsg (msg, true, 10 * 1000);
 
                 done = true;
@@ -922,8 +919,8 @@ export class na3D_fileBrowser {
                 var
                 itmaxc = it.maxColumnIta.maxColumn,
                 itmaxr = it.maxRowIta.maxRow,
-                itLeftRight = /*pLeftRight,/*/it.column-1 == itmaxc / 2 ? 0 : it.column-1 > itmaxc / 2 ? 1 : -1,
-                itUpDown = /*pUpDown, /*/it.row-1 == itmaxr / 2 ? 0 : it.row-1 > itmaxr / 2 ? 1 : -1,
+                itLeftRight = /*pLeftRight,/*/it.column == itmaxc / 2 ? 0 : it.column > itmaxc / 2 ? 1 : -1,
+                itUpDown = /*pUpDown, /*/it.row == itmaxr / 2 ? 0 : it.row > itmaxr / 2 ? 1 : -1,
                 itc = (
                     ((itmaxc / 2) - it.column)
                 ),
@@ -986,8 +983,8 @@ export class na3D_fileBrowser {
                 var
                 itmaxc = it.maxColumnIta.maxColumn,
                 itmaxr = it.maxRowIta.maxRow,
-                itLeftRight = /*pLeftRight,/*/it.column-1 == itmaxc / 2 ? 0 : it.column-1 > itmaxc / 2 ? 1 : -1,
-                itUpDown = /*pUpDown, /*/it.row-1 == itmaxr / 2 ? 0 : it.row-1 > itmaxr / 2 ? 1 : -1,
+                itLeftRight = /*pLeftRight,/*/it.column == itmaxc / 2 ? 0 : it.column > itmaxc / 2 ? 1 : -1,
+                itUpDown = /*pUpDown, /*/it.row == itmaxr / 2 ? 0 : it.row > itmaxr / 2 ? 1 : -1,
                 itc = (
                     ((itmaxc / 2) - (it.column))
                 ),
@@ -1027,7 +1024,7 @@ export class na3D_fileBrowser {
                 ilc = it.columnOffsetValue === 0 ? 0.01 : it.columnOffsetValue,
                 ilr = it.rowOffsetValue === 0 ? 0.01 : it.rowOffsetValue,
                 //min = 4, m = 500, n = 1, o = 500, q = 500, s = 1, u = it.leftRight===0?0:it.leftRight, v =1, w = it.upDown===0?0:it.upDown, x = 1,//p.leftRight,
-                min = 4, m1 = 700, m2 = 750, n = 1, o = 500, q = 500, s = 1,
+                min = 4, m1 = 1400, m2 = 750, n = 1, o = 500, q = 500, s = 1,
                 u = p.leftRight===0?0.5:p.leftRight,// v =1,
                 v = 1,
                 w = p.upDown===0?0.5:p.upDown,
