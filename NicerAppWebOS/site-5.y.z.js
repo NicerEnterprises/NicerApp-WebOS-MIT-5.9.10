@@ -2511,17 +2511,32 @@ onclick_btnFullResetOfAllThemes : function (event) {
         na.m.log (3, 'na.site.success() : msg='+msg);
         na.analytics.logMetaEvent ('na.site.success() : msg='+msg);
     },
-    setStatusMsg : function (msg, resize, showMilliseconds) {
+    setStatusMsg : function (msg, resize, showMilliseconds, fade) {
         if (resize===undefined) resize = true;
         //debugger;
 
         //if (!resize) na.site.settings.current.cancelAllResizeCommands = true;
         if (!showMilliseconds) showMilliseconds = 4000;
         na.site.settings.current.desktopIdle = false;
-        $('#siteStatusbar .vividDialogContent').stop(true,true).animate({opacity:0.0001},'normal', function () {
-            $('#siteStatusbar .vividDialogContent').html(msg).css({display:'block',margin:0}).stop(true,true).animate({opacity:1},'normal');
+        if (fade)
+        $('#siteStatusbar .vividDialogContent').stop(true,true).animate({opacity:0.0001},'fast', function () {
+            na.site.setStatusMsg_do (msg, resize, showMilliseconds);
+        });
+        else na.site.setStatusMsg_do (msg, resize, showMilliseconds);
+    },
 
-            na.m.waitForCondition('na.site.setStatusMsg(msg,resize,showMilliseconds) : na.m.HTMLidle()?', na.m.HTMLidle, function() {
+    setStatusMsg_do : function (msg,resize,showMilliseconds) {
+        $('#siteStatusbar .vividDialogContent').html(msg).delay(50).css({display:'block',margin:0}).stop(true,true).animate({opacity:1},'fast');
+        $('#siteStatusbar').animate({height:'auto'}, {
+            speed : 'fast',
+            progress : function (evt) {
+                $(window).trigger('resize');
+            }
+        });
+
+        na.m.waitForCondition(
+            'na.site.setStatusMsg(msg,resize,showMilliseconds) : na.m.HTMLidle()?', na.m.HTMLidle,
+            function() {
                 if (resize) {
                     na.site.settings.current.statusbarVisible = na.desktop.settings.visibleDivs.includes('#siteStatusbar');
                     if (!na.site.settings.current.statusbarVisible) na.desktop.settings.visibleDivs.push('#siteStatusbar');
@@ -2541,9 +2556,8 @@ onclick_btnFullResetOfAllThemes : function (event) {
                         }, 1000);
                     }, showMilliseconds);
                 }
-            }, 200);
-
-        });
+            }, 200
+        );
     },
 
     onclick_displayErrors : function (event) {

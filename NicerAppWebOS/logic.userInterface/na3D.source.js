@@ -320,7 +320,7 @@ export class na3D_fileBrowser {
     }
     
     animate(t, evt) {
-        requestAnimationFrame( function(evt) { debugger; t.animate (t,evt) } );
+        requestAnimationFrame( function(evt) { t.animate (t,evt) } );
         //if (t.mouse.x!==0 || t.mouse.y!==0) {
             t.camera.updateProjectionMatrix();
 
@@ -546,7 +546,7 @@ export class na3D_fileBrowser {
         behind the mouse pointer */; i++) {
             var cit/*clickedItem*/ = intersects[i].object, done = false;
             while (cit && !done) {
-                na.site.setStatusMsg (cit.it.fullPath);
+                na.site.setStatusMsg (cit.it.fullPath, true, 7 * 1000);
 
                 done = true;
             }
@@ -561,11 +561,20 @@ export class na3D_fileBrowser {
         behind the mouse pointer */; i++) {
             var cit/*clickedItem*/ = intersects[i].object, done = false;
             while (cit && !done) {
-                var msg = 'pos='+JSON.stringify(cit.it.model.position)
-                    +', p.leftRight='+t.items[cit.it.parent.idx].leftRight
-                    +', p.upDown='+t.items[cit.it.parent.idx].upDown
-                    +', it.maxColumnIta.maxColumn='+cit.it.maxColumnIta.maxColumn
-                    +', it.maxRowIta.maxRow='+cit.it.maxColumnIta.maxRow;
+                var dbg = {
+                    pos : cit.it.model.position,
+                    'p.column' : t.items[cit.it.parent.idx].column,
+                    'p.maxColumnIta.maxColumn':t.items[cit.it.parent.idx].maxColumnIta.maxColumn,
+                    'p.leftRight' : t.items[cit.it.parent.idx].leftRight,
+                    'p.row' :  t.items[cit.it.parent.idx].row,
+                    'p.maxColumnIta.maxRow':t.items[cit.it.parent.idx].maxColumnIta.maxRow,
+                    'p.upDown' :t.items[cit.it.parent.idx].upDown,
+                    'it.column':cit.it.column,
+                    'it.maxColumnIta.maxColumn':cit.it.maxColumnIta.maxColumn,
+                    'it.row':cit.it.row,
+                    'it.maxRowIta.maxRow':cit.it.maxColumnIta.maxRow
+                },
+                msg = JSON.stringify(dbg,undefined,4).replace(/\n/g, '<br/>').replace(/\s/g, '&nbsp;');
 
                 na.site.setStatusMsg (msg, true, 10 * 1000);
 
@@ -922,8 +931,10 @@ export class na3D_fileBrowser {
                 var
                 itmaxc = it.maxColumnIta.maxColumn,
                 itmaxr = it.maxRowIta.maxRow,
-                itLeftRight = /*pLeftRight,/*/it.column-1 == itmaxc / 2 ? 0 : it.column-1 > itmaxc / 2 ? 1 : -1,
-                itUpDown = /*pUpDown, /*/it.row-1 == itmaxr / 2 ? 0 : it.row-1 > itmaxr / 2 ? 1 : -1,
+                itmaxc2 = Math.floor(itmaxc/2),
+                itmaxr2 = Math.floor(itmaxr/2),
+                itLeftRight = /*pLeftRight,/*/it.column-1 == itmaxc2 ? 0 : it.column-1 > itmaxc2 ? 1 : -1,
+                itUpDown = /*pUpDown, /*/it.row-1 == itmaxr2 ? 0 : it.row-1 > itmaxr2 ? 1 : -1,
                 itc = (
                     ((itmaxc / 2) - it.column)
                 ),
@@ -1052,7 +1063,7 @@ export class na3D_fileBrowser {
                     //+ (it.level > min ? (ilr * n * o) : 0)
                 );
                 it.model.position.z = -1 * z - rndz;
-                if (it.name=='black' || it.name=='space') debugger;
+                //if (it.name=='black' || it.name=='space') debugger;
                 //if (it.name=='landscape' || it.name=='tiled') debugger;
                 //if (it.name=='misc' || it.name=='simple') debugger;
                 //if (it.level===4) debugger;
@@ -1086,7 +1097,7 @@ export class na3D_fileBrowser {
         if (true) {
             setTimeout(function(t) {
                 t.onresize_postDo(t);
-            }, 1000, t);
+            }, 5000, t);
             //t.drawLines(t);
         } else {
             clearTimeout (t.timeout_onresize_do_overlapChecks2);
@@ -1125,15 +1136,15 @@ export class na3D_fileBrowser {
             y : Math.round((t.winners.north + t.winners.south) / 2),
             z : Math.round((t.winners.front + t.winners.behind) /2)
         },
-        ol = 1500;
+        ol = 5000;
         console.log ('t778', t.winners, middle);
 
 
         t.curve = new THREE.CatmullRomCurve3( [
             new THREE.Vector3 (0, 0, ol),
             new THREE.Vector3 (t.winners.west - ol, 0, ol),
-            new THREE.Vector3 (t.winners.west - ol, 0, t.winners.behind - ol),
-            new THREE.Vector3 (t.winners.east + ol, 0, t.winners.behind - ol),
+            new THREE.Vector3 (t.winners.west - ol, 0, t.winners.front - ol),
+            new THREE.Vector3 (t.winners.east + ol, 0, t.winners.front - ol),
             new THREE.Vector3 (t.winners.east + ol, 0, ol),
             new THREE.Vector3 (0, 0, ol),
         ]);
@@ -1142,7 +1153,7 @@ export class na3D_fileBrowser {
         t.curves = [];
         var
         numPoints = 180,
-        radius = 500;
+        radius = 1500;
         for (var i=0; i<numPoints; i++) {
             var
             x = radius * Math.cos (2 * Math.PI * i / numPoints),
@@ -1153,19 +1164,21 @@ export class na3D_fileBrowser {
         t.curve2 = new THREE.CatmullRomCurve3(t.curves);
         t.points2 = t.curve2.getPoints(numPoints);
 
+
         /*
         const geometry = new THREE.BufferGeometry().setFromPoints( t.points );
         const material = new THREE.LineBasicMaterial( { color: 0xff0000 } );
         // Create the final object to add to the scene
         const curveObject = new THREE.Line( geometry, material );
         t.scene.add(curveObject);
-        */
 
-        //const geometry2 = new THREE.BufferGeometry().setFromPoints( t.points2 );
-        //const material2 = new THREE.LineBasicMaterial( { color: 0xffffff } );
+
+        const geometry2 = new THREE.BufferGeometry().setFromPoints( t.points2 );
+        const material2 = new THREE.LineBasicMaterial( { color: 0xffffff } );
         // Create the final object to add to the scene
-        //const curveObject2 = new THREE.Line( geometry2, material2 );
-        //t.scene.add(curveObject2);
+        const curveObject2 = new THREE.Line( geometry2, material2 );
+        t.scene.add(curveObject2);
+        */
 
         t._tmp = new THREE.Vector3();
         t.animationProgress = { value: 0 };
