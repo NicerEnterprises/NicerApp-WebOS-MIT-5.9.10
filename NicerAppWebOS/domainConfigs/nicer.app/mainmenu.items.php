@@ -305,13 +305,12 @@
                             'parameters' => [
                                 'thumbnails' => './thumbs/300/$filename.$ext'
                             ],
-                            'SEO_value' => 'demo-3D-fileBrowser'
+                            'SEO_value' => [ 'demo-3D-fileBrowser', '3D-data' ]
                         ]
                      ]
                 ]
             ]
         ],
-        
         
         "cms" => [
             'apps-current' => [

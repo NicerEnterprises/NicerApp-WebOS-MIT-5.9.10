@@ -33,8 +33,8 @@ import { OrbitControls } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/example
 import { RGBELoader } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/loaders/RGBELoader.js';
 import { DragControls } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/controls/DragControls.js';
 //import { GLTFLoader } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/loaders/GLTFLoader.js';
-//import { FlyControls } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/controls/FlyControls.js';
-//import { FirstPersonControls} from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/controls/FirstPersonControls.js';
+import { FlyControls } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/controls/FlyControls.js';
+import { FirstPersonControls} from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/controls/FirstPersonControls.js';
 import gsap from "https://unpkg.com/gsap@3.12.2/index.js";
 import { CameraControls } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/dist_camera-controls.module.js';
 
@@ -162,8 +162,6 @@ export class na3D_fileBrowser {
         
         el.appendChild( t.renderer.domElement );
 
-        t.controls = new OrbitControls( t.camera, t.renderer.domElement );
-        //t.controls.listenToKeyEvents( window ); // optional
 
         if (false) {
             const sphere1 = new THREE.Mesh(
@@ -311,12 +309,21 @@ export class na3D_fileBrowser {
 
         });
 
-        CameraControls.install ({ THREE : THREE });
-        t.clock = new THREE.Clock();
-        t.cameraControls = new CameraControls (t.camera, t.renderer.domElement);
+        //t.controls = new OrbitControls( t.camera, t.renderer.domElement );
+        //t.controls.listenToKeyEvents( window ); // optional
 
-        debugger;
-        t.animate(this, null);
+        //CameraControls.install ({ THREE : THREE });
+        t.clock = new THREE.Clock();
+        //t.cameraControls = new CameraControls (t.camera, t.renderer.domElement);
+        t.flyControls = new FlyControls (t.camera, t.renderer.domElement);
+        t.flyControls.movementSpeed = 10 * 1000;
+        //debugger;
+        //t.fpControls = new FirstPersonControls (t.camera, t.renderer.domElement);
+        //t.fpControls.movementSpeed = 2000;
+
+        //setTimeout (function() {
+            t.animate(this, null);
+        //}, 300);
     }
     
     animate(t, evt) {
@@ -328,15 +335,16 @@ export class na3D_fileBrowser {
                 var it = t.s2[i];
                 it.updateMatrixWorld();
             };
-            t.raycaster.setFromCamera (t.mouse, t.camera);
 
             t.scene.matrixWorldAutoUpdate = true;;
             t.camera.matrixWorldAutoUpdate = true;
             //t.camera.lookAt (t.s2[0].position);
-            //t.flycontrols.update(0.05);
-            //t.fpcontrols.update(0.3);
             const delta = t.clock.getDelta();
-            const hasControlsUpdated = t.cameraControls.update(delta);
+
+            const hasControlsUpdated =t.flyControls.update(0.05);
+            t.raycaster.setFromCamera (t.mouse, t.camera);
+            //const hasControlsUpdated =t.cameraControls.update(delta);
+            //t.fpControls.update(delta);
 
             const intersects = t.raycaster.intersectObjects (t.s2);
             if (intersects[0] && intersects[0].object.type!=='Line') 
@@ -481,7 +489,7 @@ export class na3D_fileBrowser {
                 }
 
                 // Render scene
-                t.renderer.render(t.scene, t.camera);
+                //t.renderer.render(t.scene, t.camera);
 
                 // Render labels
                 //t.labelRenderer.render(t.scene, t.camera);
@@ -507,7 +515,7 @@ export class na3D_fileBrowser {
             if (it && it.geometry) it.geometry.verticesNeedUpdate = true;
         };
 
-        
+        debugger;
         t.renderer.render( t.scene, t.camera );
     }
 
@@ -516,9 +524,6 @@ export class na3D_fileBrowser {
     }
     rotate2 (event, t) {
         t.pathAnimation2.play(0);
-    }
-    rotate3 (event, t) {
-        t.pathAnimation3.play(0);
     }
 
     onMouseMove( event, t ) {
@@ -973,38 +978,30 @@ export class na3D_fileBrowser {
                 ilc = it.columnOffsetValue === 0 ? 0.01 : it.columnOffsetValue,
                 ilr = it.rowOffsetValue === 0 ? 0.01 : it.rowOffsetValue,
 
-                min = 4, m0 = (it.level-2) < 4 ? it.level-2 : 4, m1 = 2000/m0, m2 = 2000/m0, n = 1, o = 600, q = 500, s = 1,
-                u = -1,//p.leftRight===0?0.7:p.leftRight,// v =1,
+                min = 4, min2 = 4, m0 = (it.level-2) < 4 ? it.level-2 : 4, m1 = 2000/m0, m2 = 2000/m0, m3 = 400, n = 1, o = (it.level>6?100:0), q = (it.level>6?200:0), s = 1,
+                u = p.leftRight===0?0.7:p.leftRight,// v =1,
                 v = 1,
-                //w = -1 * ilr,//p.upDown===0?0.1:p.upDown,
-                w = -1,//1 * (p.upDown===0?0.7:p.upDown),
+                w = -1 * ilr,//p.upDown===0?0.1:p.upDown,
+                w = 1 * (p.upDown===0?0.1:p.upDown),
                 x = 1;
                 //debugger;
 
                 it.model.position.x = Math.round(
                     p.model.position.x
                     + (it.level > min ? (u * it.column * m1) : (it.column*m1))
-                    //+ (u * (it.column * m1))
-                    + (it.level > min ? (u * v * ((o * n))) : 0)
-                    + (it.level > min ? (u * v * ((q * s))) : 0)
+                    //- (it.level > min ? (it.columnOffsetValue * m3) : (it.columnOffsetValue*m3))
+                    //- (it.level > min2 ? (u*it.column * m3) : (it.column*m3))
+                    - (it.level > min2 ? (u*p.columnOffsetValue * m3) : (p.columnOffsetValue*m3))
+                    + (it.level > min ? (u * v * ((1 * n))) : 0)
+                    + (it.level > min ? (u * v * ((o * s))) : 0)
                 );
                 it.model.position.y = Math.round(
                     p.model.position.y 
                     + (it.level > min ? (w * it.row * m2) : (it.row*m2))
-                    //+ (w * (it.rowOffsetValue * m2))
-                    + (it.level > min ? (w * x * ((o * n))) : 0)
-                    + (it.level > min ? (w * x * ((q * s))) : 0)
-                );
-                it.model.position.x = Math.round(
-                    p.model.position.x
-                    + (it.level > min ? (u * it.column * m1) : (it.column*m1))
-                    + (it.level > min ? (u * v * ((o * n))) : 0)
-                    + (it.level > min ? (u * v * ((o * s))) : 0)
-                );
-                it.model.position.y = Math.round(
-                    p.model.position.y
-                    + (it.level > min ? (w * it.row * m2) : (it.row*m2))
-                    + (it.level > min ? (w * x * ((o * n))) : 0)
+                    //- (it.level > min ? (it.rowOffsetValue * m3) : (it.rowOffsetValue*m3))
+                    //- (it.level > min2 ? (w*it.row * m3) : (it.row*m3))
+                    - (it.level > min2 ? (w*p.rowOffsetValue * m3) : (p.rowOffsetValue*m3))
+                    + (it.level > min ? (w * x * ((q * n))) : 0)
                     + (it.level > min ? (w * x * ((o * s))) : 0)
                 );
                 it.model.position.z = -1 * z - rndz;
@@ -1056,8 +1053,6 @@ export class na3D_fileBrowser {
     onresize_postDo (t) {
         t.drawLines(t);
 
-        if (!t.cameraOrigin) t.cameraOrigin = $.extend({}, t.camera.position);
-
         t.winners = {
             north : 0,
             east : 0,
@@ -1083,13 +1078,11 @@ export class na3D_fileBrowser {
             y : Math.round((t.winners.north + t.winners.south) / 2),
             z : Math.round((t.winners.front + t.winners.behind) /2)
         },
-        ol = 5000,
-        numPoints = 360,
-        radius = 12.5*1000;
+        ol = 5000;
         console.log ('t778', t.winners, middle);
 
 
-        t.curve1b = new THREE.CatmullRomCurve3( [
+        t.curve = new THREE.CatmullRomCurve3( [
             new THREE.Vector3 (0, 0, ol),
             new THREE.Vector3 (t.winners.west - ol, 0, ol),
             new THREE.Vector3 (t.winners.west - ol, 0, t.winners.front - ol),
@@ -1097,107 +1090,24 @@ export class na3D_fileBrowser {
             new THREE.Vector3 (t.winners.east + ol, 0, ol),
             new THREE.Vector3 (0, 0, ol),
         ]);
-        var first = last = {x:0,y:0,z:ol};
-        t.points1b = t.curve1b.getPoints(numPoints);
-        t.curves1a = [
-            new THREE.Vector3(t.cameraOrigin.x,t.cameraOrigin.y,t.cameraOrigin.z),
-            new THREE.Vector3(first.x,first.y,first.z)
-        ];
-        t.curve1a = new THREE.CatmullRomCurve3(t.curves1a);
-        t.points1a = t.curve1a.getPoints(50);
-        t.curves1z = [
-            new THREE.Vector3(last.x,last.y,last.z),
-            new THREE.Vector3(t.cameraOrigin.x,t.cameraOrigin.y,t.cameraOrigin.z)
-        ];
-        t.curve1z = new THREE.CatmullRomCurve3(t.curves1z);
-        t.points1z = t.curve1z.getPoints(50);
+        t.points = t.curve.getPoints(numPoints);
 
-        t.curves1x = t.points1a.concat (t.points1b, t.points1z);
-        t.curve1 = new THREE.CatmullRomCurve3(t.curves1x);
-        t.points1 = t.curve1.getPoints(numPoints);
-
-
-
-        t.curves2b = [];
+        t.curves = [];
+        var
+        numPoints = 180,
+        radius = 1500;
         for (var i=0; i<numPoints; i++) {
             var
             x = radius * Math.cos (2 * Math.PI * i / numPoints),
             y = radius * Math.sin (2 * Math.PI * i / numPoints),
-            z = 1.4 * radius;
-            z = middle.z - (radius * Math.sin (2 * Math.PI * i / numPoints) / 2);
-            if (i===0) var first = {x:x,y:y,z:z};
-            if (i===numPoints-1) var last = {x:x,y:y,z:z};
-            t.curves2b.push (new THREE.Vector3(x,y,z));
+            z = 3 * radius;
+            t.curves.push (new THREE.Vector3(x,y,z));
         }
-        t.curves2a = [
-            new THREE.Vector3(t.cameraOrigin.x,t.cameraOrigin.y,t.cameraOrigin.z),
-            new THREE.Vector3(first.x,first.y,first.z)
-        ];
-        t.curve2a = new THREE.CatmullRomCurve3(t.curves2a);
-        t.points2a = t.curve2a.getPoints(50);
-        t.curves2z = [
-            new THREE.Vector3(last.x,last.y,last.z),
-            new THREE.Vector3(t.cameraOrigin.x,t.cameraOrigin.y,t.cameraOrigin.z)
-        ];
-        t.curve2z = new THREE.CatmullRomCurve3(t.curves2z);
-        t.points2z = t.curve2z.getPoints(50);
-
-        t.curves2x = t.points2a.concat (t.curves2b, t.points2z);
-        t.curve2 = new THREE.CatmullRomCurve3(t.curves2x);
+        t.curve2 = new THREE.CatmullRomCurve3(t.curves);
         t.points2 = t.curve2.getPoints(numPoints);
 
-/*
-        t.curves3 = [];
-        t.curves3.push (new THREE.Vector3(t.camera.position.x,t.camera.position.y,t.camera.position.z));
-        for (var i=0; i<numPoints; i++) {
-            var
-            x = middle.x - (-1 * radius * Math.cos (2 * Math.PI * i / numPoints) / 2),
-            y = middle.y - (-1 * radius * Math.sin (2 * Math.PI * i / numPoints) / 2),
-            z = middle.z - (radius * Math.sin (2 * Math.PI * i / numPoints) / 2);
-            t.curves3.push (new THREE.Vector3(x,y,z));
-        }
-        t.curves3.push (new THREE.Vector3(t.camera.position.x,t.camera.position.y,t.camera.position.z));
-        t.curve3 = new THREE.CatmullRomCurve3(t.curves3);
-        t.points3 = t.curve.getPoints(numPoints);
-*/
 
-        t.curves3b = [];
-        for (var i=0; i<numPoints; i++) {
-            var
-            x = radius * Math.cos (2 * Math.PI * i / numPoints),
-            y = radius * Math.sin (2 * Math.PI * i / numPoints),
-            z = 1.4 * radius;
-            z = middle.z - (radius * Math.sin (2 * Math.PI * i / numPoints) / 2);
-            if (i===0) var first = {x:x,y:y,z:z};
-            if (i===numPoints-1) var last = {x:x,y:y,z:z};
-            t.curves3b.push (new THREE.Vector3(x,y,z));
-        }
-        t.curve3b = new THREE.CatmullRomCurve3(t.curves3b);
-        t.points3b = t.curve3b.getPoints(numPoints);
-        t.curves3a = [
-            new THREE.Vector3(t.cameraOrigin.x,t.cameraOrigin.y,t.cameraOrigin.z),
-            new THREE.Vector3(first.x,first.y,first.z)
-        ];
-        t.curve3a = new THREE.CatmullRomCurve3(t.curves3a);
-        t.points3a = t.curve3a.getPoints(50);
-        t.curves3z = [
-            new THREE.Vector3(last.x,last.y,last.z),
-            new THREE.Vector3(t.cameraOrigin.x,t.cameraOrigin.y,t.cameraOrigin.z)
-        ];
-        t.curve3z = new THREE.CatmullRomCurve3(t.curves3z);
-        t.points3z = t.curve3z.getPoints(50);
-
-        t.curves3x = t.points3a.concat (t.points3b, t.points3z);
-        t.curve3 = new THREE.CatmullRomCurve3(t.curves3x);
-        t.points3 = t.curve3.getPoints(numPoints);
-        debugger;
-
-
-
-
-
-
-/*
+        /*
         const geometry = new THREE.BufferGeometry().setFromPoints( t.points );
         const material = new THREE.LineBasicMaterial( { color: 0xff0000 } );
         // Create the final object to add to the scene
@@ -1210,7 +1120,8 @@ export class na3D_fileBrowser {
         // Create the final object to add to the scene
         const curveObject2 = new THREE.Line( geometry2, material2 );
         t.scene.add(curveObject2);
-*/
+        */
+
         t._tmp = new THREE.Vector3();
         t.animationProgress = { value: 0 };
         t.pathAnimation = gsap.fromTo(
@@ -1220,7 +1131,7 @@ export class na3D_fileBrowser {
             },
             {
                 value: 1,
-                duration: 60,
+                duration: 5,
                 overwrite: true,
                 paused: true,
                 onUpdateParams: [ t.animationProgress ],
@@ -1228,7 +1139,7 @@ export class na3D_fileBrowser {
 
                     if ( ! this.isActive() ) return;
 
-                    t.curve1.getPoint ( value, t._tmp );
+                    t.curve.getPoint ( value, t._tmp );
                     const cameraX = t._tmp.x;
                     const cameraY = t._tmp.y;
                     const cameraZ = t._tmp.z;
@@ -1249,13 +1160,17 @@ export class na3D_fileBrowser {
                 },
                 onStart() {
 
-                    t.cameraControls.enabled = false;
+          //          t.cameraControls.enabled = false;
+                    t.flyControls.enabled = false;
+                    //t.fpControls.enabled = false;
 
                 },
                 onComplete() {
 
-                    t.cameraControls.enabled = true;
-                    t.onresize_postDo(t);
+            //        t.cameraControls.enabled = false;
+                    t.flyControls.enabled = true;
+                    //t.fpControls.enabled = true;
+
                 },
             }
         );
@@ -1268,7 +1183,7 @@ export class na3D_fileBrowser {
             },
             {
                 value: 1,
-                duration: 60,
+                duration: 30,
                 overwrite: true,
                 paused: true,
                 onUpdateParams: [ t.animationProgress2 ],
@@ -1303,67 +1218,13 @@ export class na3D_fileBrowser {
                 onComplete() {
 
                     t.cameraControls.enabled = true;
-                    t.onresize_postDo(t);
-                },
-            }
-        );
 
-        t._tmp = new THREE.Vector3();
-        t.animationProgress3 = { value: 0 };
-        t.pathAnimation3 = gsap.fromTo(
-            t.animationProgress3,
-            {
-                value: 0,
-            },
-            {
-                value: 1,
-                duration: 60,
-                overwrite: true,
-                paused: true,
-                onUpdateParams: [ t.animationProgress3 ],
-                onUpdate( { value } ) {
-
-                    if ( ! this.isActive() ) return;
-
-                    t.curve3.getPoint ( value, t._tmp );
-                    const cameraX = t._tmp.x;
-                    const cameraY = t._tmp.y;
-                    const cameraZ = t._tmp.z;
-                    const lookAtX = middle.x;
-                    const lookAtY = middle.y;
-                    const lookAtZ = middle.z;
-
-                    t.cameraControls.setLookAt(
-                        cameraX,
-                        cameraY,
-                        cameraZ,
-                        lookAtX,
-                        lookAtY,
-                        lookAtZ,
-                        false, // IMPORTANT! disable cameraControls's transition and leave it to gsap.
-                    );
-
-                },
-                onStart() {
-
-                    t.cameraControls.enabled = false;
-
-                },
-                onComplete() {
-
-                    t.cameraControls.enabled = true;
-                    t.onresize_postDo(t);
                 },
             }
         );
 
         setTimeout (function() {
-
-            if (!t.started) {
-                t.started = true;
-                t.pathAnimation.play(0);
-            }
-
+            //t.pathAnimation.play(0);
 
             if (!t.dragndrop) {
                 var objs = [];

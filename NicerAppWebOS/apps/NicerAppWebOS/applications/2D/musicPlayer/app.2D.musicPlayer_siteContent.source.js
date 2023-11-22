@@ -631,7 +631,7 @@ na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/musicPlayer'] 
 		$dialogPlayer = $(dialogPlayer),
 		centerDialogsWidth = $(dialogMP3sList).width() + $dialogPlaylist.width() + $dialogPlayer.width(),
 		dialogsTop = $('#titlebar').position().top + $('#titlebar').height() + 40,
-		dialogsHeight = (myHeight - dialogsTop - 20);
+		dialogsHeight = (myHeight - dialogsTop - 40);
         
 		$('#horizontalMover__containmentBox2').css({
 			left : 25,

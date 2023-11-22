@@ -34,7 +34,7 @@
         </ol>
     </div></li>
 
-    <li class="todoList"><div>(2024 January and beyond) Fix the 3D file and data browser/viewer app
+    <li class="todoList"><div>(CURRENT) Expand functionality of the 3D file and data browser/viewer app
         <ol class="todoList_l1">
             <li class="todoList_l1"><div>Perhaps one day write a 3D tree generator, like the ThreeJS cube generator, that produces a ThreeJS model that actually looks like a tree, with figurines representing the folders sitting at strategic spots along the branches of that tree. possibly use animal figurines.
             </div></li>
