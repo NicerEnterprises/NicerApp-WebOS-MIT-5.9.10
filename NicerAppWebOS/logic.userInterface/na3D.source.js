@@ -973,27 +973,13 @@ export class na3D_fileBrowser {
                 ilc = it.columnOffsetValue === 0 ? 0.01 : it.columnOffsetValue,
                 ilr = it.rowOffsetValue === 0 ? 0.01 : it.rowOffsetValue,
 
-                min = 6, m0 = (it.level-2) < 4 ? it.level-2 : 4, m1 = 3000/m0, m2 = 3000/m0, n = 1, o = 600, q = 500, s = 1,
+                min = 6, m0 = (it.level-2) < 4 ? it.level-2 : 4, m1a = 500, m1 = 3000/m0, m2 = 3000/m0, m2a = 500, n = 1, o = 600, q = 500, s = 1,
                 u = 1 * (p.leftRight===0?0.7:p.leftRight),
                 v = 1,
                 w = 1 * (p.upDown===0?0.7:p.upDown),
                 x = 1;
                 //debugger;
 
-                it.model.position.x = Math.round(
-                    p.model.position.x
-                    + (it.level > min ? (u * it.column * m1) : (it.column*m1))
-                    //+ (u * (it.column * m1))
-                    + (it.level > min ? (u * v * ((o * n))) : 0)
-                    + (it.level > min ? (u * v * ((q * s))) : 0)
-                );
-                it.model.position.y = Math.round(
-                    p.model.position.y 
-                    + (it.level > min ? (w * it.row * m2) : (it.row*m2))
-                    //+ (w * (it.rowOffsetValue * m2))
-                    + (it.level > min ? (w * x * ((o * n))) : 0)
-                    + (it.level > min ? (w * x * ((q * s))) : 0)
-                );
                 it.model.position.x = Math.round(
                     p.model.position.x
                     + (it.level > min ? (u * it.column * m1) : (it.column*m1))
