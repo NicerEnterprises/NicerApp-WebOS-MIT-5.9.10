@@ -315,12 +315,13 @@ export class na3D_fileBrowser {
         t.clock = new THREE.Clock();
         t.cameraControls = new CameraControls (t.camera, t.renderer.domElement);
 
+        debugger;
         t.animate(this, null);
     }
     
     animate(t, evt) {
         requestAnimationFrame( function(evt) { t.animate (t,evt) } );
-        if (t.mouse.x!==0 || t.mouse.y!==0) {        
+        //if (t.mouse.x!==0 || t.mouse.y!==0) {
             t.camera.updateProjectionMatrix();
 
             for (var i=0; i<t.s2.length; i++) {
@@ -493,7 +494,7 @@ export class na3D_fileBrowser {
                     model.rotation.z += 0.02; //TODO : auto revert back to model.rotation.z = 0;
                 }
             }
-        }
+        //}
         
         //if (t.controls) t.controls.update();
 
@@ -515,6 +516,9 @@ export class na3D_fileBrowser {
     }
     rotate2 (event, t) {
         t.pathAnimation2.play(0);
+    }
+    rotate3 (event, t) {
+        t.pathAnimation3.play(0);
     }
 
     onMouseMove( event, t ) {
@@ -545,8 +549,7 @@ export class na3D_fileBrowser {
         behind the mouse pointer */; i++) {
             var cit/*clickedItem*/ = intersects[i].object, done = false;
             while (cit && !done) {
-                debugger;
-                na.site.statusMsg (cit.it.fullpath);
+                na.site.setStatusMsg (cit.it.fullPath, true, 7 * 1000);
 
                 done = true;
             }
@@ -554,6 +557,35 @@ export class na3D_fileBrowser {
 
     }
     onclick_double (t, event) {
+        const intersects = t.raycaster.intersectObjects (t.s2);
+        if (intersects[0] && intersects[0].object.type!=='Line')
+        for (var i=0; i<1/*intersects.length <-- this just gets an endless
+        series of hits from camera into the furthest reaches of what's visible
+        behind the mouse pointer */; i++) {
+            var cit/*clickedItem*/ = intersects[i].object, done = false;
+            while (cit && !done) {
+                var dbg = {
+                    pos : cit.it.model.position,
+                    'p.column' : t.items[cit.it.parent.idx].column,
+                    'p.maxColumnIta.maxColumn':t.items[cit.it.parent.idx].maxColumnIta.maxColumn,
+                    'p.columnOffsetValue':t.items[cit.it.parent.idx].columnOffsetValue,
+                    'p.leftRight' : t.items[cit.it.parent.idx].leftRight,
+                    'p.row' :  t.items[cit.it.parent.idx].row,
+                    'p.maxColumnIta.maxRow':t.items[cit.it.parent.idx].maxColumnIta.maxRow,
+                    'p.rowOffsetValue':t.items[cit.it.parent.idx].rowOffsetValue,
+                    'p.upDown' :t.items[cit.it.parent.idx].upDown,
+                    'it.column':cit.it.column,
+                    'it.maxColumnIta.maxColumn':cit.it.maxColumnIta.maxColumn,
+                    'it.row':cit.it.row,
+                    'it.maxRowIta.maxRow':cit.it.maxColumnIta.maxRow
+                },
+                msg = JSON.stringify(dbg,undefined,4).replace(/\n/g, '<br/>').replace(/\s/g, '&nbsp;');
+
+                na.site.setStatusMsg (msg, true, 10 * 1000);
+
+                done = true;
+            }
+        }
     }
     onclick_triple (t, event) {
     }
@@ -656,7 +688,7 @@ export class na3D_fileBrowser {
                     map: new THREE.TextureLoader().load(textures[5])
                 })
             ];
-            var cube = new THREE.Mesh( new THREE.BoxGeometry( 50, 50, 50 ), materials );
+            var cube = new THREE.Mesh( new THREE.BoxGeometry( 250, 250, 250 ), materials );
             cd.params.t.scene.add( cube );
             cd.params.t.s2.push(cube);
             cube.it = it;
@@ -683,75 +715,6 @@ export class na3D_fileBrowser {
         t.resizing = true;
         t.overlaps = [];
 
-        if (!t.dragndrop) {
-            var objs = [];
-            for (var i=0; i<t.items.length; i++) if (t.items[i].model) objs[objs.length] = t.items[i].model;
-
-
-            t.dragndrop = new DragControls( objs, t.camera, t.renderer.domElement );
-
-            $(t.renderer.domElement).contextmenu(function() {
-                return false;
-            });
-
-            t.dragndrop.addEventListener( 'dragstart', function ( event ) {
-                if (t.controls) t.controls.dispose();
-                t.cameraControls.enabled = false;
-
-                t.dragndrop.cube = event.object;
-                t.dragndrop.mouseX = t.mouse.layerX;
-                t.dragndrop.mouseY = t.mouse.layerY;
-
-                let cube = event.object;
-
-                for (let i=0; i<t.items.length; i++) {
-                    let it2 = t.items[i];
-                    if (it2.parent === cube.it.parent) {
-                        //debugger;
-                        it2.model.position.dragStartX = it2.model.position.x;
-                        it2.model.position.dragStartY = it2.model.position.y;
-                        it2.model.position.dragStartZ = it2.model.position.z;
-                    }
-                }
-            } );
-
-            t.dragndrop.addEventListener( 'drag', function (event) {
-                let cube = event.object;
-
-                for (let i=0; i<t.items.length; i++) {
-                    let it2 = t.items[i];
-                    if (it2.parent === cube.it.parent) {
-                        //debugger;
-                        it2.model.position.x = it2.model.position.dragStartX - (t.dragndrop.mouseX - t.mouse.layerX);
-                        it2.model.position.y = it2.model.position.dragStartY + (t.dragndrop.mouseY - t.mouse.layerY);
-                        it2.model.position.z = cube.position.z;
-                    }
-                }
-                clearTimeout (t.posDataToDB);
-                t.posDataToDB = setTimeout(function() {
-                    t.posDataToDatabase(t);
-                }, 1000);
-
-                if (t.showLines) {
-                    for (var i=0; i<t.permaLines.length; i++) {
-                        var l = t.permaLines[i];
-                        t.scene.remove (l.line);
-                        l.geometry.dispose();
-                        l.material.dispose();
-                    }
-                    t.permaLines = [];
-                    t.drawLines(t);
-                }
-            });
-
-            t.dragndrop.addEventListener( 'dragend', function ( event ) {
-                if (t.showLines) t.drawLines(t);
-                t.cameraControls.enabled = true;
-            } );
-
-        };
-
-
         let 
         c = {};
         for (var path in t.ld3) {
@@ -763,7 +726,7 @@ export class na3D_fileBrowser {
                     
                     ld3.rowColumnCount = Math.ceil(Math.sqrt(ld3.itemCount));
                     var
-                    column = 0,
+                    column = 1,
                     row = 1;
 
                     
@@ -837,11 +800,12 @@ export class na3D_fileBrowser {
             var
             offsetXY = 200,
             it = t.items[i],
-            p = (it.parent ? t.items[it.parent.idx] : null);
+            p = (it.parent ? t.items[it.parent.idx] : null),
+            rndMax = 4000;
 
-            if (it.parent && !pox[it.parent.idx]) pox[it.parent.idx] = Math.abs(Math.random() * 444);
-            if (it.parent && !poy[it.parent.idx]) poy[it.parent.idx] = Math.abs(Math.random() * 444);
-            if (it.parent && !poz[it.parent.idx]) poz[it.parent.idx] = Math.abs(Math.random() * 1100);
+            if (it.parent && !pox[it.parent.idx]) pox[it.parent.idx] = Math.abs(Math.random() * rndMax);
+            if (it.parent && !poy[it.parent.idx]) poy[it.parent.idx] = Math.abs(Math.random() * rndMax);
+            if (it.parent && !poz[it.parent.idx]) poz[it.parent.idx] = Math.abs(Math.random() * rndMax );
 
             if (it.parent) var rndx = pox[it.parent.idx]; else var rndx = 0;
             if (it.parent) var rndy = pox[it.parent.idx]; else var rndy = 0;
@@ -864,8 +828,8 @@ export class na3D_fileBrowser {
                 var
                 pmaxc = p.maxColumnIta.maxColumn,//p.level > 0 ? p.maxColumnIta.maxColumn : (p.maxColumnIta.maxColumn+1),
                 pmaxr = p.maxRowIta.maxRow,
-                pLeftRight = ppLeftRight, //p.column > Math.floor(pmaxc / 2) ?  ppLeftRight * 1 : ppLeftRight * -1,
-                pUpDown = ppUpDown,//p.row > Math.floor(p.maxRowIta.maxRow / 2) ? ppUpDown * 1 :  ppUpDown * -1,
+                pLeftRight = p.column > Math.floor(pmaxc / 2) ?  ppLeftRight * 1 : ppLeftRight * -1,
+                pUpDown = p.row > Math.floor(p.maxRowIta.maxRow / 2) ? ppUpDown * 1 :  ppUpDown * -1,
                 pModifierC = (
                     p.level > 1
                     ? pLeftRight
@@ -903,16 +867,47 @@ export class na3D_fileBrowser {
                 var
                 itmaxc = it.maxColumnIta.maxColumn,
                 itmaxr = it.maxRowIta.maxRow,
-                itLeftRight = /*pLeftRight,/*/it.column == itmaxc / 2 ? 0 : it.column > Math.floor(itmaxc / 2) ? 1 : -1,
-                itUpDown = /*pUpDown, /*/it.row == itmaxr / 2 ? 0 : it.row > Math.floor(itmaxr / 2) ? 1 : -1,
+                itmaxc2 = Math.floor(itmaxc/2),
+                itmaxr2 = Math.floor(itmaxr/2),
+                itLeftRight = /*pLeftRight,/*/it.column-1 == itmaxc2 ? 0 : it.column-1 > itmaxc2 ? 1 : -1,
+                itUpDown = /*pUpDown, /*/it.row-1 == itmaxr2 ? 0 : it.row-1 > itmaxr2 ? 1 : -1,
+                itLeftRight = /*p.leftRight * */(
+                    it.column-1 == itmaxc / 2
+                    ? 0
+                    : itmaxc===1
+                        ? 0
+                        : itmaxc - it.column == it.column -1
+                            ? 0
+                            : itmaxc - it.column < it.column - 1
+                                ? -1
+                                : 1
+                            ),
+                itUpDown = /*p.upDown * */(
+                    it.row-1 == itmaxr/2
+                    ? 0
+                    : itmaxr===1
+                        ? 0
+                        : itmaxr - it.row == it.row - 1
+                            ? 0
+                            : itmaxr - it.row < it.row - 1
+                                ? -1
+                                : 1
+                            ),
                 itc = (
-                    itLeftRight * ((itmaxc / 2) - it.column)
+                    ((itmaxc / 2) - it.column)
+                ),
+                itc = (
+                    itmaxc - it.column
                 ),
                 itcPercentage = (itc*1.00) / itmaxc,
                 itr = (
-                    itUpDown * ((itmaxr / 2) - it.row)
+                    ((itmaxr / 2) - it.row)
+                ),
+                itr = (
+                    itmaxr - it.row
                 ),
                 itrPercentage = (itr*1.00) / itmaxr,
+
                 itco = offsetXY * itcPercentage * it.maxColumnIta.maxColumn,
                 itro = offsetXY * itrPercentage * it.maxRowIta.maxRow;
                 
@@ -967,14 +962,34 @@ export class na3D_fileBrowser {
                 var
                 itmaxc = it.maxColumnIta.maxColumn,
                 itmaxr = it.maxRowIta.maxRow,
-                itLeftRight = /*pLeftRight,/*/it.column == itmaxc / 2 ? 0 : it.column > Math.floor(itmaxc / 2) ? 1 : -1,
-                itUpDown = /*pUpDown, /*/it.row == itmaxr / 2 ? 0 : it.row > Math.floor(itmaxr / 2) ? 1 : -1,
+                itLeftRight = /*p.leftRight * */(
+                    it.column-1 == itmaxc / 2
+                    ? 0
+                    : itmaxc===1
+                        ? 0
+                        : itmaxc - it.column == it.column -1
+                            ? 0
+                            : itmaxc - it.column < it.column - 1
+                                ? -1
+                                : 1
+                            ),
+                itUpDown = /*p.upDown * */(
+                    it.row-1 == itmaxr/2
+                    ? 0
+                    : itmaxr===1
+                        ? 0
+                        : itmaxr - it.row == it.row - 1
+                            ? 0
+                            : itmaxr - it.row < it.row - 1
+                                ? -1
+                                : 1
+                            ),
                 itc = (
-                    itLeftRight * ((itmaxc / 2) - it.column)
+                    ((itmaxc / 2) - (it.column))
                 ),
                 itcPercentage = (itc*1.00) / itmaxc,
                 itr = (
-                    itUpDown * ((itmaxr / 2) - it.row)
+                    ((itmaxr / 2) - (it.row))
                 ),
                 itrPercentage = (itr*1.00) / itmaxr,
                 itco = offsetXY * itcPercentage * it.maxColumnIta.maxColumn,
@@ -984,7 +999,7 @@ export class na3D_fileBrowser {
                 it.rowOffsetValue = itr;//Math.floor(itr);
                 it.leftRight = itLeftRight;
                 it.upDown = itUpDown;
-                //if (it.name=='tiled' || it.name=='landscape') debugger;
+                if (it.name=='landscape') debugger;
             };
         
             //if (p && p.name=='tiled') debugger;
@@ -1002,52 +1017,72 @@ export class na3D_fileBrowser {
                 }
 
 
-                var z = -1 * ((it.level+1) * 300 ),
-                m = 200, n = 1.5;
+                var
+                z = -1 * ((it.level+1) * 2500 ),
+                plc = p.columnOffsetValue === 0 ? 0.01 : p.columnOffsetValue,
+                plr = p.rowOffsetValue === 0 ? 0.01 : p.rowOffsetValue,
+                ilc =
+                    it.columnOffsetValue === 0
+                        ? -1 * 0.01
+                        : it.columnOffsetValue/2,
+                ilr =
+                    it.rowOffsetValue === 0
+                        ? -1 * 0.01
+                        :  it.rowOffsetValue/2,
+                ilc = it.leftRight * it.column,// * p.columnOffsetValue,
+                ilr = it.upDown * it.row,// * p.rowOffsetValue,
+                //ilc = p.leftRight * it.maxColumnIta.maxColumn/it.column,
+                //ilr = p.upDown * it.maxRowIta.maxRow/it.row,
+
+                min = 4, m0 = (it.level-2) < 5 ? it.level-2 : 4, m1a = 400, m1 = 2500/m0, m2 = 2500/m0, m2a = 400, n = 0.5, n1 = p.leftRight * p.column, n2 = p.upDown * p.row, o = 600, q = 500, s = 1,
+                //u = 1 * (p.leftRight===0?it.leftRight===0?0.7:it.leftRight:p.leftRight),
+                u = 1 * (p.leftRight===0?ilc:p.leftRight),
+                //u = 1 * (p.leftRight===0?p.leftRight+1:p.leftRight>0?p.leftRight+1:0.7),
+                //u = 1 * (p.leftRight===0?p.columnOffsetValue:p.leftRight),
+                v = 1,
+                w = 1 * (p.upDown===0?ilr:p.upDown),
+                //w = 1 * (p.upDown===0?it.upDown===0?0.7:it.upDown:p.upDown),
+                //w = 1 * (p.upDown===0?p.upDown+1:p.upDown>0?p.upDown+1:0.7),
+                //w = 1 * (p.upDown===0?p.columnOffsetValue:p.upDown),
+                x = 1,
+                u1 = p.columnOffsetValue/4,
+                w1 = p.rowOffsetValue/4,
+                //u1 = -1*p.leftRight * (it.level/5),
+                //w1 = -1* p.upDown * (it.level/5),
+                //u1 = ilc,
+                //w1 = ilr,
+                u2 = -1 * p.columnOffsetValue /4,
+                w2 = -1 * p.rowOffsetValue /4;
+                //u2 = ilc,
+                //w2 = ilr;
+                //debugger;
+
                 it.model.position.x = Math.round(
                     p.model.position.x
-                    //+ (it.level > 4 ? (p.leftRight * it.column * m ) : 0)
-                    //+ (p.columnOffsetValue * m)
-                    //+ (it.level > 4 ? (p.columnOffsetValue*(it.column *m)) : (it.column*m))
-
-                    //+ (it.level > 4 ? (p.leftRight*(it.column *m)) : (it.column*m))
-                    //+ (it.level > 4 ? ( p.leftRight * p.column * m * n) : 0)
-                    //+ (it.level > 4 ? (p.leftRight * rndx) : 0)
-
-                    //+ (it.level > 4 ? (ppLeftRight*(it.column *m)) : (it.column*m))
-                    //+ (it.level > 4 ? ( ppLeftRight * p.column * m * n) : 0)
-                    //+ (it.level > 4 ? (ppLeftRight * rndx) : 0)
-                    + (it.level > 6 ? (p.leftRight*(it.column *m)) : (it.column*m))
-                    + (it.level > 4 ? ( p.leftRight * p.column * m * n) : 0)
-                    + (it.level > 4 ? (p.leftRight * rndx) : 0)
+                    //+ (it.level > min ? (u * ilc * m1) : (ilc*m1))
+                    + (it.level > min ? (u1 * m1a)+(it.column*m1) : (p.leftRight*it.column*m1))
+                    //+ (it.level > min ? (it.columnOffsetValue * m1) : (it.columnOffsetValue*m1a))
+                    + (it.level > min ? (u2 * v * ((o * n))) : 0)
+                    + (it.level > min ? (u2 * v * ((o * s))) : 0)
+                    + p.leftRight * rndx
                 );
                 it.model.position.y = Math.round(
-                    p.model.position.y 
-                    //+ (p.rowOffsetValue*m)
-                    //+ (it.level > 4 ? (p.rowOffsetValue * (it.row *m)): (it.row*m))
-                    //+ (it.level > 4 ? (p.upDown * it.row * m) : 0)
-
-                    //+ (it.level > 4 ? (p.upDown * (it.row *m)) : (it.row*m))
-                    //+ (it.level >   4 ? ( p.upDown * p.row * m * n) : 0)
-                    //+ (it.level > 4 ? (p.upDown * rndy) : 0)
-
-                    //+ (it.level > 4 ? (ppUpDown * (it.row *m)) : (it.row*m))
-                    //+ (it.level >   4 ? ( ppUpDown * p.row * m * n) : 0)
-                    //+ (it.level > 4 ? (ppUpDown * rndy) : 0)
-                    + (it.level > 6 ? (p.upDown * (it.row *m)) : (it.row*m))
-                    + (it.level >   4 ? ( p.upDown * p.row * m * n) : 0)
-                    + (it.level > 4 ? (p.upDown * rndy) : 0)
+                    p.model.position.y
+                    //+ (it.level > min ? (w * ilr * m2) : (it.row*m2))
+                    + (it.level > min ? (w1 * m2a)+(it.row*m2) : (p.upDown*it.row*m2))
+                    //+ (it.level > min ? (it.rowOffsetValue * m2) : (it.rowOffsetValue*m2a))
+                    + (it.level > min ? (w2 * x * ((o * n))) : 0)
+                    + (it.level > min ? (w2 * x * ((o * s))) : 0)
+                    + p.upDown * rndy
                 );
-                it.model.position.z = -1 * ((it.level-4) * 666 ) - (rndz);
-                //if (it.name=='bricks rocks stones' || it.name=='space') debugger;
+                it.model.position.z = -1 * z - rndz;
+                //if (it.name=='black' || it.name=='space') debugger;
                 //if (it.name=='landscape' || it.name=='tiled') debugger;
                 //if (it.name=='misc' || it.name=='simple') debugger;
-                if (it.level===4) debugger;
+                //if (it.level===4) debugger;
+                if (it.name=='space'||it.name=='wood') debugger;
 
                 var x = it.data.it;
-                //debugger;
-                //if (p.name=='space stars night sky darkmode') debugger;
-                //if (p.name=='sunrise sunset') debugger;
             }else if (it.model) {
                 //debugger;
                 it.model.position.x = it.leftRight * (it.column) * 100;
@@ -1074,7 +1109,9 @@ export class na3D_fileBrowser {
         }
         
         if (true) {
-            t.onresize_postDo(t);
+            //setTimeout(function(t) {
+                t.onresize_postDo(t);
+            //}, 500, t);
             //t.drawLines(t);
         } else {
             clearTimeout (t.timeout_onresize_do_overlapChecks2);
@@ -1087,6 +1124,8 @@ export class na3D_fileBrowser {
 
     onresize_postDo (t) {
         t.drawLines(t);
+
+        if (!t.cameraOrigin) t.cameraOrigin = $.extend({}, t.camera.position);
 
         t.winners = {
             north : 0,
@@ -1113,48 +1152,134 @@ export class na3D_fileBrowser {
             y : Math.round((t.winners.north + t.winners.south) / 2),
             z : Math.round((t.winners.front + t.winners.behind) /2)
         },
-        ol = 1500;
+        ol = 5000,
+        numPoints = 360,
+        radius = 25*1000;
         console.log ('t778', t.winners, middle);
 
 
-        t.curve = new THREE.CatmullRomCurve3( [
+        t.curve1b = new THREE.CatmullRomCurve3( [
             new THREE.Vector3 (0, 0, ol),
             new THREE.Vector3 (t.winners.west - ol, 0, ol),
-            new THREE.Vector3 (t.winners.west - ol, 0, t.winners.behind - ol),
-            new THREE.Vector3 (t.winners.east + ol, 0, t.winners.behind - ol),
+            new THREE.Vector3 (t.winners.west - ol, 0, t.winners.front - ol),
+            new THREE.Vector3 (t.winners.east + ol, 0, t.winners.front - ol),
             new THREE.Vector3 (t.winners.east + ol, 0, ol),
             new THREE.Vector3 (0, 0, ol),
         ]);
-        t.points = t.curve.getPoints(numPoints);
+        var first = last = {x:0,y:0,z:ol};
+        t.points1b = t.curve1b.getPoints(numPoints);
+        t.curves1a = [
+            new THREE.Vector3(t.cameraOrigin.x,t.cameraOrigin.y,t.cameraOrigin.z),
+            new THREE.Vector3(first.x,first.y,first.z)
+        ];
+        t.curve1a = new THREE.CatmullRomCurve3(t.curves1a);
+        t.points1a = t.curve1a.getPoints(50);
+        t.curves1z = [
+            new THREE.Vector3(last.x,last.y,last.z),
+            new THREE.Vector3(t.cameraOrigin.x,t.cameraOrigin.y,t.cameraOrigin.z)
+        ];
+        t.curve1z = new THREE.CatmullRomCurve3(t.curves1z);
+        t.points1z = t.curve1z.getPoints(50);
 
-        t.curves = [];
-        var
-        numPoints = 180,
-        radius = 500;
+        t.curves1x = t.points1a.concat (t.points1b, t.points1z);
+        t.curve1 = new THREE.CatmullRomCurve3(t.curves1x);
+        t.points1 = t.curve1.getPoints(numPoints);
+
+
+
+        t.curves2b = [];
         for (var i=0; i<numPoints; i++) {
             var
             x = radius * Math.cos (2 * Math.PI * i / numPoints),
             y = radius * Math.sin (2 * Math.PI * i / numPoints),
-            z = 3 * radius;
-            t.curves.push (new THREE.Vector3(x,y,z));
+            z = 1.4 * radius;
+            z = middle.z - (radius * Math.sin (2 * Math.PI * i / numPoints) / 2);
+            if (i===0) var first = {x:x,y:y,z:z};
+            if (i===numPoints-1) var last = {x:x,y:y,z:z};
+            t.curves2b.push (new THREE.Vector3(x,y,z));
         }
-        t.curve2 = new THREE.CatmullRomCurve3(t.curves);
+        t.curves2a = [
+            new THREE.Vector3(t.cameraOrigin.x,t.cameraOrigin.y,t.cameraOrigin.z),
+            new THREE.Vector3(first.x,first.y,first.z)
+        ];
+        t.curve2a = new THREE.CatmullRomCurve3(t.curves2a);
+        t.points2a = t.curve2a.getPoints(50);
+        t.curves2z = [
+            new THREE.Vector3(last.x,last.y,last.z),
+            new THREE.Vector3(t.cameraOrigin.x,t.cameraOrigin.y,t.cameraOrigin.z)
+        ];
+        t.curve2z = new THREE.CatmullRomCurve3(t.curves2z);
+        t.points2z = t.curve2z.getPoints(50);
+
+        t.curves2x = t.points2a.concat (t.curves2b, t.points2z);
+        t.curve2 = new THREE.CatmullRomCurve3(t.curves2x);
         t.points2 = t.curve2.getPoints(numPoints);
 
-        /*
+/*
+        t.curves3 = [];
+        t.curves3.push (new THREE.Vector3(t.camera.position.x,t.camera.position.y,t.camera.position.z));
+        for (var i=0; i<numPoints; i++) {
+            var
+            x = middle.x - (-1 * radius * Math.cos (2 * Math.PI * i / numPoints) / 2),
+            y = middle.y - (-1 * radius * Math.sin (2 * Math.PI * i / numPoints) / 2),
+            z = middle.z - (radius * Math.sin (2 * Math.PI * i / numPoints) / 2);
+            t.curves3.push (new THREE.Vector3(x,y,z));
+        }
+        t.curves3.push (new THREE.Vector3(t.camera.position.x,t.camera.position.y,t.camera.position.z));
+        t.curve3 = new THREE.CatmullRomCurve3(t.curves3);
+        t.points3 = t.curve.getPoints(numPoints);
+*/
+
+        t.curves3b = [];
+        for (var i=0; i<numPoints; i++) {
+            var
+            x = radius * Math.cos (2 * Math.PI * i / numPoints),
+            y = radius * Math.sin (2 * Math.PI * i / numPoints),
+            z = 1.4 * radius;
+            z = middle.z - (radius * Math.sin (2 * Math.PI * i / numPoints) / 2);
+            if (i===0) var first = {x:x,y:y,z:z};
+            if (i===numPoints-1) var last = {x:x,y:y,z:z};
+            t.curves3b.push (new THREE.Vector3(x,y,z));
+        }
+        t.curve3b = new THREE.CatmullRomCurve3(t.curves3b);
+        t.points3b = t.curve3b.getPoints(numPoints);
+        t.curves3a = [
+            new THREE.Vector3(t.cameraOrigin.x,t.cameraOrigin.y,t.cameraOrigin.z),
+            new THREE.Vector3(first.x,first.y,first.z)
+        ];
+        t.curve3a = new THREE.CatmullRomCurve3(t.curves3a);
+        t.points3a = t.curve3a.getPoints(50);
+        t.curves3z = [
+            new THREE.Vector3(last.x,last.y,last.z),
+            new THREE.Vector3(t.cameraOrigin.x,t.cameraOrigin.y,t.cameraOrigin.z)
+        ];
+        t.curve3z = new THREE.CatmullRomCurve3(t.curves3z);
+        t.points3z = t.curve3z.getPoints(50);
+
+        t.curves3x = t.points3a.concat (t.points3b, t.points3z);
+        t.curve3 = new THREE.CatmullRomCurve3(t.curves3x);
+        t.points3 = t.curve3.getPoints(numPoints);
+        debugger;
+
+
+
+
+
+
+/*
         const geometry = new THREE.BufferGeometry().setFromPoints( t.points );
         const material = new THREE.LineBasicMaterial( { color: 0xff0000 } );
         // Create the final object to add to the scene
         const curveObject = new THREE.Line( geometry, material );
         t.scene.add(curveObject);
-        */
 
-        //const geometry2 = new THREE.BufferGeometry().setFromPoints( t.points2 );
-        //const material2 = new THREE.LineBasicMaterial( { color: 0xffffff } );
+
+        const geometry2 = new THREE.BufferGeometry().setFromPoints( t.points2 );
+        const material2 = new THREE.LineBasicMaterial( { color: 0xffffff } );
         // Create the final object to add to the scene
-        //const curveObject2 = new THREE.Line( geometry2, material2 );
-        //t.scene.add(curveObject2);
-
+        const curveObject2 = new THREE.Line( geometry2, material2 );
+        t.scene.add(curveObject2);
+*/
         t._tmp = new THREE.Vector3();
         t.animationProgress = { value: 0 };
         t.pathAnimation = gsap.fromTo(
@@ -1164,7 +1289,7 @@ export class na3D_fileBrowser {
             },
             {
                 value: 1,
-                duration: 30,
+                duration: 60,
                 overwrite: true,
                 paused: true,
                 onUpdateParams: [ t.animationProgress ],
@@ -1172,7 +1297,7 @@ export class na3D_fileBrowser {
 
                     if ( ! this.isActive() ) return;
 
-                    t.curve.getPoint ( value, t._tmp );
+                    t.curve1.getPoint ( value, t._tmp );
                     const cameraX = t._tmp.x;
                     const cameraY = t._tmp.y;
                     const cameraZ = t._tmp.z;
@@ -1199,13 +1324,10 @@ export class na3D_fileBrowser {
                 onComplete() {
 
                     t.cameraControls.enabled = true;
-
+                    t.onresize_postDo(t);
                 },
             }
         );
-        setTimeout (function() {
-            t.pathAnimation.play(0);
-        }, 1000);
 
         t.animationProgress2 = { value: 0 };
         t.pathAnimation2 = gsap.fromTo(
@@ -1215,7 +1337,7 @@ export class na3D_fileBrowser {
             },
             {
                 value: 1,
-                duration: 30,
+                duration: 60,
                 overwrite: true,
                 paused: true,
                 onUpdateParams: [ t.animationProgress2 ],
@@ -1250,11 +1372,140 @@ export class na3D_fileBrowser {
                 onComplete() {
 
                     t.cameraControls.enabled = true;
-
+                    t.onresize_postDo(t);
                 },
             }
         );
-            //t.pathAnimation.play(0);
+
+        t._tmp = new THREE.Vector3();
+        t.animationProgress3 = { value: 0 };
+        t.pathAnimation3 = gsap.fromTo(
+            t.animationProgress3,
+            {
+                value: 0,
+            },
+            {
+                value: 1,
+                duration: 60,
+                overwrite: true,
+                paused: true,
+                onUpdateParams: [ t.animationProgress3 ],
+                onUpdate( { value } ) {
+
+                    if ( ! this.isActive() ) return;
+
+                    t.curve3.getPoint ( value, t._tmp );
+                    const cameraX = t._tmp.x;
+                    const cameraY = t._tmp.y;
+                    const cameraZ = t._tmp.z;
+                    const lookAtX = middle.x;
+                    const lookAtY = middle.y;
+                    const lookAtZ = middle.z;
+
+                    t.cameraControls.setLookAt(
+                        cameraX,
+                        cameraY,
+                        cameraZ,
+                        lookAtX,
+                        lookAtY,
+                        lookAtZ,
+                        false, // IMPORTANT! disable cameraControls's transition and leave it to gsap.
+                    );
+
+                },
+                onStart() {
+
+                    t.cameraControls.enabled = false;
+
+                },
+                onComplete() {
+
+                    t.cameraControls.enabled = true;
+                    t.onresize_postDo(t);
+                },
+            }
+        );
+
+        setTimeout (function() {
+
+            if (!t.started) {
+                t.started = true;
+                t.pathAnimation.play(0);
+            }
+
+
+            if (!t.dragndrop) {
+                var objs = [];
+                for (var i=0; i<t.items.length; i++) if (t.items[i].model) objs[objs.length] = t.items[i].model;
+
+
+                t.dragndrop = new DragControls( objs, t.camera, t.renderer.domElement );
+
+                $(t.renderer.domElement).contextmenu(function() {
+                    return false;
+                });
+
+                t.dragndrop.addEventListener( 'dragstart', function ( event ) {
+                    if (t.controls) t.controls.dispose();
+                    t.cameraControls.enabled = false;
+
+                    t.dragndrop.cube = event.object;
+                    t.dragndrop.mouseX = t.mouse.layerX;
+                    t.dragndrop.mouseY = t.mouse.layerY;
+
+                    let cube = event.object;
+
+                    for (let i=0; i<t.items.length; i++) {
+                        let it2 = t.items[i];
+                        if (it2.parent === cube.it.parent) {
+                            //debugger;
+                            it2.model.position.dragStartX = it2.model.position.x;
+                            it2.model.position.dragStartY = it2.model.position.y;
+                            it2.model.position.dragStartZ = it2.model.position.z;
+                        }
+                    }
+                } );
+
+                t.dragndrop.addEventListener( 'drag', function (event) {
+                    let cube = event.object;
+
+                    for (let i=0; i<t.items.length; i++) {
+                        let it2 = t.items[i];
+                        if (it2.parent === cube.it.parent) {
+                            //debugger;
+                            it2.model.position.x = it2.model.position.dragStartX - (t.dragndrop.mouseX - t.mouse.layerX);
+                            it2.model.position.y = it2.model.position.dragStartY + (t.dragndrop.mouseY - t.mouse.layerY);
+                            it2.model.position.z = cube.position.z;
+                        }
+                    }
+                    clearTimeout (t.posDataToDB);
+                    t.posDataToDB = setTimeout(function() {
+                        t.posDataToDatabase(t);
+                    }, 1000);
+
+                    if (t.showLines) {
+                        for (var i=0; i<t.permaLines.length; i++) {
+                            var l = t.permaLines[i];
+                            t.scene.remove (l.line);
+                            l.geometry.dispose();
+                            l.material.dispose();
+                        }
+                        t.permaLines = [];
+                        t.drawLines(t);
+                    }
+                });
+
+                t.dragndrop.addEventListener( 'dragend', function ( event ) {
+                    if (t.showLines) t.drawLines(t);
+                    t.cameraControls.enabled = true;
+                } );
+
+            };
+        }, 50);
+
+
+
+
         if (typeof callback=='function') callback(t);
     }
     

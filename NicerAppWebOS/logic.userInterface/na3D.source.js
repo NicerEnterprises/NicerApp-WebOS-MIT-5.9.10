@@ -801,11 +801,11 @@ export class na3D_fileBrowser {
             offsetXY = 200,
             it = t.items[i],
             p = (it.parent ? t.items[it.parent.idx] : null),
-            rndMax = 2000;
+            rndMax = 4000;
 
             if (it.parent && !pox[it.parent.idx]) pox[it.parent.idx] = Math.abs(Math.random() * rndMax);
             if (it.parent && !poy[it.parent.idx]) poy[it.parent.idx] = Math.abs(Math.random() * rndMax);
-            if (it.parent && !poz[it.parent.idx]) poz[it.parent.idx] = Math.abs(Math.random() * rndMax/4 );
+            if (it.parent && !poz[it.parent.idx]) poz[it.parent.idx] = Math.abs(Math.random() * rndMax );
 
             if (it.parent) var rndx = pox[it.parent.idx]; else var rndx = 0;
             if (it.parent) var rndy = pox[it.parent.idx]; else var rndy = 0;
@@ -824,143 +824,44 @@ export class na3D_fileBrowser {
             };
             
             if (p) {
-                
-                var
-                pmaxc = p.maxColumnIta.maxColumn,//p.level > 0 ? p.maxColumnIta.maxColumn : (p.maxColumnIta.maxColumn+1),
-                pmaxr = p.maxRowIta.maxRow,
-                pLeftRight = p.column > Math.floor(pmaxc / 2) ?  ppLeftRight * 1 : ppLeftRight * -1,
-                pUpDown = p.row > Math.floor(p.maxRowIta.maxRow / 2) ? ppUpDown * 1 :  ppUpDown * -1,
-                pModifierC = (
-                    p.level > 1
-                    ? pLeftRight
-                    : it2 
-                        ? p.model.position.x > it2.model.position.x ? 1 : -1
-                        : 1
-                ),
-                pitcp = (
-                      pModifierC * -1 * ((pmaxc / 2) - p.column)
-                ),
-                pitcPercentage = (pitcp*1.00) / pmaxc,
-                pModifierR = (
-                    p.level > 1
-                    ? pUpDown
-                    : it2 
-                        ? p.model.position.y > it2.model.position.y ? 1 : -1
-                        : 1
-                ),
-                pitrp = (
-                      pModifierR * -1 * ((pmaxr / 2) - p.row)
-                ),
-                pitrPercentage = (pitrp*1.00) / pmaxr,
-                pitc = offsetXY * pitcPercentage * p.maxColumnIta.maxColumn,
-                pitr = offsetXY * pitrPercentage * p.maxRowIta.maxRow;
-
-                it.pitcp = pitcp;
-                it.pitrp = pitrp;
-                it.parentColumOffset = pitc;
-                it.parentRowOffset = pitr;
-                it.parentColumOffsetPercentage = pitcPercentage;
-                it.parentRowOffsetPercentage = pitrPercentage;
-                it.parentLeftRight = pLeftRight;
-                it.parentUpDown = pUpDown;
-//debugger;
                 var
                 itmaxc = it.maxColumnIta.maxColumn,
                 itmaxr = it.maxRowIta.maxRow,
                 itmaxc2 = Math.floor(itmaxc/2),
                 itmaxr2 = Math.floor(itmaxr/2),
-                itLeftRight = /*pLeftRight,/*/it.column-1 == itmaxc2 ? 0 : it.column-1 > itmaxc2 ? 1 : -1,
-                itUpDown = /*pUpDown, /*/it.row-1 == itmaxr2 ? 0 : it.row-1 > itmaxr2 ? 1 : -1,
                 itLeftRight = /*p.leftRight * */(
                     it.column-1 == itmaxc / 2
                     ? 0
                     : itmaxc===1
                         ? 0
-                        : itmaxc/2 !== Math.floor(itmaxc/2)
-                            ? itmaxc - it.column == it.column -1
-                                ? 0
-                                : itmaxc - it.column < it.column - 1
-                                    ? 1
-                                    : -1
-                            : 0),
+                        : itmaxc - it.column == it.column -1
+                            ? 0
+                            : itmaxc - it.column < it.column - 1
+                                ? 1
+                                : -1
+                            ),
                 itUpDown = /*p.upDown * */(
                     it.row-1 == itmaxr/2
                     ? 0
                     : itmaxr===1
                         ? 0
-                        : itmaxr/2 !== Math.floor(itmaxr/2)
-                            ? itmaxr - it.row == it.row - 1
-                                ? 0
-                                : itmaxr - it.row < it.row - 1
-                                    ? 1
-                                    : -1
-                            : 0),
-                itc = (
-                    ((itmaxc / 2) - it.column)
-                ),
-                itc = (
-                    itmaxc - it.column
-                ),
-                itcPercentage = (itc*1.00) / itmaxc,
-                itr = (
-                    ((itmaxr / 2) - it.row)
-                ),
-                itr = (
-                    itmaxr - it.row
-                ),
-                itrPercentage = (itr*1.00) / itmaxr,
+                        : itmaxr - it.row == it.row - 1
+                            ? 0
+                            : itmaxr - it.row < it.row - 1
+                                ? 1
+                                : -1
+                            ),
+                itc = (itmaxc - it.column),
+                itr = (itmaxr - it.row);
 
-                itco = offsetXY * itcPercentage * it.maxColumnIta.maxColumn,
-                itro = offsetXY * itrPercentage * it.maxRowIta.maxRow;
-                
                 it.columnOffsetValue = itc;//Math.floor(itc);
                 it.rowOffsetValue = itr;//Math.floor(itr);
                 it.leftRight = itLeftRight;
                 it.upDown = itUpDown;                
-                //if (it.name=='tiled' || it.name=='landscape') debugger;
 
             } else {
                 var mc = 0, mr = 0, p = it;
 
-                var
-                pmaxc = p.maxColumnIta.maxColumn,//p.level > 0 ? p.maxColumnIta.maxColumn : (p.maxColumnIta.maxColumn+1),
-                pmaxr = p.maxRowIta.maxRow,
-                pLeftRight = p.column > Math.floor(pmaxc / 2) ?  ppLeftRight * 1 : ppLeftRight * -1,
-                pUpDown = p.row > Math.floor(p.maxRowIta.maxRow / 2) ? ppUpDown * 1 :  ppUpDown * -1,
-                pModifierC = (
-                    p.level > 1
-                    ? pLeftRight
-                    : it2
-                        ? p.model.position.x > it2.model.position.x ? 1 : -1
-                        : 1
-                ),
-                pitcp = (
-                      pModifierC * -1 * ((pmaxc / 2) - p.column)
-                ),
-                pitcPercentage = (pitcp*1.00) / pmaxc,
-                pModifierR = (
-                    p.level > 1
-                    ? pUpDown
-                    : it2
-                        ? p.model.position.y > it2.model.position.y ? 1 : -1
-                        : 1
-                ),
-                pitrp = (
-                      pModifierR * -1 * ((pmaxr / 2) - p.row)
-                ),
-                pitrPercentage = (pitrp*1.00) / pmaxr,
-                pitc = offsetXY * pitcPercentage * p.maxColumnIta.maxColumn,
-                pitr = offsetXY * pitrPercentage * p.maxRowIta.maxRow;
-
-                it.pitcp = pitcp;
-                it.pitrp = pitrp;
-                it.parentColumOffset = pitc;
-                it.parentRowOffset = pitr;
-                it.parentColumOffsetPercentage = pitcPercentage;
-                it.parentRowOffsetPercentage = pitrPercentage;
-                it.parentLeftRight = pLeftRight;
-                it.parentUpDown = pUpDown;
-//debugger;
                 var
                 itmaxc = it.maxColumnIta.maxColumn,
                 itmaxr = it.maxRowIta.maxRow,
@@ -969,35 +870,25 @@ export class na3D_fileBrowser {
                     ? 0
                     : itmaxc===1
                         ? 0
-                        : itmaxc/2 !== Math.floor(itmaxc/2)
-                            ? itmaxc - it.column == it.column -1
-                                ? 0
-                                : itmaxc - it.column < it.column - 1
-                                    ? 1
-                                    : -1
-                            : 0),
+                        : itmaxc - it.column == it.column -1
+                            ? 0
+                            : itmaxc - it.column < it.column - 1
+                                ? 1
+                                : -1
+                            ),
                 itUpDown = /*p.upDown * */(
                     it.row-1 == itmaxr/2
                     ? 0
                     : itmaxr===1
                         ? 0
-                        : itmaxr/2 !== Math.floor(itmaxr/2)
-                            ? itmaxr - it.row == it.row - 1
-                                ? 0
-                                : itmaxr - it.row < it.row - 1
-                                    ? 1
-                                    : -1
-                            : 0),
-                itc = (
-                    ((itmaxc / 2) - (it.column))
-                ),
-                itcPercentage = (itc*1.00) / itmaxc,
-                itr = (
-                    ((itmaxr / 2) - (it.row))
-                ),
-                itrPercentage = (itr*1.00) / itmaxr,
-                itco = offsetXY * itcPercentage * it.maxColumnIta.maxColumn,
-                itro = offsetXY * itrPercentage * it.maxRowIta.maxRow;
+                        : itmaxr - it.row == it.row - 1
+                            ? 0
+                            : itmaxr - it.row < it.row - 1
+                                ? 1
+                                : -1
+                            ),
+                itc = (itmaxc - it.column),
+                itr = (itmaxr - it.row);
 
                 it.columnOffsetValue = itc;//Math.floor(itc);
                 it.rowOffsetValue = itr;//Math.floor(itr);
@@ -1025,57 +916,32 @@ export class na3D_fileBrowser {
                 z = -1 * ((it.level+1) * 2500 ),
                 plc = p.columnOffsetValue === 0 ? 0.01 : p.columnOffsetValue,
                 plr = p.rowOffsetValue === 0 ? 0.01 : p.rowOffsetValue,
-                ilc =
-                    it.columnOffsetValue === 0
-                        ? -1 * 0.01
-                        : it.columnOffsetValue/2,
-                ilr =
-                    it.rowOffsetValue === 0
-                        ? -1 * 0.01
-                        :  it.rowOffsetValue/2,
                 ilc = it.leftRight * it.column,// * p.columnOffsetValue,
                 ilr = it.upDown * it.row,// * p.rowOffsetValue,
-                //ilc = p.leftRight * it.maxColumnIta.maxColumn/it.column,
-                //ilr = p.upDown * it.maxRowIta.maxRow/it.row,
 
-                min = 4, m0 = (it.level-2) < 5 ? it.level-2 : 4, m1a = 400, m1 = 1500/m0, m2 = 1500/m0, m2a = 400, n = 4, n1 = p.leftRight * p.column, n2 = p.upDown * p.row, o = 600, q = 500, s = 1,
-                //u = 1 * (p.leftRight===0?it.leftRight===0?0.7:it.leftRight:p.leftRight),
+                min = 4, m0 = (it.level-2) < 5 ? it.level-2 : 4, m1a = 200, m1 = 2500/m0, m2 = 2500/m0, m2a = 200, n = 0.5, n1 = p.leftRight * p.column, n2 = p.upDown * p.row, o = 600, q = 500, s = 1,
                 u = 1 * (p.leftRight===0?ilc:p.leftRight),
-                //u = 1 * (p.leftRight===0?p.leftRight+1:p.leftRight>0?p.leftRight+1:0.7),
-                //u = 1 * (p.leftRight===0?p.columnOffsetValue:p.leftRight),
                 v = 1,
                 w = 1 * (p.upDown===0?ilr:p.upDown),
-                //w = 1 * (p.upDown===0?it.upDown===0?0.7:it.upDown:p.upDown),
-                //w = 1 * (p.upDown===0?p.upDown+1:p.upDown>0?p.upDown+1:0.7),
-                //w = 1 * (p.upDown===0?p.columnOffsetValue:p.upDown),
                 x = 1,
-                //u1 = -1 * p.columnOffsetValue * 2.5,
-                //w1 = -1 * p.rowOffsetValue * 2.5,
-                u1 = -1*p.leftRight * (it.level-4)/4,
-                w1 = -1* p.upDown * (it.level-4)/4,
-                //u1 = ilc,
-                //w1 = ilr,
-                u2 = -1 * it.columnOffsetValue * 2,
-                w2 = -1 * it.rowOffsetValue * 2;
-                //u2 = ilc,
-                //w2 = ilr;
-                //debugger;
+                u1 = p.columnOffsetValue/4,
+                w1 = p.rowOffsetValue/4,
+                u2 = p.columnOffsetValue /4,
+                w2 =  p.rowOffsetValue /4;
 
                 it.model.position.x = Math.round(
                     p.model.position.x
-                    //+ (it.level > min ? (u * ilc * m1) : (ilc*m1))
-                    + (it.level > min ? (u1 * m1a)+(it.columnOffsetValue*m1) : (it.columnOffsetValue*m1))
-                    //+ (it.level > min ? (it.columnOffsetValue * m1) : (it.columnOffsetValue*m1a))
-                    + (it.level > min ? (u1 * v * ((o * n))) : 0)
-                    + (it.level > min ? (u1 * v * ((o * s))) : 0)
+                    + (u1 * m1)+(it.column*m1)
+                    + (it.level > min ? (u2 * v * ((o * n))) : 0)
+                    + (it.level > min ? (u2 * v * ((o * s))) : 0)
+                    + p.leftRight * rndx
                 );
                 it.model.position.y = Math.round(
                     p.model.position.y
-                    //+ (it.level > min ? (w * ilr * m2) : (it.row*m2))
-                    + (it.level > min ? (w1 * m2a)+(it.rowOffsetValue*m2) : (it.rowOffsetValue*m2))
-                    //+ (it.level > min ? (it.rowOffsetValue * m2) : (it.rowOffsetValue*m2a))
-                    + (it.level > min ? (w1 * x * ((o * n))) : 0)
-                    + (it.level > min ? (w1 * x * ((o * s))) : 0)
+                    + (w1 * m2)+(it.row*m2)
+                    + (it.level > min ? (w2 * x * ((o * n))) : 0)
+                    + (it.level > min ? (w2 * x * ((o * s))) : 0)
+                    + p.upDown * rndy
                 );
                 it.model.position.z = -1 * z - rndz;
                 //if (it.name=='black' || it.name=='space') debugger;
@@ -1156,7 +1022,7 @@ export class na3D_fileBrowser {
         },
         ol = 5000,
         numPoints = 360,
-        radius = 12.5*1000;
+        radius = 25*1000;
         console.log ('t778', t.winners, middle);
 
 
@@ -1217,21 +1083,6 @@ export class na3D_fileBrowser {
         t.curve2 = new THREE.CatmullRomCurve3(t.curves2x);
         t.points2 = t.curve2.getPoints(numPoints);
 
-/*
-        t.curves3 = [];
-        t.curves3.push (new THREE.Vector3(t.camera.position.x,t.camera.position.y,t.camera.position.z));
-        for (var i=0; i<numPoints; i++) {
-            var
-            x = middle.x - (-1 * radius * Math.cos (2 * Math.PI * i / numPoints) / 2),
-            y = middle.y - (-1 * radius * Math.sin (2 * Math.PI * i / numPoints) / 2),
-            z = middle.z - (radius * Math.sin (2 * Math.PI * i / numPoints) / 2);
-            t.curves3.push (new THREE.Vector3(x,y,z));
-        }
-        t.curves3.push (new THREE.Vector3(t.camera.position.x,t.camera.position.y,t.camera.position.z));
-        t.curve3 = new THREE.CatmullRomCurve3(t.curves3);
-        t.points3 = t.curve.getPoints(numPoints);
-*/
-
         t.curves3b = [];
         for (var i=0; i<numPoints; i++) {
             var
@@ -1261,12 +1112,6 @@ export class na3D_fileBrowser {
         t.curves3x = t.points3a.concat (t.points3b, t.points3z);
         t.curve3 = new THREE.CatmullRomCurve3(t.curves3x);
         t.points3 = t.curve3.getPoints(numPoints);
-        debugger;
-
-
-
-
-
 
 /*
         const geometry = new THREE.BufferGeometry().setFromPoints( t.points );
@@ -1505,808 +1350,11 @@ export class na3D_fileBrowser {
             };
         }, 50);
 
-
-
-
         if (typeof callback=='function') callback(t);
     }
     
 
-    onresize_do_overlapChecks2 (t, callback) {
-        //t.overlaps = [];
-        for (var i=0; i < t.overlaps.length; i++) {
-            var it = t.overlaps[i];
-            it.overlappingItems_count = 0;
-            it.conflicts = 0;
-            it.itemsa = [];
-            it.itemsb = [];
-        }
-       
-        for (var patha in t.ld3) {
-            if (patha!=='') {
-                var ld3a = t.ld3[patha];
-                for (var pathb in t.ld3) {
-                    if (pathb!=='' && pathb!==patha) {
-                        var ld3b = t.ld3[pathb];
-                        
-                        for (var i=0; i<ld3a.items.length; i++) {
-                            var ita = t.items[ld3a.items[i]];
-                            
-                            for (var j=0; j<ld3b.items.length; j++) {
-                                var itb = t.items[ld3b.items[j]];
-                                
-                                if (
-                                    ita.model && itb.model
-                                    /*
-                                    && (
-                                        ita.model.position.x >= itb.model.position.x
-                                        && ita.model.position.x <= itb.model.position.x + 60
-                                    )
 
-                                    && (
-                                        ita.model.position.y >= itb.model.position.y
-                                        && ita.model.position.y <= itb.model.position.y + 60
-                                    )*/
-
-                                    && (
-                                        ita.model.position.x >= itb.model.position.x
-                                        && ita.model.position.x <= itb.model.position.x + 50
-                                    )
-                                    && (
-                                        ita.model.position.y >= itb.model.position.y
-                                        && ita.model.position.y <= itb.model.position.y + 50
-                                    )
-                                    /*
-                                    && ita.model.position.x === itb.model.position.x
-                                    && ita.model.position.y === itb.model.position.y
-                                    */
-                                    && ita.model.position.z === itb.model.position.z
-                                ) {
-                                    var have = false;
-                                    for (var k=0; k<t.overlaps.length; k++) {
-                                        if (
-                                            (
-                                                t.overlaps[k].patha === patha
-                                                && t.overlaps[k].pathb === pathb
-                                            )
-                                            || (
-                                                t.overlaps[k].patha === pathb
-                                                && t.overlaps[k].pathb === patha
-                                            )
-                                        ) {
-                                            have = true;
-                                            break;
-                                        }
-                                            
-                                    };
-                                    if (!have) {
-                                        var d = {overlappingItems_count : 0, patha : patha, pathb : pathb, conflicts : 1};
-                                        t.overlaps.push (d);
-                                        var o = t.overlaps[t.overlaps.length-1];
-                                    } else {
-                                        var 
-                                        o = t.overlaps[k];
-                                        o.conflicts++;
-                                        o.ita = ita;
-                                        o.itb = itb;
-                                    }
-                                    o.overlappingItems_count++;
-                                    console.log (o);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        debugger;
-
-        t.onresize_calculateStatistics (t);
-
-        /*
-        // this for loop can be commented out for speed optimization, it's only here for debugging purposes
-        for (var i=0; i<t.overlaps.length; i++) {
-            var o = t.overlaps[i];
-            o.itemsa = [];
-            o.itemsb = [];
-            for (var j=0; j<t.items.length; j++) {
-                var it = t.items[j];
-                if (it.path === o.patha) { o.itemsa.push(it); o.parenta = t.items[it.parent]; }
-                if (it.path === o.pathb) { o.itemsb.push(it); o.parentb = t.items[it.parent]; }
-            }
-        };*/
-        
-        for (var j=1; j<t.items.length; j++) {
-            t.items[j].adjustedModXmin = 0;
-            t.items[j].adjustedModXadd = 0;
-            t.items[j].adjustedModYmin = 0;
-            t.items[j].adjustedModYadd = 0;
-            t.items[j].assignments = [];
-        };
-
-        var rnd2 = Math.floor(Math.random() * t.overlaps.length);
-        for (var i=0; i<t.overlaps.length; i++) {
-            //if (i===mostConflicts.j) {
-            if (i===rnd2) {//t.largest.j) {
-                var 
-                x = t.mostOverlappingItems,
-                overlapFixes = [ 'top', 'topright', 'middleright', 'bottomright', 'bottom', 'bottomleft', 'middleleft', 'topleft'],
-                overlapFixData = [],
-                overlapFix = null;
-                
-                for (var j=0; j<overlapFixes.length; j++) {
-                    var 
-                    ofs = overlapFixes[j], 
-                    d = { quadrant : ofs };
-                    
-                    if (ofs.match('top')) d.upDown = 1; else if (ofs.match('bottom')) d.upDown = -1; else d.upDown = 0;
-                    if (ofs.match('left')) d.leftRight = -1; else if (ofs.match('right')) d.leftRight = 1; else d.leftRight = 0;
-                    
-
-                    d.newPos = t.onresize_testCalculateOverlaps (t, t.overlaps[i].patha, t.overlaps[i].pathb, d);
-                    overlapFixData.push (d);
-                }
-                
-                overlapFix = t.onresize_calculateBestOverlapFix (t, i, overlapFixData);
-                console.log (t.overlaps[i], overlapFix);
-                if (overlapFix) {
-                    if (!t.overlaps[i].history) t.overlaps[i].history = [];
-                    if (overlapFix[0]) t.overlaps[i].history.push (overlapFix[0].quadrant);
-                    t.onresize_applyBestOverlapFix (t, overlapFix);
-                    t.onresize_calculateStatistics (t);
-                    rnd2 = Math.floor(Math.random() * t.overlaps.length);
-                } else {
-                    t.overlaps.splice (i, 1);
-                    t.onresize_calculateStatistics (t);
-                    rnd2 = Math.floor(Math.random() * t.overlaps.length);
-                }
-                //debugger;
-            }
-        }   
-
-        debugger;
-        if (t.overlaps.length > 0) {
-            //console.log ('onresize_do_overlapChecks2() : t.overlaps.length='+t.overlaps.length, t.overlaps);
-            setTimeout (function() {
-                t.onresize_do_overlapChecks2(t, callback);
-            }, 10);
-        } else {
-            t.drawLines(t);
-
-            t.winners = {
-                north : 0,
-                east : 0,
-                south : 0,
-                west : 0,
-                front : 0,
-                behind : 0
-            };
-            for (var i=0; i < t.items.length; i++) {
-                var it = t.items[i];
-                if (!it.model) continue;
-                if (it.model.position.y > t.winners.north) t.winners.north = it.model.position.y;
-                if (it.model.position.x > t.winners.east) t.winners.east = it.model.position.x;
-                if (it.model.position.y < t.winners.south) t.winners.south = it.model.position.y;
-                if (it.model.position.x < t.winners.west) t.winners.west = it.model.position.x;
-                if (it.model.position.z > t.winners.front) t.winners.front = it.model.position.z;
-                if (it.model.position.z < t.winners.behind) t.winners.behind = it.model.position.z;
-            };
-            var
-            tf = t.winners.behind + Math.round((t.winners.behind - t.winners.front) / 2),
-            middle = {
-                x : Math.round((t.winners.west + t.winners.east) / 2),
-                y : Math.round((t.winners.north + t.winners.south) / 2),
-                z : Math.round((t.winners.front + t.winners.behind) /2)
-            },
-            ol = 1500;
-            console.log ('t778', t.winners, middle);
-
-
-            t.curve2 = new THREE.CatmullRomCurve3( [
-                new THREE.Vector3 (0, 0, 0),
-                new THREE.Vector3 (middle.x, middle.y, middle.z),
-            ]);
-            t.points2 = t.curve2.getPoints(50);
-            t.curves = [];
-            var
-            numPoints = 180,
-            radius = 500;
-            for (var i=0; i<numPoints; i++) {
-                var
-                x = radius * Math.cos (2 * Math.PI * i / numPoints),
-                y = radius * Math.sin (2 * Math.PI * i / numPoints),
-                z = 3 * radius;
-                t.curves.push (new THREE.Vector3(x,y,z));
-            }
-            t.curve = new THREE.CatmullRomCurve3( [
-                new THREE.Vector3 (0, 0, ol),
-                new THREE.Vector3 (t.winners.west - ol, 0, ol),
-                new THREE.Vector3 (t.winners.west - ol, 0, t.winners.behind - ol),
-                new THREE.Vector3 (t.winners.east + ol, 0, t.winners.behind - ol),
-                new THREE.Vector3 (t.winners.east + ol, 0, ol),
-                new THREE.Vector3 (0, 0, ol),
-            ]);
-            t.curve2 = new THREE.CatmullRomCurve3(t.curves);
-            t.points = t.curve.getPoints(numPoints);
-            t.points2 = t.curve2.getPoints(numPoints);
-
-            /*
-            const geometry = new THREE.BufferGeometry().setFromPoints( t.points );
-            const material = new THREE.LineBasicMaterial( { color: 0xff0000 } );
-            // Create the final object to add to the scene
-            const curveObject = new THREE.Line( geometry, material );
-            t.scene.add(curveObject);
-            */
-
-            //const geometry2 = new THREE.BufferGeometry().setFromPoints( t.points2 );
-            //const material2 = new THREE.LineBasicMaterial( { color: 0xffffff } );
-            // Create the final object to add to the scene
-            //const curveObject2 = new THREE.Line( geometry2, material2 );
-            //t.scene.add(curveObject2);
-
-            t._tmp = new THREE.Vector3();
-            t.animationProgress = { value: 0 };
-            t.pathAnimation = gsap.fromTo(
-                t.animationProgress,
-                {
-                    value: 0,
-                },
-                {
-                    value: 1,
-                    duration: 30,
-                    overwrite: true,
-                    paused: true,
-                    onUpdateParams: [ t.animationProgress ],
-                    onUpdate( { value } ) {
-
-                        if ( ! this.isActive() ) return;
-
-                        t.curve.getPoint ( value, t._tmp );
-                        const cameraX = t._tmp.x;
-                        const cameraY = t._tmp.y;
-                        const cameraZ = t._tmp.z;
-                        const lookAtX = middle.x;
-                        const lookAtY = middle.y;
-                        const lookAtZ = middle.z;
-
-                        t.cameraControls.setLookAt(
-                            cameraX,
-                            cameraY,
-                            cameraZ,
-                            lookAtX,
-                            lookAtY,
-                            lookAtZ,
-                            false, // IMPORTANT! disable cameraControls's transition and leave it to gsap.
-                        );
-
-                    },
-                    onStart() {
-
-                        t.cameraControls.enabled = false;
-
-                    },
-                    onComplete() {
-
-                        t.cameraControls.enabled = true;
-
-                    },
-                }
-            );
-
-            t.animationProgress2 = { value: 0 };
-            t.pathAnimation2 = gsap.fromTo(
-                t.animationProgress2,
-                {
-                    value: 0,
-                },
-                {
-                    value: 1,
-                    duration: 30,
-                    overwrite: true,
-                    paused: true,
-                    onUpdateParams: [ t.animationProgress2 ],
-                    onUpdate( { value } ) {
-
-                        if ( ! this.isActive() ) return;
-
-                        t.curve2.getPoint ( value, t._tmp );
-                        const cameraX = t._tmp.x;
-                        const cameraY = t._tmp.y;
-                        const cameraZ = t._tmp.z;
-                        const lookAtX = middle.x;
-                        const lookAtY = middle.y;
-                        const lookAtZ = middle.z;
-
-                        t.cameraControls.setLookAt(
-                            cameraX,
-                            cameraY,
-                            cameraZ,
-                            lookAtX,
-                            lookAtY,
-                            lookAtZ,
-                            false, // IMPORTANT! disable cameraControls's transition and leave it to gsap.
-                        );
-
-                    },
-                    onStart() {
-
-                        t.cameraControls.enabled = false;
-
-                    },
-                    onComplete() {
-
-                        t.cameraControls.enabled = true;
-
-                    },
-                }
-            );
-            if (typeof callback=='function') callback(t);
-        }
-    }
-
-    onresize_calculateStatistics (t) {
-        t.leastOverlappingItems = { overlappingItems_count : 200, j : -1 };
-        t.mostOverlappingItems = { overlappingItems_count : 0, j : -1 };
-        t.mostConflicts = {conflicts : 1, j : -1};
-        t.leastConflicts = {conflicts : 200, j : -1};
-        t.largest = null;
-        t.smallest = null;
-
-        for (var j=0; j<t.overlaps.length; j++) {
-            if (t.overlaps[j].overlappingItems_count > t.mostOverlappingItems.overlappingItems_count)
-                t.mostOverlappingItems = { overlappingItems_count : t.overlaps[j].overlappingItems_count, j : j};
-
-            if (t.overlaps[j].overlappingItems_count < t.leastOverlappingItems.overlappingItems_count)
-                t.leastOverlappingItems = { overlappingItems_count : t.overlaps[j].overlappingItems_count, j : j};
-
-            if (t.overlaps[j].conflicts > t.mostConflicts.conflicts) t.mostConflicts = {conflicts:t.overlaps[j].conflicts, j : j};
-            if (t.overlaps[j].conflicts < t.leastConflicts.conflicts) t.leastConflicts = {conflicts:t.overlaps[j].conflicts, j : j};
-
-            if (
-                !t.largest
-                || (
-                    t.ld3[t.overlaps[j].patha].itemCountA > t.largest.itemCountA
-                    && t.ld3[t.overlaps[j].pathb].itemCountB > t.largest.itemCountB
-                )
-            ) t.largest = {
-                pathb : t.overlaps[j].pathb,
-                itemCountA : t.ld3[t.overlaps[j].patha].itemCount,
-                itemCountB : t.ld3[t.overlaps[j].pathb].itemCount,
-                j : j
-            };
-
-            if (
-                !t.smallest
-                || (
-                    t.ld3[t.overlaps[j].patha].itemCountA < t.smallest.itemCountA
-                    && t.ld3[t.overlaps[j].pathb].itemCountB < t.smallest.itemCountB
-                )
-            ) t.smallest = {
-                pathb : t.overlaps[j].pathb,
-                itemCountA : t.ld3[t.overlaps[j].patha].itemCount,
-                itemCountB : t.ld3[t.overlaps[j].pathb].itemCount,
-                j : j
-            };
-
-        }
-    }
-    
-    onresize_applyBestOverlapFix (t, overlapFix) {
-        var fix = overlapFix[0];
-        if (fix)
-        for (var i=0; i<fix.itemsa.length; i++) {
-            var ita = t.items[fix.itemsa[i].idx];
-            if (ita.model) {
-                ita.model.position.x = fix.itemsa[i].x;
-                ita.model.position.y = fix.itemsa[i].y;
-                ita.model.position.z = fix.itemsa[i].z;
-            }
-        }
-    }
-    
-    onresize_calculateBestOverlapFix (t, i, overlapFixData) {
-        var
-        compare = function (a,b) { return a.newPos.overlaps.length - b.newPos.overlaps.length; },
-        x = overlapFixData.sort(compare).reverse(),
-        compare2 = function (a,b) {
-            if (
-                a.newPos.overlaps[0] 
-                && b.newPos.overlaps[0]
-                && x[0].newPos.overlaps[0]
-               // && a.newPos.overlaps[0].patha == x[0].newPos.overlaps[0].patha
-              //  && b.newPos.overlaps[0].pathb == x[0].newPos.overlaps[0].pathb
-            ) return a.newPos.overlaps[0].overlappingItems_count - b.newPos.overlaps[0].overlappingItems_count;
-            else return 0;
-        },
-        y = x.sort(compare2);
-
-        var allGood = true;
-        for (var j=0; j < overlapFixData.length; j++) {
-            if (overlapFixData[j].newPos.overlaps.length > 0) allGood = false;
-        }
-        if (allGood) {
-            //debugger;
-            return false;
-        }
-
-
-        if (typeof t.overlaps[i].history=='object') {
-            for (var j=1; j<=10; j++) {
-                var pat = t.findArrayPattern (t.overlaps[i].history,j);
-                if (pat && typeof pat!=='boolean') {
-
-                    var
-                    h = t.overlaps[i].history;
-                    /*
-                    strategy = h[pat.idx],
-                    strategies = [];
-                    strategies.push(strategy);
-                    strategies.push(strategy);
-                    */
-
-                    var
-                    x = t.overlaps[i],
-                    itap = x.ita.idxPath,
-                    itapTxt = t.translateIdxPathToText(t, itap),
-                    itbp = x.itb.idxPath,
-                    itbpTxt = t.translateIdxPathToText(t, itbp),
-                    ld3a = t.ld3[itap],
-                    ld3b = t.ld3[itbp],
-                    kpda = { path : itap },
-                    kpdb = { path : itbp };
-
-                    for (var k=0; k<ld3a.items.length-1; k++) {
-                        var
-                        l = ld3a.items[k],
-                        it = t.items[l],
-                        kp = it.idxPath+','+it.idx,
-                        kpTxt = t.translateIdxPathToText(t, kp);
-
-                        kpda[l] = kpTxt;
-                    }
-
-                    for (var k=0; k<ld3b.items.length-1; k++) {
-                        var
-                        l = ld3b.items[k],
-                        it = t.items[l],
-                        kp = it.idxPath+','+it.idx,
-                        kpTxt = t.translateIdxPathToText(t, kp);
-
-                        kpdb[l]= kpTxt;
-                    }
-
-                    var
-                    overlapFixes = [ 'top', 'topright', 'middleright', 'bottomright', 'bottom', 'bottomleft', 'middleleft', 'topleft'],
-                    po = Object.assign([], overlapFixes);
-                    for (var k=0; k<po.length; k++) {
-                        for (var l=0; l<pat.r.length; l++) {
-                            if (po[k] === pat.r[l]) {
-                                po.splice(k,1);
-                                k--
-                            }
-                        }
-                    }
-
-                    // pick a random strategy
-                    var
-                    rnda = Math.floor(Math.random() * po.length),
-                    rndb = Math.floor(Math.random() * po.length),
-                    rnda = po.length-1,
-                    strategyA = po[rnda],
-                    itaQuadrant = '',
-                    itbQuadrant = '',
-                    itaParent = t.items[x.ita.parent.idx],
-                    itbParent = t.items[x.itb.parent.idx];
-
-                    switch (strategyA) {
-                        case 'top' : var strategyB = 'bottom'; break;
-                        case 'topright' : var strategyB = 'bottomleft'; break;
-                        case 'middleright' : var strategyB = 'middleleft'; break;
-                        case 'bottomright' : var strategyB = 'topleft'; break;
-                        case 'bottom' : var strategyB = 'top'; break;
-                        case 'bottomleft' : var strategyB = 'topright'; break;
-                        case 'middleleft' : var strategyB = 'middleright'; break;
-                        case 'topleft' : var strategyB = 'bottomright'; break;
-                    }
-                    /*
-                    switch (strategyA) {
-                        case 'top' : var strategyB = 'top'; break;
-                        case 'topright' : var strategyB = 'topright'; break;
-                        case 'middleright' : var strategyB = 'middleright'; break;
-                        case 'bottomright' : var strategyB = 'bottomright'; break;
-                        case 'bottom' : var strategyB = 'bottom'; break;
-                        case 'bottomleft' : var strategyB = 'bottomleft'; break;
-                        case 'middleleft' : var strategyB = 'middleleft'; break;
-                        case 'topleft' : var strategyB = 'topleft'; break;
-                    }
-                    /*
-                    if (x.ita.upDown < 0) itaQuadrant += 'bottom';
-                    if (x.ita.upDown === 0) itaQuadrant += 'middle';
-                    if (x.ita.upDown > 0) itaQuadrant += 'top';
-                    if (x.itb.upDown < 0) itbQuadrant += 'bottom';
-                    if (x.itb.upDown === 0) itbQuadrant += 'middle';
-                    if (x.itb.upDown > 0) itbQuadrant += 'top';
-                    if (x.ita.leftRight < 0) itaQuadrant += 'left';
-                    if (x.ita.leftRight > 0) itaQuadrant += 'right';
-                    if (x.itb.leftRight < 0) itbQuadrant += 'left';
-                    if (x.itb.leftRight > 0) itbQuadrant += 'right';
-                    */
-
-                    if (itaParent.upDown < 0) itaQuadrant += 'bottom';
-                    if (itaParent.upDown === 0) itaQuadrant += 'middle';
-                    if (itaParent.upDown > 0) itaQuadrant += 'top';
-
-                    if (itbParent.upDown < 0) itbQuadrant += 'bottom';
-                    if (itbParent.upDown === 0) itbQuadrant += 'middle';
-                    if (itbParent.upDown > 0) itbQuadrant += 'top';
-
-                    if (itaParent.leftRight <= 0) itaQuadrant += 'left';
-                    if (itaParent.leftRight > 0) itaQuadrant += 'right';
-
-                    if (itbParent.leftRight <= 0) itbQuadrant += 'left';
-                    if (itbParent.leftRight > 0) itbQuadrant += 'right';
-
-                    t.onresize_applyBestOverlapFix2 (t, y, itaQuadrant, itbQuadrant);
-                    //t.onresize_applyBestOverlapFix2 (t, y, strategyA, strategyA);
-                    return true;
-                }
-            }
-        }
-        
-        return y;
-    }
-
-    onresize_applyBestOverlapFix2 (t, overlapFix, itaQuadrant, itbQuadrant) {
-        var fix = null;
-        for (var i=0; i<overlapFix.length; i++) {
-            if (overlapFix[i].quadrant==itaQuadrant) fix = overlapFix[i];
-        }
-        if (!fix) {
-            return false;
-        }
-
-        for (var i=0; i<fix.itemsa.length; i++) {
-            var ita = t.items[fix.itemsa[i].idx];
-            if (
-                typeof fix.itemsa[i].xOffset==='number'
-                && typeof fix.itemsa[i].yOffset==='number'
-                && ita.model
-            ) {
-                debugger;
-                ita.model.position.x += fix.itemsa[i].xOffset;
-                ita.model.position.y += fix.itemsa[i].yOffset;
-                ita.model.position.z = fix.itemsa[i].z;
-            }/* else if (ita.model) {
-                ita.model.position.x = fix.itemsa[i].x;
-                ita.model.position.y = fix.itemsa[i].y;
-                ita.model.position.z = fix.itemsa[i].z;
-            }*/
-        }
-        var fix = null;
-        for (var i=0; i<overlapFix.length; i++) {
-            if (overlapFix[i].quadrant==itbQuadrant) fix = overlapFix[i];
-        }
-        for (var i=0; i<fix.itemsb.length; i++) {
-            var ita = t.items[fix.itemsb[i].idx];
-            if (
-                typeof fix.itemsb[i].xOffset==='number'
-                && typeof fix.itemsb[i].yOffset==='number'
-                && ita.model
-            ) {
-                ita.model.position.x += fix.itemsb[i].xOffset;
-                ita.model.position.y += fix.itemsb[i].yOffset;
-                ita.model.position.z = fix.itemsb[i].z;
-            }
-        }
-    }
-
-    translateIdxPathToText (t, idxPath) {
-        var
-        r = '',
-        parts = idxPath.split('/');
-
-        for (var i=1; i<parts.length; i++) {
-            if (r!=='') r+='/';
-            r+=t.items[parseInt(parts[i])].name;
-        }
-
-        return r;
-    }
-
-    findArrayPattern (arr, l) {
-        var
-        p1 = [],
-        p2 = [];
-
-        if (arr.length < (l*2) -1 ) {
-            return false;
-        }
-        //debugger;
-
-        for (var point1 = arr.length-1; point1 > arr.length - 1 - l; point1--) {
-            p1.push (arr[point1]);
-        }
-        var allGood = true, i = 0;
-        for (var point2 = point1; point2 > point1 - l; point2--) {
-            if (
-                arr[point2]
-                && p1[i] !== arr[point2]
-            ) allGood = false;
-
-            p2.push (arr[point2]);
-            i++;
-        }
-        if (allGood) {
-            var x = {
-                r : arr.slice().splice(arr.length-1-l, l),
-                idx : arr.length - 1 - (l*2)
-            };
-            return x;
-        };
-
-        return false;
-    }
-
-    onresize_testCalculateOverlaps (t, patha, pathb, ofd4quadrant) {
-        var r = {
-            overlaps : []
-        };
-        ofd4quadrant.itemsa = [];
-        ofd4quadrant.itemsb = [];
-        
-        
-        var ld3a = t.ld3[patha];
-        var ld3b = t.ld3[pathb];
-        var psi = null;
-        var offset = 50;//50 + Math.floor(Math.random() * 50);//t.items[pidx];
-
-        for (var i=0; i<ld3a.items.length; i++) {
-            var ita = t.items[ld3a.items[i]];
-            if (!ita.model) continue;
-            ofd4quadrant.itemsa.push($.extend({},ita.model.position));
-            var ita1 = ofd4quadrant.itemsa[ofd4quadrant.itemsa.length-1];
-            ita1.idx = ita.idx;
-            //debugger;
-            //ita1.x += ofd4quadrant.leftRight * 500;
-            //ita1.y += ofd4quadrant.upDown * 500;
-            var
-            ps = ita.idxPath.split(','),
-            //psi = !psi ? Math.round(Math.random() * (ps.length + 1)) : psi,
-            pidx = ps[ps.length-1],
-            itaParent = null;
-
-            if (itaParent) {
-                ita1.xOffset = itaParent.leftRight * offset;
-                ita1.yOffset = itaParent.upDown * offset;
-                ita1.x += itaParent.leftRight * offset;
-                ita1.y += itaParent.upDown * offset;
-            } else {
-                ita1.xOffset = ofd4quadrant.leftRight * offset;
-                ita1.yOffset = ofd4quadrant.upDown * offset;
-                ita1.x += ofd4quadrant.leftRight * offset;
-                ita1.y += ofd4quadrant.upDown * offset;
-                //ita1.x += ita.leftRight * 50;
-                //ita1.y += ita.upDown * 50;
-            }
-
-
-            for (var j=0; j<ld3b.items.length; j++) {
-                var itb = t.items[ld3b.items[j]];
-
-                var
-                itan = '',
-                itap = ita.idxPath.split('/'),
-                itbn = '',
-                itbp = itb.idxPath.split('/');
-                for (var k=1; k<itap.length; k++) {
-                    if (itan!=='') itan += '/';
-                    itan += t.items[parseInt(itap[k])].name;
-                }
-                itan += '/' + ita.name;
-                for (var k=1; k<itbp.length; k++) {
-                    if (itbn!=='') itbn += '/';
-                    itbn += t.items[parseInt(itbp[k])].name;
-                }
-                itbn += '/' + itb.name;
-
-                var
-                dbg = {
-                    //i : i,
-                    //j : j,
-                    //la : ld3a.items.length,
-                    //lb : ld3b.items.length,
-                    lan : itan,
-                    lbn : itbn,
-                    ita : ita,
-                    itb : itb,
-                    ofd4quadrant : ofd4quadrant
-                };
-
-
-                if (!itb.model) continue;
-                if (i===0) {
-                    ofd4quadrant.itemsb.push($.extend({},itb.model.position));
-                    var itb1 = ofd4quadrant.itemsb[ofd4quadrant.itemsb.length-1];
-                    itb1.idx = itb.idx;
-                } else {
-                    var itb1 = null;
-                    for (var k=0; k<ofd4quadrant.itemsb.length; k++) {
-                        if (
-                            //itb.model.position.x === ofd4quadrant.itemsb[k].x
-                            //&& itb.model.position.y === ofd4quadrant.itemsb[k].y
-                            (
-                                ita.model.position.x >= itb.model.position.x
-                                && ita.model.position.x <= itb.model.position.x + (offset*1.4)
-                            )
-                            && (
-                                ita.model.position.y >= itb.model.position.y
-                                && ita.model.position.y <= itb.model.position.y + (offset*1.4)
-                            )
-                            && itb.model.position.z === ofd4quadrant.itemsb[k].z
-                        ) itb1 = ofd4quadrant.itemsb[k];
-                    }
-                }
-                
-                if (
-                    ita1 && itb1 &&
-                    (
-                        ita1.x >= itb1.x - 20
-                        && ita1.x <= itb1.x + 20
-                    )
-                    && (
-                        ita1.y >= itb1.y - 20
-                        && ita1.y <= itb1.y + 20
-                    )
-                    && ita1.z === itb1.z
-                ) {
-                    var have = false;
-                    for (var k=0; k<r.overlaps.length; k++) {
-                        if (
-                            (
-                                r.overlaps[k].patha === patha
-                                && r.overlaps[k].pathb === pathb
-                            )
-                            || (
-                                r.overlaps[k].patha === pathb
-                                && r.overlaps[k].pathb === patha
-                            )
-                        ) {
-                            have = true;
-                            break;
-                        }
-                            
-                    };
-                    if (!have) {
-                        //console.log ('onresize_testCalculateOverlaps() : '+ofd4quadrant.quadrant, dbg);
-                        r.overlaps.push ({overlappingItems_count : 0, patha : patha, pathb : pathb, conflicts : 1 });
-                        var o = r.overlaps[t.overlaps.length-1];
-                    } else {
-                        var 
-                        o = r.overlaps[k];
-                        o.conflicts++;
-                    }
-                    r.overlaps[k].overlappingItems_count++;
-                }
-            }
-        }
-        
-        r.leastOverlappingItems = { overlappingItems_count : 200, j : -1 }, 
-        r.mostOverlappingItems = { overlappingItems_count : 0, j : -1 }, 
-        r.mostConflicts = {conflicts : 1, j : -1};
-        
-        for (var j=0; j<r.overlaps.length; j++) {
-            if (r.overlaps[j].overlappingItems_count > r.mostOverlappingItems.overlappingItems_count)
-                r.mostOverlappingItems = { overlappingItems_count : r.overlaps[j].overlappingItems_count, j : j};
-
-            if (r.overlaps[j].overlappingItems_count < r.leastOverlappingItems.overlappingItems_count)
-                r.leastOverlappingItems = { overlappingItems_count : r.overlaps[j].overlappingItems_count, j : j};
-            
-            if (r.overlaps[j].conflicts > r.mostConflicts.conflicts) r.mostConflicts = {conflicts:r.overlaps[j].conflicts, j : j};
-        }
-        
-        return r;
-    }
-    
     posDataToDatabase (t) {
         let address = function (databaseName, username, password) {
             var r = 

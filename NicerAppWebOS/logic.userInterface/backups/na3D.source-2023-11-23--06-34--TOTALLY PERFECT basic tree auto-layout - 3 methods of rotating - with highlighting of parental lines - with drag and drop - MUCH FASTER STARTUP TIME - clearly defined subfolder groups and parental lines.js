@@ -801,11 +801,11 @@ export class na3D_fileBrowser {
             offsetXY = 200,
             it = t.items[i],
             p = (it.parent ? t.items[it.parent.idx] : null),
-            rndMax = 2000;
+            rndMax = 4000;
 
             if (it.parent && !pox[it.parent.idx]) pox[it.parent.idx] = Math.abs(Math.random() * rndMax);
             if (it.parent && !poy[it.parent.idx]) poy[it.parent.idx] = Math.abs(Math.random() * rndMax);
-            if (it.parent && !poz[it.parent.idx]) poz[it.parent.idx] = Math.abs(Math.random() * rndMax/4 );
+            if (it.parent && !poz[it.parent.idx]) poz[it.parent.idx] = Math.abs(Math.random() * rndMax );
 
             if (it.parent) var rndx = pox[it.parent.idx]; else var rndx = 0;
             if (it.parent) var rndy = pox[it.parent.idx]; else var rndy = 0;
@@ -876,25 +876,23 @@ export class na3D_fileBrowser {
                     ? 0
                     : itmaxc===1
                         ? 0
-                        : itmaxc/2 !== Math.floor(itmaxc/2)
-                            ? itmaxc - it.column == it.column -1
-                                ? 0
-                                : itmaxc - it.column < it.column - 1
-                                    ? 1
-                                    : -1
-                            : 0),
+                        : itmaxc - it.column == it.column -1
+                            ? 0
+                            : itmaxc - it.column < it.column - 1
+                                ? 1
+                                : -1
+                            ),
                 itUpDown = /*p.upDown * */(
                     it.row-1 == itmaxr/2
                     ? 0
                     : itmaxr===1
                         ? 0
-                        : itmaxr/2 !== Math.floor(itmaxr/2)
-                            ? itmaxr - it.row == it.row - 1
-                                ? 0
-                                : itmaxr - it.row < it.row - 1
-                                    ? 1
-                                    : -1
-                            : 0),
+                        : itmaxr - it.row == it.row - 1
+                            ? 0
+                            : itmaxr - it.row < it.row - 1
+                                ? 1
+                                : -1
+                            ),
                 itc = (
                     ((itmaxc / 2) - it.column)
                 ),
@@ -969,25 +967,23 @@ export class na3D_fileBrowser {
                     ? 0
                     : itmaxc===1
                         ? 0
-                        : itmaxc/2 !== Math.floor(itmaxc/2)
-                            ? itmaxc - it.column == it.column -1
-                                ? 0
-                                : itmaxc - it.column < it.column - 1
-                                    ? 1
-                                    : -1
-                            : 0),
+                        : itmaxc - it.column == it.column -1
+                            ? 0
+                            : itmaxc - it.column < it.column - 1
+                                ? 1
+                                : -1
+                            ),
                 itUpDown = /*p.upDown * */(
                     it.row-1 == itmaxr/2
                     ? 0
                     : itmaxr===1
                         ? 0
-                        : itmaxr/2 !== Math.floor(itmaxr/2)
-                            ? itmaxr - it.row == it.row - 1
-                                ? 0
-                                : itmaxr - it.row < it.row - 1
-                                    ? 1
-                                    : -1
-                            : 0),
+                        : itmaxr - it.row == it.row - 1
+                            ? 0
+                            : itmaxr - it.row < it.row - 1
+                                ? 1
+                                : -1
+                            ),
                 itc = (
                     ((itmaxc / 2) - (it.column))
                 ),
@@ -1038,7 +1034,7 @@ export class na3D_fileBrowser {
                 //ilc = p.leftRight * it.maxColumnIta.maxColumn/it.column,
                 //ilr = p.upDown * it.maxRowIta.maxRow/it.row,
 
-                min = 4, m0 = (it.level-2) < 5 ? it.level-2 : 4, m1a = 400, m1 = 1500/m0, m2 = 1500/m0, m2a = 400, n = 4, n1 = p.leftRight * p.column, n2 = p.upDown * p.row, o = 600, q = 500, s = 1,
+                min = 4, m0 = (it.level-2) < 5 ? it.level-2 : 4, m1a = 200, m1 = 2500/m0, m2 = 2500/m0, m2a = 200, n = 0.5, n1 = p.leftRight * p.column, n2 = p.upDown * p.row, o = 600, q = 500, s = 1,
                 //u = 1 * (p.leftRight===0?it.leftRight===0?0.7:it.leftRight:p.leftRight),
                 u = 1 * (p.leftRight===0?ilc:p.leftRight),
                 //u = 1 * (p.leftRight===0?p.leftRight+1:p.leftRight>0?p.leftRight+1:0.7),
@@ -1049,14 +1045,14 @@ export class na3D_fileBrowser {
                 //w = 1 * (p.upDown===0?p.upDown+1:p.upDown>0?p.upDown+1:0.7),
                 //w = 1 * (p.upDown===0?p.columnOffsetValue:p.upDown),
                 x = 1,
-                //u1 = -1 * p.columnOffsetValue * 2.5,
-                //w1 = -1 * p.rowOffsetValue * 2.5,
-                u1 = -1*p.leftRight * (it.level-4)/4,
-                w1 = -1* p.upDown * (it.level-4)/4,
+                u1 = p.columnOffsetValue/4,
+                w1 = p.rowOffsetValue/4,
+                //u1 = -1*p.leftRight * (it.level/5),
+                //w1 = -1* p.upDown * (it.level/5),
                 //u1 = ilc,
                 //w1 = ilr,
-                u2 = -1 * it.columnOffsetValue * 2,
-                w2 = -1 * it.rowOffsetValue * 2;
+                u2 = p.columnOffsetValue /4,
+                w2 =  p.rowOffsetValue /4;
                 //u2 = ilc,
                 //w2 = ilr;
                 //debugger;
@@ -1064,18 +1060,22 @@ export class na3D_fileBrowser {
                 it.model.position.x = Math.round(
                     p.model.position.x
                     //+ (it.level > min ? (u * ilc * m1) : (ilc*m1))
-                    + (it.level > min ? (u1 * m1a)+(it.columnOffsetValue*m1) : (it.columnOffsetValue*m1))
+                    //+ (it.level > min ? (u1 * m1a)+(it.column*m1) : (p.leftRight*it.column*m1a))
+                    +(u1 * m1)+(it.column*m1)
                     //+ (it.level > min ? (it.columnOffsetValue * m1) : (it.columnOffsetValue*m1a))
-                    + (it.level > min ? (u1 * v * ((o * n))) : 0)
-                    + (it.level > min ? (u1 * v * ((o * s))) : 0)
+                    + (it.level > min ? (u2 * v * ((o * n))) : 0)
+                    + (it.level > min ? (u2 * v * ((o * s))) : 0)
+                    + p.leftRight * rndx
                 );
                 it.model.position.y = Math.round(
                     p.model.position.y
                     //+ (it.level > min ? (w * ilr * m2) : (it.row*m2))
-                    + (it.level > min ? (w1 * m2a)+(it.rowOffsetValue*m2) : (it.rowOffsetValue*m2))
+                    //+ (it.level > min ? (w1 * m2a)+(it.row*m2) : (p.upDown*it.row*m2a))
+                    +(w1 * m2)+(it.row*m2)
                     //+ (it.level > min ? (it.rowOffsetValue * m2) : (it.rowOffsetValue*m2a))
-                    + (it.level > min ? (w1 * x * ((o * n))) : 0)
-                    + (it.level > min ? (w1 * x * ((o * s))) : 0)
+                    + (it.level > min ? (w2 * x * ((o * n))) : 0)
+                    + (it.level > min ? (w2 * x * ((o * s))) : 0)
+                    + p.upDown * rndy
                 );
                 it.model.position.z = -1 * z - rndz;
                 //if (it.name=='black' || it.name=='space') debugger;
@@ -1156,7 +1156,7 @@ export class na3D_fileBrowser {
         },
         ol = 5000,
         numPoints = 360,
-        radius = 12.5*1000;
+        radius = 25*1000;
         console.log ('t778', t.winners, middle);
 
 
