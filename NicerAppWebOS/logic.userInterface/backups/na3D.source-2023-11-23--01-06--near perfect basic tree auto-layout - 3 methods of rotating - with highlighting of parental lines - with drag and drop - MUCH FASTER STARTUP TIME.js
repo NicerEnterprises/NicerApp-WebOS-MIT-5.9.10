@@ -973,51 +973,38 @@ export class na3D_fileBrowser {
                 ilc =
                     it.columnOffsetValue === 0
                         ? -1 * 0.01
-                        : it.columnOffsetValue/2,
+                        : -1 * it.columnOffsetValue*2,
                 ilr =
                     it.rowOffsetValue === 0
                         ? -1 * 0.01
-                        :  it.rowOffsetValue/2,
-                ilc = it.leftRight * it.column,// * p.columnOffsetValue,
-                ilr = it.upDown * it.row,// * p.rowOffsetValue,
+                        : -1 * it.rowOffsetValue*2 ,
 
-
-                min = 4, m0 = (it.level-2) < 5 ? it.level-2 : 4, m1a = 400, m1 = 1500/m0, m2 = 1500/m0, m2a = 400, n = 1, o = 600, q = 500, s = 1,
+                min = 4, m0 = (it.level-2) < 5 ? it.level-2 : 4, m1a = 400, m1 = 2500/m0, m2 = 2500/m0, m2a = 400, n = 1, o = 600, q = 500, s = 1,
                 //u = 1 * (p.leftRight===0?it.leftRight===0?0.7:it.leftRight:p.leftRight),
-                u = 1 * (p.leftRight===0?ilc:p.leftRight),
+                u = 1 * (p.leftRight===0?0.5:p.leftRight),
                 //u = 1 * (p.leftRight===0?p.leftRight+1:p.leftRight>0?p.leftRight+1:0.7),
                 //u = 1 * (p.leftRight===0?p.columnOffsetValue:p.leftRight),
                 v = 1,
-                w = 1 * (p.upDown===0?ilr:p.upDown),
+                w = 1 * (p.upDown===0?0.5:p.upDown),
                 //w = 1 * (p.upDown===0?it.upDown===0?0.7:it.upDown:p.upDown),
                 //w = 1 * (p.upDown===0?p.upDown+1:p.upDown>0?p.upDown+1:0.7),
                 //w = 1 * (p.upDown===0?p.columnOffsetValue:p.upDown),
-                x = 1,
-                u1 = p.leftRight * m0,
-                w1 = p.upDown * m0,
-                //u1 = ilc,
-                //w1 = ilr,
-                u2 = -1 * it.columnOffsetValue,
-                w2 = -1 * it.rowOffsetValue ;
-                //u2 = ilc,
-                //w2 = ilr;
+                x = 1;
                 //debugger;
 
                 it.model.position.x = Math.round(
                     p.model.position.x
-                    //+ (it.level > min ? (u * ilc * m1) : (ilc*m1))
-                    + (it.level > min ? (u2 * m1a) : (it.column*m1))
+                    + (it.level > min ? (u * ilc * m1) : (ilc*m1))
                     //+ (it.level > min ? (it.columnOffsetValue * m1) : (it.columnOffsetValue*m1a))
-                    + (it.level > min ? (u1 * v * ((o * n))) : 0)
-                    + (it.level > min ? (u1 * v * ((o * s))) : 0)
+                    + (it.level > min ? (u * v * ((o * n))) : 0)
+                    + (it.level > min ? (u * v * ((o * s))) : 0)
                 );
                 it.model.position.y = Math.round(
                     p.model.position.y
-                    //+ (it.level > min ? (w * ilr * m2) : (it.row*m2))
-                    + (it.level > min ? (w2 * m2a) : (it.row*m2))
+                    + (it.level > min ? (w * ilr * m2) : (it.row*m2))
                     //+ (it.level > min ? (it.rowOffsetValue * m2) : (it.rowOffsetValue*m2a))
-                    + (it.level > min ? (w1 * x * ((o * n))) : 0)
-                    + (it.level > min ? (w1 * x * ((o * s))) : 0)
+                    + (it.level > min ? (w * x * ((o * n))) : 0)
+                    + (it.level > min ? (w * x * ((o * s))) : 0)
                 );
                 it.model.position.z = -1 * z - rndz;
                 //if (it.name=='black' || it.name=='space') debugger;
