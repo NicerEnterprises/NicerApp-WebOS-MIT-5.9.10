@@ -976,18 +976,7 @@ export class na3D_fileBrowser {
 
         }
         
-        if (true) {
-            //setTimeout(function(t) {
-                t.onresize_postDo(t);
-            //}, 500, t);
-            //t.drawLines(t);
-        } else {
-            clearTimeout (t.timeout_onresize_do_overlapChecks2);
-            t.timeout_onresize_do_overlapChecks2 = setTimeout(function() {
-                t.onresize_do_overlapChecks2(t, callback);
-                //if (typeof callback=='function') callback(t);
-            }, 500);
-        };
+        t.onresize_postDo(t);
     }
 
     onresize_postDo (t) {
