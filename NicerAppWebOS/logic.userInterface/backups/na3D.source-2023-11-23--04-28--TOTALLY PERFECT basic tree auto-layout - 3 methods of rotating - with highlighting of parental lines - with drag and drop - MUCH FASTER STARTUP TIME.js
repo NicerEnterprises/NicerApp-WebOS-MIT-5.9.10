@@ -33,8 +33,8 @@ import { OrbitControls } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/example
 import { RGBELoader } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/loaders/RGBELoader.js';
 import { DragControls } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/controls/DragControls.js';
 //import { GLTFLoader } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/loaders/GLTFLoader.js';
-import { FlyControls } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/controls/FlyControls.js';
-import { FirstPersonControls} from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/controls/FirstPersonControls.js';
+//import { FlyControls } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/controls/FlyControls.js';
+//import { FirstPersonControls} from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/controls/FirstPersonControls.js';
 import gsap from "https://unpkg.com/gsap@3.12.2/index.js";
 import { CameraControls } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/dist_camera-controls.module.js';
 
@@ -162,6 +162,8 @@ export class na3D_fileBrowser {
         
         el.appendChild( t.renderer.domElement );
 
+        t.controls = new OrbitControls( t.camera, t.renderer.domElement );
+        //t.controls.listenToKeyEvents( window ); // optional
 
         if (false) {
             const sphere1 = new THREE.Mesh(
@@ -309,21 +311,12 @@ export class na3D_fileBrowser {
 
         });
 
-        //t.controls = new OrbitControls( t.camera, t.renderer.domElement );
-        //t.controls.listenToKeyEvents( window ); // optional
-
-        //CameraControls.install ({ THREE : THREE });
+        CameraControls.install ({ THREE : THREE });
         t.clock = new THREE.Clock();
-        //t.cameraControls = new CameraControls (t.camera, t.renderer.domElement);
-        t.flyControls = new FlyControls (t.camera, t.renderer.domElement);
-        t.flyControls.movementSpeed = 10 * 1000;
-        //debugger;
-        //t.fpControls = new FirstPersonControls (t.camera, t.renderer.domElement);
-        //t.fpControls.movementSpeed = 2000;
+        t.cameraControls = new CameraControls (t.camera, t.renderer.domElement);
 
-        //setTimeout (function() {
-            t.animate(this, null);
-        //}, 300);
+        debugger;
+        t.animate(this, null);
     }
     
     animate(t, evt) {
@@ -335,16 +328,15 @@ export class na3D_fileBrowser {
                 var it = t.s2[i];
                 it.updateMatrixWorld();
             };
+            t.raycaster.setFromCamera (t.mouse, t.camera);
 
             t.scene.matrixWorldAutoUpdate = true;;
             t.camera.matrixWorldAutoUpdate = true;
             //t.camera.lookAt (t.s2[0].position);
+            //t.flycontrols.update(0.05);
+            //t.fpcontrols.update(0.3);
             const delta = t.clock.getDelta();
-
-            const hasControlsUpdated =t.flyControls.update(0.05);
-            t.raycaster.setFromCamera (t.mouse, t.camera);
-            //const hasControlsUpdated =t.cameraControls.update(delta);
-            //t.fpControls.update(delta);
+            const hasControlsUpdated = t.cameraControls.update(delta);
 
             const intersects = t.raycaster.intersectObjects (t.s2);
             if (intersects[0] && intersects[0].object.type!=='Line') 
@@ -489,7 +481,7 @@ export class na3D_fileBrowser {
                 }
 
                 // Render scene
-                //t.renderer.render(t.scene, t.camera);
+                t.renderer.render(t.scene, t.camera);
 
                 // Render labels
                 //t.labelRenderer.render(t.scene, t.camera);
@@ -515,7 +507,7 @@ export class na3D_fileBrowser {
             if (it && it.geometry) it.geometry.verticesNeedUpdate = true;
         };
 
-        debugger;
+        
         t.renderer.render( t.scene, t.camera );
     }
 
@@ -524,6 +516,9 @@ export class na3D_fileBrowser {
     }
     rotate2 (event, t) {
         t.pathAnimation2.play(0);
+    }
+    rotate3 (event, t) {
+        t.pathAnimation3.play(0);
     }
 
     onMouseMove( event, t ) {
@@ -573,9 +568,11 @@ export class na3D_fileBrowser {
                     pos : cit.it.model.position,
                     'p.column' : t.items[cit.it.parent.idx].column,
                     'p.maxColumnIta.maxColumn':t.items[cit.it.parent.idx].maxColumnIta.maxColumn,
+                    'p.columnOffsetValue':t.items[cit.it.parent.idx].columnOffsetValue,
                     'p.leftRight' : t.items[cit.it.parent.idx].leftRight,
                     'p.row' :  t.items[cit.it.parent.idx].row,
                     'p.maxColumnIta.maxRow':t.items[cit.it.parent.idx].maxColumnIta.maxRow,
+                    'p.rowOffsetValue':t.items[cit.it.parent.idx].rowOffsetValue,
                     'p.upDown' :t.items[cit.it.parent.idx].upDown,
                     'it.column':cit.it.column,
                     'it.maxColumnIta.maxColumn':cit.it.maxColumnIta.maxColumn,
@@ -729,7 +726,7 @@ export class na3D_fileBrowser {
                     
                     ld3.rowColumnCount = Math.ceil(Math.sqrt(ld3.itemCount));
                     var
-                    column = 0,
+                    column = 1,
                     row = 1;
 
                     
@@ -808,7 +805,7 @@ export class na3D_fileBrowser {
 
             if (it.parent && !pox[it.parent.idx]) pox[it.parent.idx] = Math.abs(Math.random() * rndMax);
             if (it.parent && !poy[it.parent.idx]) poy[it.parent.idx] = Math.abs(Math.random() * rndMax);
-            if (it.parent && !poz[it.parent.idx]) poz[it.parent.idx] = Math.abs(Math.random() * rndMax );
+            if (it.parent && !poz[it.parent.idx]) poz[it.parent.idx] = Math.abs(Math.random() * rndMax/4 );
 
             if (it.parent) var rndx = pox[it.parent.idx]; else var rndx = 0;
             if (it.parent) var rndy = pox[it.parent.idx]; else var rndy = 0;
@@ -874,14 +871,45 @@ export class na3D_fileBrowser {
                 itmaxr2 = Math.floor(itmaxr/2),
                 itLeftRight = /*pLeftRight,/*/it.column-1 == itmaxc2 ? 0 : it.column-1 > itmaxc2 ? 1 : -1,
                 itUpDown = /*pUpDown, /*/it.row-1 == itmaxr2 ? 0 : it.row-1 > itmaxr2 ? 1 : -1,
+                itLeftRight = /*p.leftRight * */(
+                    it.column-1 == itmaxc / 2
+                    ? 0
+                    : itmaxc===1
+                        ? 0
+                        : itmaxc/2 !== Math.floor(itmaxc/2)
+                            ? itmaxc - it.column == it.column -1
+                                ? 0
+                                : itmaxc - it.column < it.column - 1
+                                    ? 1
+                                    : -1
+                            : 0),
+                itUpDown = /*p.upDown * */(
+                    it.row-1 == itmaxr/2
+                    ? 0
+                    : itmaxr===1
+                        ? 0
+                        : itmaxr/2 !== Math.floor(itmaxr/2)
+                            ? itmaxr - it.row == it.row - 1
+                                ? 0
+                                : itmaxr - it.row < it.row - 1
+                                    ? 1
+                                    : -1
+                            : 0),
                 itc = (
                     ((itmaxc / 2) - it.column)
+                ),
+                itc = (
+                    itmaxc - it.column
                 ),
                 itcPercentage = (itc*1.00) / itmaxc,
                 itr = (
                     ((itmaxr / 2) - it.row)
                 ),
+                itr = (
+                    itmaxr - it.row
+                ),
                 itrPercentage = (itr*1.00) / itmaxr,
+
                 itco = offsetXY * itcPercentage * it.maxColumnIta.maxColumn,
                 itro = offsetXY * itrPercentage * it.maxRowIta.maxRow;
                 
@@ -936,8 +964,30 @@ export class na3D_fileBrowser {
                 var
                 itmaxc = it.maxColumnIta.maxColumn,
                 itmaxr = it.maxRowIta.maxRow,
-                itLeftRight = /*pLeftRight,/*/it.column-1 == itmaxc / 2 ? 0 : it.column-1 > itmaxc / 2 ? 1 : -1,
-                itUpDown = /*pUpDown, /*/it.row-1 == itmaxr / 2 ? 0 : it.row-1 > itmaxr / 2 ? 1 : -1,
+                itLeftRight = /*p.leftRight * */(
+                    it.column-1 == itmaxc / 2
+                    ? 0
+                    : itmaxc===1
+                        ? 0
+                        : itmaxc/2 !== Math.floor(itmaxc/2)
+                            ? itmaxc - it.column == it.column -1
+                                ? 0
+                                : itmaxc - it.column < it.column - 1
+                                    ? 1
+                                    : -1
+                            : 0),
+                itUpDown = /*p.upDown * */(
+                    it.row-1 == itmaxr/2
+                    ? 0
+                    : itmaxr===1
+                        ? 0
+                        : itmaxr/2 !== Math.floor(itmaxr/2)
+                            ? itmaxr - it.row == it.row - 1
+                                ? 0
+                                : itmaxr - it.row < it.row - 1
+                                    ? 1
+                                    : -1
+                            : 0),
                 itc = (
                     ((itmaxc / 2) - (it.column))
                 ),
@@ -953,7 +1003,7 @@ export class na3D_fileBrowser {
                 it.rowOffsetValue = itr;//Math.floor(itr);
                 it.leftRight = itLeftRight;
                 it.upDown = itUpDown;
-                //if (it.name=='tiled' || it.name=='landscape') debugger;
+                if (it.name=='landscape') debugger;
             };
         
             //if (p && p.name=='tiled') debugger;
@@ -972,43 +1022,67 @@ export class na3D_fileBrowser {
 
 
                 var
-                z = -1 * ((it.level+1) * 3000 ),
+                z = -1 * ((it.level+1) * 2500 ),
                 plc = p.columnOffsetValue === 0 ? 0.01 : p.columnOffsetValue,
                 plr = p.rowOffsetValue === 0 ? 0.01 : p.rowOffsetValue,
-                ilc = it.columnOffsetValue === 0 ? 0.01 : it.columnOffsetValue,
-                ilr = it.rowOffsetValue === 0 ? 0.01 : it.rowOffsetValue,
+                ilc =
+                    it.columnOffsetValue === 0
+                        ? -1 * 0.01
+                        : it.columnOffsetValue/2,
+                ilr =
+                    it.rowOffsetValue === 0
+                        ? -1 * 0.01
+                        :  it.rowOffsetValue/2,
+                ilc = it.leftRight * it.column,// * p.columnOffsetValue,
+                ilr = it.upDown * it.row,// * p.rowOffsetValue,
+                //ilc = p.leftRight * it.maxColumnIta.maxColumn/it.column,
+                //ilr = p.upDown * it.maxRowIta.maxRow/it.row,
 
-                min = 4, min2 = 4, m0 = (it.level-2) < 4 ? it.level-2 : 4, m1 = 2000/m0, m2 = 2000/m0, m3 = 400, n = 1, o = (it.level>6?100:0), q = (it.level>6?200:0), s = 1,
-                u = p.leftRight===0?0.7:p.leftRight,// v =1,
+                min = 4, m0 = (it.level-2) < 5 ? it.level-2 : 4, m1a = 400, m1 = 1500/m0, m2 = 1500/m0, m2a = 400, n = 4, n1 = p.leftRight * p.column, n2 = p.upDown * p.row, o = 600, q = 500, s = 1,
+                //u = 1 * (p.leftRight===0?it.leftRight===0?0.7:it.leftRight:p.leftRight),
+                u = 1 * (p.leftRight===0?ilc:p.leftRight),
+                //u = 1 * (p.leftRight===0?p.leftRight+1:p.leftRight>0?p.leftRight+1:0.7),
+                //u = 1 * (p.leftRight===0?p.columnOffsetValue:p.leftRight),
                 v = 1,
-                w = -1 * ilr,//p.upDown===0?0.1:p.upDown,
-                w = 1 * (p.upDown===0?0.1:p.upDown),
-                x = 1;
+                w = 1 * (p.upDown===0?ilr:p.upDown),
+                //w = 1 * (p.upDown===0?it.upDown===0?0.7:it.upDown:p.upDown),
+                //w = 1 * (p.upDown===0?p.upDown+1:p.upDown>0?p.upDown+1:0.7),
+                //w = 1 * (p.upDown===0?p.columnOffsetValue:p.upDown),
+                x = 1,
+                //u1 = -1 * p.columnOffsetValue * 2.5,
+                //w1 = -1 * p.rowOffsetValue * 2.5,
+                u1 = -1*p.leftRight * (it.level-4)/4,
+                w1 = -1* p.upDown * (it.level-4)/4,
+                //u1 = ilc,
+                //w1 = ilr,
+                u2 = -1 * it.columnOffsetValue * 2,
+                w2 = -1 * it.rowOffsetValue * 2;
+                //u2 = ilc,
+                //w2 = ilr;
                 //debugger;
 
                 it.model.position.x = Math.round(
                     p.model.position.x
-                    + (it.level > min ? (u * it.column * m1) : (it.column*m1))
-                    //- (it.level > min ? (it.columnOffsetValue * m3) : (it.columnOffsetValue*m3))
-                    //- (it.level > min2 ? (u*it.column * m3) : (it.column*m3))
-                    - (it.level > min2 ? (u*p.columnOffsetValue * m3) : (p.columnOffsetValue*m3))
-                    + (it.level > min ? (u * v * ((1 * n))) : 0)
-                    + (it.level > min ? (u * v * ((o * s))) : 0)
+                    //+ (it.level > min ? (u * ilc * m1) : (ilc*m1))
+                    + (it.level > min ? (u1 * m1a)+(it.columnOffsetValue*m1) : (it.columnOffsetValue*m1))
+                    //+ (it.level > min ? (it.columnOffsetValue * m1) : (it.columnOffsetValue*m1a))
+                    + (it.level > min ? (u1 * v * ((o * n))) : 0)
+                    + (it.level > min ? (u1 * v * ((o * s))) : 0)
                 );
                 it.model.position.y = Math.round(
-                    p.model.position.y 
-                    + (it.level > min ? (w * it.row * m2) : (it.row*m2))
-                    //- (it.level > min ? (it.rowOffsetValue * m3) : (it.rowOffsetValue*m3))
-                    //- (it.level > min2 ? (w*it.row * m3) : (it.row*m3))
-                    - (it.level > min2 ? (w*p.rowOffsetValue * m3) : (p.rowOffsetValue*m3))
-                    + (it.level > min ? (w * x * ((q * n))) : 0)
-                    + (it.level > min ? (w * x * ((o * s))) : 0)
+                    p.model.position.y
+                    //+ (it.level > min ? (w * ilr * m2) : (it.row*m2))
+                    + (it.level > min ? (w1 * m2a)+(it.rowOffsetValue*m2) : (it.rowOffsetValue*m2))
+                    //+ (it.level > min ? (it.rowOffsetValue * m2) : (it.rowOffsetValue*m2a))
+                    + (it.level > min ? (w1 * x * ((o * n))) : 0)
+                    + (it.level > min ? (w1 * x * ((o * s))) : 0)
                 );
                 it.model.position.z = -1 * z - rndz;
                 //if (it.name=='black' || it.name=='space') debugger;
                 //if (it.name=='landscape' || it.name=='tiled') debugger;
                 //if (it.name=='misc' || it.name=='simple') debugger;
                 //if (it.level===4) debugger;
+                if (it.name=='space'||it.name=='wood') debugger;
 
                 var x = it.data.it;
             }else if (it.model) {
@@ -1053,6 +1127,8 @@ export class na3D_fileBrowser {
     onresize_postDo (t) {
         t.drawLines(t);
 
+        if (!t.cameraOrigin) t.cameraOrigin = $.extend({}, t.camera.position);
+
         t.winners = {
             north : 0,
             east : 0,
@@ -1078,11 +1154,13 @@ export class na3D_fileBrowser {
             y : Math.round((t.winners.north + t.winners.south) / 2),
             z : Math.round((t.winners.front + t.winners.behind) /2)
         },
-        ol = 5000;
+        ol = 5000,
+        numPoints = 360,
+        radius = 12.5*1000;
         console.log ('t778', t.winners, middle);
 
 
-        t.curve = new THREE.CatmullRomCurve3( [
+        t.curve1b = new THREE.CatmullRomCurve3( [
             new THREE.Vector3 (0, 0, ol),
             new THREE.Vector3 (t.winners.west - ol, 0, ol),
             new THREE.Vector3 (t.winners.west - ol, 0, t.winners.front - ol),
@@ -1090,24 +1168,107 @@ export class na3D_fileBrowser {
             new THREE.Vector3 (t.winners.east + ol, 0, ol),
             new THREE.Vector3 (0, 0, ol),
         ]);
-        t.points = t.curve.getPoints(numPoints);
+        var first = last = {x:0,y:0,z:ol};
+        t.points1b = t.curve1b.getPoints(numPoints);
+        t.curves1a = [
+            new THREE.Vector3(t.cameraOrigin.x,t.cameraOrigin.y,t.cameraOrigin.z),
+            new THREE.Vector3(first.x,first.y,first.z)
+        ];
+        t.curve1a = new THREE.CatmullRomCurve3(t.curves1a);
+        t.points1a = t.curve1a.getPoints(50);
+        t.curves1z = [
+            new THREE.Vector3(last.x,last.y,last.z),
+            new THREE.Vector3(t.cameraOrigin.x,t.cameraOrigin.y,t.cameraOrigin.z)
+        ];
+        t.curve1z = new THREE.CatmullRomCurve3(t.curves1z);
+        t.points1z = t.curve1z.getPoints(50);
 
-        t.curves = [];
-        var
-        numPoints = 180,
-        radius = 1500;
+        t.curves1x = t.points1a.concat (t.points1b, t.points1z);
+        t.curve1 = new THREE.CatmullRomCurve3(t.curves1x);
+        t.points1 = t.curve1.getPoints(numPoints);
+
+
+
+        t.curves2b = [];
         for (var i=0; i<numPoints; i++) {
             var
             x = radius * Math.cos (2 * Math.PI * i / numPoints),
             y = radius * Math.sin (2 * Math.PI * i / numPoints),
-            z = 3 * radius;
-            t.curves.push (new THREE.Vector3(x,y,z));
+            z = 1.4 * radius;
+            z = middle.z - (radius * Math.sin (2 * Math.PI * i / numPoints) / 2);
+            if (i===0) var first = {x:x,y:y,z:z};
+            if (i===numPoints-1) var last = {x:x,y:y,z:z};
+            t.curves2b.push (new THREE.Vector3(x,y,z));
         }
-        t.curve2 = new THREE.CatmullRomCurve3(t.curves);
+        t.curves2a = [
+            new THREE.Vector3(t.cameraOrigin.x,t.cameraOrigin.y,t.cameraOrigin.z),
+            new THREE.Vector3(first.x,first.y,first.z)
+        ];
+        t.curve2a = new THREE.CatmullRomCurve3(t.curves2a);
+        t.points2a = t.curve2a.getPoints(50);
+        t.curves2z = [
+            new THREE.Vector3(last.x,last.y,last.z),
+            new THREE.Vector3(t.cameraOrigin.x,t.cameraOrigin.y,t.cameraOrigin.z)
+        ];
+        t.curve2z = new THREE.CatmullRomCurve3(t.curves2z);
+        t.points2z = t.curve2z.getPoints(50);
+
+        t.curves2x = t.points2a.concat (t.curves2b, t.points2z);
+        t.curve2 = new THREE.CatmullRomCurve3(t.curves2x);
         t.points2 = t.curve2.getPoints(numPoints);
 
+/*
+        t.curves3 = [];
+        t.curves3.push (new THREE.Vector3(t.camera.position.x,t.camera.position.y,t.camera.position.z));
+        for (var i=0; i<numPoints; i++) {
+            var
+            x = middle.x - (-1 * radius * Math.cos (2 * Math.PI * i / numPoints) / 2),
+            y = middle.y - (-1 * radius * Math.sin (2 * Math.PI * i / numPoints) / 2),
+            z = middle.z - (radius * Math.sin (2 * Math.PI * i / numPoints) / 2);
+            t.curves3.push (new THREE.Vector3(x,y,z));
+        }
+        t.curves3.push (new THREE.Vector3(t.camera.position.x,t.camera.position.y,t.camera.position.z));
+        t.curve3 = new THREE.CatmullRomCurve3(t.curves3);
+        t.points3 = t.curve.getPoints(numPoints);
+*/
 
-        /*
+        t.curves3b = [];
+        for (var i=0; i<numPoints; i++) {
+            var
+            x = radius * Math.cos (2 * Math.PI * i / numPoints),
+            y = radius * Math.sin (2 * Math.PI * i / numPoints),
+            z = 1.4 * radius;
+            z = middle.z - (radius * Math.sin (2 * Math.PI * i / numPoints) / 2);
+            if (i===0) var first = {x:x,y:y,z:z};
+            if (i===numPoints-1) var last = {x:x,y:y,z:z};
+            t.curves3b.push (new THREE.Vector3(x,y,z));
+        }
+        t.curve3b = new THREE.CatmullRomCurve3(t.curves3b);
+        t.points3b = t.curve3b.getPoints(numPoints);
+        t.curves3a = [
+            new THREE.Vector3(t.cameraOrigin.x,t.cameraOrigin.y,t.cameraOrigin.z),
+            new THREE.Vector3(first.x,first.y,first.z)
+        ];
+        t.curve3a = new THREE.CatmullRomCurve3(t.curves3a);
+        t.points3a = t.curve3a.getPoints(50);
+        t.curves3z = [
+            new THREE.Vector3(last.x,last.y,last.z),
+            new THREE.Vector3(t.cameraOrigin.x,t.cameraOrigin.y,t.cameraOrigin.z)
+        ];
+        t.curve3z = new THREE.CatmullRomCurve3(t.curves3z);
+        t.points3z = t.curve3z.getPoints(50);
+
+        t.curves3x = t.points3a.concat (t.points3b, t.points3z);
+        t.curve3 = new THREE.CatmullRomCurve3(t.curves3x);
+        t.points3 = t.curve3.getPoints(numPoints);
+        debugger;
+
+
+
+
+
+
+/*
         const geometry = new THREE.BufferGeometry().setFromPoints( t.points );
         const material = new THREE.LineBasicMaterial( { color: 0xff0000 } );
         // Create the final object to add to the scene
@@ -1120,8 +1281,7 @@ export class na3D_fileBrowser {
         // Create the final object to add to the scene
         const curveObject2 = new THREE.Line( geometry2, material2 );
         t.scene.add(curveObject2);
-        */
-
+*/
         t._tmp = new THREE.Vector3();
         t.animationProgress = { value: 0 };
         t.pathAnimation = gsap.fromTo(
@@ -1131,7 +1291,7 @@ export class na3D_fileBrowser {
             },
             {
                 value: 1,
-                duration: 5,
+                duration: 60,
                 overwrite: true,
                 paused: true,
                 onUpdateParams: [ t.animationProgress ],
@@ -1139,7 +1299,7 @@ export class na3D_fileBrowser {
 
                     if ( ! this.isActive() ) return;
 
-                    t.curve.getPoint ( value, t._tmp );
+                    t.curve1.getPoint ( value, t._tmp );
                     const cameraX = t._tmp.x;
                     const cameraY = t._tmp.y;
                     const cameraZ = t._tmp.z;
@@ -1160,17 +1320,13 @@ export class na3D_fileBrowser {
                 },
                 onStart() {
 
-          //          t.cameraControls.enabled = false;
-                    t.flyControls.enabled = false;
-                    //t.fpControls.enabled = false;
+                    t.cameraControls.enabled = false;
 
                 },
                 onComplete() {
 
-            //        t.cameraControls.enabled = false;
-                    t.flyControls.enabled = true;
-                    //t.fpControls.enabled = true;
-
+                    t.cameraControls.enabled = true;
+                    t.onresize_postDo(t);
                 },
             }
         );
@@ -1183,7 +1339,7 @@ export class na3D_fileBrowser {
             },
             {
                 value: 1,
-                duration: 30,
+                duration: 60,
                 overwrite: true,
                 paused: true,
                 onUpdateParams: [ t.animationProgress2 ],
@@ -1218,13 +1374,67 @@ export class na3D_fileBrowser {
                 onComplete() {
 
                     t.cameraControls.enabled = true;
+                    t.onresize_postDo(t);
+                },
+            }
+        );
 
+        t._tmp = new THREE.Vector3();
+        t.animationProgress3 = { value: 0 };
+        t.pathAnimation3 = gsap.fromTo(
+            t.animationProgress3,
+            {
+                value: 0,
+            },
+            {
+                value: 1,
+                duration: 60,
+                overwrite: true,
+                paused: true,
+                onUpdateParams: [ t.animationProgress3 ],
+                onUpdate( { value } ) {
+
+                    if ( ! this.isActive() ) return;
+
+                    t.curve3.getPoint ( value, t._tmp );
+                    const cameraX = t._tmp.x;
+                    const cameraY = t._tmp.y;
+                    const cameraZ = t._tmp.z;
+                    const lookAtX = middle.x;
+                    const lookAtY = middle.y;
+                    const lookAtZ = middle.z;
+
+                    t.cameraControls.setLookAt(
+                        cameraX,
+                        cameraY,
+                        cameraZ,
+                        lookAtX,
+                        lookAtY,
+                        lookAtZ,
+                        false, // IMPORTANT! disable cameraControls's transition and leave it to gsap.
+                    );
+
+                },
+                onStart() {
+
+                    t.cameraControls.enabled = false;
+
+                },
+                onComplete() {
+
+                    t.cameraControls.enabled = true;
+                    t.onresize_postDo(t);
                 },
             }
         );
 
         setTimeout (function() {
-            //t.pathAnimation.play(0);
+
+            if (!t.started) {
+                t.started = true;
+                t.pathAnimation.play(0);
+            }
+
 
             if (!t.dragndrop) {
                 var objs = [];
