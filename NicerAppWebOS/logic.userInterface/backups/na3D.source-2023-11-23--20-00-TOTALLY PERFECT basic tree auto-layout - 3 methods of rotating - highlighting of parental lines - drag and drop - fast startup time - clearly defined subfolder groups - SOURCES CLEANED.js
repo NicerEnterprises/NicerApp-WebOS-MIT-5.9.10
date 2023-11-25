@@ -33,7 +33,7 @@ import { OrbitControls } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/example
 import { RGBELoader } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/loaders/RGBELoader.js';
 import { DragControls } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/controls/DragControls.js';
 //import { GLTFLoader } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/loaders/GLTFLoader.js';
-import { FlyControls } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/controls/FlyControls.js';
+//import { FlyControls } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/controls/FlyControls.js';
 //import { FirstPersonControls} from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/controls/FirstPersonControls.js';
 import gsap from "https://unpkg.com/gsap@3.12.2/index.js";
 import { CameraControls } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/dist_camera-controls.module.js';
@@ -107,7 +107,6 @@ export class na3D_fileBrowser {
         
         t.autoRotate = false;
         t.showLines = true;
-        t.animationDuration = 10;
         
         t.p = parent;
         t.el = el;
@@ -162,6 +161,9 @@ export class na3D_fileBrowser {
         t.renderer.toneMappingExposure = 1.0;
         
         el.appendChild( t.renderer.domElement );
+
+        t.controls = new OrbitControls( t.camera, t.renderer.domElement );
+        //t.controls.listenToKeyEvents( window ); // optional
 
         if (false) {
             const sphere1 = new THREE.Mesh(
@@ -311,28 +313,16 @@ export class na3D_fileBrowser {
 
         CameraControls.install ({ THREE : THREE });
         t.clock = new THREE.Clock();
-        t.lookClock = null;
-        //t.orbitControls = new OrbitControls( t.camera, t.renderer.domElement );
-        //t.orbitControls.enabled = false;
-        //t.controls.listenToKeyEvents( window ); // optional
-
         t.cameraControls = new CameraControls (t.camera, t.renderer.domElement);
-        t.cameraControls.enabled = true;
-        t.flyControls = new FlyControls (t.camera, t.renderer.domElement, t.cameraControls);
-        t.flyControls.enabled = false;
-        t.flyControls.movementSpeed = 3000;
-        t.flyControls.dragToLook = true;
-        t.flyControls.rollSpeed = Math.PI / 24;
-        //t.fpControls = new FirstPersonControls (t.camera, t.renderer.domElement);
-        t.camera.lookAt (t.s2[0].position);
-        t.cameraControls._camera.lookAt (t.s2[0].position);
 
+        debugger;
         t.animate(this, null);
     }
     
     animate(t, evt) {
         requestAnimationFrame( function(evt) { t.animate (t,evt) } );
         //if (t.mouse.x!==0 || t.mouse.y!==0) {
+            t.camera.updateProjectionMatrix();
 
             for (var i=0; i<t.s2.length; i++) {
                 var it = t.s2[i];
@@ -342,45 +332,11 @@ export class na3D_fileBrowser {
 
             t.scene.matrixWorldAutoUpdate = true;;
             t.camera.matrixWorldAutoUpdate = true;
-
-            if (t.lookClock) {
-                var delta2 = Date.now() - 1000;
-            };
-            if (t.lookClock && delta2 > t.lookClock) {
-                t.flyControls.enabled = true;
-                t.cameraControls.enabled = true;
-            } else {
-                t.flyControls.enabled = false;
-                t.cameraControls.enabled = true;
-            }
-
+            //t.camera.lookAt (t.s2[0].position);
+            //t.flycontrols.update(0.05);
+            //t.fpcontrols.update(0.3);
             const delta = t.clock.getDelta();
-            //if (t.orbitControls.enabled)  t.orbitControls.update(delta);
-            if (t.flyControls.enabled) {
-                t.flyControls.update(delta)
-                t.flyControls.updateMovementVector();
-            }
-            if (t.cameraControls.enabled) {
-                if (t.flyControls.enabled) {
-                    t.cameraControls.setLookAt (
-                        t.flyControls.object.position.x,
-                        t.flyControls.object.position.y,
-                        t.flyControls.object.position.z,
-                        //scope.object._target.x,
-                        //scope.object._target.y,
-                        //scope.object._target.z,
-                        t.cameraControls._target.x,
-                        t.cameraControls._target.y,
-                        t.cameraControls._target.z,
-                        false
-                    );
-                }
-                t.cameraControls.update(delta);
-            }
-            //t.fpControls.update(0.3);
-
-            t.camera.updateProjectionMatrix();
-            t.camera.updateWorldMatrix (true, false);
+            const hasControlsUpdated = t.cameraControls.update(delta);
 
             const intersects = t.raycaster.intersectObjects (t.s2);
             if (intersects[0] && intersects[0].object.type!=='Line') 
@@ -642,6 +598,7 @@ export class na3D_fileBrowser {
     initializeItems_walkKey (cd) {
         var ps = cd.path.split('/');
         if (ps[ps.length-1]=='folders') {
+            console.log ('key', cd);
             cd.params.idxPath = cd.params.idxPath2;
             //cd.params.idxPath = cd.params.idxPath + '/' + cd.params.t.items.length;
 
@@ -703,6 +660,7 @@ export class na3D_fileBrowser {
                     textures[i] = pathThumb;//'/NicerAppWebOS/'+filepath+'/'+key+'/thumbs/'+itd[''+i];//fn;
                     textures[i] = textures[i].replace(/\/\//g, '/');
                     it.fullPath = fullPath;
+                    console.log ('t7734:' + fullPath);
                     //if (itd.files[i] && itd.files[i].match(/streetfighter/)) debugger;
                     //alert (JSON.stringify(textures,null,2));
                 } else {
@@ -936,7 +894,7 @@ export class na3D_fileBrowser {
                 it.rowOffsetValue = itr;//Math.floor(itr);
                 it.leftRight = itLeftRight;
                 it.upDown = itUpDown;
-                //if (it.name=='landscape') debugger;
+                if (it.name=='landscape') debugger;
             };
         
             if (it.model && p && p.model) {
@@ -955,22 +913,22 @@ export class na3D_fileBrowser {
                 x = 1,
                 u1 = p.columnOffsetValue/4,
                 w1 = p.rowOffsetValue/4,
-                u2 = -1 * p.columnOffsetValue,
-                w2 = -1 * p.rowOffsetValue;
+                u2 = p.columnOffsetValue /4,
+                w2 =  p.rowOffsetValue /4;
 
                 it.model.position.x = Math.round(
                     p.model.position.x
                     + (u1 * m1)+(it.column*m1)
                     + (it.level > min ? (u2 * v * ((o * n))) : 0)
                     + (it.level > min ? (u2 * v * ((o * s))) : 0)
-                    + (it.level > min ? p.leftRight * rndx : 0)
+                    + p.leftRight * rndx
                 );
                 it.model.position.y = Math.round(
                     p.model.position.y
                     + (w1 * m2)+(it.row*m2)
                     + (it.level > min ? (w2 * x * ((o * n))) : 0)
                     + (it.level > min ? (w2 * x * ((o * s))) : 0)
-                    + (it.level > min ? p.upDown * rndy : 0)
+                    + p.upDown * rndy
                 );
                 it.model.position.z = -1 * z - rndz;
                 //if (it.name=='space'||it.name=='wood') debugger;
@@ -1134,7 +1092,6 @@ export class na3D_fileBrowser {
         const curveObject2 = new THREE.Line( geometry2, material2 );
         t.scene.add(curveObject2);
 */
-
         t._tmp = new THREE.Vector3();
         t.animationProgress = { value: 0 };
         t.pathAnimation = gsap.fromTo(
@@ -1144,7 +1101,7 @@ export class na3D_fileBrowser {
             },
             {
                 value: 1,
-                duration: t.animationDuration,
+                duration: 60,
                 overwrite: true,
                 paused: true,
                 onUpdateParams: [ t.animationProgress ],
@@ -1172,10 +1129,15 @@ export class na3D_fileBrowser {
 
                 },
                 onStart() {
+
+                    t.cameraControls.enabled = false;
+
                 },
                 onComplete() {
+
+                    t.cameraControls.enabled = true;
                     t.onresize_postDo(t);
-                }
+                },
             }
         );
 
@@ -1187,7 +1149,7 @@ export class na3D_fileBrowser {
             },
             {
                 value: 1,
-                duration: t.animationDuration,
+                duration: 60,
                 overwrite: true,
                 paused: true,
                 onUpdateParams: [ t.animationProgress2 ],
@@ -1215,10 +1177,15 @@ export class na3D_fileBrowser {
 
                 },
                 onStart() {
+
+                    t.cameraControls.enabled = false;
+
                 },
                 onComplete() {
+
+                    t.cameraControls.enabled = true;
                     t.onresize_postDo(t);
-                }
+                },
             }
         );
 
@@ -1231,7 +1198,7 @@ export class na3D_fileBrowser {
             },
             {
                 value: 1,
-                duration: t.animationDuration,
+                duration: 60,
                 overwrite: true,
                 paused: true,
                 onUpdateParams: [ t.animationProgress3 ],
@@ -1259,10 +1226,15 @@ export class na3D_fileBrowser {
 
                 },
                 onStart() {
+
+                    t.cameraControls.enabled = false;
+
                 },
                 onComplete() {
+
+                    t.cameraControls.enabled = true;
                     t.onresize_postDo(t);
-                }
+                },
             }
         );
 
@@ -1270,45 +1242,14 @@ export class na3D_fileBrowser {
 
             if (!t.started) {
                 t.started = true;
-                //t.cameraControls.enabled = true;
-                t.pathAnimation2.play(0);
-
-
-                t.renderer.domElement.addEventListener ('pointerdown', function (evt) {
-                    /*
-                    const intersects = t.raycaster.intersectObjects (t.s2);
-                    if (intersects[0] && intersects[0].object.type!=='Line') {
-                        t.flyControls.enabled = true;
-                        t.cameraControls.enabled = false;
-                        t.camera.lookAt (t.s2[0].position);
-                        //t.cameraControls._camera.lookAt (t.s2[0].position);
-                        t.cameraControls._camera.position = t.cameraOrigin;
-                    } else {
-                        t.flyControls.enabled = false;
-                        t.cameraControls.enabled = true;
-                        t.camera.lookAt (t.s2[0].position);
-                        t.cameraControls._camera.lookAt (t.s2[0].position);
-                        t.cameraControls._camera.position = t.cameraOrigin;
-                    }*/
-                    t.lookClock = Date.now();
-                });
-                t.renderer.domElement.addEventListener ('pointerup', function (evt) {
-                    /*
-                        t.flyControls.enabled = true;
-                        t.cameraControls.enabled = false;
-                        t.camera.lookAt (t.s2[0].position);
-                        //t.cameraControls._camera.lookAt (t.s2[0].position);
-                        t.cameraControls._camera.position = t.cameraOrigin;
-                    */
-                    t.lookClock = null;
-                });
+                t.pathAnimation.play(0);
             }
-
 
 
             if (!t.dragndrop) {
                 var objs = [];
                 for (var i=0; i<t.items.length; i++) if (t.items[i].model) objs[objs.length] = t.items[i].model;
+
 
                 t.dragndrop = new DragControls( objs, t.camera, t.renderer.domElement );
 
@@ -1319,9 +1260,6 @@ export class na3D_fileBrowser {
                 t.dragndrop.addEventListener( 'dragstart', function ( event ) {
                     if (t.controls) t.controls.dispose();
                     t.cameraControls.enabled = false;
-                    t.flyControls.enabled = false;
-                    t.flyControls.moveState.forward = 0;
-                    t.flyControls.moveState.back = 0;
 
                     t.dragndrop.cube = event.object;
                     t.dragndrop.mouseX = t.mouse.layerX;
@@ -1371,7 +1309,7 @@ export class na3D_fileBrowser {
 
                 t.dragndrop.addEventListener( 'dragend', function ( event ) {
                     if (t.showLines) t.drawLines(t);
-                    t.flyControls.enabled = true;
+                    t.cameraControls.enabled = true;
                 } );
 
             };
