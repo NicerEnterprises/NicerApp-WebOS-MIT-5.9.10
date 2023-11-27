@@ -36,7 +36,7 @@ import { DragControls } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples
 import { FlyControls } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/controls/FlyControls.js';
 //import { FirstPersonControls} from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/controls/FirstPersonControls.js';
 import gsap from "https://unpkg.com/gsap@3.12.2/index.js";
-import { CameraControls } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/dist_camera-controls.module.js';
+import { CameraControls, approxZero } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/dist_camera-controls.module.js';
 
   import {
     CSS2DRenderer,
@@ -311,7 +311,7 @@ export class na3D_fileBrowser {
 
         CameraControls.install ({ THREE : THREE });
         t.clock = new THREE.Clock();
-        t.lookClock = null;
+        t.lookClock = false;
         //t.orbitControls = new OrbitControls( t.camera, t.renderer.domElement );
         //t.orbitControls.enabled = false;
         //t.controls.listenToKeyEvents( window ); // optional
@@ -344,12 +344,15 @@ export class na3D_fileBrowser {
             t.camera.matrixWorldAutoUpdate = true;
 
             if (t.lookClock) {
-                var delta2 = Date.now() - 1000;
+                var delta2 = Date.now() - 2000;
+                //console.log ('animate(): delta2', delta2 > t.lookClock);
             };
             if (t.lookClock && delta2 > t.lookClock) {
+                console.log ('t.flyControls enabled');
                 t.flyControls.enabled = true;
                 t.cameraControls.enabled = true;
             } else {
+                console.log ('t.flyControls disabled');
                 t.flyControls.enabled = false;
                 t.cameraControls.enabled = true;
             }
@@ -374,6 +377,27 @@ export class na3D_fileBrowser {
                         false
                     );
                 }
+                    var dbg = {
+                        't.cameraControls.deltaX' : t.cameraControls.deltaX,
+                        't.cameraControls.deltaY' : t.cameraControls.deltaY,
+                        'approxZero(t.cameraControls.deltaX)' : approxZero(t.cameraControls.deltaX),
+                        'approxZero(t.cameraControls.deltaY)' : approxZero(t.cameraControls.deltaY),
+                        //'t.cameraControls._isDragging' : t.cameraControls._isDragging,
+                        //'t.cameraControls._dragNeedsUpdate' : t.cameraControls._dragNeedsUpdate,
+                        't.lookClock' : t.lookClock
+                    };
+                    //console.log (dbg);
+                    if (!t.animPlaying && approxZero(t.cameraControls.deltaX) && approxZero(t.cameraControls.deltaY) && t.lookClock===false) {
+                        console.log ('animate(): t.lookClock set');
+                        t.lookClock = Date.now();
+                    } else if (
+                        !approxZero(t.cameraControls.deltaX)
+                        || !approxZero(t.cameraControls.deltaY)
+                    ) {
+                        console.log ('animate(): t.lookClock disabled');
+                        t.lookClock = false;
+                    }
+
                 t.cameraControls.update(delta, true);
                 //t.camera.lookAt (t.middle.x, t.middle.y, t.middle.z);
             }
@@ -1297,15 +1321,19 @@ export class na3D_fileBrowser {
                         t.cameraControls._camera.lookAt (t.s2[0].position);
                         t.cameraControls._camera.position = t.cameraOrigin;
                     }*/
-                    t.lookClock = Date.now();
+                    //console.log ('pointerdown(): t.lookClock set to null');
+                    //t.lookClock = null;
+                });
+                t.renderer.domElement.addEventListener ('pointermove', function (evt) {
+                    var dbg = {
+                        't.cameraControls._isDragging' : t.cameraControls._isDragging,
+                        't.cameraControls._dragNeedsUpdate' : t.cameraControls._dragNeedsUpdate,
+                        't.lookClock' : t.lookClock
+                    };
+//console.log (dbg);
                 });
                 t.renderer.domElement.addEventListener ('pointerup', function (evt) {
-                    t.lookClock = null;
-                    t.cameraControls.setPosition (
-                        t.flyControls.object.position.x,
-                        t.flyControls.object.position.y,
-                        t.flyControls.object.position.z
-                    );
+                    t.lookClock = false;
                 });
             }
 
