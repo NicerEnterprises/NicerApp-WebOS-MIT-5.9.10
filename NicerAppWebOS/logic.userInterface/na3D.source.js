@@ -344,15 +344,15 @@ export class na3D_fileBrowser {
             t.camera.matrixWorldAutoUpdate = true;
 
             if (t.lookClock) {
-                var delta2 = Date.now() - 2000;
+                var delta2 = Date.now() - 1000;
                 //console.log ('animate(): delta2', delta2 > t.lookClock);
             };
             if (t.lookClock && delta2 > t.lookClock) {
-                console.log ('t.flyControls enabled');
+                //console.log ('t.flyControls enabled');
                 t.flyControls.enabled = true;
                 t.cameraControls.enabled = true;
             } else {
-                console.log ('t.flyControls disabled');
+                //console.log ('t.flyControls disabled');
                 t.flyControls.enabled = false;
                 t.cameraControls.enabled = true;
             }
@@ -377,26 +377,47 @@ export class na3D_fileBrowser {
                         false
                     );
                 }
-                    var dbg = {
-                        't.cameraControls.deltaX' : t.cameraControls.deltaX,
-                        't.cameraControls.deltaY' : t.cameraControls.deltaY,
-                        'approxZero(t.cameraControls.deltaX)' : approxZero(t.cameraControls.deltaX),
-                        'approxZero(t.cameraControls.deltaY)' : approxZero(t.cameraControls.deltaY),
-                        //'t.cameraControls._isDragging' : t.cameraControls._isDragging,
-                        //'t.cameraControls._dragNeedsUpdate' : t.cameraControls._dragNeedsUpdate,
-                        't.lookClock' : t.lookClock
-                    };
-                    //console.log (dbg);
-                    if (!t.animPlaying && approxZero(t.cameraControls.deltaX) && approxZero(t.cameraControls.deltaY) && t.lookClock===false) {
-                        console.log ('animate(): t.lookClock set');
-                        t.lookClock = Date.now();
-                    } else if (
-                        !approxZero(t.cameraControls.deltaX)
-                        || !approxZero(t.cameraControls.deltaY)
-                    ) {
-                        console.log ('animate(): t.lookClock disabled');
-                        t.lookClock = false;
-                    }
+                var dbg = {
+                    't.cameraControls.deltaX' : t.cameraControls.deltaX,
+                    't.cameraControls.deltaY' : t.cameraControls.deltaY,
+                    'approxZero(t.cameraControls.deltaX)' : approxZero(t.cameraControls.deltaX),
+                    'approxZero(t.cameraControls.deltaY)' : approxZero(t.cameraControls.deltaY),
+                    //'t.cameraControls._isDragging' : t.cameraControls._isDragging,
+                    //'t.cameraControls._dragNeedsUpdate' : t.cameraControls._dragNeedsUpdate,
+                    't.lookClock' : t.lookClock
+                };
+                //console.log (dbg);
+                var threshold = 1;
+                if (
+                    !t.animPlaying
+                    && (
+                        (
+                            t.cameraControls.deltaX > -1 * threshold
+                            && t.cameraControls.deltaX < threshold
+                        ) || (
+                            t.cameraControls.deltaY > -1 * threshold
+                            && t.cameraControls.deltaY < threshold
+                        )
+                    )
+                    && t.lookClock===false
+                ) {
+                    console.log ('animate(): t.lookClock set');
+                    t.lookClock = Date.now();
+                } else if (
+                    //!approxZero(t.cameraControls.deltaX)
+                    //|| !approxZero(t.cameraControls.deltaY)
+                        t.cameraControls._isUserControllingDolly
+                        || (
+                            t.cameraControls.deltaX < -1 * threshold
+                            || t.cameraControls.deltaX > threshold
+                        ) || (
+                            t.cameraControls.deltaY < -1 * threshold
+                            || t.cameraControls.deltaY > threshold
+                        )
+                ) {
+                    console.log ('animate(): t.lookClock disabled');
+                    t.lookClock = false;
+                }
 
                 t.cameraControls.update(delta, true);
                 //t.camera.lookAt (t.middle.x, t.middle.y, t.middle.z);
@@ -1330,7 +1351,7 @@ export class na3D_fileBrowser {
                         't.cameraControls._dragNeedsUpdate' : t.cameraControls._dragNeedsUpdate,
                         't.lookClock' : t.lookClock
                     };
-//console.log (dbg);
+                    //console.log (dbg);
                 });
                 t.renderer.domElement.addEventListener ('pointerup', function (evt) {
                     t.lookClock = false;
