@@ -373,8 +373,6 @@ export class na3D_fileBrowser {
                         tar.z,
                         false
                     );
-                } else {
-                    t.cameraControls.update(delta, t.animPlaying);
                 }
                 t.cameraControls.update(delta, true);
                 //t.camera.lookAt (t.middle.x, t.middle.y, t.middle.z);
