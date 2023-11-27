@@ -362,20 +362,22 @@ export class na3D_fileBrowser {
             }
             if (t.cameraControls.enabled) {
                 if (t.flyControls.enabled) {
+                    var tar = t.cameraControls._targetEnd.clone();
+                    tar.set(0,0,-10).applyQuaternion(t.camera.quaternion).add(t.camera.position);
                     t.cameraControls.setLookAt (
                         t.flyControls.object.position.x,
                         t.flyControls.object.position.y,
                         t.flyControls.object.position.z,
-                        //scope.object._target.x,
-                        //scope.object._target.y,
-                        //scope.object._target.z,
-                        t.cameraControls._target.x,
-                        t.cameraControls._target.y,
-                        t.cameraControls._target.z,
+                        tar.x,
+                        tar.y,
+                        tar.z,
                         false
                     );
+                } else {
+                    t.cameraControls.update(delta, t.animPlaying);
                 }
-                t.cameraControls.update(delta);
+                t.cameraControls.update(delta, true);
+                //t.camera.lookAt (t.middle.x, t.middle.y, t.middle.z);
             }
             //t.fpControls.update(0.3);
 
@@ -1022,15 +1024,16 @@ export class na3D_fileBrowser {
         };
         var
         tf = t.winners.behind + Math.round((t.winners.behind - t.winners.front) / 2),
-        middle = {
-            x : Math.round((t.winners.west + t.winners.east) / 2),
-            y : Math.round((t.winners.north + t.winners.south) / 2),
-            z : Math.round((t.winners.front + t.winners.behind) /2)
-        },
         ol = 5000,
         numPoints = 360,
         radius = 25*1000;
-        console.log ('t778', t.winners, middle);
+        t.middle = {
+            x : Math.round((t.winners.west + t.winners.east) / 2),
+            y : Math.round((t.winners.north + t.winners.south) / 2),
+            z : Math.round((t.winners.front + t.winners.behind) /2)
+        };
+
+        console.log ('t778', t.winners, t.middle);
 
 
         t.curve1b = new THREE.CatmullRomCurve3( [
@@ -1068,7 +1071,7 @@ export class na3D_fileBrowser {
             x = radius * Math.cos (2 * Math.PI * i / numPoints),
             y = radius * Math.sin (2 * Math.PI * i / numPoints),
             z = 1.4 * radius;
-            z = middle.z - (radius * Math.sin (2 * Math.PI * i / numPoints) / 2);
+            z = t.middle.z - (radius * Math.sin (2 * Math.PI * i / numPoints) / 2);
             if (i===0) var first = {x:x,y:y,z:z};
             if (i===numPoints-1) var last = {x:x,y:y,z:z};
             t.curves2b.push (new THREE.Vector3(x,y,z));
@@ -1096,7 +1099,7 @@ export class na3D_fileBrowser {
             x = radius * Math.cos (2 * Math.PI * i / numPoints),
             y = radius * Math.sin (2 * Math.PI * i / numPoints),
             z = 1.4 * radius;
-            z = middle.z - (radius * Math.sin (2 * Math.PI * i / numPoints) / 2);
+            z = t.middle.z - (radius * Math.sin (2 * Math.PI * i / numPoints) / 2);
             if (i===0) var first = {x:x,y:y,z:z};
             if (i===numPoints-1) var last = {x:x,y:y,z:z};
             t.curves3b.push (new THREE.Vector3(x,y,z));
@@ -1156,9 +1159,9 @@ export class na3D_fileBrowser {
                     const cameraX = t._tmp.x;
                     const cameraY = t._tmp.y;
                     const cameraZ = t._tmp.z;
-                    const lookAtX = middle.x;
-                    const lookAtY = middle.y;
-                    const lookAtZ = middle.z;
+                    const lookAtX = t.middle.x;
+                    const lookAtY = t.middle.y;
+                    const lookAtZ = t.middle.z;
 
                     t.cameraControls.setLookAt(
                         cameraX,
@@ -1172,8 +1175,10 @@ export class na3D_fileBrowser {
 
                 },
                 onStart() {
+                    t.animPlaying = true;
                 },
                 onComplete() {
+                    t.animPlaying = false;
                     t.onresize_postDo(t);
                 }
             }
@@ -1199,9 +1204,9 @@ export class na3D_fileBrowser {
                     const cameraX = t._tmp.x;
                     const cameraY = t._tmp.y;
                     const cameraZ = t._tmp.z;
-                    const lookAtX = middle.x;
-                    const lookAtY = middle.y;
-                    const lookAtZ = middle.z;
+                    const lookAtX = t.middle.x;
+                    const lookAtY = t.middle.y;
+                    const lookAtZ = t.middle.z;
 
                     t.cameraControls.setLookAt(
                         cameraX,
@@ -1215,8 +1220,10 @@ export class na3D_fileBrowser {
 
                 },
                 onStart() {
+                    t.animPlaying = true;
                 },
                 onComplete() {
+                    t.animPlaying = false;
                     t.onresize_postDo(t);
                 }
             }
@@ -1243,9 +1250,9 @@ export class na3D_fileBrowser {
                     const cameraX = t._tmp.x;
                     const cameraY = t._tmp.y;
                     const cameraZ = t._tmp.z;
-                    const lookAtX = middle.x;
-                    const lookAtY = middle.y;
-                    const lookAtZ = middle.z;
+                    const lookAtX = t.middle.x;
+                    const lookAtY = t.middle.y;
+                    const lookAtZ = t.middle.z;
 
                     t.cameraControls.setLookAt(
                         cameraX,
@@ -1259,8 +1266,10 @@ export class na3D_fileBrowser {
 
                 },
                 onStart() {
+                    t.animPlaying = true;
                 },
                 onComplete() {
+                    t.animPlaying = false;
                     t.onresize_postDo(t);
                 }
             }
@@ -1293,14 +1302,12 @@ export class na3D_fileBrowser {
                     t.lookClock = Date.now();
                 });
                 t.renderer.domElement.addEventListener ('pointerup', function (evt) {
-                    /*
-                        t.flyControls.enabled = true;
-                        t.cameraControls.enabled = false;
-                        t.camera.lookAt (t.s2[0].position);
-                        //t.cameraControls._camera.lookAt (t.s2[0].position);
-                        t.cameraControls._camera.position = t.cameraOrigin;
-                    */
                     t.lookClock = null;
+                    t.cameraControls.setPosition (
+                        t.flyControls.object.position.x,
+                        t.flyControls.object.position.y,
+                        t.flyControls.object.position.z
+                    );
                 });
             }
 
