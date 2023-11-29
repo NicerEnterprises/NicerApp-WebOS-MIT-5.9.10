@@ -267,6 +267,31 @@ function checkForJSONerrors($rawData, $filepath, $exampleFilepath) {
     return true;
 }
 
+function translate_plainUserName_to_couchdbUserName ($un) {
+    global $naWebOS;
+    $dn = $naWebOS->domainForDB;
+    $un = str_replace($dn.'___', '', $un);
+    return $dn.'___'.str_replace('.','__',str_replace(' ', '_', $un));
+}
+function translate_couchdbUserName_to_plainUserName ($un) {
+    $un = preg_replace('/.*___/','', $un);
+    return str_replace('_',' ',str_replace('__', '.', $un));
+}
+
+function translate_plainGroupName_to_couchdbGroupName ($gn) {
+    global $naWebOS;
+    $dn = $naWebOS->domainForDB;
+    //echo '<pre style="color:red">'; var_dump ($dn); echo '</pre>';
+    $gn = str_replace($dn.'___', '', $gn);
+    //echo '<pre style="color:purple">'; var_dump ($dn); echo '</pre>';
+    return $dn.'___'.str_replace('.','__',str_replace(' ', '_', $gn));
+}
+function translate_couchdbGroupName_to_plainGroupName ($gn) {
+    $gn = preg_replace('/.*___/','', $gn);
+    return str_replace('_',' ',str_replace('__', '.', $gn));
+}
+
+
 function cdb_login($cdb, $cRec, $username) {
     //echo '$_COOKIE=<pre>';var_dump($_COOKIE);echo '</PRE>';
     $fncn = '.../NicerAppWebOS/functions.php::cdb_login()';
@@ -315,26 +340,31 @@ function cdb_login($cdb, $cRec, $username) {
                         'roles' => $cdb_session->body->userCtx->roles
                     ];
                 } else {
-                    $cdb->login ($cRec['username'], $cRec['password']);
+                    $cdb->login ($cRec['username'], $cRec['password'], Sag:$AUTH_COOKIE);
                     //if ($cRec['username']!=='Guest') trigger_error ('Session cookie expired. You have been logged in as \''.$cRec['username'].'\'', E_USER_WARNING);
                     //echo '<pre>'; var_dump ($cdb->getSession()); exit();
-                    $cdb_session = $cdb->getSession();
-                    return [
-                        'username' => $cdb_session->body->userCtx->name,
-                        'roles' => $cdb_session->body->userCtx->roles
-                    ];
+                    if (
+                        is_object($cdb_session)
+                        && $cdb_session->body->ok
+                        && !is_null($cdb_session->body->userCtx->name)
+                    ) {
+                        $done = true;
+                        $_SESSION['cdb_loginName'] = $cdb_session->body->userCtx->name;
+                                    //var_dump ('t1:'.$_SESSION['cdb_loginName']);
 
+                        return [
+                            'username' => $cdb_session->body->userCtx->name,
+                            'roles' => $cdb_session->body->userCtx->roles
+                        ];
+                    }
                 }
             //}
-        }
-
-        if (
+        } elseif (
             is_array($_COOKIE)
             && array_key_exists('AuthSession',$_COOKIE)
             && is_string($_COOKIE['AuthSession'])
             && $_COOKIE['AuthSession']!==''
         ) {
-            var_dump (123);
             $r = $cdb->loginByCookie ($_COOKIE['AuthSession']);
             //echo '<pre>'; var_dump ($r); exit();
             //if (!is_null($r)) {
@@ -349,8 +379,8 @@ function cdb_login($cdb, $cRec, $username) {
                     'roles' => $cdb_session->body->userCtx->roles
                 ];
             } else {
-                //echo 't55:'; var_dump ($cRec);
-                cdb_login ($cRec['username'], $cRec['password'], Sag::AUTH_COOKIE);
+                echo 't55:'; var_dump ($cRec);
+                cdb_login ($cRec['username'], $cRec['password'], Sag::$AUTH_COOKIE);
                 $cdb_session = $cdb->getSession();
                 if (is_object($cdb_session) && $cdb_session->body->ok) {
                     $done = true;
