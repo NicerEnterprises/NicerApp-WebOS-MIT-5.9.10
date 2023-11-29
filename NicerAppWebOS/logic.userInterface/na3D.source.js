@@ -121,7 +121,8 @@ export class na3D_fileBrowser {
         t.ld1 = {}; //levelDataOne
         t.ld2 = {}; //levelDataTwo
 
-
+        delete na.site.settings.current.running_loadContent;
+        delete na.site.settings.current.running_loadTheme;
         
         t.items = [ {
             name : 'backgrounds',
@@ -163,16 +164,6 @@ export class na3D_fileBrowser {
         
         el.appendChild( t.renderer.domElement );
 
-        if (false) {
-            const sphere1 = new THREE.Mesh(
-                new THREE.SphereGeometry(1, 300, 300),
-                new THREE.MeshNormalMaterial({wireframe: true})
-            );
-            debugger;
-            t.scene.add (sphere1);
-
-            alert ('2023-07-17 07:01am CET : This app is currently being improved. It might be a bit buggy over the course of the next week.');
-        }
 
         $(t.renderer.domElement).bind('mousemove', function() {
             //event.preventDefault(); 
@@ -311,7 +302,7 @@ export class na3D_fileBrowser {
 
         CameraControls.install ({ THREE : THREE });
         t.clock = new THREE.Clock();
-        t.lookClock = false;
+        t.lookClock = -1;
         //t.orbitControls = new OrbitControls( t.camera, t.renderer.domElement );
         //t.orbitControls.enabled = false;
         //t.controls.listenToKeyEvents( window ); // optional
@@ -323,6 +314,7 @@ export class na3D_fileBrowser {
         t.flyControls.movementSpeed = 3000;
         t.flyControls.dragToLook = true;
         t.flyControls.rollSpeed = Math.PI / 24;
+        t.flyControls.autoMove = true;
         //t.fpControls = new FirstPersonControls (t.camera, t.renderer.domElement);
         t.camera.lookAt (t.s2[0].position);
         t.cameraControls._camera.lookAt (t.s2[0].position);
@@ -331,7 +323,7 @@ export class na3D_fileBrowser {
     }
     
     animate(t, evt) {
-        requestAnimationFrame( function(evt) { t.animate (t,evt) } );
+        requestAnimationFrame( function(evt) { setTimeout (function() { t.animate (t,evt) }, 500) });
         //if (t.mouse.x!==0 || t.mouse.y!==0) {
 
             for (var i=0; i<t.s2.length; i++) {
@@ -343,28 +335,58 @@ export class na3D_fileBrowser {
             t.scene.matrixWorldAutoUpdate = true;;
             t.camera.matrixWorldAutoUpdate = true;
 
-            if (t.lookClock) {
+            console.log ('t.lookClock', t.lookClock);
+            if (t.lookClock === -2) {
+                t.lookClock = Date.now() - 1000;
+            }
+            if (t.lookClock > 0) {
                 var delta2 = Date.now() - 1000;
                 //console.log ('animate(): delta2', delta2 > t.lookClock);
             };
-            if (t.lookClock && delta2 > t.lookClock) {
-                //console.log ('t.flyControls enabled');
+            if (t.lookClock > 0 && delta2 > t.lookClock) {
+                console.log ('t.flyControls.enabled, t.cameraControls.disabled');
                 t.flyControls.enabled = true;
-                t.cameraControls.enabled = true;
+                t.cameraControls.enabled = false;
             } else {
-                //console.log ('t.flyControls disabled');
+                console.log ('t.flyControls.disabled, t.cameraControls.enabled');
                 t.flyControls.enabled = false;
                 t.cameraControls.enabled = true;
             }
 
             const delta = t.clock.getDelta();
             //if (t.orbitControls.enabled)  t.orbitControls.update(delta);
+            var dbg = {
+                    't.cameraControls.deltaX' : t.cameraControls.deltaX,
+                    't.cameraControls.deltaY' : t.cameraControls.deltaY
+                };
+                console.log (dbg);
+var threshold = 1;
+/*
+                        if (
+                            !t.cameraControls._isUserControllingTruck
+                            /*&& (
+                                t.cameraControls.deltaX < -1 * threshold
+                                || t.cameraControls.deltaX > threshold
+                            ) || (
+                                t.cameraControls.deltaY < -1 * threshold
+                                || t.cameraControls.deltaY > threshold
+                            )* /
+                        ) {
+                            t.lookClock = -1;
+                            t.flyControls.enabled = false;
+                            t.cameraControls.enabled = true;
+                        }
+*/
+
             if (t.flyControls.enabled) {
+                console.log ('animate() : calling t.flyControls.update()');
                 t.flyControls.update(delta)
                 t.flyControls.updateMovementVector();
             }
+
             if (t.cameraControls.enabled) {
                 if (t.flyControls.enabled) {
+                    console.log ('animate() : setting t.cameraControls.setLookAt()');
                     var tar = t.cameraControls._targetEnd.clone();
                     tar.set(0,0,-10).applyQuaternion(t.camera.quaternion).add(t.camera.position);
                     t.cameraControls.setLookAt (
@@ -377,57 +399,84 @@ export class na3D_fileBrowser {
                         false
                     );
                 }
-                var dbg = {
-                    't.cameraControls.deltaX' : t.cameraControls.deltaX,
-                    't.cameraControls.deltaY' : t.cameraControls.deltaY,
-                    'approxZero(t.cameraControls.deltaX)' : approxZero(t.cameraControls.deltaX),
-                    'approxZero(t.cameraControls.deltaY)' : approxZero(t.cameraControls.deltaY),
-                    //'t.cameraControls._isDragging' : t.cameraControls._isDragging,
-                    //'t.cameraControls._dragNeedsUpdate' : t.cameraControls._dragNeedsUpdate,
-                    't.lookClock' : t.lookClock
-                };
-                //console.log (dbg);
-                var threshold = 1;
-                if (
-                    !t.animPlaying
-                    && (
-                        (
-                            t.cameraControls.deltaX > -1 * threshold
-                            && t.cameraControls.deltaX < threshold
-                        ) || (
-                            t.cameraControls.deltaY > -1 * threshold
-                            && t.cameraControls.deltaY < threshold
-                        )
-                    )
-                    && t.lookClock===false
-                ) {
-                    console.log ('animate(): t.lookClock set');
-                    t.lookClock = Date.now();
-                } else if (
-                    //!approxZero(t.cameraControls.deltaX)
-                    //|| !approxZero(t.cameraControls.deltaY)
-                        t.cameraControls._isUserControllingDolly
-                        || (
-                            t.cameraControls.deltaX < -1 * threshold
-                            || t.cameraControls.deltaX > threshold
-                        ) || (
-                            t.cameraControls.deltaY < -1 * threshold
-                            || t.cameraControls.deltaY > threshold
-                        )
-                ) {
-                    console.log ('animate(): t.lookClock disabled');
-                    t.lookClock = false;
-                }
-
+                console.log ('animate() : calling t.cameraControls.update()');
+                //if (t.cameraControls._isUserControllingTruck) debugger;
                 t.cameraControls.update(delta, true);
                 //t.camera.lookAt (t.middle.x, t.middle.y, t.middle.z);
             }
             //t.fpControls.update(0.3);
 
+            var dbg = {
+                    't.cameraControls.deltaX' : t.cameraControls.deltaX,
+                    't.cameraControls.deltaY' : t.cameraControls.deltaY,
+                    'iuct' : t.cameraControls._isUserControllingTruck,
+                    'fce' : t.flyControls.enabled,
+                    'cce' : t.cameraControls.enabled,
+                    't.lookClock' : t.lookClock
+                };
+                //console.log (dbg);
+                /*
+                var threshold = 1;
+                if (
+                    !t.animPlaying
+                    && (
+                        !t.cameraControls._isUserControllingTruck
+                        && (
+                            t.cameraControls.deltaX > -1 * threshold
+                            && t.cameraControls.deltaX < threshold
+                        ) && (
+                            t.cameraControls.deltaY > -1 * threshold
+                            && t.cameraControls.deltaY < threshold
+                        )
+                    )
+                     && t.lookClock===-1
+                ) {
+                    console.log ('animate(): t.lookClock set');
+                    //debugger;
+                    t.lookClock = Date.now();
+                } else*/ //else if (
+                        if (
+                            //!t.cameraControls._isUserControllingTruck
+                             (
+                                t.cameraControls.deltaX < -1 * threshold
+                                || t.cameraControls.deltaX > threshold
+                            ) || (
+                                t.cameraControls.deltaY < -1 * threshold
+                                || t.cameraControls.deltaY > threshold
+                            )
+                        ) {
+                            console.log ('animate(): t.lookClock===-1, flyControls.enabled==false');
+                            t.lookClock = -1;
+                            t.flyControls.enabled = false;
+                        } //else {
+                            console.log ('animate(): cameraControls.enabled==true');
+                            t.cameraControls.enabled = true;
+                        //}
+                    var intersects = t.raycaster.intersectObjects (t.s2);
+                    console.log ('pointerdown(): t.lookClock set to -1');
+                    //t.lookClock = null;
+                    t.lookClock = -1;
+                    if (intersects[0] && intersects[0].object.type!=='Line') {
+                        t.cameraControls.enabled= false;
+                        t.flyControls.enabled = false;
+                        console.log ('pointerdown()',t.cameraControls.enabled, t.flyControls.enabled);
+                            //t.camera.lookAt (t.s2[0].position);
+                            //t.cameraControls._camera.lookAt (t.s2[0].position);
+                            //t.cameraControls._camera.position = t.cameraOrigin;
+                    } else {
+                        t.cameraControls.enabled= false;
+                        t.flyControls.enabled = true;
+                        console.log ('pointerdown()',t.cameraControls.enabled, t.flyControls.enabled);
+                        t.lookClock = Date.now();
+                            //t.camera.lookAt (t.s2[0].position);
+                            //t.cameraControls._camera.lookAt (t.s2[0].position);
+                            //t.cameraControls._camera.position = t.cameraOrigin;
+                    }
+
             t.camera.updateProjectionMatrix();
             t.camera.updateWorldMatrix (true, false);
 
-            const intersects = t.raycaster.intersectObjects (t.s2);
+            var intersects = t.raycaster.intersectObjects (t.s2);
             if (intersects[0] && intersects[0].object.type!=='Line') 
             for (var i=0; i<1/*intersects.length <-- this just gets an endless series of hits from camera into the furthest reaches of what's visible behind the mouse pointer */; i++) {
                 var hoveredItem = intersects[i].object, done = false;
@@ -627,7 +676,6 @@ export class na3D_fileBrowser {
     }
     
     onMouseWheel( event, t ) {
-        debugger;
     }
 
     onclick (t, event) {
@@ -1264,6 +1312,8 @@ export class na3D_fileBrowser {
                 },
                 onStart() {
                     t.animPlaying = true;
+                    t.flyControls.enabled = false;
+                    t.cameraControls.enabled = false;
                 },
                 onComplete() {
                     t.animPlaying = false;
@@ -1327,23 +1377,25 @@ export class na3D_fileBrowser {
 
 
                 t.renderer.domElement.addEventListener ('pointerdown', function (evt) {
-                    /*
-                    const intersects = t.raycaster.intersectObjects (t.s2);
-                    if (intersects[0] && intersects[0].object.type!=='Line') {
-                        t.flyControls.enabled = true;
-                        t.cameraControls.enabled = false;
-                        t.camera.lookAt (t.s2[0].position);
-                        //t.cameraControls._camera.lookAt (t.s2[0].position);
-                        t.cameraControls._camera.position = t.cameraOrigin;
-                    } else {
-                        t.flyControls.enabled = false;
-                        t.cameraControls.enabled = true;
-                        t.camera.lookAt (t.s2[0].position);
-                        t.cameraControls._camera.lookAt (t.s2[0].position);
-                        t.cameraControls._camera.position = t.cameraOrigin;
-                    }*/
-                    //console.log ('pointerdown(): t.lookClock set to null');
+                    /*const intersects = t.raycaster.intersectObjects (t.s2);
+                    console.log ('pointerdown(): t.lookClock set to -1');
                     //t.lookClock = null;
+                    t.lookClock = -1;
+                    if (intersects[0] && intersects[0].object.type!=='Line') {
+                    t.cameraControls.enabled= false;
+                    t.flyControls.enabled = false;
+                        console.log ('pointerdown()',t.cameraControls.enabled, t.flyControls.enabled);
+                        //t.camera.lookAt (t.s2[0].position);
+                        //t.cameraControls._camera.lookAt (t.s2[0].position);
+                        //t.cameraControls._camera.position = t.cameraOrigin;
+                    } else {
+                    t.cameraControls.enabled= false;
+                    t.flyControls.enabled = true;
+                        console.log ('pointerdown()',t.cameraControls.enabled, t.flyControls.enabled);
+                        //t.camera.lookAt (t.s2[0].position);
+                        //t.cameraControls._camera.lookAt (t.s2[0].position);
+                        //t.cameraControls._camera.position = t.cameraOrigin;
+                    }*/
                 });
                 t.renderer.domElement.addEventListener ('pointermove', function (evt) {
                     var dbg = {
@@ -1354,13 +1406,16 @@ export class na3D_fileBrowser {
                     //console.log (dbg);
                 });
                 t.renderer.domElement.addEventListener ('pointerup', function (evt) {
-                    t.lookClock = false;
+                    console.log ('pointerup() t.lookClock === -1, t.cameraControls.enabled');
+                    t.lookClock = -1;
+                    t.cameraControls.enabled = true;
                 });
             }
 
 
 
             if (!t.dragndrop) {
+                console.log ('Initializing drag and drop');
                 var objs = [];
                 for (var i=0; i<t.items.length; i++) if (t.items[i].model) objs[objs.length] = t.items[i].model;
 
@@ -1371,7 +1426,7 @@ export class na3D_fileBrowser {
                 });
 
                 t.dragndrop.addEventListener( 'dragstart', function ( event ) {
-                    if (t.controls) t.controls.dispose();
+                    console.log ('dragstart() : init');;
                     t.cameraControls.enabled = false;
                     t.flyControls.enabled = false;
                     t.flyControls.moveState.forward = 0;
@@ -1392,6 +1447,7 @@ export class na3D_fileBrowser {
                             it2.model.position.dragStartZ = it2.model.position.z;
                         }
                     }
+
                 } );
 
                 t.dragndrop.addEventListener( 'drag', function (event) {
@@ -1406,10 +1462,13 @@ export class na3D_fileBrowser {
                             it2.model.position.z = cube.position.z;
                         }
                     }
+                    /*
                     clearTimeout (t.posDataToDB);
                     t.posDataToDB = setTimeout(function() {
                         t.posDataToDatabase(t);
-                    }, 1000);
+                    },
+                    1000);
+                    */
 
                     if (t.showLines) {
                         for (var i=0; i<t.permaLines.length; i++) {
@@ -1425,7 +1484,9 @@ export class na3D_fileBrowser {
 
                 t.dragndrop.addEventListener( 'dragend', function ( event ) {
                     if (t.showLines) t.drawLines(t);
-                    t.flyControls.enabled = true;
+                    t.lookClock = -2;
+                    t.cameraControls.enabled = false;
+                    //t.flyControls.enabled = true;
                 } );
 
             };
