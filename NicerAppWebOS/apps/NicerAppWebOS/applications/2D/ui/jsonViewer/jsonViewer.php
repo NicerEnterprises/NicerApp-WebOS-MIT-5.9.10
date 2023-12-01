@@ -73,7 +73,7 @@ function jsonViewer_dump ($var, $title, $options=null, $outputSettings=array('di
 	);
 	json_encode_xxl_output ('<div id="'.$htmlID.'" class="jsonViewer hm hmPreInit">', $outputSettings);
 	json_encode_xxl_output ('<div id="'.$htmlID.'_hmPreInit" class="hmPreInit">', $outputSettings);
-	json_encode_xxl_output ('<div id="'.$htmlID.'_titleSpan" class="hmPItitle"><a href="http://seductiveapps.com/jsonViewer/">jsonViewer</a> '.$title.'</div> ', $outputSettings);
+	json_encode_xxl_output ('<div id="'.$htmlID.'_titleSpan" class="hmPItitle"><a href="https://nicer.app/">jsonViewer</a> '.$title.'</div> ', $outputSettings);
 	if (2==1) {
 		$b = strlen(serialize($var)); //i suspect serialize to be slow and prone to memory hogging.
 		json_encode_xxl_output ('<div id="'.$htmlID.'_dataSize" class="hmPIdataSize">Receiving '.$b.' bytes, '.filesizeHumanReadable($b).' of data.<br/><br/></div>', $outputSettings);

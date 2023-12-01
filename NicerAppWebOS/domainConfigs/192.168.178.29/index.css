@@ -10,6 +10,7 @@ html, body {
     left : 0px;
     width : 100%;
     height : 100%;
+    color : black;
 }
 body {
     overflow : hidden;
@@ -30,6 +31,9 @@ h1, h2, h3, h4, h5 {
     height : 100%;
 }
 
+.btnOptions_menu__label__specificity_dropdown, .btnOptions_menu__label__themes_dropdown, .changeBackgroundsAutomatically_label, #myForm p, .btnOptions_menu__backgroundTimeSettingsChanged_save__containerDiv div label, .smallPadding  {
+    color : white;
+}
 
 .verticalSpacer { /* thanks go to : https://tobiasahlin.com/blog/flexbox-break-to-new-row/ */
   flex-basis: 100%;
@@ -46,6 +50,10 @@ justify-content : left;
 align-items : center;
 width : fit-content;
 margin : 5px !important;
+}
+ol.todoList > li > div, ol.todoList_l1 > li > div, ol.todoList_l2 > li > div,
+ul.todoList > li > div, ul.todoList_l1 > li > div, ul.todoList_l2 > li > div {
+padding : 8px !important;
 }
 body {
     counter-reset : step-counter step-counter-l1 step-counter-l2;
@@ -320,6 +328,7 @@ img.bg_last {
 }
 #siteStatusbar .vividDialogContent {
     margin : 5px;
+    padding : 10px;
     margin-left : 15px;
     height : auto;
 }
@@ -466,7 +475,7 @@ body {
 #btnLoginLogout {
     position : absolute;
     opacity : 0.0001;
-    z-index : 500;
+    z-index : 900000;
 }
 #btnChangeBackground {
     position : absolute;
@@ -491,14 +500,14 @@ body {
     position : absolute;
     top : -15px;
     right : 15px;
-    width : 200px;
-    height : 40px;
+    width : 50px;
+    height : 50px;
 }
 .vdTools img {
     position : absolute;
     top : 0px;
-    left : 0px;
-    width : 40px;
+    right : 0px;
+    width : 50px;
     z-index : inherit;
 }
 .sliderOpacityRange {
@@ -855,7 +864,7 @@ body {
     left : calc(50% - 200px);
     top : calc(50% - 125px);
     padding : 15px;
-    z-index : 2000;
+    z-index : 500000;
 }
 #siteRegistration:before { 
     content : '';
@@ -903,10 +912,10 @@ body {
     width : 350px;
     height : auto;
     padding : 15px;
-    z-index : 2500;
+    z-index : 500000;
     text-align : center;
     justify-content : center;
-    overflow:hidden;
+    overflow : hidden;
 }
 #siteLogin input {
     width : calc(100% - 178px);
@@ -2130,4 +2139,10 @@ pre.tv_na_url {
     border-radius:8px;
     background:rgba(0,0,50,0.55);
     box-shadow:inset 2px 2px 4px 3px rgba(0,0,0,0.7);
+}
+
+
+/* vividEditor */
+.vividEditor_toolbar_dropdown {
+    display : inline-block;
 }

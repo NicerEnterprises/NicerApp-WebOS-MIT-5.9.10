@@ -217,7 +217,6 @@ Options +FollowSymLinks
             ##RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_URI} !^/NicerAppWebOS/apps/NicerAppWCS/applications/2D/musicPlayer/music/.*$
     RewriteRule ^view/(.*)$ NicerAppWebOS/index.php?seoValue=$1&%{QUERY_STRING} [L]
-    # https://nicer.app/view/3D-folders?relPath=siteMedia/backgrounds
 
     RewriteCond %{REQUEST_URI} !^/NicerAppWebOS/apps/NicerAppWCS/applications/2D/musicPlayer/music/.*$
     RewriteCond %{HTTP:X-Requested-With} XMLHttpRequest
@@ -600,12 +599,25 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_METHOD} ^(GET)$
 RewriteCond %{HTTP:X-Requested-With} XMLHttpRequest
-RewriteRule ^demo-3D-fileBrowser$ /view-content/eyJcL05pY2VyQXBwV2ViT1NcL2FwcHNcL05pY2VyQXBwV2ViT1NcL2FwcGxpY2F0aW9uc1wvM0RcL2FwcC4zRC5maWxlRXhwbG9yZXIiOnsicGFyYW1ldGVycyI6eyJ0aHVtYm5haWxzIjoiLlwvdGh1bWJzXC8zMDBcLyRmaWxlbmFtZS4kZXh0In0sIlNFT192YWx1ZSI6ImRlbW8tM0QtZmlsZUJyb3dzZXIifX0 [N]
+RewriteRule ^demo-3D-fileBrowser$ /view-content/eyJcL05pY2VyQXBwV2ViT1NcL2FwcHNcL05pY2VyQXBwV2ViT1NcL2FwcGxpY2F0aW9uc1wvM0RcL2FwcC4zRC5maWxlRXhwbG9yZXIiOnsicGFyYW1ldGVycyI6eyJ0aHVtYm5haWxzIjoiLlwvdGh1bWJzXC8zMDBcLyRmaWxlbmFtZS4kZXh0In0sIlNFT192YWx1ZSI6WyJkZW1vLTNELWZpbGVCcm93c2VyIiwiM0QtZGF0YSJdfX0 [N]
 
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_METHOD} ^(GET)$
-RewriteRule ^demo-3D-fileBrowser$ /view/eyJcL05pY2VyQXBwV2ViT1NcL2FwcHNcL05pY2VyQXBwV2ViT1NcL2FwcGxpY2F0aW9uc1wvM0RcL2FwcC4zRC5maWxlRXhwbG9yZXIiOnsicGFyYW1ldGVycyI6eyJ0aHVtYm5haWxzIjoiLlwvdGh1bWJzXC8zMDBcLyRmaWxlbmFtZS4kZXh0In0sIlNFT192YWx1ZSI6ImRlbW8tM0QtZmlsZUJyb3dzZXIifX0 [N]
+RewriteRule ^demo-3D-fileBrowser$ /view/eyJcL05pY2VyQXBwV2ViT1NcL2FwcHNcL05pY2VyQXBwV2ViT1NcL2FwcGxpY2F0aW9uc1wvM0RcL2FwcC4zRC5maWxlRXhwbG9yZXIiOnsicGFyYW1ldGVycyI6eyJ0aHVtYm5haWxzIjoiLlwvdGh1bWJzXC8zMDBcLyRmaWxlbmFtZS4kZXh0In0sIlNFT192YWx1ZSI6WyJkZW1vLTNELWZpbGVCcm93c2VyIiwiM0QtZGF0YSJdfX0 [N]
+
+
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_METHOD} ^(GET)$
+RewriteCond %{HTTP:X-Requested-With} XMLHttpRequest
+RewriteRule ^3D-data$ /view-content/eyJcL05pY2VyQXBwV2ViT1NcL2FwcHNcL05pY2VyQXBwV2ViT1NcL2FwcGxpY2F0aW9uc1wvM0RcL2FwcC4zRC5maWxlRXhwbG9yZXIiOnsicGFyYW1ldGVycyI6eyJ0aHVtYm5haWxzIjoiLlwvdGh1bWJzXC8zMDBcLyRmaWxlbmFtZS4kZXh0In0sIlNFT192YWx1ZSI6WyJkZW1vLTNELWZpbGVCcm93c2VyIiwiM0QtZGF0YSJdfX0 [N]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_METHOD} ^(GET)$
+RewriteRule ^3D-data$ /view/eyJcL05pY2VyQXBwV2ViT1NcL2FwcHNcL05pY2VyQXBwV2ViT1NcL2FwcGxpY2F0aW9uc1wvM0RcL2FwcC4zRC5maWxlRXhwbG9yZXIiOnsicGFyYW1ldGVycyI6eyJ0aHVtYm5haWxzIjoiLlwvdGh1bWJzXC8zMDBcLyRmaWxlbmFtZS4kZXh0In0sIlNFT192YWx1ZSI6WyJkZW1vLTNELWZpbGVCcm93c2VyIiwiM0QtZGF0YSJdfX0 [N]
 
 
 

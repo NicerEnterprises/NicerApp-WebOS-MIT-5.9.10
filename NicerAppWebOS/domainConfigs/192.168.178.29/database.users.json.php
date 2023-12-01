@@ -8,7 +8,7 @@ global $naWebOS;
 //$dn = $naWebOS->domainForDB;
 ?>
 {
-    "admin" : {
+    "<?php echo $naWebOS->ownerInfo['OWNER_NAME'];?>" : {
         "groups" : [
             "Owners",
             "Chief Officers",

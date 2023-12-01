@@ -135,6 +135,7 @@ NicerApp WCS (Website Control System) from Nicer Enterprises
 
     if ($_SERVER['SCRIPT_NAME']=='/NicerAppWebOS/index.php') {
         $_SESSION['started'] = microtime(true);
+        $_SESSION['startedID'] = cdb_randomString(50);
 
         $now = DateTime::createFromFormat('U.u', $_SESSION['started']);
         $now->setTimezone(new DateTimeZone(exec('date +%z')));
@@ -147,12 +148,17 @@ NicerApp WCS (Website Control System) from Nicer Enterprises
             );
         $naBot = stripos($_SERVER['HTTP_USER_AGENT'], 'bot')!==false;
 
-        $_SESSION['na_error_log_filepath_html'] =
-            '/var/www/'.$naWebOS->domain.'/NicerAppWebOS/siteLogs/'
-            .$date.'-'.$appName.'-'.$naIP.($naBot?'-BOT':'').'.html';
-        $_SESSION['na_error_log_filepath_txt'] =
-            '/var/www/'.$naWebOS->domain.'/NicerAppWebOS/siteLogs/'
-            .$date.'-'.$appName.'-'.$naIP.($naBot?'-BOT':'').'.txt';
+        if (!$naBot) {
+            $_SESSION['na_error_log_filepath_html'] =
+                '/var/www/'.$naWebOS->domain.'/NicerAppWebOS/siteLogs/'
+                .$date.'-'.$appName.'-'.$naIP.($naBot?'-BOT':'').'.html';
+            $_SESSION['na_error_log_filepath_txt'] =
+                '/var/www/'.$naWebOS->domain.'/NicerAppWebOS/siteLogs/'
+                .$date.'-'.$appName.'-'.$naIP.($naBot?'-BOT':'').'.txt';
+        } else {
+            $_SESSION['na_error_log_filepath_html'] = null;
+            $_SESSION['na_error_log_filepath_txt'] = null;
+        }
 
         $_SESSION['dbgNum'] = 0;
         $_SESSION['dbgNum2'] = 0;
@@ -209,8 +215,43 @@ NicerApp WCS (Website Control System) from Nicer Enterprises
         '$_POST' => $_POST,
         '$naWebOS->view' => $naWebOS->view
     ];
-    $msg = 'NEW REQUEST :<br/>'.hmJSON($dbg,'$dbg');
-    trigger_error ($msg, E_USER_NOTICE);
+    //$msg = 'NEW REQUEST :<br/>'.hmJSON($dbg,'$dbg');
+
+
+    global $phpScript_startupTime;
+    global $naIP;
+    global $naVersionNumber;
+    $time = microtime(true) - $phpScript_startupTime;
+    //var_dump (dirname(__FILE__).'/errors.css');
+    //date_default_timezone_set('UTC');
+    $dtz = new DateTime('now');//new DateTimeZone(date_default_timezone_get());
+    $dtz_offset = $dtz->getOffset();
+    //$unixTimeStamp = time();//date(DATE_ATOM);//date(DATE_RFC2822);//date('Y-m-d H:i:sa');
+    $timestamp = date(DATE_RFC2822);
+    $err = [
+        's1' => (
+            session_status() === PHP_SESSION_NONE
+            ? microtime(true)
+            : $_SESSION['started']
+        ),
+        's2' => microtime(true),
+        'i' => (
+            session_status() === PHP_SESSION_NONE
+            ? false
+            : $_SESSION['startedID']
+        ),
+        'isIndex' => $_SERVER['SCRIPT_NAME']==='/NicerAppWebOS/index.php',
+        'to' => $dtz_offset,
+        'ts' => $timestamp,
+        'ip' => $naIP,
+        'sid' => session_id(),
+        'nav' => $naVersionNumber,
+        'request' => $dbg,
+        'type' => 'new request'
+    ];
+    global $naLog;
+    $naLog->add ( [ $err ] );
+    //trigger_error ($msg, E_USER_NOTICE);
     //echo '<pre>'; var_dump ($_SERVER); die();
 
     $lanConfigFilepath = realpath(dirname(__FILE__)).'/domainConfigs/'.$naWebOS->domain.'/naLAN.json';

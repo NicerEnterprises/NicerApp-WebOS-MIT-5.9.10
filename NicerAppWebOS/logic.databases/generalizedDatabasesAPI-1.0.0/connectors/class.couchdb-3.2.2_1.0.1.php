@@ -1110,7 +1110,20 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
             'index' => [
                 'fields' => [ 'sid' ]
             ],
-            'name' => 'primaryIndex',
+            'name' => 'sidIndex',
+            'type' => 'json'
+        ];
+        try {
+            $this->cdb->setIndex ($rec);
+        } catch (Exception $e) {
+            if ($this->debug) { echo '<pre style="color:red">'; var_dump ($e); echo '</pre>'; exit(); }
+        }
+
+        $rec = [
+            'index' => [
+                'fields' => [ 's1', 's2' ]
+            ],
+            'name' => 'timeIndex',
             'type' => 'json'
         ];
         try {
@@ -1208,29 +1221,18 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
         $dataSetName = $this->dataSetName('logentries');
         $cdb->setDatabase($dataSetName, false);
 
-        $t = null; $to = null;
-        foreach ($entries[0] as $k => $rec) {
-            $t = $rec['t'];
-            $to = $rec['to'];
-            break;
-        };
-
-        $rec = array(
-            '_id' => cdb_randomString(20),
-            't' => $t,
-            'to' => $to,
-            'entries' => $entries
-        );
-        try {
-            $cdb->post($rec);
-        } catch (Exception $e) {
-            global $naLog; global $naWebOS;
-            /*
-            $naLog->addTo_phpOutput( SEID,
-                $fncn.' : Error while trying to $cdb->post() : $e->getMessage()='.$e->getMessage().', $cdb->getSession()='.json_encode($cdb->getSession()).', $naWebOS->dbs->findConnection(\'couchdb\')->username='.$naWebOS->dbs->findConnection('couchdb')->username
-            );
-            */
-            return false;
+        foreach ($entries as $k => $rec) {
+            try {
+                $cdb->post($rec);
+            } catch (Exception $e) {
+                global $naLog; global $naWebOS;
+                /*
+                $naLog->addTo_phpOutput( SEID,
+                    $fncn.' : Error while trying to $cdb->post() : $e->getMessage()='.$e->getMessage().', $cdb->getSession()='.json_encode($cdb->getSession()).', $naWebOS->dbs->findConnection(\'couchdb\')->username='.$naWebOS->dbs->findConnection('couchdb')->username
+                );
+                */
+                return false;
+            }
         }
         return true;
     }

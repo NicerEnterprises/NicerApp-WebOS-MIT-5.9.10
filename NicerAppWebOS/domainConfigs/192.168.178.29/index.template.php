@@ -6,7 +6,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" style="width:100%;height:100%;">
 <head>
 <!--
-https://nicer.app and https://said.by are Copyrighted (c) 2002-2023 by Rene A.J.M. Veerman from The Netherlands.
+https://nicer.app and https://said.by are Copyrighted (C) and have All Rights Reserved (R) 2002-2023
+by Rene A.J.M. Veerman from The Netherlands.
+
+THIS IS NOW A CLOSED-SOURCE PROJECT.
+SEE THE NEW LICENSE CONTENT FILE ON THE WEBFACING FRONT PAGE OF THIS WEBSITE.
 
 LICENSE : see https://nicer.app/docs-license
 -->
@@ -38,7 +42,6 @@ $(document).ready(function() {
     <link rel="manifest" href="/NicerAppWebOS/favicon/site.webmanifest">
     <link rel="mask-icon" href="/NicerAppWebOS/favicon/safari-pinned-tab.svg" color="#5bbad5">
     <link rel="shortcut icon" href="/NicerAppWebOS/favicon/favicon.ico">
-    <?php echo '<link type="text/css" rel="StyleSheet" href="/NicerAppWebOS/logic.business/errors.css?c='.date('Ymd_His', filemtime(dirname(__FILE__).'/../../../NicerAppWebOS/logic.business/errors.css')).'">'.PHP_EOL; ?>
     <?php echo '<link type="text/css" rel="StyleSheet" href="/NicerAppWebOS/3rd-party/jsTree-3.3.15/dist/themes/default/style.css?c='.date('Ymd_His', filemtime(dirname(__FILE__).'/../../../NicerAppWebOS/3rd-party/jsTree-3.3.15/dist/themes/default/style.css')).'">'.PHP_EOL; ?>
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-config" content="/NicerAppWebOS/favicon/browserconfig.xml">
@@ -61,7 +64,7 @@ $(document).ready(function() {
     </div>
 
     <div id="btnOptions" class="vividButton_icon_50x50_siteTop" tabindex="2"
-        onmouseover="na.site.settings.timeout_btnOptionsMouseOver = setTimeout(function(evt){na.site.onmouseover_btnOptions(event); delete na.site.settings.timeout_btnOptionsMouseOver;},500,event);"
+        onmouseover="na.site.settings.timeout_btnOptionsMouseOver = setTimeout(function(evt){na.site.onmouseover_btnOptions(event); delete na.site.settings.timeout_btnOptionsMouseOver;},300,event);"
         onmouseout="clearTimeout(na.site.settings.timeout_btnOptionsMouseOver);">
         <div class="vividButton_icon_borderCSS_50x50"></div>
         <img class="vividButton_icon_imgBorder_50x50" srcPreload="/NicerAppWebOS/siteMedia/btnCssVividButton_outerBorder.png"/>
@@ -71,7 +74,7 @@ $(document).ready(function() {
     </div>
 
     <div id="btnLoginLogout" class="vividButton_icon_50x50_siteTop" tabindex="3" onclick="na.site.displayLogin(event)"
-        onmouseover="na.site.settings.current.timeout_hide__btnOptions_menu_2 = setTimeout(function() { $('#btnOptions_menu').fadeOut('fast'); }, 1000);"
+        onmouseover="na.site.settings.current.timeout_hide__btnOptions_menu_2 = setTimeout(function() { $('#btnOptions_menu').fadeOut('fast'); }, 300);"
         onmouseout="clearTimeout(na.site.settings.current.timeout_hide__btnOptions_menu_2);">
         <div class="vividButton_icon_borderCSS_50x50"></div>
         <img class="vividButton_icon_imgBorder_50x50" srcPreload="/NicerAppWebOS/siteMedia/btnCssVividButton_outerBorder.png"/>

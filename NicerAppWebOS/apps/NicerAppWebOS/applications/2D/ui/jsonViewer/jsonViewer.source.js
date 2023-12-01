@@ -171,6 +171,7 @@ nicerapp.hms = nicerapp.jsonViewer = {
 					cmd.trace = na.hms.tools.makeTraceHumanReadable(JSON.parse (json));
 					cmd.trace = na.hms.tools.augmentWithStats(cmd.trace, null, 'ROOT-TRACE');
 				} catch (err) {
+					if (json.trim()==='') $('#'+cmd.id+'_longMsg').html('No data was supplied');
 					debugger;
 				};
 			cmd.waits['trace'] = null;
@@ -1226,8 +1227,16 @@ nicerapp.hms = nicerapp.jsonViewer = {
 				pvCmd.buildUpdateCallback (pvCmd);
 			}
 			
+			if (!na.hms.failCounter) na.hms.failCounter = {};
+			if (!na.hms.failCounter[pvCmd.cmd.id]) na.hms.failCounter[pvCmd.cmd.id] = 0;
 			if (!html) {
-				debugger;
+				if (na.hms.failCounter[pvCmd.cmd.id] > 100) {
+					debugger;
+					var html = 'No data found.';
+					$('#'+pvCmd.cmd.id+'_longMsg').html(html);
+					return false;
+				}
+				na.hms.failCounter[pvCmd.cmd.id]++;
                 var html = na.hms.tools.printNextLevel_buildItem (pvCmd);
 				setTimeout (function () {
 					na.hms.tools.printNextLevel_buildList (pvCmd);
@@ -1267,10 +1276,10 @@ nicerapp.hms = nicerapp.jsonViewer = {
 			};
 			var s = p.hms;
 			var id = false;
-			debugger;
 			if (s.realParentID && jQuery('#'+s.realParentID).length>0) id = s.realParentID;
 			else if (s.valueID && jQuery('#'+s.valueID).length>0) id = s.valueID;
 			else if (s.keyID && jQuery('#'+s.keyID).length>0) id = s.keyID;
+			//if (!id) debugger;
 				
 			//na.hms.log (202, 'tools.printNextLevel_buildItem(): pvCmd.buildIdx='+pvCmd.buildIdx+', '+(id!==false?'SUCCESS':'FAIL')+'; '+p+', '+id+' - '+it.html);
 			if (id) {

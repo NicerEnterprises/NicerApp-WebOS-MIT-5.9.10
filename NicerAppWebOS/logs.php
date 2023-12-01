@@ -32,7 +32,7 @@ if (array_key_exists('file', $_GET)) {
 
     //echo '<pre>'; var_dump ($_SERVER); die();
     if (
-        $_SERVER['SCRIPT_FILENAME']!=='/var/www/nicer.app/NicerAppWebOS/index.php'
+        $_SERVER['SCRIPT_FILENAME']!=='/var/www/'.$naWebOS->domain.'/NicerAppWebOS/index.php'
     ) {
         echo $html;
     } else {

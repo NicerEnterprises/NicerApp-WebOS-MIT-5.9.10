@@ -1246,7 +1246,7 @@ na.desktop = {
     },
 
     masterCallback_do : function (div, calculationResults, sectionIdx, section, divOrderIdx) {
-        na.m.log (15, 'na.desktop.masterCallback_do (divID='+div.id+')',false);
+        //na.m.log (15, 'na.desktop.masterCallback_do (divID='+div.id+')',false);
         for (var i=0; i < na.d.s.masterCallbacks.length; i++) {
             var cf = na.d.s.masterCallbacks[i];
             if (!cf) debugger;

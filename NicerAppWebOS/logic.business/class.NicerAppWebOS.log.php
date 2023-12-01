@@ -181,6 +181,7 @@ class class_NicerAppWebOS_log {
         }
 
         global $naLAN;
+        /*
         $fncn = '.../NicerAppWebOS/logic.business/class.NicerAppWebOS.log.php::class_NicerAppWebOS_log->add()';
         $html = '<h2>'.$fncn.'</h2>'.PHP_EOL;
         $html .=
@@ -191,6 +192,7 @@ class class_NicerAppWebOS_log {
         if (
             session_status() === PHP_SESSION_ACTIVE
             && isset($_SESSION['na_error_log_filepath_html'])
+            && !is_null($_SESSION['na_error_log_filepath_html'])
         ) {
             foreach ($entries as $entryIdx => $entry) {
                 $it = $entry['ENTRY:add_PHPerror'];
@@ -198,7 +200,8 @@ class class_NicerAppWebOS_log {
             }
             file_put_contents ($_SESSION['na_error_log_filepath_html'], $html, FILE_APPEND);
 
-        } elseif ($naLAN || (isset($naWebOS) && $naWebOS->showAllErrors)) {
+        }         */
+/*elseif ($naLAN || (isset($naWebOS) && $naWebOS->showAllErrors)) {
 
             foreach ($entries as $entryIdx => $entry) {
                 $it = $entry['ENTRY:add_PHPerror'];
@@ -216,7 +219,7 @@ class class_NicerAppWebOS_log {
             }
             if (!array_key_exists($sessionKeyName,$_SESSION)) $_SESSION[$sessionKeyName] = [];
             array_push ($_SESSION[$sessionKeyName], $it['html']);
-        }
+        }*/
 
         return $r;
     }

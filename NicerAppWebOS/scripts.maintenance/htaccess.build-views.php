@@ -11,7 +11,7 @@ global $naWebOS;
 $dbs = [ 'views' => true ];
 $naWebOS->dbsAdmin->createDatabases($dbs); // also empties database
 
-$db = $naWebOS->dbs->findConnection('couchdb');
+$db = $naWebOS->dbsAdmin->findConnection('couchdb');
 $cdb = $db->cdb;
 $dataSetName1 = $db->dataSetName('views');
 $dataSetName2 = $db->dataSetName('viewsIDs');

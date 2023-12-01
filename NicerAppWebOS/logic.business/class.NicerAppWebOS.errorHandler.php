@@ -79,21 +79,45 @@ class class_NicerAppWebOS__errorHandler {
         $errTXT = "[".$naIP." : ".$date."] PHP ".$errtype.' error in "'.$errfile.'":'.$errline." : ".$errstr.", backtrace = ".PHP_EOL.$this->backtrace('txt');
 
         return [
-            'ENTRY:add_PHPerror' => [
-                't' => $unixTimeStamp,
-                'to' => $dtz_offset,
-                'ts' => $timestamp,
-                'ip' => $naIP,
-                'sid' => session_id(),
-                'nav' => $naVersionNumber,
-                'html' => $errHTML,
-                'ansi' => $errANSI,
-                'txt' => $errTXT
-            ]
+            'type' => 'PHP error',
+            's1' => (
+                session_status() === PHP_SESSION_NONE
+                ? microtime(true)
+                : (
+                    array_key_exists('started',$_SESSION)
+                    ? $_SESSION['started']
+                    : microtime(true)
+                )
+            ),
+            's2' => microtime(true),
+            'isIndex' => $_SERVER['SCRIPT_NAME']==='/NicerAppWebOS/index.php',
+            'i' => (
+                session_status() === PHP_SESSION_NONE
+                ? false
+                : (
+                    array_key_exists('startedID',$_SESSION)
+                    ? $_SESSION['startedID']
+                    : false
+                )
+            ),
+            't' => $unixTimeStamp,
+            'to' => $dtz_offset,
+            'ts' => $timestamp,
+            'ip' => $naIP,
+            'sid' => session_id(),
+            'nav' => $naVersionNumber,
+            'html' => $errHTML,
+            'ansi' => $errANSI,
+            'txt' => $errTXT,
+            'classErrorType' => $classErrorType,
+            'errType' => $errtype,
+            'errMsg' => $errstr,
+            'errFile' => $errfile,
+            'errLine' => $errline
         ];
      }
     
-    public function addStr ($html, $txt) {
+    public function addStr ($html, $txt='') {
         global $naWebOS;
         $db = $naWebOS->dbs->findConnection('couchdb');
         $cdb = $db->cdb;
@@ -102,7 +126,6 @@ class class_NicerAppWebOS__errorHandler {
         $dtz_offset = $dtz->getOffset();
         $unixTimeStamp = time();//date(DATE_ATOM);//date(DATE_RFC2822);//date('Y-m-d H:i:sa');
 
-        if (!is_string($txt)) $txt = $html;
         $rec = [
             't' => $unixTimeStamp,
             'to' => $dtz_offset,

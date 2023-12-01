@@ -6,11 +6,16 @@ function today() {
 }
 
 function archive() {
-	today $2 $3
-	echo "mv $2 $today"
-	#mv $1 $2
+	today $1 $2
+	mv $1 $today
 }
 
-archive $root/$1 $root/$2 $3
-echo cp -r $root/$1 $root/$2
+cp $root/$2/NicerAppWebOS/documentation/pageHeader.php /home/reneajmveerman/Documents
+archive $root/$2 $3
+cp -r $root/$1 $root/$2
+
+cp $root/$1/NicerAppWebOS/domainConfigs/$1/index.javascripts.json $root/$2/NicerAppWebOS/domainConfigs/$2
+cp $root/$1/NicerAppWebOS/domainConfigs/$1/index.css $root/$2/NicerAppWebOS/domainConfigs/$2
+cp $root/$1/NicerAppWebOS/domainConfigs/$1/index.dark.css $root/$2/NicerAppWebOS/domainConfigs/$2
+cp /home/reneajmveerman/Documents/pageHeader.php $root/$2/NicerAppWebOS/documentation
 

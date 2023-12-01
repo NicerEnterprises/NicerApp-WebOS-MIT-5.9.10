@@ -1,8 +1,6 @@
 <?php
+require_once (dirname(__FILE__).'/../../../../../boot.php');
 global $naWebOS;
-//echo '<pre style="color:yellow;background:rgba(0,0,50,0.5);border-radius:10px;margin:10px;">'; var_dump ($naWebOS->view); echo '</pre>';
-foreach ($naWebOS->view as $appID => $appRec) break;
-if ($appRec['page']=='index') {
     $db = $naWebOS->dbs->findConnection('couchdb');
     $cdb = $db->cdb;
 
@@ -12,9 +10,9 @@ if ($appRec['page']=='index') {
     // fetch dataRecord
     $findCommand = [
         'selector' => [
-            'isIndex' => true
+            '_id' => $_GET['id']
         ],
-        'fields' => ['_id', 'isIndex', 'ip', 's1', 's2', 'request'],
+        'fields' => ['_id', 'isIndex', 'ip', 's1', 's2', 'i', 'request', 'httpOpts', 'httpResponse'],
         'sort' => [
             [ 's1' => 'asc' ],
             [ 's2' => 'asc' ]
@@ -34,28 +32,35 @@ if ($appRec['page']=='index') {
 
 
 
-    //echo '<pre style="color:white;background:rgba(0,50,0,0.5);border-radius:10px;margin:10px;">'; var_dump($call); echo '</pre>';
-    foreach ($call->body->docs as $docID => $doc) {
+    //echo '<pre style="color:white;background:rgba(0,50,0,0.5);border-radius:10px;margin:10px;">'; var_dump($call); echo '</pre>'; die();
+    foreach ($call->body->docs as $docIdx => $doc) {
         //echo '<pre style="padding:5px;margin:8px;color:white;background:rgba(0,50,0,0.5);">'; var_dump ($doc); echo '</pre>';
         //$call2 = $cdb->get($doc->_id);
         //echo $call2->body->entry->request->html;
 
         //echo '<pre style="color:white;background:rgba(0,50,0,0.5);border-radius:10px;padding:5px;margin:10px;">'; var_dump($call2->body); echo '</pre>';
 
-
         $marginLeft = 10;
         if (!$doc->isIndex) $marginLeft = 50;
         $docA = json_decode(json_encode($doc), true);
 
-        if (array_key_exists('request', $docA)) {
-            $now = DateTime::createFromFormat('U.u', $doc->s1);
-            $now2 = $now->format("Y-m-d H:i:s.u");
+        $now = DateTime::createFromFormat('U.u', $doc->s1);
+        $now2 = $now->format("Y-m-d H:i:s.u");
 
-            echo '<div style="margin-left:'.$marginLeft.'px">';
-            echo '<h2><span class="datetimeAccurate">'.$now2.'</span> <span class="ip">'.$doc->ip.'</span> '.$docA['request']['$_SERVER']['REQUEST_URI'].'</h2>';
-            echo hmJSON ($docA['request'], 'Request response');
-            echo '</div>';
-        }
+        $url = '';
+        if (array_key_exists('request', $docA))
+            $url = $docA['request']['$_SERVER']['REQUEST_URI'];
+        if (array_key_exists('httpOpts', $docA))
+            $url = $docA['httpOpts']['ALL cURL fields']['CURLOPT_URL'];
+
+        echo '<div style="margin-left:'.$marginLeft.'px">';
+        echo '<h2 class="logEntry"><span class="datetimeAccurate">'.$now2.'</span> <span class="ip">'.$doc->ip.'</span> '.$url.'</h2>';
+        if (array_key_exists('request', $docA)) echo hmJSON ($docA['request'], 'Request response');
+        if (array_key_exists('httpOpts', $docA)) echo hmJSON ($docA['httpOpts'], 'HTTP options');
+        //if (array_key_exists('httpResponse', $docA)) echo '<pre>'; var_dump ($docA['httpResponse']); echo '</pre>'; //echo hmJSON ($docA['httpResponse'], 'HTTP response');
+        if (array_key_exists('httpResponse', $docA)) echo hmJSON ($docA['httpResponse'], 'HTTP response');
+
+        echo '</div>';
 /*
         // fetch dataRecord
         $findCommand2 = [
@@ -98,12 +103,5 @@ if ($appRec['page']=='index') {
         }
 */
     }
-    $html = '';
     $html .= '<script type="text/javascript">setTimeout (function() {na.site.settings.current.running_loadTheme = false; na.site.settings.current.loadingApps = false; na.hms.startProcessing()}, 1500); na.site.transformLinks()</script>';
     echo $html;
-
-
-
-}
-//require_once(dirname(__FILE__).'/../../../../../logs.php');
-?>

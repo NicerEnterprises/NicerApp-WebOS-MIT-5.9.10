@@ -9,6 +9,26 @@ h2 {
     font-size : 1em;
 }
 
+.datetimeAccurate {
+    color : lime;
+}
+.ip {
+    color : cyan;
+}
+.logEntry {
+    margin : 8px;
+    box-shadow : inset 0px 0px 3px 2px rgba(0,0,0,0.55), 3px 3px 2px 1px rgba(0,0,0,0.7);
+}
+
+.logEntry.withData {
+    background : rgba(0,100,0,0.55);
+}
+.logEntry.error {
+    margin : 10px;
+    padding : 5px;
+    border-radius : 8px;
+}
+
 .naNavBar_darkenedBG {
     background : rgba(0,0,0,0.5);
     border-radius : 5px;
@@ -42,10 +62,20 @@ h2 {
     }
 }
 
+div.label {
+    background : rgba(0,0,50,0.5);
+    box-shadow : inset 3px 3px 2px 2px rgba(255,255,255,0.7), 4px 4px 3px 2px rgba(0,0,0,0.7);
+    display : inline-block;
+    position:absolute;
+    padding : 8px;
+    border-radius : 10px;
+    z-index : 10000000;
+};
+
 /* musicPlayer */
 #app__musicPlayer__player::before, #app__musicPlayer__description::before, #app__musicPlayer__playlist::before {
-    -webkit-mask-image: url(/NicerAppWebOS/siteMedia/vividDialog_borderMask_300x500.png);
-    mask-image: url(/NicerAppWebOS/siteMedia/vividDialog_borderMask_300x500.png);
+    -webkit-mask-image: url(/NicerAppWebOS/siteMedia/vividDialog_borderMask_300x120.png);
+    mask-image: url(/NicerAppWebOS/siteMedia/vividDialog_borderMask_300x120.png);
 }
 /* end musicPlayer */
 
@@ -176,7 +206,7 @@ h2 {
     font-weight : bold;
 }
 
-a {
+a:not(.naVividTextCSS, .contentSectionTitle3_a, .jstree-anchor) {
     --bg-size: 400%;
     --color-one-blue: #0000FF;
     --color-two-white: #AAA;
@@ -194,15 +224,15 @@ a {
     z-index : 750000;
     position : relative;
 }
-a:visited {
+a:not(.naVividTextCSS, .contentSectionTitle3_a, .jstree-anchor):visited {
   --bg-size: 400%;
-  --color-one-yellow: #f5db16;
-  --color-two-white : #DDDDDD;
+  --color-one-grey: grey;
+  --color-two-white : white;
   background : linear-gradient(
                 315deg,
-                var(--color-one-yellow),
+                var(--color-one-grey),
                 var(--color-two-white),
-                var(--color-one-yellow)
+                var(--color-one-grey)
               ) 0 0 / var(--bg-size) 100%;
   background-clip: text;
   -webkit-background-clip: text;
@@ -212,7 +242,7 @@ a:visited {
   font-size : 120%;
   position : relative;
 }
-a:hover {
+a:not(.naVividTextCSS, .contentSectionTitle3_a, .jstree-anchor):hover {
   --bg-size: 400%;
   --color-one-green: #50FF50;
   --color-two-white : #AAA;
@@ -242,8 +272,8 @@ h1.pageTitle {
 .pageTitle span, .pageTitle a {
     font-size: clamp(0.5625rem, -16.625rem + 50vw, 1.5rem);
 }
-h1:not(.pageTitle), h2, h3 {
-    padding : 5px;
+h1:not(.pageTitle):not(.naVividTextCSS), h2:not(.naVividTextCSS), h3:not(.naVividTextCSS) {
+    padding : 10px;
     background : rgba(0,0,0,0.55);
     border-radius : 10px;
     display : block;
@@ -255,7 +285,7 @@ a, p, span, h1, h2, h3 {
     /*display : content;*/
     /*display : inline-block;*/
 }
-li > div > div:not(.jstree-wholerow), li > div:not(.jstree-wholerow), .contentSectionTitle1, .contentSectionTitle2, .contentSectionTitle3), li > span:not(.vt), .backdropped {
+li > div > div:not(.jstree-wholerow), li > div:not(.jstree-wholerow), .contentSectionTitle1, .contentSectionTitle2, .contentSectionTitle3), li > span:not(.naVividTextCSS), .backdropped {
     margin-block-start : 0;
     margin-block-end : 0;
     margin : 8px;
@@ -296,7 +326,7 @@ ul.index > li {
     margin : 5px;
 }
 #siteContent > .vividDialogContent > ul > li > span {
-    padding : 7px !important;
+    padding : 10px !important;
     margin : 5px !important;
     border-radius : 10px !important;
 }
@@ -600,7 +630,6 @@ ul.index > li {
     background-image: linear-gradient(bottom, rgba(0,0,0,0.4) 25%, rgba(40,40,40,0.8) 81%);
     border-radius : 12px;
     z-index: -1;
-    transition: opacity 0.5s linear;
     opacity: 0;
 }    
 .vividButton[theme="dark"]:hover:before {
@@ -749,27 +778,75 @@ ul.index > li {
 }
 
 
-
-.contentSectionTitle3_span, .animatedText-green {
+.contentSectionTitle3_a {
+  text-decoration : none;
+}
+.contentSectionTitle3_a h3 {
+    color : transparent;
+}
+.contentSectionTitle3_a span {
   --bg-size: 400%;
-  --color-one-green : lime;
-  --color-two-green : cyan;
+  --color-n-lime : lime;
+  --color-np1-cyan : cyan;
   background: linear-gradient(
-                315deg,
-                var(--color-one-green),
-                var(--color-two-green),
-                var(--color-one-green)
+                135deg,
+                var(--color-n-lime),
+                var(--color-np1-cyan),
+                var(--color-n-lime)
               ) 0 0 / var(--bg-size) 100%;
-  color: transparent;
   background-clip: text;
   -webkit-background-clip: text;
+  color: transparent;
+  animation: move-bg 5s infinite cubic-bezier(0.11, 0, 0.5, 0);
+  text-shadow : 2px 2px 2px rgba(0,0,0,0.55);
+  position : relative;
+}
+.contentSectionTitle3_a:visited span {
+  --bg-size: 400%;
+  --color-one-grey : #BBB;
+  --color-two-white : #FFFFFF;
+  background: linear-gradient(
+                315deg,
+                var(--color-one-grey),
+                var(--color-two-white),
+                var(--color-one-grey)
+              ) 0 0 / var(--bg-size) 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  animation: move-bg 5s infinite cubic-bezier(0.11, 0, 0.5, 0);
+  text-shadow : 2px 2px 2px rgba(0,0,0,0.55);
+  position : relative;
+}
+.contentSectionTitle3_a:hover span {
+  --bg-size: 400%;
+  --color-one-lime : lime;
+  --color-two-yellow : yellow;
+  background: linear-gradient(
+                90deg,
+                var(--color-one-lime),
+                var(--color-two-yellow),
+                var(--color-one-lime)
+              ) 0 0 / var(--bg-size) 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
   animation: move-bg 5s infinite cubic-bezier(0.11, 0, 0.5, 0);
   text-shadow : 2px 2px 2px rgba(0,0,0,0.55);
   position : relative;
 }
 
-.vividDialog, .vividDialogContent,
-.contentSectionTitle1_a, .contentSectionTitle2_a, .contentSectionTitle3_a,
+
+
+.vividDialog, .vividDialogContent {
+    z-index : 400000;
+}
+
+.contentSectionTitle1_a, .contentSectionTitle2_a, .contentSectionTitle3_a {
+    z-index : 550000;
+    position:relative;
+}
+
 .contentSectionTitle1_span, .contentSectionTitle2_span, .contentSectionTitle3_span {
     z-index : 500000;
 }
@@ -841,8 +918,7 @@ ul.index > li {
 
     );
     z-index: -1;
-    -webkit-mask-image: url(/NicerAppWebOS/siteMedia/vividDialog_borderMask_3840x2160.png);
-    mask-image: url(/NicerAppWebOS/siteMedia/vividDialog_borderMask_3840x2160.png);
+    mask-border-slice : url(/NicerAppWebOS/siteMedia/vividDialog_borderMask_3840x2160.png);
     -webkit-mask-size: 100% 100%, contain;
     -webkit-mask-repeat : no-repeat;
     border-radius : 16px;
@@ -859,7 +935,7 @@ ul.index > li {
     left : 8px;
     width : calc(100% - 16px);
     height : calc(100% - 16px);
-    box-shadow : inset 0px 0px 4px 4px rgba(0, 0, 0, 0.4);
+    box-shadow : inset 0px 0px 6px 4px rgba(0, 0, 0, 0.55);
 }
 
 .vividDialogPopup {
@@ -909,8 +985,8 @@ ul.index > li {
 
 
     #siteStatusbar::before, #titlebar::before {
-        -webkit-mask-image: url(/NicerAppWebOS/siteMedia/vividDialog_borderMask_3840x100.png);
-        mask-image: url(/NicerAppWebOS/siteMedia/vividDialog_borderMask_3840x100.png);
+        -webkit-mask-image: url(/NicerAppWebOS/siteMedia/vividDialog_borderMask_600x65.png);
+        mask-image: url(/NicerAppWebOS/siteMedia/vividDialog_borderMask_600x65.png);
     }
     #siteToolbarLeft::before, #siteToolbarRight::before, #siteToolbarThemeEditor::before {
         -webkit-mask-image: url("/NicerAppWebOS/siteMedia/vividDialog_borderMask_320x1500.png");
@@ -1037,3 +1113,20 @@ ul.index > li {
 .vakata-contextmenu-sep, .vakata-context-separator {
     display : none !important;
 }
+
+/* vividEditor */
+div[contenteditable] {
+    outline : none;
+}
+.vividEditor_main {
+    background : none;
+    border : 3px ridge lightblue;
+    color : white;
+    caret-color : yellow;
+    padding : 5px;
+    border-radius : 10px;
+}
+.vividEditor_main:focus {
+    border : 3px ridge ivory;
+}
+

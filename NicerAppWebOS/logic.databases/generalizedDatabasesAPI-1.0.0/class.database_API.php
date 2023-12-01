@@ -51,11 +51,6 @@ class class_NicerAppWebOS_database_API {
         $db = null;
         if (strpos('couchdb', $ct)!==false) {
             $db = new class_NicerAppWebOS_database_API_couchdb_3_2 ( clone $naWebOS, $username, $cRec );
-            //echo '<pre>'; var_dump($db); die();
-
-            //silly in most cases:
-            //$db['dbs'] = 'initialized.';
-            //$db['dbsAdmin'] = 'initialized.';
         }
         if (strpos('fsdb', $ct)!==false) {
             $db = new class_NicerAppWebOS_database_API_fileSystemDB_version1 ( clone $naWebOS, $username, $cRec);

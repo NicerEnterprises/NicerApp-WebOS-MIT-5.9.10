@@ -172,19 +172,19 @@ class SagCURLHTTPAdapter extends SagHTTPAdapter {
     $dbg = [
       1 => (isset($_SESSION['na_error_log_filepath_html'])),
       2 => (is_object($naWebOS->dbs)),
-      3 => (is_object($naWebOS->dbs) ? $naWebOS->dbs->findConnection('couchdb')->username : 'NOTSETYET')
+      3 => (is_object($naWebOS->dbs) ? $naWebOS->dbs->findConnection('couchdb')->username : 'NOTSETYET'),
+      4 => $this->debug
     ];
-    //echo '<pre>'.PHP_EOL; var_dump ($dbg); echo '</pre>'.PHP_EOL;
+    //echo '<pre>'.PHP_EOL; var_dump ($dbg); echo '</pre>'.PHP_EOL;die();
     if (
       $this->debug // declared in SagHTTPAdapter.php::__construct()
       && session_status() === PHP_SESSION_ACTIVE
-      && isset($_SESSION['na_error_log_filepath_html'])
       && is_object($naWebOS->dbs)
-      && (
+      /*&& (
         $naWebOS->dbs->findConnection('couchdb')->username=='said_by___Rene_AJM_Veerman'
         || $naWebOS->dbs->findConnection('couchdb')->username=='said_by___Guest'
         || $naWebOS->dbs->findConnection('couchdb')->username=='nicer_app___Guest'
-      )
+      )*/
       && strpos($opts[CURLOPT_URL], 'logentries')===false
       && strpos($opts[CURLOPT_URL], '_session')===false
     ) {
@@ -212,7 +212,11 @@ class SagCURLHTTPAdapter extends SagHTTPAdapter {
 
 
       //var_dump ($na_error_log_filepath_html); die();
-      $now = DateTime::createFromFormat('U.u', $_SESSION['started']);
+      $now = DateTime::createFromFormat('U.u', (
+        array_key_exists('started', $_SESSION)
+          ? $_SESSION['started']
+          : microtime(true)
+      ));
       $now->setTimezone(new DateTimeZone(exec('date +%z')));
       $date = $now->format("Y-m-d H:i:s.u ").preg_replace('/.*\s/','',date(DATE_RFC2822));
       //$date = $now->format("Y-m-d_H:i:s");
@@ -230,40 +234,73 @@ class SagCURLHTTPAdapter extends SagHTTPAdapter {
       $ret = str_replace('\n','<br/>',$ret);
       $ret = str_replace(" ",'&nbsp;',$ret);
       */
-      $dbgOpts = json_decode(json_encode($optsTranslated), true);
-      if (array_key_exists('CURLOPT_POSTFIELDS', $dbgOpts))
-        $dbgOpts = [
-          'cURL POST Fields' => $dbgOpts['CURLOPT_POSTFIELDS'],
-          'ALL cURL fields' => $dbgOpts
-        ];
-      $dbgOpts = hmJSON ($dbgOpts, 'cURL options',
-                          [ 'themeName' => 'naColorgradientSchemeMagicalBlue' ] );
+      if (!is_null($_SESSION['na_error_log_filepath_html'])) {
+        $dbgOpts = json_decode(json_encode($optsTranslated), true);
+        if (array_key_exists('CURLOPT_POSTFIELDS', $dbgOpts))
+          $dbgOpts = [
+            'cURL POST Fields' => $dbgOpts['CURLOPT_POSTFIELDS'],
+            'ALL cURL fields' => $dbgOpts
+          ];
+        //$dbgOpts2 = hmJSON ($dbgOpts, 'cURL options', [ 'themeName' => 'naColorgradientSchemeMagicalBlue' ] );
 
-      $ret = json_decode($response->body,true);
-      $ret = hmJSON ($ret, 'cURL response', [ 'themeName' => 'naColorgradientSchemeGreen' ] );
+        //$ret = json_decode($response->body,true);
+        //$ret2 = hmJSON ($ret, 'cURL response', [ 'themeName' => 'naColorgradientSchemeGreen' ] );
 
-      $dbgHTML =
-        '<div id="entry_'.$_SESSION['dbgNum2'].'" class="naLogEntry">'
-        .'<div class="naLogEntry_header"><span class="naLogHeader_title">Database Query</span><br/><span class="naLogHeader_datetime">'.$date.'</span><br/><span class="naLogHeader_url">'.$opts[CURLOPT_URL].'</span></div>'
-        //.'<div class="naLogHeader_curlOptions" style="display:flex;align-items:center;">'.$this->buttonExpand().'curl options</div>'
-        .'<div id="expandData_'.($_SESSION['dbgNum']-1).'" class="naLogCurlOptions">'
-        .$dbgOpts
-        .'</div>'
-        //.'<div class="naLogHeader_curlResponse" style="display:flex;align-items:center;">'.$this->buttonExpand().'curl response</div>'
-        .'<div id="expandData_'.($_SESSION['dbgNum']-1).'" class="naLogCurlResponse">'
-        .$ret
-        .'</div>'
-        .'</div>';
-      $_SESSION['dbgNum2']++;
-      file_put_contents ($_SESSION['na_error_log_filepath_html'], $dbgHTML, FILE_APPEND);
+        /*
+        $dbgHTML =
+          '<div id="entry_'.$_SESSION['dbgNum2'].'" class="naLogEntry">'
+          .'<div class="naLogEntry_header"><span class="naLogHeader_title">Database Query</span><br/><span class="naLogHeader_datetime">'.$date.'</span><br/><span class="naLogHeader_url">'.$opts[CURLOPT_URL].'</span></div>'
+          //.'<div class="naLogHeader_curlOptions" style="display:flex;align-items:center;">'.$this->buttonExpand().'curl options</div>'
+          .'<div id="expandData_'.($_SESSION['dbgNum']-1).'" class="naLogCurlOptions">'
+          .$dbgOpts2
+          .'</div>'
+          //.'<div class="naLogHeader_curlResponse" style="display:flex;align-items:center;">'.$this->buttonExpand().'curl response</div>'
+          .'<div id="expandData_'.($_SESSION['dbgNum']-1).'" class="naLogCurlResponse">'
+          .$ret2
+          .'</div>'
+          .'</div>';
+        */
+        $_SESSION['dbgNum2']++;
+        //file_put_contents ($_SESSION['na_error_log_filepath_html'], $dbgHTML, FILE_APPEND);
 
-      $dbgTxt =
-        'curl options = '
-        .str_replace('\/','/',json_encode($optsTranslated, JSON_PRETTY_PRINT)).PHP_EOL
-        .'curl response = '
-        .json_encode(json_decode($response->body), JSON_PRETTY_PRINT).PHP_EOL.PHP_EOL
-        .'----------------------'.PHP_EOL.PHP_EOL;
-      file_put_contents ($_SESSION['na_error_log_filepath_txt'], $dbgTxt, FILE_APPEND);
+        $dbgTxt =
+          'curl options = '
+          .str_replace('\/','/',json_encode($optsTranslated, JSON_PRETTY_PRINT)).PHP_EOL
+          .'curl response = '
+          .json_encode(json_decode($response->body), JSON_PRETTY_PRINT).PHP_EOL.PHP_EOL
+          .'----------------------'.PHP_EOL.PHP_EOL;
+        //file_put_contents ($_SESSION['na_error_log_filepath_txt'], $dbgTxt, FILE_APPEND);
+      }
+
+      global $phpScript_startupTime;
+      global $naIP;
+      global $naVersionNumber;
+      $time = microtime(true) - $phpScript_startupTime;
+      //var_dump (dirname(__FILE__).'/errors.css');
+      //date_default_timezone_set('UTC');
+      $dtz = new DateTime('now');//new DateTimeZone(date_default_timezone_get());
+      $dtz_offset = $dtz->getOffset();
+      $unixTimeStamp = time();//date(DATE_ATOM);//date(DATE_RFC2822);//date('Y-m-d H:i:sa');
+      $timestamp = date(DATE_RFC2822);
+
+      $err = [
+          's1' => $_SESSION['started'],
+          's2' => microtime(true),
+          'i' => $_SESSION['startedID'],
+          't' => $unixTimeStamp,
+          'to' => $dtz_offset,
+          'ts' => $timestamp,
+          'ip' => $naIP,
+          'sid' => session_id(),
+          'nav' => $naVersionNumber,
+          'type' => 'db',
+          'httpOpts' => $dbgOpts,
+          'httpResponse' => json_decode($response->body,true),
+          'txt' => $dbgTxt
+      ];
+
+      global $naLog;
+      $naLog->add ( [ $err ] );
 
     }
 

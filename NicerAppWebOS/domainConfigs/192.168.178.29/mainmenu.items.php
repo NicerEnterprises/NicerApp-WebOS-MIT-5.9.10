@@ -2,22 +2,7 @@
     global $naWebOS;
     global $na_apps_structure;
     $na_apps_structure = array( // the PHP variable name $na_apps_structure is the point where the trunk of the tree goes either into the air, or the ground (as the root-kit system or spyware application.
-        // NicerAppWebOS version 5.0.0 (aka : THIS FILE IS FULLY FINALIZED. FOR NOW. FOR AT LEAST THE NEXT 5 YEARS OR SO. ) :
-        "diskText__GPH_politicalContributions_2020s" => [
-            'apps-current' => [
-                'NicerApp-WebOS__pageSettings' => [
-                    'misc' => [
-                       'folder' => '/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/NicerApp-WCS'
-                    ],
-                    "apps" => [
-                        'diskText' => [ // a more JSON and shorter way of declaring the leaf section of a tree-like JSON array.
-                            'file' => 'user--Rene_AJM_Veerman-aka-Gavan_Peacefan_Hoverswell/app.dialog.siteContent-politicalContributions.php', // key pointing to value
-                            'SEO_value' =>  'political-ideas--Gavan-Peacefan-Hoverswell' // same here
-                        ]
-                     ]
-                ]
-            ]
-        ],
+
         "newsHeadlines_englishNews" => [
             'apps-current' => [
                 'NicerApp-WebOS__pageSettings' => [
@@ -320,13 +305,12 @@
                             'parameters' => [
                                 'thumbnails' => './thumbs/300/$filename.$ext'
                             ],
-                            'SEO_value' => 'demo-3D-fileBrowser'
+                            'SEO_value' => [ 'demo-3D-fileBrowser', '3D-data' ]
                         ]
                      ]
                 ]
             ]
         ],
-        
         
         "cms" => [
             'apps-current' => [
@@ -488,11 +472,47 @@
                      ]
                 ]
             ]
+        ],
+        
+        
+        "jsonViewer" => [
+            'apps-current' => [
+                'NicerApp-WebOS__pageSettings' => [
+                    "misc" => [
+                       'folder' => '/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/ui'
+                    ],
+                    "apps" => [
+                        'meta' => [
+                            'mustBeLoggedIn' => true
+                        ],
+                        'jsonViewer' => [
+                            'page' => 'index',
+                            'SEO_value' => [ 'jv', 'jsonViewer' ]
+                        ]
+                     ]
+                ]
+            ]
+        ],
+
+        "logs" => [
+            'apps-current' => [
+                'NicerApp-WebOS__pageSettings' => [
+                    "misc" => [
+                       'folder' => '/NicerAppWebOS/apps/NicerAppWebOS/applications/2D'
+                    ],
+                    "apps" => [
+                        'meta' => [
+                            'mustBeLoggedIn' => true
+                        ],
+                        'logs' => [
+                            'page' => 'index',
+                            'SEO_value' => 'logs'
+                        ]
+                     ]
+                ]
+            ]
         ]
-        
-        
-        
-        
+
 
         
      );

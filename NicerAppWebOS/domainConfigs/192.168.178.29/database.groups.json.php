@@ -1,6 +1,4 @@
-<?php
-    global $naWebOS;
-?>
+<?php global $naWebOS; ?>
 {
     "Owners" : {
         "realname" : "<?php echo $naWebOS->domain.' Owners';?>"

@@ -320,7 +320,7 @@ class NicerAppWebOS {
                         && is_array($call->body->docs)
                     ) {
                         if (count($call->body->docs)===0) {
-                            $this->view = '[NOT FOUND]';
+                            $this->view = '["NOT FOUND"]';
                             return false;
                         } elseif (count($call->body->docs)===1) {
                             $cdb->setDatabase ($db->dataSetName('views'));
@@ -374,7 +374,7 @@ class NicerAppWebOS {
             }
         } elseif (array_key_exists('seoValue', $_GET)) {
             $view = $naWebOS->view;//json_decode (base64_decode_url($_GET['vi']), true);
-            if ($view=='[NOT FOUND]') {
+            if ($view=='["NOT FOUND"]') {
                 $titleFile = $rp_domain.'/index.title.php';
             } else foreach ($view as $viewFolder => $viewSettings) {
                 $titleFile = realpath(dirname(__FILE__).'/../..').'/'.$viewFolder.'/app.title.site.php';
@@ -471,10 +471,10 @@ class NicerAppWebOS {
             if (array_key_exists('indexFile', $fileRec)) {
                 $indexFilepath = $fileRec['indexFile'];
                 $filesRaw = file_get_contents($indexFilepath);
-                $files = json_decode ($filesRaw);
+                $files2 = json_decode ($filesRaw);
                 checkForJSONerrors ($filesRaw, $indexFilepath, '"null"');
             } else if (array_key_exists('files', $fileRec)) {
-                $files = $fileRec['files'];
+                $files2 = $fileRec['files'];
             }
             $indexType = $fileRec['type'];
             
@@ -483,7 +483,7 @@ class NicerAppWebOS {
                 case 'javascript': $lineSrc = "\t".'<script type="text/javascript" src="{$src}?c={$changed}"></script>'."\r\n"; break;
             };
             
-            foreach ($files as $idx => $file) {
+            foreach ($files2 as $idx => $file) {
                 //trigger_error ($file.' (1)', E_USER_NOTICE);
                 $oFile = $file;
                 $file = str_replace ('apps/{$domain}', 'apps/'.$this->viewsMID, $file);
@@ -586,7 +586,7 @@ class NicerAppWebOS {
     public function getVividButtonCSSfiles () {
         global $rootPath_na;
         $basePath = $rootPath_na.'/NicerAppWebOS/logic.userInterface/vividButton-4.1.0';
-        $files = getFilePathList ($basePath, true, '/btn_.*\.css/', null, array('file'), 1);
+        $files = getFilePathList ($basePath, false, '/btn_.*\.css/', null, array('file'), 1)['files'];
         foreach ($files as $idx => $file) {
             $files[$idx] = str_replace($this->basePath, '', $file);
         }
@@ -597,7 +597,7 @@ class NicerAppWebOS {
     public function getVividButtonJavascriptFiles () {
         global $rootPath_na;
         $basePath = $rootPath_na.'/NicerAppWebOS/logic.userInterface/vividButton-4.1.0';
-        $files = getFilePathList ($basePath, true, '/btn_.*\.source\.js/', null, array('file'), 1);
+        $files = getFilePathList ($basePath, false, '/btn_.*\.source\.js/', null, array('file'), 1)['files'];
         foreach ($files as $idx => $file) {
             $files[$idx] = str_replace($this->basePath, '', $file);
         }
@@ -756,7 +756,7 @@ class NicerAppWebOS {
                             //$ret = [ 'siteContent' => execPHP ($contentFile) ];
                         }
                     }
-                } elseif ($view==='[NOT FOUND]') {
+                } elseif ($view==='["NOT FOUND"]') {
                     // serve up the front page!
                     $ret = ['siteContent' => $viewID ];
                 }
