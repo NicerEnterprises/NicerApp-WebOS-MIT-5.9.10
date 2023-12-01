@@ -1230,7 +1230,7 @@ nicerapp.hms = nicerapp.jsonViewer = {
 			if (!na.hms.failCounter) na.hms.failCounter = {};
 			if (!na.hms.failCounter[pvCmd.cmd.id]) na.hms.failCounter[pvCmd.cmd.id] = 0;
 			if (!html) {
-				if (na.hms.failCounter[pvCmd.cmd.id] > 100) {
+				if (na.hms.failCounter[pvCmd.cmd.id] > 20) {
 					debugger;
 					var html = 'No data found.';
 					$('#'+pvCmd.cmd.id+'_longMsg').html(html);

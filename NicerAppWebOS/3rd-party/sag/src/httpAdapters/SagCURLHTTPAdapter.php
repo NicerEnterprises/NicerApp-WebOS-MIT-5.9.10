@@ -234,7 +234,7 @@ class SagCURLHTTPAdapter extends SagHTTPAdapter {
       $ret = str_replace('\n','<br/>',$ret);
       $ret = str_replace(" ",'&nbsp;',$ret);
       */
-      if (!is_null($_SESSION['na_error_log_filepath_html'])) {
+      //if (!is_null($_SESSION['na_error_log_filepath_html'])) {
         $dbgOpts = json_decode(json_encode($optsTranslated), true);
         if (array_key_exists('CURLOPT_POSTFIELDS', $dbgOpts))
           $dbgOpts = [
@@ -270,7 +270,7 @@ class SagCURLHTTPAdapter extends SagHTTPAdapter {
           .json_encode(json_decode($response->body), JSON_PRETTY_PRINT).PHP_EOL.PHP_EOL
           .'----------------------'.PHP_EOL.PHP_EOL;
         //file_put_contents ($_SESSION['na_error_log_filepath_txt'], $dbgTxt, FILE_APPEND);
-      }
+      //}
 
       global $phpScript_startupTime;
       global $naIP;

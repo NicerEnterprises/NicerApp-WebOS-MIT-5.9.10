@@ -51,9 +51,9 @@ if ($appRec['page']=='index') {
             $now = DateTime::createFromFormat('U.u', $doc->s1);
             $now2 = $now->format("Y-m-d H:i:s.u");
 
-            echo '<div style="margin-left:'.$marginLeft.'px">';
+            echo '<div id="'.$doc->_id.'" style="margin:10px;margin-left:'.$marginLeft.'px" onclick="naLog.onclick_logEntry(event);">';
             echo '<h2><span class="datetimeAccurate">'.$now2.'</span> <span class="ip">'.$doc->ip.'</span> '.$docA['request']['$_SERVER']['REQUEST_URI'].'</h2>';
-            echo hmJSON ($docA['request'], 'Request response');
+            //echo hmJSON ($docA['request'], 'Request response');
             echo '</div>';
         }
 /*
