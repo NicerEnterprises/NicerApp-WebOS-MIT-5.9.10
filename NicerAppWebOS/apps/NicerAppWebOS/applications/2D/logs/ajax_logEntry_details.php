@@ -41,13 +41,13 @@ global $naLAN;
         //$call2 = $cdb->get($doc->_id);
         //echo $call2->body->entry->request->html;
 
-        //echo '<pre style="color:white;background:rgba(0,50,0,0.5);border-radius:10px;padding:5px;margin:10px;">'; var_dump($call2->body); echo '</pre>';
+        //echo '<pre style="color:white;background:rgba(0,50,0,0.5);border-radius:10px;padding:5px;margin:10px;">'; var_dump($doc); echo '</pre>';
 
         $marginLeft = 10;
         if (!$doc->isIndex) $marginLeft = 50;
         $docA = json_decode(json_encode($doc), true);
 
-        $now = DateTime::createFromFormat('U.u', $doc->s1);
+        $now = DateTime::createFromFormat('U.u', $doc->s2);
         $now2 = $now->format("Y-m-d H:i:s.u");
 
         $url = '';

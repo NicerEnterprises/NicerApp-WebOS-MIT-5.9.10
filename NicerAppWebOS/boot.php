@@ -218,7 +218,11 @@ NicerApp WCS (Website Control System) from Nicer Enterprises
     //$msg = 'NEW REQUEST :<br/>'.hmJSON($dbg,'$dbg');
 
     global $naIsBot;
-    $naIsBot = preg_match('/bot/i', $_SERVER['HTTP_USER_AGENT']) === 1;
+    if (!array_key_exists('HTTP_USER_AGENT',$_SERVER)) $naIsBot = true;
+    else {
+        $preg = preg_match('/bot/i', $_SERVER['HTTP_USER_AGENT']);
+        $naIsBot = $preg === 1;
+    }
 
     $lanConfigFilepath = realpath(dirname(__FILE__)).'/domainConfigs/'.$naWebOS->domain.'/naLAN.json';
     $lanConfigExampleFilepath = realpath(dirname(__FILE__)).'/domainConfigs/'.$naWebOS->domain.'/naLAN.EXAMPLE.json';
