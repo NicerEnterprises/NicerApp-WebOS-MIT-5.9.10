@@ -51,12 +51,19 @@ if ($appRec['page']=='index') {
         if (!$doc->isIndex) $marginLeft = 50;
         $docA = json_decode(json_encode($doc), true);
 
+        $url = '';
+        if (array_key_exists('request', $docA))
+            $url = $docA['request']['$_SERVER']['REQUEST_URI'];
+        if (array_key_exists('httpOpts', $docA))
+            $url = $docA['httpOpts']['ALL cURL fields']['CURLOPT_URL'];
+
+
         if (array_key_exists('request', $docA)) {
             $now = DateTime::createFromFormat('U.u', $doc->s1);
             $now2 = $now->format("Y-m-d H:i:s.u");
 
             echo '<div id="'.$doc->_id.'" style="margin:10px;margin-left:'.$marginLeft.'px" onclick="naLog.onclick_logEntry(event);">';
-            echo '<h2><span class="datetimeAccurate">'.$now2.'</span> <span class="ip">'.$doc->ip.'</span> '.$docA['request']['$_SERVER']['REQUEST_URI'].'</h2>';
+            echo '<h2><span class="datetimeAccurate">'.$now2.'</span> <span class="ip">'.$doc->ip.'</span> '.$url.'</h2>';
             //echo hmJSON ($docA['request'], 'Request response');
             echo '</div>';
         }

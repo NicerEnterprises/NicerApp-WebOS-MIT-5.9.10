@@ -3,7 +3,6 @@ var naLog = {
         var
         url = '/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/logs/ajax_logEntry.php',
         dat = {
-            s1 : parseFloat($(evt.currentTarget).attr('s1')),
             i : $(evt.currentTarget).attr('i')
         },
         ac = {
