@@ -1,12 +1,12 @@
-<div style="display:flex;">
+<div style="display:inline-block;height:100px;max-height:100px;">
 <?php
 global $naWebOS;
 global $naLAN;
-if (!$naLAN) die('403 Forbidden.');
+//if (!$naLAN) die('403 Forbidden.');
 //echo '<pre style="color:yellow;background:rgba(0,0,50,0.5);border-radius:10px;margin:10px;">'; var_dump ($naWebOS->view); echo '</pre>';
 
 echo $naWebOS->html_vividButton (
-    1, 'position:relative;display:block;',
+    1, 'float:left;',
 
     'btnRobots', 'vividButton_icon_100x100 relative', '_100x100', 'relative',
     '',
@@ -29,7 +29,7 @@ echo $naWebOS->html_vividButton (
     null
 );
 echo $naWebOS->html_vividButton (
-    3, 'position:relative;display:block;',
+    3, 'float:left',
 
     'btnHumans', 'vividButton_icon_100x100 relative', '_100x100', 'relative',
     '',
@@ -52,7 +52,7 @@ echo $naWebOS->html_vividButton (
     null
 );
 echo $naWebOS->html_vividButton (
-    5, 'position:relative;display:block;',
+    5, 'float:left',
 
     'btnLAN', 'vividButton_icon_100x100 relative', '_100x100', 'relative',
     '',

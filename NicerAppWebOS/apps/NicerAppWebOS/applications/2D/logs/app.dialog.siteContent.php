@@ -1,7 +1,7 @@
 <?php
 global $naWebOS;
 global $naLAN;
-if (!$naLAN) die('403 Forbidden.');
+//if (!$naLAN) die('403 Forbidden.');
 //echo '<pre style="color:yellow;background:rgba(0,0,50,0.5);border-radius:10px;margin:10px;">'; var_dump ($naWebOS->view); echo '</pre>';
 foreach ($naWebOS->view as $appID => $appRec) break;
 if ($appRec['page']=='index') {

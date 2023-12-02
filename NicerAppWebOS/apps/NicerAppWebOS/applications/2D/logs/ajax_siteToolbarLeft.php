@@ -1,9 +1,9 @@
-<div style="display:flex;">
+<div style="display:flex;height:100px;">
 <?php
 require_once (dirname(__FILE__).'/../../../../../boot.php');
 global $naWebOS;
 global $naLAN;
-if (!$naLAN) die('403 Forbidden.');
+//if (!$naLAN) die('403 Forbidden.');
 //echo '<pre style="color:yellow;background:rgba(0,0,50,0.5);border-radius:10px;margin:10px;">'; var_dump ($naWebOS->view); echo '</pre>';
 
 switch ($_GET['type']) {
