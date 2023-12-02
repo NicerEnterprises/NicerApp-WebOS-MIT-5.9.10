@@ -1,0 +1,63 @@
+var naLog = {
+    onclick_logEntry : function (evt) {
+        var
+        url = '/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/logs/ajax_logEntry.php',
+        dat = {
+            s1 : parseFloat($(evt.currentTarget).attr('s1')),
+            i : $(evt.currentTarget).attr('i')
+        },
+        ac = {
+            type : 'GET',
+            url : url,
+            data : dat,
+            success : function (data, ts, xhr) {
+                debugger;
+                $('#siteContent .vividDialogContent').html(data);
+            },
+            error : function (xhr, textStatus, errorThrown) {
+            }
+        };
+        debugger;
+        $.ajax(ac);
+    },
+    onclick_logEntry_details : function (evt) {
+        var
+        url = '/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/logs/ajax_logEntry_details.php',
+        dat = {
+            id : evt.currentTarget.id
+        },
+        ac = {
+            type : 'GET',
+            url : url,
+            data : dat,
+            success : function (data, ts, xhr) {
+                debugger;
+                $('#siteContent .vividDialogContent').html(data);
+            },
+            error : function (xhr, textStatus, errorThrown) {
+            }
+        };
+        debugger;
+        $.ajax(ac);
+    },
+    showEvents : function (evt,type) {
+        var
+        url = '/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/logs/ajax_siteToolbarLeft.php',
+        dat = {
+            type : type
+        },
+        ac = {
+            type : 'GET',
+            url : url,
+            data : dat,
+            success : function (data, ts, xhr) {
+                debugger;
+                $('#siteToolbarLeft .vividDialogContent').html(data);
+            },
+            error : function (xhr, textStatus, errorThrown) {
+            }
+        };
+        debugger;
+        $.ajax(ac);
+    }
+};

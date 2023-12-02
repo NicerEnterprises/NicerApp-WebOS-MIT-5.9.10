@@ -1,5 +1,7 @@
 <?php
 global $naWebOS;
+global $naLAN;
+if (!$naLAN) die('403 Forbidden.');
 //echo '<pre style="color:yellow;background:rgba(0,0,50,0.5);border-radius:10px;margin:10px;">'; var_dump ($naWebOS->view); echo '</pre>';
 foreach ($naWebOS->view as $appID => $appRec) break;
 if ($appRec['page']=='index') {
@@ -12,7 +14,9 @@ if ($appRec['page']=='index') {
     // fetch dataRecord
     $findCommand = [
         'selector' => [
-            'isIndex' => true
+            'isIndex' => true,
+            'isBot' => false,
+            'isLAN' => false
         ],
         'fields' => ['_id', 'isIndex', 'ip', 's1', 's2', 'request'],
         'sort' => [

@@ -274,6 +274,8 @@ class SagCURLHTTPAdapter extends SagHTTPAdapter {
 
       global $phpScript_startupTime;
       global $naIP;
+      global $naIsBot;
+      global $naLAN;
       global $naVersionNumber;
       $time = microtime(true) - $phpScript_startupTime;
       //var_dump (dirname(__FILE__).'/errors.css');
@@ -287,6 +289,9 @@ class SagCURLHTTPAdapter extends SagHTTPAdapter {
           's1' => $_SESSION['started'],
           's2' => microtime(true),
           'i' => $_SESSION['startedID'],
+          'isIndex' => $_SERVER['SCRIPT_NAME']==='/NicerAppWebOS/index.php',
+          'isBot' => $naIsBot,
+          'isLAN' => $naLAN,
           't' => $unixTimeStamp,
           'to' => $dtz_offset,
           'ts' => $timestamp,

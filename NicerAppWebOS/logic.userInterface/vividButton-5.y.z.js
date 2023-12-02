@@ -32,6 +32,13 @@ class naVividButton {
         $el = $('.vividButton_icon_50x50',$(t.el).parent()), // $el should be $(t.el)
         $el2 = $('.vividButton_icon_50x50_text',$(t.el).parent()),
         $el3 = $('.vividButton_icon_50x50_text > div',$(t.el).parent());
+
+        if (!$el[0]) {
+            var
+            $el = $('.vividButton_icon_100x100',$(t.el).parent()), // $el should be $(t.el)
+            $el2 = $('.vividButton_icon_100x100_text',$(t.el).parent()),
+            $el3 = $('.vividButton_icon_100x100_text > div',$(t.el).parent());
+        }
         
         $('img[srcPreload]',$(t.el).parent()).each(function(idx,el4) {
             $(el4).attr('src', $(el4).attr('srcPreload')).removeAttr('srcPreload');
@@ -262,6 +269,7 @@ class naVividButton {
     
     select () {
         $(this.el).addClass('selected');
+        debugger;
         $('.vividButton_icon_borderCSS'+this.suffix, this.el).css({backgroundImage : 'radial-gradient(circle 70px at center, rgba(255, 166, 0, 1), rgba(255,166,0,1)', boxShadow : '0px 0px 2px 2px rgba(255,166,0,0.7)'});
     }    
 

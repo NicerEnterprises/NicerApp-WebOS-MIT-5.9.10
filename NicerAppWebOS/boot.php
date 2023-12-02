@@ -146,7 +146,7 @@ NicerApp WCS (Website Control System) from Nicer Enterprises
                 '+','plus',
                 preg_replace('/.*\s/','',date(DATE_RFC2822))
             );
-        $naBot = stripos($_SERVER['HTTP_USER_AGENT'], 'bot')!==false;
+        $naBot = stripos($_SERVER['HTTP_USER_AGENT'], 'bot')!==0;
 
         if (!$naBot) {
             $_SESSION['na_error_log_filepath_html'] =
@@ -217,6 +217,35 @@ NicerApp WCS (Website Control System) from Nicer Enterprises
     ];
     //$msg = 'NEW REQUEST :<br/>'.hmJSON($dbg,'$dbg');
 
+    global $naIsBot;
+    $naIsBot = preg_match('/bot/i', $_SERVER['HTTP_USER_AGENT']) === 1;
+
+    $lanConfigFilepath = realpath(dirname(__FILE__)).'/domainConfigs/'.$naWebOS->domain.'/naLAN.json';
+    $lanConfigExampleFilepath = realpath(dirname(__FILE__)).'/domainConfigs/'.$naWebOS->domain.'/naLAN.EXAMPLE.json';
+    if (!file_exists($lanConfigFilepath))
+        trigger_error ('"'.$lanConfigFilepath.'" does not exist. See "'.$lanConfigExampleFilepath.'" for a template.', E_USER_ERROR);
+    $lanConfigRaw = file_get_contents($lanConfigFilepath);
+    $lanConfig = json_decode($lanConfigRaw, true);
+    checkForJSONerrors($lanConfigRaw, $lanConfigFilepath, $lanConfigExampleFilepath);
+
+    global $naLAN;
+    $naLAN = (
+        $naIP === '::1'
+        || $naIP === '127.0.0.1'
+        || in_array($naIP, $lanConfig)
+    );
+    if ($naLAN && array_key_exists('logsInitialized', $_SESSION) && !$_SESSION['logsInitialized']) {
+        /*
+        $html = $naWebOS->getSite();
+            //'<html><head>'
+            //.PHP_EOL.$naWebOS->getLinks($naWebOS->cssFiles)
+            //.PHP_EOL.$naWebOS->getLinks($naWebOS->javascriptFiles).PHP_EOL
+            //.'</head><body style="overflow:visible"><div id="siteBackground"></div>';*/
+        //$html = '<script type="text/javascript" src="/NicerAppWebOS/logic.business/debug-1.0.0.source.js?c='.date('Ymd_His',filemtime(dirname(__FILE__).'/logic.business/debug-1.0.0.source.js')).'"></script>';
+        //file_put_contents ($_SESSION['na_error_log_filepath_html'], $html, FILE_APPEND);
+
+        $_SESSION['logsInitialized'] = true;
+    }
 
     global $phpScript_startupTime;
     global $naIP;
@@ -241,6 +270,8 @@ NicerApp WCS (Website Control System) from Nicer Enterprises
             : $_SESSION['startedID']
         ),
         'isIndex' => $_SERVER['SCRIPT_NAME']==='/NicerAppWebOS/index.php',
+        'isBot' => $naIsBot,
+        'isLAN' => $naLAN,
         'to' => $dtz_offset,
         'ts' => $timestamp,
         'ip' => $naIP,
@@ -253,33 +284,6 @@ NicerApp WCS (Website Control System) from Nicer Enterprises
     $naLog->add ( [ $err ] );
     //trigger_error ($msg, E_USER_NOTICE);
     //echo '<pre>'; var_dump ($_SERVER); die();
-
-    $lanConfigFilepath = realpath(dirname(__FILE__)).'/domainConfigs/'.$naWebOS->domain.'/naLAN.json';
-    $lanConfigExampleFilepath = realpath(dirname(__FILE__)).'/domainConfigs/'.$naWebOS->domain.'/naLAN.EXAMPLE.json';
-    if (!file_exists($lanConfigFilepath))
-        trigger_error ('"'.$lanConfigFilepath.'" does not exist. See "'.$lanConfigExampleFilepath.'" for a template.', E_USER_ERROR);
-    $lanConfigRaw = file_get_contents($lanConfigFilepath);
-    $lanConfig = json_decode($lanConfigRaw, true);
-    checkForJSONerrors($lanConfigRaw, $lanConfigFilepath, $lanConfigExampleFilepath);
-
-    global $naLAN;
-    $naLAN = (
-        $naIP === '::1'
-        || $naIP === '127.0.0.1'
-        || in_array($naIP, $lanConfig)
-    );
-    if ($naLAN && array_key_exists('logsInitialized', $_SESSION) && !$_SESSION['logsInitialized']) {
-        /*
-        $html = $naWebOS->getSite();
-            //'<html><head>'
-            //.PHP_EOL.$naWebOS->getLinks($naWebOS->cssFiles)
-            //.PHP_EOL.$naWebOS->getLinks($naWebOS->javascriptFiles).PHP_EOL
-            //.'</head><body style="overflow:visible"><div id="siteBackground"></div>';*/
-        $html = '<script type="text/javascript" src="/NicerAppWebOS/logic.business/debug-1.0.0.source.js?c='.date('Ymd_His',filemtime(dirname(__FILE__).'/logic.business/debug-1.0.0.source.js')).'"></script>';
-        file_put_contents ($_SESSION['na_error_log_filepath_html'], $html, FILE_APPEND);
-
-        $_SESSION['logsInitialized'] = true;
-    }
 
     ini_set ('error_log', $na_error_log_filepath_txt);
 

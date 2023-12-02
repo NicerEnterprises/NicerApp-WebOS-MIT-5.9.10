@@ -299,7 +299,8 @@ na.site = {
         
         $('#siteContent').css({display:'none',opacity:1}).fadeIn('slow');//css({display:'block'});
 
-        $('.vividButton4, .vividButton, .vividButton_icon_50x50_siteTop, .vividButton_icon_50x50').each(function(idx,el){
+        $('.vividButton4, .vividButton, .vividButton_icon_50x50_siteTop, .vividButton_icon_50x50, .vividButton_icon_100x100').each(function(idx,el){
+            if ($(el).is('.vividButton_icon_100x100')) debugger;
             if (!na.site.settings.buttons['#'+el.id]) na.site.settings.buttons['#'+el.id] = new naVividButton(el);
         });
         if (na.m.userDevice.isPhone) $('#btnOptions, #btnLoginLogout, #btnChangeBackground').css({opacity:1})

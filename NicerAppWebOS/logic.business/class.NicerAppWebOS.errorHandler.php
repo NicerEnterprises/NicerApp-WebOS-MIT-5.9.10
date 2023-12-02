@@ -72,6 +72,8 @@ class class_NicerAppWebOS__errorHandler {
         $errHTML .= '</div>'.PHP_EOL.PHP_EOL;
 
         global $naIP;
+        global $naIsBot;
+        global $naLAN;
         $date = date('Y-m-d H:i:s');
 
         $errANSI = PHP_EOL."\033[37;49;1m[ ".$naIP." : ".$date."]".PHP_EOL."\033[31;47;3;1mPHP ".$errtype.' error in "'.$errfile.'":'.$errline." : \033[35;47;3;1m".$errstr.",\033[31;47;3;1m backtrace = \033[37;49m".PHP_EOL.$this->backtrace('ansi')."\033[37;49m".PHP_EOL;
@@ -91,6 +93,8 @@ class class_NicerAppWebOS__errorHandler {
             ),
             's2' => microtime(true),
             'isIndex' => $_SERVER['SCRIPT_NAME']==='/NicerAppWebOS/index.php',
+            'isBot' => $naIsBot,
+            'isLAN' => $naLAN,
             'i' => (
                 session_status() === PHP_SESSION_NONE
                 ? false

@@ -1,6 +1,8 @@
 <?php
 require_once (dirname(__FILE__).'/../../../../../boot.php');
 global $naWebOS;
+global $naLAN;
+if (!$naLAN) die('403 Forbidden.');
     $db = $naWebOS->dbs->findConnection('couchdb');
     $cdb = $db->cdb;
 
@@ -40,7 +42,7 @@ global $naWebOS;
         //echo '<pre style="color:white;background:rgba(0,50,0,0.5);border-radius:10px;padding:5px;margin:10px;">'; var_dump($call2->body); echo '</pre>';
 
         $marginLeft = 10;
-        if (!$doc->isIndex) $marginLeft = 50;
+        if (!$call2->body->isIndex) $marginLeft = 50;
         $docA = json_decode(json_encode($call2->body), true);
 
         $now = DateTime::createFromFormat('U.u', $call2->body->s2);

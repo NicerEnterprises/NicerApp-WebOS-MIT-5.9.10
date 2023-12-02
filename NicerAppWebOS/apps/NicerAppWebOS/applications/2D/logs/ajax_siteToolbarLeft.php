@@ -1,0 +1,156 @@
+<div style="display:flex;">
+<?php
+require_once (dirname(__FILE__).'/../../../../../boot.php');
+global $naWebOS;
+global $naLAN;
+if (!$naLAN) die('403 Forbidden.');
+//echo '<pre style="color:yellow;background:rgba(0,0,50,0.5);border-radius:10px;margin:10px;">'; var_dump ($naWebOS->view); echo '</pre>';
+
+switch ($_GET['type']) {
+    case 'robots' : $btnID = '#btnRobots'; break;
+    case 'humans' : $btnID = '#btnHumans'; break;
+    case 'LAN' : $btnID = '#btnLAN'; break;
+}
+
+echo $naWebOS->html_vividButton (
+    1, 'position:relative;display:block;',
+
+    'btnRobots', 'vividButton_icon_100x100 relative', '_100x100', 'relative',
+    '',
+    'if (!$(this).is(\'.disabled\')) { naLog.showEvents(event,\'robots\'); }',
+    '',
+    '',
+
+    2, 'Show robot visitors',
+
+    'btnCssVividButton_outerBorder.png',
+    'btnCssVividButton.png',
+    'btnCssVividButton.green2a.png',
+    'btnVisitors_robots.png',
+
+    '',
+    '',
+
+    null,
+    null,
+    null
+);
+echo $naWebOS->html_vividButton (
+    3, 'position:relative;display:block;',
+
+    'btnHumans', 'vividButton_icon_100x100 relative', '_100x100', 'relative',
+    '',
+    'if (!$(this).is(\'.disabled\')) { naLog.showEvents(event,\'humans\'); }',
+    '',
+    '',
+
+    4, 'Show human visitors',
+
+    'btnCssVividButton_outerBorder.png',
+    'btnCssVividButton.png',
+    'btnCssVividButton.green2a.png',
+    'btnVisitors_humans.png',
+
+    '',
+    '',
+
+    null,
+    null,
+    null
+);
+echo $naWebOS->html_vividButton (
+    5, 'position:relative;display:block;',
+
+    'btnLAN', 'vividButton_icon_100x100 relative', '_100x100', 'relative',
+    '',
+    'if (!$(this).is(\'.disabled\')) { naLog.showEvents(event,\'LAN\'); }',
+    '',
+    '',
+
+    6, 'Show LAN visitors',
+
+    'btnCssVividButton_outerBorder.png',
+    'btnCssVividButton.png',
+    'btnCssVividButton.green2a.png',
+    'btnVisitors_LAN.png',
+
+    '',
+    '',
+
+    null,
+    null,
+    null
+);
+?>
+</div>
+<script type="text/javascript">
+    setTimeout(function() {
+        $('.vividButton_icon_100x100').each(function(idx,el) {
+            na.site.settings.buttons['#'+el.id] = new naVividButton(el);
+        });
+        na.site.settings.buttons['<?php echo $btnID?>'].select();
+    }, 50);
+</script>
+<?php
+
+
+
+//echo '<img src="/NicerAppWebOS/siteMedia/btnRobot.png" style="width:100px;height:100px;"/>';
+//echo '<img src="/NicerAppWebOS/siteMedia/btnHumans.png" style="width:100px;height:100px;"/>';
+
+
+foreach ($naWebOS->view as $appID => $appRec) break;
+//if ($appRec['page']=='index') {
+    $db = $naWebOS->dbs->findConnection('couchdb');
+    $cdb = $db->cdb;
+
+    $debug = false;
+    $dbName = $db->dataSetName('logentries');
+
+    // fetch dataRecord
+    $findCommand = [
+        'selector' => [
+            'type' => 'new request',
+            'isIndex' => true
+        ],
+        'fields' => ['_id', 'ip', 's1', 's2', 'i', 'isIndex', 'isBot', 'request'],
+        'sort' => [
+            [ 's1' => 'asc' ],
+            [ 's2' => 'asc' ]
+        ],
+        'use_index' => '_design/249f3b14593cc6f19467c3697f2398397bd9aab6'
+    ];
+    if ($_GET['type']=='robots') $findCommand['selector']['isBot'] = true;
+    elseif ($_GET['type']=='LAN') $findCommand['selector']['isLAN'] = true;
+    else {
+        $findCommand['selector']['isBot'] = false;
+        $findCommand['selector']['isLAN'] = false;
+    }
+
+    //echo '<pre style="padding:8px;border-radius:10px;background:rgba(255,255,255,0.5);color:green;">'; var_dump ($findCommand); echo '</pre>';
+    try {
+        $call = $cdb->find ($findCommand);
+    } catch (Exception $e) {
+        $msg = $fncn.' FAILED while trying to find in \''.$dataSetName.'\' : '.$e->getMessage();
+        echo $msg;
+        die();
+    }
+
+    foreach ($call->body->docs as $docID => $doc) {
+        $docA = json_decode(json_encode($doc), true);
+
+        $now = DateTime::createFromFormat('U.u', $doc->s1);
+        $now2 = $now->format("Y-m-d H:i:s.u");
+
+        $class = '';
+        if ($doc->isBot) $class.='bot ';
+
+        echo '<h2 class="logEntry '.$class.'" s1="'.$doc->s1.'" i="'.$doc->i.'"  onclick="naLog.onclick_logEntry(event);"><span class="datetimeAccurate">'.$now2.'</span> <span class="ip">'.$doc->ip.'</span><br/>'.$docA['request']['$_SERVER']['REQUEST_URI'].'</h2>';
+
+    }
+
+    echo PHP_EOL;
+    echo '<script type="text/javascript">setTimeout(function() { na.desktop.settings.visibleDivs.push(\'#siteToolbarLeft\');na.desktop.resize();},1000);</script>';
+//}
+?>
+<script type="text/javascript" src="/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/logs/naLog.source.js"></script>
