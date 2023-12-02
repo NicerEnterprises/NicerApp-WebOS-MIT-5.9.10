@@ -3,6 +3,7 @@ require_once (dirname(__FILE__).'/../../../../../boot.php');
 global $naWebOS;
 global $naLAN;
 if (!$naLAN) die('403 Forbidden.');
+
     $db = $naWebOS->dbs->findConnection('couchdb');
     $cdb = $db->cdb;
 
