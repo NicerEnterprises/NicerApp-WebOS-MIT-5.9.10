@@ -59,5 +59,23 @@ var naLog = {
         };
         debugger;
         $.ajax(ac);
+        var
+        url = '/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/logs/ajax_siteContent.php',
+        dat = {
+            type : type
+        },
+        ac = {
+            type : 'GET',
+            url : url,
+            data : dat,
+            success : function (data, ts, xhr) {
+                debugger;
+                $('#siteContent .vividDialogContent').html(data);
+            },
+            error : function (xhr, textStatus, errorThrown) {
+            }
+        };
+        debugger;
+        $.ajax(ac);
     }
 };
