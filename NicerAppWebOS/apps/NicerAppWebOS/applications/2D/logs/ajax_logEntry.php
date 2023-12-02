@@ -13,7 +13,8 @@ global $naLAN;
     // fetch dataRecord
     $findCommand = [
         'selector' => [
-            'i' => $_GET['i']
+            'i' => $_GET['i'],
+            'isIndex' => true
         ],
         'fields' => ['_id'],
         'sort' => [

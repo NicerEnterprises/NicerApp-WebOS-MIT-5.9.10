@@ -6,13 +6,18 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" style="width:100%;height:100%;">
 <head>
 <!--
-https://nicer.app and https://said.by are Copyrighted (c) 2002-2023 by Rene A.J.M. Veerman from The Netherlands.
+https://nicer.app and https://said.by are Copyrighted (C) and have All Rights Reserved (R) 2002-2023
+by Rene A.J.M. Veerman from The Netherlands.
+
+THIS IS NOW A CLOSED-SOURCE PROJECT.
+SEE THE NEW LICENSE CONTENT FILE ON THE WEBFACING FRONT PAGE OF THIS WEBSITE.
 
 LICENSE : see https://nicer.app/docs-license
 -->
 
 <!--<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />-->
 <meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
+<meta name="description" content="Use a video or (tled) photo background as wallpaper for your webpages. Comes with it's own theme editor." />
 {$viewport}
 <meta name="HandheldFriendly" content="true" />
 {$cssLinks}
@@ -37,7 +42,7 @@ $(document).ready(function() {
     <link rel="manifest" href="/NicerAppWebOS/favicon/site.webmanifest">
     <link rel="mask-icon" href="/NicerAppWebOS/favicon/safari-pinned-tab.svg" color="#5bbad5">
     <link rel="shortcut icon" href="/NicerAppWebOS/favicon/favicon.ico">
-    <?php echo '<link type="text/css" rel="StyleSheet" href="/NicerAppWebOS/logic.business/errors.css?c='.date('Ymd_His', filemtime(dirname(__FILE__).'/../../logic.business/errors.css')).'">'.PHP_EOL; ?>
+    <?php echo '<link type="text/css" rel="StyleSheet" href="/NicerAppWebOS/3rd-party/jsTree-3.3.15/dist/themes/default/style.css?c='.date('Ymd_His', filemtime(dirname(__FILE__).'/../../../NicerAppWebOS/3rd-party/jsTree-3.3.15/dist/themes/default/style.css')).'">'.PHP_EOL; ?>
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-config" content="/NicerAppWebOS/favicon/browserconfig.xml">
     <meta name="theme-color" content="#ffffff">
@@ -58,7 +63,9 @@ $(document).ready(function() {
     </div>
     </div>
 
-    <div id="btnOptions" class="vividButton_icon_50x50_siteTop" tabindex="2" onmouseover="na.site.settings.timeout_btnOptionsMouseOver = setTimeout(function(evt){na.site.onmouseover_btnOptions(event); delete na.site.settings.timeout_btnOptionsMouseOver;},500,event);" onmouseout="if (na.site.settings.timeout_btnOptionsMouseOver) { clearTimeout(na.site.settings.timeout_btnOptionsMouseOver); delete na.site.settings.timeout_btnOptionsMouseOver;}">
+    <div id="btnOptions" class="vividButton_icon_50x50_siteTop" tabindex="2"
+        onmouseover="na.site.settings.timeout_btnOptionsMouseOver = setTimeout(function(evt){na.site.onmouseover_btnOptions(event); delete na.site.settings.timeout_btnOptionsMouseOver;},300,event);"
+        onmouseout="clearTimeout(na.site.settings.timeout_btnOptionsMouseOver);">
         <div class="vividButton_icon_borderCSS_50x50"></div>
         <img class="vividButton_icon_imgBorder_50x50" srcPreload="/NicerAppWebOS/siteMedia/btnCssVividButton_outerBorder.png"/>
         <img class="vividButton_icon_imgTile_50x50" srcPreload="/NicerAppWebOS/siteMedia/btnCssVividButton.png"/>
@@ -66,7 +73,9 @@ $(document).ready(function() {
         <img class="vividButton_icon_imgButtonIcon_50x50" srcPreload="/NicerAppWebOS/siteMedia/btnOptions2.png"/>
     </div>
 
-    <div id="btnLoginLogout" class="vividButton_icon_50x50_siteTop" tabindex="3" onclick="na.site.displayLogin(event)" onmouseover="$('#btnOptions_menu').fadeOut('fast');">
+    <div id="btnLoginLogout" class="vividButton_icon_50x50_siteTop" tabindex="3" onclick="na.site.displayLogin(event)"
+        onmouseover="na.site.settings.current.timeout_hide__btnOptions_menu_2 = setTimeout(function() { $('#btnOptions_menu').fadeOut('fast'); }, 300);"
+        onmouseout="clearTimeout(na.site.settings.current.timeout_hide__btnOptions_menu_2);">
         <div class="vividButton_icon_borderCSS_50x50"></div>
         <img class="vividButton_icon_imgBorder_50x50" srcPreload="/NicerAppWebOS/siteMedia/btnCssVividButton_outerBorder.png"/>
         <img class="vividButton_icon_imgTile_50x50" srcPreload="/NicerAppWebOS/siteMedia/btnCssVividButton.png"/>
@@ -90,8 +99,11 @@ $(document).ready(function() {
         <ul class="vividMenu_mainUL" style="display:none;"></ul>
     </div>
 
-    <div id="btnOptions_menu" class="vividDialogPopup anchored vividScrollpane" style="display:none;" onmouseover="na.site.onmouseover_btnOptions(event);" onmouseout="na.site.onmouseout_btnOptions(event)">
+    <div id="btnOptions_menu" class="vividDialogPopup anchored vividScrollpane" style="z-index:-10;overflow:visible;"
+        onmouseover="clearTimeout(na.site.settings.current.timeout_hide__btnOptions_menu);"
+        onmouseout="na.site.settings.current.timeout_hide__btnOptions_menu = setTimeout(function(){ $('#btnOptions_menu').fadeOut('slow'); }, 500);">
         <?php       
+        //onmouseover="na.site.onmouseover_btnOptions(event);" onmouseout="na.site.onmouseout_btnOptions(event)"
             global $naWebOS;
             $fn = realpath(dirname(__FILE__).'/../../../').'/NicerAppWebOS/domainConfigs/'.$naWebOS->domain.'/btnOptions_menu__default.php';
             if (file_exists($fn)) echo require_return($fn);
@@ -113,11 +125,10 @@ $(document).ready(function() {
         <img class="bg_last" alt=""/>
     </div>
     
-    <div id="siteLoginLogout" class="vividDialog" style="display:none;z-index:2000;">
-    <div class="vividDialogContent vividScrollpane">
+    <div id="siteLoginLogout" class="vividDialogPopup">
+        <div id="siteLoginLogout_background" class="vividDialogPopup_background"></div>
     </div>
-    </div>
-
+<!--
     <div id="siteVideo" class="vividDialog" style="display:none;justify-content:center;align-items:center;text-align:center;">
         {$div_siteVideo}
     </div>
@@ -125,30 +136,29 @@ $(document).ready(function() {
     <div id="siteVideoSearch" class="vividDialog" style="display:none;justify-content:center;align-items:center;text-align:center;">
         {$div_siteVideoSearch}
     </div>
-
+-->
     
     <div id="siteComments" class="vividDialog" style="display:none;justify-content:center;align-items:center;text-align:center;">
         {$div_siteComments}
     </div>
-    
+
+<!--
     <div id="siteToolbarTop" class="vdToolbar vividDialog">
     <div class="vividDialogContent vividScrollpane">
         {$div_siteToolbarTop}
     </div>
     </div>
-
+-->
     <div id="siteToolbarLeft" class="vdToolbar vividDialog">
     <div class="vividDialogContent vividScrollpane">
         {$div_siteToolbarLeft}
     </div>
     </div>
-    
     <div id="siteToolbarRight" class="vdToolbar vividDialog">
     <div class="vividDialogContent vividScrollpane">
         {$div_siteToolbarRight}
     </div>
     </div>
-
     
     
     <div id="siteRegistration" class="vividDialogPopup vividScrollpane">
@@ -255,10 +265,14 @@ echo $naWebOS->html_vividButton (
         <div id="siteErrors_msg">{$div_siteErrors}</div>
     </div>
     
-    
+
+    <div id="siteToolbarThemeEditor__elementPicker" class="vividDialogPopup_noBorder" style="display:none;">
+        <div id="siteToolbarThemeEditor__elementPicker_dropdown" class="na_elementPicker_dropdown vividScrollpane" style="position:relative;height:auto;white-space:normal;"></div>
+    </div>
 
     <div id="siteToolbarThemeEditor" class="vdToolbar vividDialog">
-    <div class="vividDialogContent vividScrollpane" style="overflow:hidden;overflow-y:auto;">
+    <div class="vividDialogContent vividScrollpane" style="overflow:visible;overflow-y:auto;">
+    <!--
         <div class="sds_dialogTitle">
 <?php
 global $naWebOS;
@@ -283,12 +297,14 @@ echo $naWebOS->html_vividButton (
     
     'View result',
     'grouped btnHide themeEditor', 
-    'font-weight:bold;font-size:1em;'
+    ''
 );
+
 ?>
         </div>
         <div class="flexBreak"></div>
-        <div id="specificitySettings" class="themeEditorComponent_alwaysVisible" style="font-size:15px;flex-wrap:wrap;">
+        -->
+        <div id="specificitySettings" class="themeEditorComponent_alwaysVisible" style="font-size:15px;flex-wrap:wrap;box-shadow:inset 0px 0px 4px 2px rgba(0,0,0,0.6);">
 <?php
 global $naLAN;
 if (false && $naLAN) {
@@ -320,25 +336,91 @@ if (false && $naLAN) {
 ?>
             <div class="flexBreak"></div>
 
+
+            <!--
             <div style="order:0;display:flex;align-items:center;justify-content:center;">
                 <label for="themeEditor_specificity_dialog" class="labelthemeEditor2" style="order:0">Dialog
-                    <input type="radio" id="themeEditor_photoSpecificity_dialog" name="sdad" class="radioInput" value="dialog" checked="checked" onchange="na.te.onchange_applicationRange(event);" style="order:0"/>
+                    <input type="radio" id="themeEditor_photoSpecificity_dialog" name="sdad" class="radioInput" value="dialog" checked="checked" onchange="na.te.onchange_applicationRange(event);" style="order:0;display:none"/>
                 </label>
                 <label for="themeEditor_specificity_allDialogs" class="labelthemeEditor2" style="order:4;white-space:nowrap;">All dialogs
-                    <input type="radio" id="themeEditor_photoSpecificity_allDialogs" name="sdad" class="radioInput" value="allDialogs" onchange="na.te.onchange_applicationRange(event);" style="order:1"/>
+                    <input type="radio" id="themeEditor_photoSpecificity_allDialogs" name="sdad" class="radioInput" value="allDialogs" onchange="na.te.onchange_applicationRange(event);" style="order:1;display:none"/>
                 </label>
             </div>
+            -->
                 
-                
+            <div style="display:flex;width:100%;align-items:center;margin-top:5px;">
+                <!--<label id="labelTheme" for="themes" class="specificityLabel" style="order:2;font-weight:bold;">Theme</label>
+                <select id="themes" class="select themeEditor mainBar_forThemeEditor" onchange="na.te.themeSelected(event)" style="order:2">
+                    <option id="theme_default" name="theme_default" value="default">default</option>
+                </select>-->
+                <!--<span class="siteToolbarThemeEditor__label__themes">Theme</span>-->
+                <?php
+echo $naWebOS->html_vividButton (
+    4, 'align-items:center;',
+
+    'btnViewResult',
+    'vividButton_icon_50x50 grouped btnDelete forum', '_50x50', 'grouped',
+    '',
+    'na.te.hide(event)',
+    '',
+    '',
+
+    400, 'View result.',
+
+    'btnCssVividButton_outerBorder.png',
+    'btnCssVividButton.grey2a.png',
+    null,//'btnCssVividButton_iconBackground.png',
+    'btnBack.png',
+
+    '',
+
+    '',
+    'grouped btnHide themeEditor',
+    ''
+);
+                ?>
+                <!--<img src="/NicerAppWebOS/siteMedia/btnPickColor.png" class="vividButton" style="width:40px;"/>-->
+                <div id="siteToolbarThemeEditor__themes_dropdown" class="na_themes_dropdown na_themes_dropdown__themes vividScrollpane" style="position:relative;height:auto;white-space:normal;"></div>
+
+<?php
+global $naWebOS;
+echo $naWebOS->html_vividButton (
+    4, 'order:2;margin-left:10px',
+
+    'btnSetPermissionsForTheme', 'vividButton_icon_50x50 grouped btnDelete forum', '_50x50', 'grouped',
+    '',
+    'if (!$(this).is(\'.disabled\')) na.te.setPermissionsForTheme(event)',
+    '',
+    '',
+
+    403, 'Create or delete theme, and set permissions for current theme.',
+
+    'btnCssVividButton_outerBorder.png',
+    'btnCssVividButton.png',
+    'btnCssVividButton.red1b.png',
+    '1660_blk_19329_zoom.upperBodyOnly.256x256.png',
+
+    '<img class="vividButton_icon_imgButtonIcon_50x50_sup1" srcPreload="/NicerAppWebOS/siteMedia/btnTrashcan2_white_lowres.png" style="position:absolute;left:calc(50px - 15px);width:15px;height:19px;z-index:2021;"/>'
+    .'<img class="vividButton_icon_imgButtonIcon_50x50_sup2" srcPreload="/NicerAppWebOS/siteMedia/documentAdd_lowres.png" style="position:absolute;left:-5px;width:20px;height:20px;z-index:2021;"/>',
+
+    null,
+    null,
+    null
+);
+?>
+            </div>
             <div style="display:flex;width:100%;align-items:center;">
-                <label for="specificity" class="specificityLabel" style="order:1;vertical-align:middle;font-weight:bold">Specificity</label>
-                <select id="specificity" class="select themeEditor mainBar_forThemeEditor" onchange="na.te.specificitySelected(event)" style="order:1;display:none;"></select>
-                <div id="specificity_dropdown" class="vividDropDownBox" style="order:1"></div>
+                <!--<label for="specificity" class="specificityLabel" style="order:1;vertical-align:middle;font-weight:bold">Specificity</label>
+                <select id="specificity" class="select themeEditor mainBar_forThemeEditor" onchange="na.te.specificitySelected(event)" style="order:1;display:none;"></select>-->
+                <!--<span class="siteToolbarThemeEditor__label__specificity">Specificity</span>-->
+                <div id="btnThemeEditor__specificity_lock" class="vividButton4" buttonType="btn_lock" onclick="na.site.settings.current.lockSpecificity = !na.site.settings.current.lockSpecificity;"></div>
+                <div id="siteToolbarThemeEditor__specificity_dropdown" class="na_themes_dropdown na_themes_dropdown__specificity vividScrollpane" style="position:relative;height:auto;white-space:normal;"></div>
+
                 
 <?php
 global $naWebOS;
 echo $naWebOS->html_vividButton (
-    4, 'order:1;margin-left:10px;',
+    4, 'order:1;margin-left:10px',
     
     'btnDeleteSpecificity', 
     'vividButton_icon_50x50 grouped btnDelete forum', '_50x50', 'grouped',
@@ -362,88 +444,67 @@ echo $naWebOS->html_vividButton (
 );
 ?>
             </div>
-            <div style="display:flex;width:100%;align-items:center;margin-top:5px;">
-                <label id="labelTheme" for="themes" class="specificityLabel" style="order:2;font-weight:bold;">Theme</label>
-                <select id="themes" class="select themeEditor mainBar_forThemeEditor" onchange="na.te.themeSelected(event)" style="order:2;display:none;">
-                    <option id="theme_default" name="theme_default" value="default">default</option>
-                </select>
-                <div id="themes_dropdown" class="vividDropDownBox" style="order:2"></div>
+            <!--
+            <div style="position:relative;display:flex;width:100%;align-items:center;margin-top:5px;height:60px;">
+                <img src="/NicerAppWebOS/siteMedia/btnSettings.png" style="width:44px;"/>
+                <div id="siteToolbarThemeEditor__selector" class="vividMenu" type="vertical" tabindex="5" theme="{$theme}" style="position:relative;margin-left:8px;z-index:2000">
+                    <?php
+                        global $naWebOS;
+                        //echo '<pre>'; var_dump ($naWebOS->theme); echo '</pre>'; die();
+                        echo $naWebOS->themeSettings_UL_list($naWebOS->theme['themeSettings']);
+                    ?>
+                </div>
 
-<?php
-global $naWebOS;
-echo $naWebOS->html_vividButton (
-    4, 'order:2;margin-left:10px',
-    
-    'btnSetPermissionsForTheme', 'vividButton_icon_50x50 grouped btnDelete forum', '_50x50', 'grouped',
-    '',
-    'if (!$(this).is(\'.disabled\')) na.te.setPermissionsForTheme(event)',
-    '',
-    '',
-
-    403, 'Create or delete theme, and set permissions for current theme.',
-
-    'btnCssVividButton_outerBorder.png',
-    'btnCssVividButton.png',
-    'btnCssVividButton.red1b.png',
-    '1660_blk_19329_zoom.upperBodyOnly.256x256.png',
-    
-    '<img class="vividButton_icon_imgButtonIcon_50x50_sup1" srcPreload="/NicerAppWebOS/siteMedia/btnTrashcan2_white_lowres.png" style="position:absolute;left:calc(50px - 15px);width:15px;height:19px;z-index:2021;"/>'
-    .'<img class="vividButton_icon_imgButtonIcon_50x50_sup2" srcPreload="/NicerAppWebOS/siteMedia/documentAdd_lowres.png" style="position:absolute;left:-5px;width:20px;height:20px;z-index:2021;"/>',
-    
-    null, 
-    null, 
-    null
-);
-?>
             </div>
-            
-            <div class="navbar" style="order:5;width:100%;display:flex;align-items:center;justify-content:center;">
+            -->
+            <div class="navbar" style="order:5;width:100%;display:flex;align-items:center;justify-content:space-between;">
 <?php
-global $naWebOS;
 echo $naWebOS->html_vividButton (
     4, 'order:1',
-    
-    'btnSelectBorderSettings', 'vividButton_icon_50x50 sdsnav grouped', '_50x50', 'grouped',
+
+    'btnSelectSelectorSet', 'vividButton_icon_50x50 grouped', '_50x50', 'grouped',
     '',
-    'na.te.selectBorderSettings(event)',
+    'na.te.selectSelectorSet(event)',
     '',
     '',
 
-    422, 'Set border settings.',
+    401, 'Pick Selector Set.',
 
     'btnCssVividButton_outerBorder.png',
     'btnCssVividButton.png',
-    'btnCssVividButton.grey2a.png',
-    'btnSettingsBorder3.png',
-    
+    'btnCssVividButton.blue1a.png',
+    'fileTree_1b.png',
+
     null,
-    
-    null, 
-    null, 
+
+    null,
+    null,
     null
 );
+/*
 echo $naWebOS->html_vividButton (
-    4, 'order:2',
-    
-    'btnSelectBoxShadowSettings', 'vividButton_icon_50x50 sdsnav grouped', '_50x50', 'grouped',
+    4, 'order:2;',
+
+    'btnSelectElement', 'vividButton_icon_50x50 grouped', '_50x50', 'grouped',
     '',
-    'na.te.selectBoxShadowSettings(event)',
+    'if (!$(this).is(\'.disabled\')) na.te.selectElement(event)',
     '',
     '',
 
-    423, 'Set border shadow.',
+    402, 'Pick Element.',
 
     'btnCssVividButton_outerBorder.png',
     'btnCssVividButton.png',
-    'btnCssVividButton.orange1c.png',
+    'btnCssVividButton.greenBlue.png',
+    'btnZoomIncrease.png',
+
+    '',
+    '',
+
     null,
-    
     null,
-    
-    null, 
-    null, 
     null
-);
+);*/
 ?>
            <!-- </div>
             <div class="navbar" style="order:6;display:flex;align-items:center;justify-content:center;">-->
@@ -452,7 +513,7 @@ global $naWebOS;
 echo $naWebOS->html_vividButton (
     4, 'order:3',
     
-    'btnSelectBackgroundColor', 'vividButton_icon_50x50 sdsnav grouped', '_50x50', 'grouped',
+    'btnSelectBackgroundColor', 'vividButton_icon_50x50 grouped', '_50x50', 'grouped',
     '',
     'na.te.selectBackground_color(event)',
     '',
@@ -473,8 +534,56 @@ echo $naWebOS->html_vividButton (
 );
 echo $naWebOS->html_vividButton (
     4, 'order:4',
-    
-    'btnSelectBackgroundFolder', 'vividButton_icon_50x50 sdsnav grouped', '_50x50', 'grouped',
+
+    'btnSelectBorderSettings', 'vividButton_icon_50x50 grouped', '_50x50', 'grouped',
+    '',
+    'na.te.selectBorderSettings(event)',
+    '',
+    '',
+
+    422, 'Set border settings.',
+
+    'btnCssVividButton_outerBorder.png',
+    'btnCssVividButton.png',
+    'btnCssVividButton.grey2a.png',
+    'btnSettingsBorder3.png',
+
+    null,
+
+    null,
+    null,
+    null
+);
+echo $naWebOS->html_vividButton (
+    4, 'order:5',
+
+    'btnSelectBoxShadowSettings', 'vividButton_icon_50x50 grouped', '_50x50', 'grouped',
+    '',
+    'na.te.selectBoxShadowSettings(event)',
+    '',
+    '',
+
+    423, 'Set border shadow.',
+
+    'btnCssVividButton_outerBorder.png',
+    'btnCssVividButton.png',
+    'btnCssVividButton.orange1c.png',
+    null,
+
+    null,
+
+    null,
+    null,
+    null
+);
+?>
+            </div>
+            <div class="navbar" style="order:7;display:flex;align-items:center;justify-content:space-between;">
+<?php
+echo $naWebOS->html_vividButton (
+    4, 'order:4',
+
+    'btnSelectBackgroundFolder', 'vividButton_icon_50x50 grouped', '_50x50', 'grouped',
     '',
     'na.te.selectBackground_folder(event)',
     '',
@@ -486,17 +595,17 @@ echo $naWebOS->html_vividButton (
     'btnCssVividButton.png',
     'btnCssVividButton.yellow1b.png',
     'fileTree_1b.png',
-    
+
     null,
-    
-    null, 
-    null, 
+
+    null,
+    null,
     null
 );
 echo $naWebOS->html_vividButton (
     4, 'order:5',
-    
-    'btnSelectBackgroundImage', 'vividButton_icon_50x50 sdsnav grouped', '_50x50', 'grouped',
+
+    'btnSelectBackgroundImage', 'vividButton_icon_50x50 grouped', '_50x50', 'grouped',
     '',
     'na.te.selectBackground_image(event)',
     '',
@@ -508,22 +617,17 @@ echo $naWebOS->html_vividButton (
     'btnCssVividButton.png',
     'btnCssVividButton.yellow1a.png',
     'btnBackground.png',
-    
+
     null,
-    
-    null, 
-    null, 
+
+    null,
+    null,
     null
 );
-?>
-            </div>
-            <div class="navbar" style="order:7;display:flex;align-items:center;justify-content:center;">
-<?php
-global $naWebOS;
 echo $naWebOS->html_vividButton (
     4, 'order:6',
     
-    'btnSelectTextSettings', 'vividButton_icon_50x50 sdsnav grouped', '_50x50', 'grouped',
+    'btnSelectTextSettings', 'vividButton_icon_50x50 grouped', '_50x50', 'grouped',
     '',
     'na.te.selectTextSettings(event)',
     '',
@@ -545,7 +649,7 @@ echo $naWebOS->html_vividButton (
 echo $naWebOS->html_vividButton (
     4, 'order:7',
     
-    'btnSelectTextShadowSettings', 'vividButton_icon_50x50 sdsnav grouped', '_50x50', 'grouped',
+    'btnSelectTextShadowSettings', 'vividButton_icon_50x50 grouped', '_50x50', 'grouped',
     '',
     'na.te.selectTextShadowSettings(event)',
     '',
@@ -566,7 +670,145 @@ echo $naWebOS->html_vividButton (
 );
 ?>            
             </div>
-            
+
+        </div>
+        <div id="nate_selectorSet" class="themeEditorComponent_containerDiv2" style="order:8;display:block;width:100%;height:auto;display:none;justify-content:space-between">
+            <div class="naNavBar_darkenedBG" style="position:relative;display:flex;align-items:center;justify-content:space-between;border-radius:10px;box-shadow:inset 0px 0px 4px 2px rgba(0,0,0,0.6);">
+<?php
+/*
+echo $naWebOS->html_vividButton (
+    4, 'order:1',
+
+    'btnAddSelector', 'vividButton_icon_50x50 grouped', '_50x50', 'grouped',
+    '',
+    'na.te.onclick_btnAddSelector(event)',
+    '',
+    '',
+
+    433, 'Add selector.',
+
+    'btnCssVividButton_outerBorder.png',
+    'btnCssVividButton.png',
+    'btnCssVividButton.greenBlue.png',
+    'btnSelector.png',
+
+    '<img class="vividButton_icon_imgButtonIcon_50x50_sup1" srcPreload="/NicerAppWebOS/siteMedia/btnPlus_shaded.png" style="position:absolute;left:0px;width:15px;z-index:2021;"/>',
+
+    null,
+    null,
+    null
+);
+echo $naWebOS->html_vividButton (
+    4, 'order:2',
+
+     'btnDeleteSelector', 'vividButton_icon_50x50 grouped', '_50x50', 'grouped',
+    '',
+    'na.te.onclick_btnDeleteSelector(event)',
+    '',
+    '',
+
+    433, 'Delete selector.',
+
+    'btnCssVividButton_outerBorder.png',
+    'btnCssVividButton.png',
+    'btnCssVividButton.yellow4a.png',
+    'btnSelector.png',
+
+    '<img class="vividButton_icon_imgButtonIcon_50x50_sup1" srcPreload="/NicerAppWebOS/siteMedia/btnDelete.png" style="position:absolute;left:0px;width:15px;z-index:2021;"/>',
+
+    null,
+    null,
+    null
+);*/
+echo $naWebOS->html_vividButton (
+    4, 'order:3',
+
+     'btnAddGraphics', 'vividButton_icon_50x50 grouped', '_50x50', 'grouped',
+    '',
+    'na.te.onclick_btnAddGraphics(event)',
+    '',
+    '',
+
+    433, 'Add graphics.',
+
+    'btnCssVividButton_outerBorder.png',
+    'btnCssVividButton.png',
+    'btnCssVividButton.greenBlue.png',
+    'btnPickColor_canvasSquared.png',
+
+    '<img class="vividButton_icon_imgButtonIcon_50x50_sup1" srcPreload="/NicerAppWebOS/siteMedia/btnPlus_shaded.png" style="position:absolute;left:0px;width:15px;z-index:2021;"/>',
+
+    null,
+    null,
+    null
+);echo $naWebOS->html_vividButton (
+    4, 'order:4',
+
+     'btnDeleteGraphics', 'vividButton_icon_50x50 grouped', '_50x50', 'grouped',
+    '',
+    'na.te.onclick_btnDeleteGraphics(event)',
+    '',
+    '',
+
+    433, 'Delete graphics.',
+
+    'btnCssVividButton_outerBorder.png',
+    'btnCssVividButton.png',
+    'btnCssVividButton.red1a.png',
+    'btnPickColor_canvasSquared.png',
+
+    '<img class="vividButton_icon_imgButtonIcon_50x50_sup1" srcPreload="/NicerAppWebOS/siteMedia/btnDelete.png" style="position:absolute;left:0px;width:15px;z-index:2021;"/>',
+
+    null,
+    null,
+    null
+);
+echo $naWebOS->html_vividButton (
+    4, 'order:5',
+
+     'btnAddElement', 'vividButton_icon_50x50 grouped', '_50x50', 'grouped',
+    '',
+    'na.te.onclick_btnAddElement(event)',
+    '',
+    '',
+
+    433, 'Add element.',
+
+    'btnCssVividButton_outerBorder.png',
+    'btnCssVividButton.png',
+    'btnCssVividButton.greenBlue.png',
+    'btnSettings2.png',
+
+    '<img class="vividButton_icon_imgButtonIcon_50x50_sup1" srcPreload="/NicerAppWebOS/siteMedia/btnPlus_shaded.png" style="position:absolute;left:0px;width:15px;z-index:2021;"/>',
+
+    null,
+    null,
+    null
+);echo $naWebOS->html_vividButton (
+    4, 'order:6',
+
+     'btnDeleteElement', 'vividButton_icon_50x50 grouped', '_50x50', 'grouped',
+    '',
+    'na.te.onclick_btnDeleteElement(event)',
+    '',
+    '',
+
+    433, 'Delete element.',
+
+    'btnCssVividButton_outerBorder.png',
+    'btnCssVividButton.png',
+    'btnCssVividButton.red1a.png',
+    'btnSettings2.png',
+
+    '<img class="vividButton_icon_imgButtonIcon_50x50_sup1" srcPreload="/NicerAppWebOS/siteMedia/btnDelete.png" style="position:absolute;left:0px;width:15px;z-index:2021;"/>',
+
+    null,
+    null,
+    null
+);
+?>
+            </div>
+            <div id="themeEditor_jsTree_selectors" class="themeEditorComponent vividScrollpane" style="top:auto;position:relative;width:auto;"></div>
         </div>
         <div id="borderSettings" class="themeEditorComponent" style="top:auto;">
             <div class="themeEditorComponent_containerDiv" style="order:1">
@@ -706,35 +948,52 @@ echo $naWebOS->html_vividButton (
             <input id="colorpicker" class="themeEditor_colorPicker" style="position:absolute;top:auto;"></input>
         </div>
         <div id="themeEditor_jsTree_backgrounds" class="themeEditorComponent" style="top:auto;display:none;"></div>
-        <div id="themeEditor_photoAlbum_specs" class="themeEditorComponent" style="height:6.4em;flex-flow: wrap row;position:relative;top:auto;display:none;">
+        <div id="themeEditor_photoAlbum_specs" class="themeEditorComponent" style="height:auto;flex-flow: wrap row;position:relative;top:auto;display:none;">
+            <div class="themeEditor_input_containerDiv flexColumns" style="display:flex;">
+                <label for="themeEditor_photoSpecificity_dialog" class="labelthemeEditor2">Dialog
+                <input type="radio" id="themeEditor_photoSpecificity_dialog" name="psdp" class="radioInput" value="dialog" checked="checked"/>
+                </label>
+
+                <label for="themeEditor_photoSpecificity_page" class="labelthemeEditor2">Page
+                <input type="radio" id="themeEditor_photoSpecificity_page" name="psdp" class="radioInput" value="dialog"/>
+                </label>
+            </div>
+            <div style="flex-basis:100%;height:0;">&nbsp;</div>
             <div class="themeEditor_input_containerDiv">
             <label id="label_themeEditor_photoOpacity" class="labelthemeEditor" for="themeEditor_photoOpacity">Opacity</label>
             <input id="themeEditor_photoOpacity" type="range" min="1" max="100" value="50" class="sliderOpacityRangethemeEditor" oninput="if (na.te.settings.current.selectedImage) na.te.imageSelected(na.te.settings.current.selectedImage);"/>
             </div>
             
+            <div style="flex-basis:100%;height:0;">&nbsp;</div>
             <div class="themeEditor_input_containerDiv">
             <label id="label_themeEditor_photoScaleX" class="labelthemeEditor" for="themeEditor_photoScaleX">Scale hor</label>
-            <input id="themeEditor_photoScaleX" type="range" min="25" max="200" value="100" class="sliderOpacityRangethemeEditor" style="top:30px;" oninput="if (na.te.settings.current.selectedImage) na.te.imageSelected(na .te.settings.current.selectedImage);"/>
+            <input id="themeEditor_photoScaleX" type="range" min="25" max="200" value="100" class="sliderOpacityRangethemeEditor" style="" oninput="if (na.te.settings.current.selectedImage) na.te.imageSelected(na .te.settings.current.selectedImage);"/>
             </div>
             
+            <div style="flex-basis:100%;height:0;">&nbsp;</div>
             <div class="themeEditor_input_containerDiv">
             <label id="label_themeEditor_photoScaleY" class="labelthemeEditor" for="themeEditor_photoScaleY">Scale ver</label>
-            <input id="themeEditor_photoScaleY" type="range" min="25" max="200" value="100" class="sliderOpacityRangethemeEditor" style="top:63px;" oninput="if (na.te.settings.current.selectedImage) na.te.imageSelected(na.te.settings.current.selectedImage);"/>
+            <input id="themeEditor_photoScaleY" type="range" min="25" max="200" value="100" class="sliderOpacityRangethemeEditor" style="" oninput="if (na.te.settings.current.selectedImage) na.te.imageSelected(na.te.settings.current.selectedImage);"/>
             </div>
             
-            <!--
-            <div class="flexColumns" style="display:inline-flex;top:65px">
-                <label for="themeEditor_photoSpecificity_dialog" class="labelthemeEditor2">Dialog
-                <input type="radio" id="themeEditor_photoSpecificity_dialog" name="psdp" class="radioInput" value="dialog" checked="checked"/>
-                </label>
-                
-                <label for="themeEditor_photoSpecificity_page" class="labelthemeEditor2">Page
-                <input type="radio" id="themeEditor_photoSpecificity_page" name="psdp" class="radioInput" value="dialog"/>
-                </label>
-            </div>
-            -->
+            <div style="flex-basis:100%;height:0;">&nbsp;</div>
         </div>
-        <iframe id="themeEditor_photoAlbum" class="themeEditorComponent" style="top:calc(230px + 4em);height:calc(100% - 220px - 4em);display:none;border:0px"></iframe>
+        <script type="application/javascript">
+            function resizeIFrameToFitContent( iFrame ) {
+                if (
+                    iFrame
+                    && iFrame.src.match(/photoAlbum/)
+                ) {
+                    $('div.vividScrollpane', iFrame.contentWindow.document.body).css({
+                        width : $(iFrame).width()+'px'
+                    });
+                    setTimeout (function(iFrame) {
+                        iFrame.style.height = ($('div.vividScrollpane', iFrame.contentWindow.document.body)[0].scrollHeight+20)+'px';
+                    }, 50, iFrame);
+                };
+            }
+        </script>
+        <iframe id="themeEditor_photoAlbum" class="themeEditorComponent" style="top:calc(230px + 4em);display:none;border:0px"></iframe>
         <div id="textSettings" class="themeEditorComponent" style="top:auto;display:none;">
             <div class="themeEditor_input_containerDiv">
             <div class="textSettings_label_containerDiv">
@@ -745,7 +1004,16 @@ echo $naWebOS->html_vividButton (
             </div>
             </div>
 
-            <div class="themeEditor_input_containerDiv">
+            <div id="textHasAnimatedColor_section" class="themeEditor_input_containerDiv">
+            <div class="textSettings_input_containerDiv_checkbox" style="width:70px;text-align:right">
+                <input id="textHasAnimatedColor" type="checkbox" style=""></input>
+            </div>
+            <div class="textSettings_label_containerDiv" style="flex-grow:7;">
+                <label id="labelTextAnimatedColor" class="textColorpicker textSettings_label" for="textHasAnimatedColor" style="width:calc(100% - 10px);">Animated Color</label>
+            </div>
+            </div>
+
+        <div class="themeEditor_input_containerDiv">
             <div class="textSettings_label_containerDiv">
                 <label id="labelTextFontFamily" class="textSettings_label" for="textFontFamily">Font</label>
             </div>
@@ -1013,7 +1281,7 @@ echo $naWebOS->html_vividButton (
             </div>
 
         </div>
-        <div id="themePermissions" class="themeEditorComponent" style="position:absolute;top:auto;display:none;">
+        <div id="themePermissions" class="themeEditorComponent" style="top:auto;display:none;">
             <div class="themeEditor_input_containerDiv">
             <div class="themePermissions_label_containerDiv">
                 <label id="labelThemeControls" class="themePermissions_label" for="themePermissionsControls">Themes</label>

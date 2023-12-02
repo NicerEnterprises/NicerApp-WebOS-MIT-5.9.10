@@ -2,22 +2,7 @@
     global $naWebOS;
     global $na_apps_structure;
     $na_apps_structure = array( // the PHP variable name $na_apps_structure is the point where the trunk of the tree goes either into the air, or the ground (as the root-kit system or spyware application.
-        // NicerAppWebOS version 5.0.0 (aka : THIS FILE IS FULLY FINALIZED. FOR NOW. FOR AT LEAST THE NEXT 5 YEARS OR SO. ) :
-        "diskText__GPH_politicalContributions_2020s" => [
-            'apps-current' => [
-                'NicerApp-WebOS__pageSettings' => [
-                    'misc' => [
-                       'folder' => '/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/NicerApp-WCS'
-                    ],
-                    "apps" => [
-                        'diskText' => [ // a more JSON and shorter way of declaring the leaf section of a tree-like JSON array.
-                            'file' => 'user--Rene_AJM_Veerman-aka-Gavan_Peacefan_Hoverswell/app.dialog.siteContent-politicalContributions.php', // key pointing to value
-                            'SEO_value' =>  'political-ideas--Gavan-Peacefan-Hoverswell' // same here
-                        ]
-                     ]
-                ]
-            ]
-        ],
+
         "newsHeadlines_englishNews" => [
             'apps-current' => [
                 'NicerApp-WebOS__pageSettings' => [
@@ -57,7 +42,7 @@
                     "apps" => [
                         'news' => [ // a more JSON and shorter way of declaring a tree-like JSON array.
                             'section' => 'English_News__Topics__Business',
-                            'SEO_value' => [ 'news-business', 'business', 'news-business-headlines' ]
+                            'SEO_value' => [ 'nbh', 'news-business', 'business', 'news-business-headlines' ]
                         ]
                      ]
                 ]
@@ -134,7 +119,23 @@
                 ]
             ]
         ],
-        
+
+        "wikipedia.org" => [
+            'apps-current' => [
+                'NicerApp-WebOS__pageSettings' => [
+                    "misc" => [
+                       'folder' => '/NicerAppWebOS/apps/NicerAppWebOS/applications/2D'
+                    ],
+                    "apps" => [
+                        '3rd-party-site.wikipedia.org' => [
+                            'page' => 'index',
+                            'SEO_value' => [ 'wiki', 'wikipedia', 'wikipedia.org' ]
+                        ]
+                     ]
+                ]
+            ]
+        ],
+
         "tarot" => [
             'apps-current' => [
                 'NicerApp-WebOS__pageSettings' => [
@@ -143,7 +144,7 @@
                     ],
                     "apps" => [
                         'cardgame.tarot' => [
-                            'deck' => 'Original Rider Waite',
+                            'deck' => '/Waite-Smith/Pam Colman Smith/Original Rider Waite',
                             "reading" => "3-Cards",
                             'SEO_value' => [ 'tarot', 'cardgame-tarot' ]
                         ]
@@ -304,14 +305,13 @@
                             'parameters' => [
                                 'thumbnails' => './thumbs/300/$filename.$ext'
                             ],
-                            'SEO_value' => 'demo-3D-fileBrowser'
+                            'SEO_value' => [ 'demo-3D-fileBrowser', '3D-data' ]
                         ]
                      ]
                 ]
             ]
         ],
         
-        
         "cms" => [
             'apps-current' => [
                 'NicerApp-WebOS__pageSettings' => [
@@ -324,33 +324,14 @@
                         ],
                         'blogEditor' => [
                             'page' => 'index',
-                            'SEO_value' => [ 'cms', 'me' ]
-                        ] 
-                     ]
-                ]
-            ]
-        ],
-
-        "cms" => [
-            'apps-current' => [
-                'NicerApp-WebOS__pageSettings' => [
-                    "misc" => [
-                       'folder' => '/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/NicerAppWebOS'
-                    ],
-                    "apps" => [
-                        'meta' => [
-                            'mustBeLoggedIn' => true
-                        ],
-                        'blogEditor' => [
-                            'page' => 'index',
-                            'SEO_value' => [ 'cms', 'me' ]
+                            'SEO_value' => [ 'me' ]
                         ]
                      ]
                 ]
             ]
         ],
 
-        "cms" => [
+        "ugm" => [
             'apps-current' => [
                 'NicerApp-WebOS__pageSettings' => [
                     "misc" => [
@@ -360,9 +341,9 @@
                         'meta' => [
                             'mustBeLoggedIn' => true
                         ],
-                        'blogEditor' => [
+                        'cmsManager' => [
                             'page' => 'index',
-                            'SEO_value' => [ 'cms', 'me' ]
+                            'SEO_value' => [ 'cms', 'ugm', 'ug', 'users', 'users-groups', 'usersGroups' ]
                         ]
                      ]
                 ]
@@ -378,7 +359,8 @@
                     "apps" => [
                         'diskText' => [
                             'file' => '/NicerAppWebOS/documentation/NicerApp-WebOS--overview.php',
-                            'SEO_value' =>  'docs-overview'
+                            'title' => '/NicerAppWebOS/documentation/NicerApp-WebOS--overview.title.php',
+                            'SEO_value' =>  [ 'docs', 'docs-overview' ]
                         ]
                      ]
                 ]
@@ -394,13 +376,13 @@
                     "apps" => [
                         'diskText' => [
                             'file' => '/NicerAppWebOS/LICENSE.php',
-                            'SEO_value' =>  'docs-license'
+                            'title' => '/NicerAppWebOS/LICENSE.title.php',
+                            'SEO_value' =>  [ 'license', 'LICENSE', 'docs-license' ]
                         ]
                      ]
                 ]
             ]
         ],
-
         "docs__todoList" => [
             'apps-current' => [
                 'NicerApp-WebOS__pageSettings' => [
@@ -410,7 +392,8 @@
                     "apps" => [
                         'diskText' => [
                             'file' => '/NicerAppWebOS/documentation/NicerApp-WebOS--todoList.php',
-                            'SEO_value' =>  'docs-todoList'
+                            'title' => '/NicerAppWebOS/documentation/NicerApp-WebOS--todoList.title.php',
+                            'SEO_value' =>  [ 'todo', 'docs-todoList' ]
                         ]
                      ]
                 ]
@@ -426,6 +409,7 @@
                     "apps" => [
                         'diskText' => [
                             'file' => '/NicerAppWebOS/documentation/NicerEnterprises--company.php',
+                            'title' => '/NicerAppWebOS/documentation/NicerEnterprises--company.title.php',
                             'SEO_value' =>  'company'
                         ]
                      ]
@@ -488,11 +472,47 @@
                      ]
                 ]
             ]
+        ],
+        
+        
+        "jsonViewer" => [
+            'apps-current' => [
+                'NicerApp-WebOS__pageSettings' => [
+                    "misc" => [
+                       'folder' => '/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/ui'
+                    ],
+                    "apps" => [
+                        'meta' => [
+                            'mustBeLoggedIn' => true
+                        ],
+                        'jsonViewer' => [
+                            'page' => 'index',
+                            'SEO_value' => [ 'jv', 'jsonViewer' ]
+                        ]
+                     ]
+                ]
+            ]
+        ],
+
+        "logs" => [
+            'apps-current' => [
+                'NicerApp-WebOS__pageSettings' => [
+                    "misc" => [
+                       'folder' => '/NicerAppWebOS/apps/NicerAppWebOS/applications/2D'
+                    ],
+                    "apps" => [
+                        'meta' => [
+                            'mustBeLoggedIn' => true
+                        ],
+                        'logs' => [
+                            'page' => 'index',
+                            'SEO_value' => 'logs'
+                        ]
+                     ]
+                ]
+            ]
         ]
-        
-        
-        
-        
+
 
         
      );

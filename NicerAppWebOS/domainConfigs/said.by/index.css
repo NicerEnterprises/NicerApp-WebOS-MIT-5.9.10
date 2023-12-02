@@ -5,12 +5,20 @@ html, body {
     padding : 0;
     margin : 0;
     font-family: 'Open Sans', sans-serif;
+    position : absolute;
+    top : 0px;
+    left : 0px;
+    width : 100%;
+    height : 100%;
+    color : black;
 }
 body {
     overflow : hidden;
 }
-#btnOptions_menu {
-    font-size : 0.8rem;
+
+h1, h2, h3, h4, h5 {
+    margin-block-start : 0px;
+    margin-block-end : 0px;
 }
 
 .vividButton {
@@ -23,6 +31,9 @@ body {
     height : 100%;
 }
 
+.btnOptions_menu__label__specificity_dropdown, .btnOptions_menu__label__themes_dropdown, .changeBackgroundsAutomatically_label, #myForm p, .btnOptions_menu__backgroundTimeSettingsChanged_save__containerDiv div label, .smallPadding  {
+    color : white;
+}
 
 .verticalSpacer { /* thanks go to : https://tobiasahlin.com/blog/flexbox-break-to-new-row/ */
   flex-basis: 100%;
@@ -39,6 +50,10 @@ justify-content : left;
 align-items : center;
 width : fit-content;
 margin : 5px !important;
+}
+ol.todoList > li > div, ol.todoList_l1 > li > div, ol.todoList_l2 > li > div,
+ul.todoList > li > div, ul.todoList_l1 > li > div, ul.todoList_l2 > li > div {
+padding : 8px !important;
 }
 body {
     counter-reset : step-counter step-counter-l1 step-counter-l2;
@@ -140,22 +155,18 @@ li.todoList > div, li.todoList > span {
     outline : 0
 }
 
+
 #btnOptions_menu {
     height : auto;
     overflow : hidden;
 }
-#btnOptions_menu__background {
-    position : absolute;
-    z-index : -1;
-    width : 100%;
-    height : 100%;
-}
-#btnOptions_menu__backgroundTimeSettingsChanged_save__containerDiv, #btnOptions_menu__specificity__containerDiv { 
+#btnOptions_menu__backgroundTimeSettingsChanged_save__containerDiv, .btnOptions_menu__specificity__containerDiv {
     width : calc(100% - 10px);
 }
-#btnOptions_menu__backgroundTimeSettingsChanged_save__containerDiv span, #btnOptions_menu__specificity__containerDiv span { 
+#btnOptions_menu__backgroundTimeSettingsChanged_save__containerDiv span, .btnOptions_menu__specificity__containerDiv span {
     border-radius : 5px;
 }
+
 #backgroundChange_hours, #backgroundChange_minutes {
     padding : 8px;
     border-radius : 8px;    
@@ -185,11 +196,6 @@ li.todoList > div, li.todoList > span {
 #btnOptions_menu__specificity__containerDiv span, #btnFullResetOfAllThemes, #btnFullResetOfAllMenuLayoutData, #btnOptions_menu__backgroundTimeSettingsChanged_save__containerDiv span {
     margin-left : 10px;
 }*/
-
-#logoAndSiteTitle h1:before, #logoAndSiteTitle:before h2, #logoAndSiteTitle h3:before {
-    content : %20%20;
-}
-
 
 #pageTitle::before {
     content : '';
@@ -251,24 +257,6 @@ img.bg_last {
 }
 
 
-.naan_rec {
-    
-}
-.naan_datetimeStr {
-    color : skyblue;
-}
-.naan_ip {
-    color : lime;
-}
-.naan_msg {
-    
-}
-.naan_bot .naan_ip {
-    color : grey;
-}
-.naan_bot .naan_msg {
-    color : grey;st
-}
 
 .naCouchDB_findCommand {
     color : rgb(0, 50, 0);
@@ -304,13 +292,10 @@ img.bg_last {
     z-index : 1000;
 }
 .vividDialogPopup {
-    border : 3px ridge lime;
-    border-radius : 15px;
-    text-shadow : 2px 2px 2px rgba(0,0,0,0.7);
     opacity : 1;
     display : /*none;*/grid;
     position : absolute;
-    z-index : 5000;
+    z-index : -100 * 1000;
     background : rgba(0,0,0,0.4);
 }
 
@@ -328,7 +313,7 @@ img.bg_last {
 }
 .vividDialogContent {
     overflow : auto;
-    margin : 20px;
+    margin : 18px;
     display : none;
     width : calc(100% - 35px);
     height : calc(100% - 40px);
@@ -342,7 +327,9 @@ img.bg_last {
     margin-left : 0px;
 }
 #siteStatusbar .vividDialogContent {
-    margin : 10px;
+    margin : 5px;
+    padding : 10px;
+    margin-left : 15px;
     height : auto;
 }
 #siteStatusbar {
@@ -385,11 +372,29 @@ img.bg_last {
     width : 98vw;
 }
 #siteStatusbar .vividDialogContent {
-    width : 100%;
     height : 100%;
     display : flex;
     text-shadow : 3px 3px 2px rgba(0,0,0,0.7);
 }
+body {
+    font-size: 0.8rem;
+}
+#siteDateTime > div > div {
+    font-size: 0.8rem;
+}
+.vividDialogPopup p, .vividDialogPopup span, .vividDialogPopup div {
+    font-size : 0.8rem;
+}
+
+.vividMenu_item {
+    float : left;
+}
+.vividMenu_item a span {
+}
+.vividDropDownBox_selected, .vividDropDownBox_selector {
+    font-size: clamp(0.4375rem, 0.4004rem + 0.1854vw, 0.875rem);
+}
+
 #siteStatusbar .vividDialogContent td {
     vertical-align: middle;
 }
@@ -423,17 +428,13 @@ img.bg_last {
 
 .vividButton, .vividMenu {
     position : absolute;
-    z-index : 20000;
+    z-index : 700000;
 }
 .vividButton {
     display : flex;
     justify-content : center;
     align-items : center;
     text-align : center;
-}
-.mp3.vividButton, .mp3.vividButtonSelected {
-    margin-bottom:5px;
-    padding : 3px;
 }
 .vividButton, .vividButtonSelected {
     position : absolute;
@@ -442,7 +443,7 @@ img.bg_last {
     align-items : center;
     text-align : center;
     height:24px;
-    width:180px;
+    width:150px;
 }
 
 .vividButton.level1, .vividButtonSelected.level1 {
@@ -474,9 +475,8 @@ img.bg_last {
 #btnLoginLogout {
     position : absolute;
     opacity : 0.0001;
-    z-index : 500;
+    z-index : 900000;
 }
-
 #btnChangeBackground {
     position : absolute;
     opacity : 0.0001;
@@ -488,13 +488,26 @@ img.bg_last {
     left : 15px;
     width : 200px;
     height : 40px;
-    opacity : 0.0001;
 }
 .vdSettings img {
     position : absolute;
     top : 0px;
     left : 0px;
     width : 40px;
+    z-index : inherit;
+}
+.vdTools {
+    position : absolute;
+    top : -15px;
+    right : 15px;
+    width : 50px;
+    height : 50px;
+}
+.vdTools img {
+    position : absolute;
+    top : 0px;
+    right : 0px;
+    width : 50px;
     z-index : inherit;
 }
 .sliderOpacityRange {
@@ -532,7 +545,6 @@ img.bg_last {
     -webkit-appearance: none;  /* Override default CSS styles */
     appearance: none;
     width: calc(100% - 15px); /* Full-width */
-    height: 25px; /* Specified height */
     background: rgba(0,0,0,0.95); /* Grey background */
     z-index : 5000;
     border : 2px ridge rgba(100,100,100,0.7);
@@ -541,6 +553,7 @@ img.bg_last {
     opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
     -webkit-transition: .2s; /* 0.2 seconds transition on hover */
     transition: opacity .2s;
+    margin : 4px;
 }
 .sliderOpacityRangethemeEditor:hover {
   opacity: 1; /* Fully shown on mouse-over */
@@ -590,11 +603,17 @@ img.bg_last {
 }
 
 
-
+.vividMenu_subMenuPanel {
+    position : absolute;
+}
 
 .vividButton_container_50x50 {
-    height : 50px;
+    height : auto;
 }
+ .vividButton_container_100x100 {
+     height : 100px;
+     display : inline-block;
+ }
 .vividButton_icon_50x50_sdsdt img {
     position : absolute;
     top : 0px;
@@ -836,8 +855,6 @@ img.bg_last {
     top : calc(10px + 18px);
     left : calc(2vw + 340px);
     width : 180px;
-    height : 24px;
-    font-size : 20px;
 }
 #siteMenu.phoneView {
     left : calc(1vw + 50px);
@@ -851,7 +868,7 @@ img.bg_last {
     left : calc(50% - 200px);
     top : calc(50% - 125px);
     padding : 15px;
-    z-index : 2000;
+    z-index : 500000;
 }
 #siteRegistration:before { 
     content : '';
@@ -899,10 +916,10 @@ img.bg_last {
     width : 350px;
     height : auto;
     padding : 15px;
-    z-index : 2500;
+    z-index : 500000;
     text-align : center;
     justify-content : center;
-    overflow:hidden;
+    overflow : hidden;
 }
 #siteLogin input {
     width : calc(100% - 178px);
@@ -1027,8 +1044,8 @@ img.bg_last {
 .vividButton_icon_50x50_text div {
     display : inline-block;
     position : relative;
-    padding : 5px;
-    padding-bottom : 10px;
+/*    padding : 5px;
+    padding-bottom : 10px;*/
 }
 
 .vividButton_icon_50x50_text {
@@ -1065,6 +1082,12 @@ img.bg_last {
 							0 -0.2rem 0.7rem rgba(80, 0, 0, 0.7) inset,
 							0 0.7rem 0.5rem rgba(255,255,255, 0.4) inset,
 							0 0.2rem 0.5rem 0 rgba(80, 0, 0, 0.7) inset;    
+}
+.vividButton.btnSave {
+	box-shadow: 0.5rem 0.5rem 0.7rem 0 rgba(0,0,0,0.50),
+							0 -0.2rem 0.7rem rgba(0, 0, 255, 0.7) inset,
+							0 0.7rem 0.5rem rgba(255,255,255, 0.4) inset,
+							0 0.2rem 0.5rem 0 rgba(0, 0, 255, 0.7) inset;
 }
 .vividButton_icon_50x50_text div {
 	color: white;
@@ -1435,11 +1458,14 @@ select[multiple] {
   justify-content: space-between;
   align-items : center;
   padding : 5px;
-  margin : 10px;
+  margin : 4px;
   background : rgba(0,0,0,0.55);
   border-radius : 10px;
   box-shadow : inset 1px 1px 2px 1px rgba(0,0,0,0.8);
   
+}
+#themeEditor_photoAlbum_specs {
+  margin : 4px;
 }
 label.specificityCB {
     width : auto;
@@ -1462,7 +1488,7 @@ input.specificityCB {
     border-radius : 10px;
     box-shadow : 2px 2px 3px 2px rgba(0,0,0,0.5) inset;
     padding : 5px;
-    margin : 10px;
+    margin : 4px;
 }
 .sds_dialogTitle .vividButton_icon_50x50_sdsdt {
     display : inline-block;
@@ -1486,7 +1512,7 @@ input.specificityCB {
 .textSettingsLabel2 {
     width : 85px;
 }
-.themeItem {
+.themeItem input {
     background:rgba(0,0,100,0.5);
     border:1px solid white; 
     border-radius:10px; 
@@ -1494,23 +1520,32 @@ input.specificityCB {
     padding : 5px;
     color : white;
 }
-.themeItem.onfocus {
+.themeItem.onfocus input {
     background : rgba(0,0,255,0.5);
-    font-weight : bold;
 }
 
 .specificityLabel {
     width : 88px;
 }
 
+#document_headers > .sections, #document_navBar > .sections {
+    display : inline-block;
+}
 .navbar {
+    display : inline-block;
     padding : 0;
     margin : 0;
+    margin-bottom : 4px;
     align-content : center;
     align-items : center;
-    height : 58px;
-    max-height : 58px;
+    height : fit-content;
     width : 100%;
+}
+.navbar_section {
+    display:inline-block;
+    align-content : center;
+    align-items : center;
+    vertical-align:middle;
 }
 .navbar_button {
     width : 50px;
@@ -1965,9 +2000,11 @@ label {
     background : rgba(255,255,255,0.4);
     box-shadow : 2px 2px 1px 1px rgba(0,0,0,0.4);
 }
+/*
 #tinymce {
     display : none;
 }
+*/
 .tox-tinymce {
   opacity: 0;
   z-index : 1000;
@@ -2106,4 +2143,10 @@ pre.tv_na_url {
     border-radius:8px;
     background:rgba(0,0,50,0.55);
     box-shadow:inset 2px 2px 4px 3px rgba(0,0,0,0.7);
+}
+
+
+/* vividEditor */
+.vividEditor_toolbar_dropdown {
+    display : inline-block;
 }

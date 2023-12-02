@@ -1,6 +1,6 @@
 na.desktop = {
     globals : {
-        animationSpeed : 'fast',
+        animationSpeed : 300,//'slow',
         divs : [ '#siteDateTime', '#siteErrors', '#btnOptions', '#btnLoginLogout', '#btnChangeBackground', '#siteContent', '#siteVideo', '#siteVideoSearch', '#siteComments', '#siteStatusbar', '#siteToolbarThemeEditor', '#siteToolbarLeft', '#siteToolbarRight', '#siteToolbarTop' ],
         visibleDivs : [ '#siteDateTime', '#btnOptions', '#btnLoginLogout', '#btnChangeBackground', '#siteContent', '#siteStatusbar' ],
         configs : {
@@ -86,9 +86,10 @@ na.desktop = {
                 opacity : 0.0001
             }
         },                
-        margin : 14
+        margin : 8
     },
     settings : {
+        animate : na.m.userDevice.isPhone,
         animating : true,
         showVideoBackgroundControls : false,
         visibleDivs : [ '#btnOptions' ],
@@ -170,6 +171,7 @@ na.desktop = {
     
     registerProgress : function (name, func) {
         var entry = { name : name, callback : func };
+        na.d.deleteProgress(name);
         na.d.s.callbacksProgress.push (entry); // na.d.s = na.desktop.settings
     },
     
@@ -228,10 +230,26 @@ na.desktop = {
         if (reset === undefined) reset = true;
         var anims = na.d.calculateWhichTopIconsToShow();
         if (animate===null) animate = anims;
+        na.m.log (100, 'called : na.desktop.resize (callback, animate, reset); - animationSpeed='+na.d.g.animationSpeed, false);
         na.d.goto(na.d.s.visibleDivs,callback, animate, reset);
     },
     
     goto : function (visibleDivs, callback, animate, reset) {
+        var fncn = 'na.desktop.goto (visibleDivs, callback, animate, reset)';
+        if ($(window).width() > $(window).height()) {
+            if (na.site.settings.current.orientation!=='landscape') {
+                na.site.settings.current.orientation = 'landscape';
+                if (na.site.globals.backgroundSearchKey.indexOf('portrait')!==-1) na.site.globals.backgroundSearchKey = 'landscape';
+                na.site.loadTheme();
+            }
+        } else {
+            if (na.site.settings.current.orientation !== 'portrait') {
+                na.site.settings.current.orientation = 'portrait';
+                if (na.site.globals.backgroundSearchKey.indexOf('landscape')!==-1) na.site.globals.backgroundSearchKey = 'portrait';
+                na.site.loadTheme();
+            }
+        }
+
         if (animate===null) animate = na.m.userDevice.isPhone;
         na.d.s.animating = animate;
         if (typeof callback=='function') {
@@ -252,6 +270,7 @@ na.desktop = {
         ) {
             if (!visibleDivs.includes('#siteStatusbar')) visibleDivs.push('#siteStatusbar');
         }
+        $('#siteStatusbar').css({height:'auto'}).delay(200);
         
         if ($('#siteDateTime').css('display')!=='none') visibleDivs.push('#siteDateTime');
         
@@ -263,6 +282,7 @@ na.desktop = {
         
 
         na.d.s.visibleDivs = visibleDivs;
+        na.m.log (10010, fncn+' : calculated visibleDivs', false);
 
 
         na.d.g.defaultPos = {
@@ -336,7 +356,8 @@ na.desktop = {
             }
         };
         //debugger;
-        
+        na.m.log (10010, fncn+' : set defaultPos', false);
+
         var calculationResults = {
             'calculationResults_visible' : na.m.negotiateOptions( // TODO : clean up, reduce number of evaluations
                 (
@@ -725,6 +746,8 @@ na.desktop = {
                 )
             ) // calculationResults_visible
         };
+        //debugger;
+        na.m.log (10010, fncn+' : calculated calculationResults_visible', false);
 
         var 
         w = $(window).width(),
@@ -749,11 +772,11 @@ na.desktop = {
         if (visibleDivs.includes('#siteToolbarLeft')) c.order.push('#siteToolbarLeft');
         if (visibleDivs.includes('#siteToolbarRight')) c.order.push('#siteToolbarRight');
         if (visibleDivs.includes('#siteToolbarTop')) c.order.push('#siteToolbarTop');
-        */
-        c.order.push ('#siteContent');
         c.order.push ('#siteVideo');
         c.order.push ('#siteVideoSearch');
+        */
         c.order.push ('#siteComments');
+        c.order.push ('#siteContent');
         
         if (c['#siteContent']) {
             let gtl = c['#siteContent'].growToLimits;
@@ -766,7 +789,7 @@ na.desktop = {
             if (visibleDivs.includes('#siteComments')) gtl.push ({ element : '#siteComments', edge : 'left' });
             if (visibleDivs.includes('#siteStatusbar')) gtl.push ({ element : '#siteStatusbar', edge : 'top' });
         }
-
+        
         let divs = {};
         for (var sectionID in calculationResults) {
             let section = calculationResults[sectionID];
@@ -780,7 +803,7 @@ na.desktop = {
                 var divID = section.order[i];
 
                 if (!section[divID]) { continue; };
-                divs[divID] = { top : 0, left : 0 };//, width : $(divID).width(), height : $(divID).height() };
+                divs[divID] = { top : 0, left : 0, width : $(divID).width(), height : $(divID).height() };
                 //debugger;
             
                 for (var j=0; j<section[divID].snapTo.length; j++) {
@@ -789,33 +812,33 @@ na.desktop = {
                     offsetY = section[divID].offsetY ? section[divID].offsetY : 0,
                     offsetX = section[divID].offsetX ? section[divID].offsetX : 0;
                     //if (divID=='#btnOptions' || divID=='#siteMenu') debugger;
-                    //if (divID=='#siteContent') debugger;
+                   // if (divID=='#siteContent' || divID=='#siteToolbarThemeEditor') debugger;
                     switch (sn.edge) {
                         case 'top':
-                            if (sn.element==='body') divs[divID].top = na.d.g.margin + offsetY; else divs[divID].top = divs[sn.element].top + na.d.g.margin + offsetY;
+                            if (sn.element==='body') divs[divID].top = na.d.g.margin; else divs[divID].top = divs[sn.element].top + na.d.g.margin;
                             break;
                         case 'bottom':
                             if (sn.element==='body') {
-                                divs[divID].top = $(window).height() - $(divID).outerHeight() + offsetY;
+                                divs[divID].top = $(window).height() - $(divID).height();
                             } else {
-                                if (divs[sn.element]) divs[divID].top = divs[sn.element].top + $(sn.element).outerHeight() + offsetY + na.d.g.margin;
+                                if (divs[sn.element]) divs[divID].top = divs[sn.element].top + $(sn.element).height() + na.d.g.margin;
                             }
                             break;
                         case 'left':
                             if (sn.element==='body') divs[divID].left = na.d.g.margin; 
-                            else divs[divID].left = divs[sn.element].left + $(sn.element).outerWidth() + na.d.g.margin;
+                            else divs[divID].left = divs[sn.element].left + $(sn.element).width() + na.d.g.margin;
                             break;
                         case 'right':
                             if (sn.element=='body') {
-                                divs[divID].left = $(window).width() - $(divID).outerWidth() - na.d.g.margin+ offsetX;
+                                divs[divID].left = $(window).width() - $(divID).width() - na.d.g.margin+ offsetX;
                             } else {
                                 if (!divs[sn.element]) debugger;
-                                divs[divID].left = divs[sn.element].left + $(sn.element).outerWidth() + offsetX;
+                                divs[divID].left = divs[sn.element].left + $(sn.element).width() + na.d.g.margin + offsetX;
                             }
                             break;
                         case 'rightNegative':
                             if (!divs[sn.element]) debugger;
-                            divs[divID].left = divs[sn.element].left - $(divID).outerWidth() - na.d.g.margin + offsetX;
+                            divs[divID].left = divs[sn.element].left - $(divID).width() - na.d.g.margin + offsetX;
                             break;
                     }
                 }
@@ -827,15 +850,15 @@ na.desktop = {
                         break;
                     case 'maxX':
                         divs[divID].width = $(window).width() - divs[divID].left - na.d.g.margin;
-                        //divs[divID].height = $(divID).height();
+                        divs[divID].height = $(divID).height();
                         break;
                     case 'maxY':
                         if ($(window).width() < na.site.globals.reallySmallDeviceWidth)
-                            divs[divID].width = $(window).width() - (3 * na.d.g.margin)
+                            divs[divID].width = $(window).width() - (2 * na.d.g.margin)
                         else 
                             divs[divID].width = $(divID).width();
                         
-                        divs[divID].height = $(window).height() - divs[divID].top - (2 * na.d.g.margin);
+                        divs[divID].height = $(window).height() - divs[divID].top;
                         break;
                 }
 
@@ -855,6 +878,7 @@ na.desktop = {
                 if (section[divID].xMinWidth) divs[divID].width -= section[divID].xMinWidth;
                 if (section[divID].yMinHeight) divs[divID].height -= section[divID].yMinHeight;
 //debugger;
+                na.m.log (10010, fncn+' : calculated sections', false);
 
                 switch (divID) {
                     case '#siteMenu':
@@ -872,8 +896,8 @@ na.desktop = {
                         break;
                     case '#siteContent':
                         divs[divID].height -= (2 * na.d.g.margin);
-                        divs[divID].left += na.d.g.margin;
-                        divs[divID].width -= (3 * na.d.g.margin);
+                        //divs[divID].left += na.d.g.margin;
+                        //divs[divID].width -= (2 * na.d.g.margin);
                         //if (visibleDivs.includes('#siteDateTime')) {
                             divs[divID].top += na.d.g.margin;
                             divs[divID].height -= na.d.g.margin;
@@ -891,8 +915,8 @@ na.desktop = {
                         break;
                     case '#siteToolbarLeft':
                     case '#siteToolbarThemeEditor':
-                        divs[divID].top += na.d.g.margin;
-                        divs[divID].height -= na.d.g.margin;
+                        divs[divID].top -= (na.d.g.margin);
+                        divs[divID].height -= (3*na.d.g.margin);
                         break;
                     case '#siteVideoSearch':
                     case '#siteToolbarRight':
@@ -916,10 +940,12 @@ na.desktop = {
                     case '#siteStatusbar':
                         divs[divID].top -= na.d.g.margin;
                         divs[divID].left += na.d.g.margin;
-                        divs[divID].width -= (4 * na.d.g.margin);
+                        divs[divID].width -= (2 * na.d.g.margin);
+                        divs[divID].height = 'auto';
                         break;
                 }
             }
+                na.m.log (10010, fncn+' : calculated divs', false);
 
 
                 
@@ -946,6 +972,7 @@ na.desktop = {
                 na.d.s.animatingDivs[divID] = true;
             };
 
+            /*
             var dp = $('.vividDialogPopup').not('#siteErrors');
             var dpa = 0;
             dp.each(function(idx,el) {
@@ -956,10 +983,10 @@ na.desktop = {
                         left : ( $(window).width() - $(el).width() ) / 2
                     });
                 }
-            });
-
+            });*/
 
             for (var masterCallbackIdx=0; masterCallbackIdx<section.order.length; masterCallbackIdx++) {
+                na.m.log (10010, fncn+' : issuing animation calls for masterCallbackIdx='+masterCallbackIdx, false);
                 let divID = section.order[masterCallbackIdx];
                 var haveFiredAnimationsForDivAlready = false;
                 for (var i=0; i < divsDone.length; i++) if (divsDone[i]==divID) haveFiredAnimationsForDivAlready = true;
@@ -1004,14 +1031,14 @@ na.desktop = {
                                     }
                                 }
                             }
-                            //if (divID=='#siteContent') debugger;
 
+                            //if (divID!=='#siteContent') debugger;
 
 
                             if (!shown /*|| !visibleDivs.includes(divID)*/) {
                                 var options = {
                                         queue : false,
-                                        duration : 'normal',
+                                        duration : na.d.g.animationSpeed,
                                         easing : 'swing',
                                         complete : function() {
                                             na.d.s.animatingDivs[divID] = false;
@@ -1163,19 +1190,19 @@ na.desktop = {
         }
         
         var allCompleted = true;
-        for (var did in na.d.s.animatingDivs) {
+        for (var did in na.d.s.visibleDivs) {
             var ds = na.d.s.animatingDivs[did];
             if (ds) allCompleted = false;
         }
         //na.m.log (556, fncn + ' : na.desktop.settings.animatingDivs='+JSON.stringify(na.d.s.animatingDivs, null, 2), false);
         //debugger;
+        //na.m.log (50, fncn + ' : allCompleted='+(allCompleted?'true':'false')+', na.m.HTMLidle()='+(na.m.HTMLidle()?'true':'false'), false);
         if (!allCompleted) {
             na.d.s.animating = true;
             return false;
         } else {
             na.d.s.animating = false;
         }
-        //na.m.log (50, fncn + ' : allCompleted='+(allCompleted?'true':'false')+', na.m.HTMLidle()='+(na.m.HTMLidle()?'true':'false'), false);
 
 
         // call desktop.registerCallback() callbackFunctions, 
@@ -1184,7 +1211,7 @@ na.desktop = {
             var cb = na.d.s.callbacks[i];
             if (cb.divID=='#'+div.id && typeof cb.callback=='function') cb.callback(cb, div, calculationResults, sectionIdx, section, divOrderIdx);
         };
-        
+
 
         // and now call the na.desktop equivalent of jQuery.animate({complete:callbackFunction}) 
         //  for all #div.id, AFTER allCompleted==true and na.m.HTMLidle()===true
@@ -1219,10 +1246,7 @@ na.desktop = {
     },
 
     masterCallback_do : function (div, calculationResults, sectionIdx, section, divOrderIdx) {
-        na.m.log (15, 'na.desktop.masterCallback_do (divID='+div.id+')',false);
-
-        na.site.resizeApps();
-
+        //na.m.log (15, 'na.desktop.masterCallback_do (divID='+div.id+')',false);
         for (var i=0; i < na.d.s.masterCallbacks.length; i++) {
             var cf = na.d.s.masterCallbacks[i];
             if (!cf) debugger;

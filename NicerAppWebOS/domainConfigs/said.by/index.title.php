@@ -1,1 +1,1 @@
-Said.by blogging platform
+NicerApp WebOS

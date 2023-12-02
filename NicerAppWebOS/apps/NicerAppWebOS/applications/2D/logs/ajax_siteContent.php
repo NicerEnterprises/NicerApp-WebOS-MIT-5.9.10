@@ -17,7 +17,7 @@ foreach ($naWebOS->view as $appID => $appRec) break;
         'selector' => [
             'isIndex' => true
         ],
-        'fields' => ['_id', 'isIndex', 'isBot', 'isLAN', 'i', 'ip', 's1', 's2', 'request'],
+        'fields' => ['_id', 'isIndex', 'isBot', 'isLAN', 'i', 'ip', 's1', 's2', 'request', 'httpOpts'],
         'sort' => [
             [ 's1' => 'asc' ],
             [ 's2' => 'asc' ]
@@ -51,7 +51,7 @@ foreach ($naWebOS->view as $appID => $appRec) break;
         //$call2 = $cdb->get($doc->_id);
         //echo $call2->body->entry->request->html;
 
-        //echo '<pre style="color:white;background:rgba(0,50,0,0.5);border-radius:10px;padding:5px;margin:10px;">'; var_dump($call2->body); echo '</pre>';
+        //echo '<pre style="color:white;background:rgba(0,50,0,0.5);border-radius:10px;padding:5px;margin:10px;">'; var_dump($doc); echo '</pre>';
 
 
         $marginLeft = 10;
@@ -64,7 +64,7 @@ foreach ($naWebOS->view as $appID => $appRec) break;
         if (array_key_exists('httpOpts', $docA))
             $url = $docA['httpOpts']['ALL cURL fields']['CURLOPT_URL'];
 
-        //if (array_key_exists('request', $docA)) {
+        if ($docA['isIndex']) {
             $now = DateTime::createFromFormat('U.u', $doc->s2);
             $now2 = $now->format("Y-m-d H:i:s.u");
 
@@ -72,7 +72,7 @@ foreach ($naWebOS->view as $appID => $appRec) break;
             echo '<h2><span class="datetimeAccurate">'.$now2.'</span> <span class="ip">'.$doc->ip.'</span> '.$url.'</h2>';
             //echo hmJSON ($docA['request'], 'Request response');
             echo '</div>';
-        //}
+        }
 /*
         // fetch dataRecord
         $findCommand2 = [

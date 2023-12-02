@@ -274,7 +274,7 @@ class SagCURLHTTPAdapter extends SagHTTPAdapter {
 
       global $phpScript_startupTime;
       global $naIP;
-      global $naIsBot;
+      global $naIsBot; global $naIsDesktop; global $naIsMobile; global $naBrowserMarketSharePercentage;
       global $naLAN;
       global $naVersionNumber;
       $time = microtime(true) - $phpScript_startupTime;
@@ -289,9 +289,12 @@ class SagCURLHTTPAdapter extends SagHTTPAdapter {
           's1' => $_SESSION['started'],
           's2' => microtime(true),
           'i' => $_SESSION['startedID'],
-          'isIndex' => $_SERVER['SCRIPT_NAME']==='/NicerAppWebOS/index.php',
+          'isIndex' => false,//DONT! $_SERVER['SCRIPT_NAME']==='/NicerAppWebOS/index.php',
           'isBot' => $naIsBot,
           'isLAN' => $naLAN,
+          'isDesktop' => $naIsDesktop,
+          'isMobile' => $naIsMobile,
+          'browserMarketSharePercentage' => $naBrowserMarketSharePercentage,
           't' => $unixTimeStamp,
           'to' => $dtz_offset,
           'ts' => $timestamp,

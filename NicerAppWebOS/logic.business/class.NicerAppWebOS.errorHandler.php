@@ -72,7 +72,7 @@ class class_NicerAppWebOS__errorHandler {
         $errHTML .= '</div>'.PHP_EOL.PHP_EOL;
 
         global $naIP;
-        global $naIsBot;
+        global $naIsBot; global $naIsDesktop; global $naIsMobile; global $naBrowserMarketSharePercentage;
         global $naLAN;
         $date = date('Y-m-d H:i:s');
 
@@ -95,6 +95,9 @@ class class_NicerAppWebOS__errorHandler {
             'isIndex' => $_SERVER['SCRIPT_NAME']==='/NicerAppWebOS/index.php',
             'isBot' => $naIsBot,
             'isLAN' => $naLAN,
+            'isDesktop' => $naIsDesktop,
+            'isMobile' => $naIsMobile,
+            'browserMarketSharePercentage' => $naBrowserMarketSharePercentage,
             'i' => (
                 session_status() === PHP_SESSION_NONE
                 ? false

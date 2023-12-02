@@ -217,11 +217,37 @@ NicerApp WCS (Website Control System) from Nicer Enterprises
     ];
     //$msg = 'NEW REQUEST :<br/>'.hmJSON($dbg,'$dbg');
 
-    global $naIsBot;
+    global $naIsBot; global $naIsDesktop; global $naIsMobile; global $naBrowserMarketSharePercentage;
+    $naIsDesktop = false;
+    $naIsMobile = false;
+    $naBrowserMarketSharePercentage = -1;
     if (!array_key_exists('HTTP_USER_AGENT',$_SERVER)) $naIsBot = true;
     else {
-        $preg = preg_match('/bot/i', $_SERVER['HTTP_USER_AGENT']);
-        $naIsBot = $preg === 1;
+        //$preg = preg_match('/bot/i', $_SERVER['HTTP_USER_AGENT']);
+        //$naIsBot = $preg === 1;
+
+        $fn1 = dirname(__FILE__).'/apps/NicerAppWebOS/applications/2D/logs/userAgents.desktop.2023-12-02.json';
+        $json1 = json_decode(file_get_contents($fn1), true);
+        $fn2 = dirname(__FILE__).'/apps/NicerAppWebOS/applications/2D/logs/userAgents.mobile.2023-12-02.json';
+        $json2 = json_decode(file_get_contents($fn2), true);
+
+        $naIsBot = true;
+        foreach ($json1 as $idx => $jrec) {
+            if ($jrec['ua']===$_SERVER['HTTP_USER_AGENT']) {
+                $naIsBot = false;
+                $naIsDesktop = true;
+                $naBrowserMarketSharePercentage = $jrec['pct'];
+            }
+        }
+        foreach ($json2 as $idx => $jrec) {
+            if ($jrec['ua']===$_SERVER['HTTP_USER_AGENT']) {
+                $naIsBot = false;
+                $naIsMobile = true;
+                $naBrowserMarketSharePercentage = $jrec['pct'];
+            }
+        }
+
+
     }
 
     $lanConfigFilepath = realpath(dirname(__FILE__)).'/domainConfigs/'.$naWebOS->domain.'/naLAN.json';
@@ -276,6 +302,9 @@ NicerApp WCS (Website Control System) from Nicer Enterprises
         'isIndex' => $_SERVER['SCRIPT_NAME']==='/NicerAppWebOS/index.php',
         'isBot' => $naIsBot,
         'isLAN' => $naLAN,
+        'isDesktop' => $naIsDesktop,
+        'isMobile' => $naIsMobile,
+        'browserMarketSharePercentage' => $naBrowserMarketSharePercentage,
         'to' => $dtz_offset,
         'ts' => $timestamp,
         'ip' => $naIP,

@@ -3,26 +3,41 @@
     global $naWebOS;
     error_reporting (E_ALL);
 ?>
-<div id="btnOptions_menu__background"></div>
+<form id="myForm" name="myForm">
+<div id="btnOptions_menu__background" class="vividDialogPopup_background"></div>
 
-<div id="btnOptions_menu__specificity__containerDiv" style="display:flex;align-items:center;height:44px;">
-    <span class="label_specificityOrThemeChange">Specificity</span><select id="specificityChange_specificityName" type="text"></select>
+<div class="btnOptions_menu__specificity__containerDiv" style="display:flex;align-items:center;height:auto;">
+    <!--<span class="label_specificityOrThemeChange">Specificity</span><select id="specificityChange_specificityName" type="text"></select>-->
+    <div id="btnLockSpecificity" class="vividButton4" buttonType="btn_lock" onclick="na.site.settings.current.lockSpecificity = !na.site.settings.current.lockSpecificity;"></div>
+    <span class="btnOptions_menu__label__specificity_dropdown">Specificity</span>
+    <div id="btnOptions_menu__specificity_dropdown" class="na_themes_dropdown na_themes_dropdown__specificity"></div>
 </div>
-<div id="btnOptions_menu__theme__containerDiv" style="display:flex;align-items:center;height:44px;">
-    <span class="label_specificityOrThemeChange">Theme</span><select id="themeChange_themeName" type="text" onchange="na.te.themeSelected(event);"></select>
+<div class="btnOptions_menu__theme__containerDiv" style="display:flex;align-items:center;height:44px;">
+    <!--<span class="label_specificityOrThemeChange">Theme</span><select id="themeChange_themeName" type="text" onchange="na.te.themeSelected(event);"></select>-->
+    <span class="btnOptions_menu__label__themes_dropdown">Theme</span>
+    <div id="btnOptions_menu__themes_dropdown" class="na_themes_dropdown na_themes_dropdown__themes"></div>
 </div>
 
 
-
+<p style="margin:5px;padding:5px;text-align:center;width:calc(100%-10px);">Visibility of Dialog Settings icons :</p>
+<div id="btnOptions_menu__showVividDialogSettings__containerDiv" style="">
+    <div style="margin-left:10px;width:calc(100% - 20px);">
+        <select id="vdSettings_show" name="vdSettings_show" style="background:rgba(255,255,255,0.4);color:yellow" onchange="var opacity=$('#vdSettings_show').val()=='hidden'?0.000001:$('#vdSettings_show').val()=='transparent'?0.5:1; $('.vdSettings').css({opacity:opacity}); na.site.saveTheme();">
+            <option value="hidden" style="color:navy">Hidden until hovered over</option>
+            <option value="transparent" style="color:navy">Semi-transparent until hovered over</option>
+            <option value="shown" style="color:navy">Shown</option>
+        </select>
+    </div>
+</div>
 <p style="margin:5px;padding:5px;text-align:center;width:calc(100%-10px);">Set the time between background changes :</p>
-<div id="btnOptions_menu__backgroundTimeSettingsChanged_save__containerDiv">
-    <div style="margin-left:10px;width:calc(100% - 20px)">
+<div id="btnOptions_menu__backgroundTimeSettingsChanged_save__containerDiv" style="">
+    <div style="margin-left:10px;width:calc(100% - 20px);">
         <input id="changeBackgroundsAutomatically" type="checkbox" onchange="setTimeout(na.site.saveTheme, 250);">
         <label id="changeBackgroundsAutomatically_label" class="smallPadding" for="changeBackgroundsAutomatically" onclick="setTimeout(na.site.saveTheme, 250);">Change backgrounds automatically</label>
     </div>
-    <div style="margin:10px;width:calc(100% - 40px)">
-        <span>Hours</span><input id="backgroundChange_hours" type="number" min="0" max="23" value="0" style="width:40px;height:1em;margin-left:15px" onchange="setTimeout(na.site.saveTheme, 250);"></input>
-        <span style="margin-left:10px;">Minutes</span><input id="backgroundChange_minutes" type="number" min="1" max="59" value="5" style="width:40px;height:1em;margin-left:15px" onchange="setTimeout(na.site.saveTheme, 250);"></input>
+    <div style="margin:10px;width:calc(100% - 40px);">
+        <label for="backgroundChange_hours" style="">Hours<input id="backgroundChange_hours" name="backgroundChange_hours" type="number" min="0" max="23" value="0" style="width:40px;height:1em;margin-left:15px;" onchange="setTimeout(na.site.saveTheme, 250);"/></label>
+        <label for="backgroundChange_minutes" style="margin-left:10px;">Minutes<input id="backgroundChange_minutes" name="backgroundChange_minutes" type="number" min="1" max="59" value="5" style="width:40px;height:1em;margin-left:15px;" onchange="setTimeout(na.site.saveTheme, 250);"/></label>
     </div>
 </div>
 
@@ -105,6 +120,30 @@
         'grouped btnDelete themes',
         ''
     );
+    echo $naWebOS->html_vividButton (
+        0, 'align-items:center;justify-content:center;margin-right:10px;margin-left:10px;',
+
+        'btnDeleteAllOfMyThemes',
+        'vividButton_icon_50x50 grouped btnDelete forum', '_50x50', 'grouped',
+        '',
+        'na.site.onclick_btnDeleteAllOfMyThemes(event)',
+        '',
+        '',
+
+        202, 'Delete all of my client-specific themes.',
+
+
+        'btnCssVividButton_outerBorder.png',
+        'btnCssVividButton.blue1b.png',
+        null,//'btnCssVividButton_iconBackground.png',
+        'btnTrashcan_red.png',
+
+        '',
+
+        'Delete only my own themes.',
+        'grouped btnDelete themes',
+        ''
+    );
 ?>
 <?php
     echo $naWebOS->html_vividButton (
@@ -113,16 +152,16 @@
         'btnShowErrors',
         'vividButton_icon_50x50 grouped btnDelete forum', '_50x50', 'grouped',
         '',
-        'na.site.onclick_displayPHPerrors(event)',
+        'na.site.onclick_displayErrors(event)',
         '',
         '',
 
-        203, 'View PHP errors.',
+        204, 'View PHP errors.',
 
         'btnCssVividButton_outerBorder.png',
         'btnCssVividButton.yellow1a.png',
         null,//'btnCssVividButton_iconBackground.png',
-        'btnTrashcan_red.png', //!! !!
+        'btnZoomIncrease.png', //!! !!
 
         '',
 
@@ -155,4 +194,4 @@
         ''
     );*/
 ?>
-
+</form>
