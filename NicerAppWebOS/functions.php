@@ -297,7 +297,10 @@ function cdb_login($cdb, $cRec, $username) {
     $fncn = '.../NicerAppWebOS/functions.php::cdb_login()';
 
     $done = false;
-    if ($username=='admin') {
+    if (
+        $username=='nicer_app___Rene_AJM_Veerman'
+        || $username=='said_by___Rene_AJM_Veerman'
+    ) {
         try {
             $cdb->login ($cRec['username'], $cRec['password']);
         } catch (Throwable $e) {
@@ -317,7 +320,20 @@ function cdb_login($cdb, $cRec, $username) {
         ) {
             $r = $cdb->loginByCookie ($_COOKIE['cdb_authSession_cookie']);
 
+            try {
             $cdb_session = $cdb->getSession();
+            } catch (Throwable $e) {
+                $_SESSION['cdb_loginName'] = $cRec['username'];
+                $cdb->login ($cRec['username'], $cRec['password'], Sag::$AUTH_COOKIE);
+                $cdb_session = $cdb->getSession();
+                if (
+                    is_object($cdb_session)
+                    && $cdb_session->body->ok
+                    && !is_null($cdb_session->body->userCtx->name)
+                ) {
+                    $done = true;
+                }
+            }
             if (
                 is_object($cdb_session)
                 && $cdb_session->body->ok
@@ -325,7 +341,7 @@ function cdb_login($cdb, $cRec, $username) {
             ) {
                 $done = true;
             } else {
-                $cdb->login ($cRec['username'], $cRec['password'], Sag:$AUTH_COOKIE);
+                $cdb->login ($cRec['username'], $cRec['password'], Sag::$AUTH_COOKIE);
                 //if ($cRec['username']!=='Guest') trigger_error ('Session cookie expired. You have been logged in as \''.$cRec['username'].'\'', E_USER_WARNING);
                 //echo '<pre>'; var_dump ($cdb->getSession()); exit();
                 if (
@@ -347,6 +363,7 @@ function cdb_login($cdb, $cRec, $username) {
         }
     }
 
+    //echo 't593:'; var_dump ($done);
     if (!$done) {
         try {
             $cdb->login ($cRec['username'], $cRec['password']);
@@ -356,10 +373,37 @@ function cdb_login($cdb, $cRec, $username) {
         }
     }
     if ($done) {
-        $cdb_session = $cdb->getSession();
+        try {
+            $cdb_session = $cdb->getSession();
+            //echo 't3211:'; var_dump ($cdb_session);
+            if (
+                is_object($cdb_session)
+                && $cdb_session->body->ok
+                && !is_null($cdb_session->body->userCtx->name)
+            ) {
+                $done = true;
+            } else {
+              //  echo 't34j21'; var_dump ($cdb); var_dump ($cRec); die();
+                $_SESSION['cdb_loginName'] = $cRec['username'];
+                $cdb->login ($cRec['username'], $cRec['password'], Sag::$AUTH_COOKIE);
+                $cdb_session = $cdb->getSession();
+            }
+        } catch (Exception $e) {
+           //echo 't34j22'; var_dump ($cdb); var_dump ($cRec); die();
+                $_SESSION['cdb_loginName'] = $cRec['username'];
+                $cdb->login ($cRec['username'], $cRec['password'], Sag::$AUTH_COOKIE);
+                $cdb_session = $cdb->getSession();
+        }
         if (is_object($cdb_session) && $cdb_session->body->ok) {
-            if ($cdb_session->body->userCtx->name!=='admin')
+            global $naWebOS;
+            $un = $naWebOS->ownerInfo['OWNER_NAME'];
+            $un = str_replace ('.', '__', $un);
+            $un = str_replace (' ', '_', $un);
+            $un = $naWebOS->domainForDB.'___'.$un;
+
+            if ($cdb_session->body->userCtx->name!==$un)
                 $_SESSION['cdb_loginName'] = $cdb_session->body->userCtx->name;
+            //echo 't3222:'; var_dump ($_SESSION);
 
             return [
                 'username' => $cdb_session->body->userCtx->name,
@@ -540,6 +584,7 @@ function css_array_to_css($rules, $indent = 0) {
             $properties = $value;
 
             $css .= $prefix . "$selector {\n";
+            $css .= $prefix . $prefix . 'font-weight:bolder;'.PHP_EOL;
             $css .= $prefix . css_array_to_css($properties, $indent + 1);
             $css .= $prefix . "}\n";
         } else {

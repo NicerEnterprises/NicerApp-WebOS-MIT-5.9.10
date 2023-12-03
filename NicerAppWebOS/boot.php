@@ -218,7 +218,6 @@ NicerApp WCS (Website Control System) from Nicer Enterprises
     //$msg = 'NEW REQUEST :<br/>'.hmJSON($dbg,'$dbg');
 
     global $naIsBot; global $naIsDesktop; global $naIsMobile; global $naBrowserMarketSharePercentage;
-    $naIsBot = false;
     $naIsDesktop = false;
     $naIsMobile = false;
     $naBrowserMarketSharePercentage = -1;
@@ -247,8 +246,9 @@ NicerApp WCS (Website Control System) from Nicer Enterprises
                 $naBrowserMarketSharePercentage = $jrec['pct'];
             }
         }
+
+
     }
-    //echo '<pre>'; var_dump ($naIsBot); var_dump ($json1); var_dump($json2); die();
 
     $lanConfigFilepath = realpath(dirname(__FILE__)).'/domainConfigs/'.$naWebOS->domain.'/naLAN.json';
     $lanConfigExampleFilepath = realpath(dirname(__FILE__)).'/domainConfigs/'.$naWebOS->domain.'/naLAN.EXAMPLE.json';

@@ -192,10 +192,11 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
         if (!is_null($usersFinal))
         foreach ($usersFinal as $username1 => $userDoc) {
             $dbg = [
+                'username1' => $username1,
                 'username1-tr' => $this->translate_plainUserName_to_couchdbUserName($username1),
                 'username' => $username
             ];
-            //echo '<pre style="color:blue;">'; var_dump ($dbg); echo '</pre>';
+            //echo '<pre style="color:blue;">t32118:'; var_dump ($dbg); echo '</pre>';
             if (
                 $this->translate_plainUserName_to_couchdbUserName($username1)===$username
                 || $username1===$username
@@ -560,7 +561,9 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
         }
 
         $do = false; try { $doc = $this->cdb->get('bab'); } catch (Exception $e) { $do = true; };
-        $data = '{ "database" : "'.$dataSetName.'", "_id" : "bab", "id" : "bab", "parent" : "baa", "text" : "Administrator", "state" : { "opened" : true }, "type" : "naUserRootFolder" }';
+        global $naWebOS;
+        $un = $naWebOS->ownerInfo['OWNER_NAME'];
+        $data = '{ "database" : "'.$dataSetName.'", "_id" : "bab", "id" : "bab", "parent" : "baa", "text" : "'.$un.'", "state" : { "opened" : true }, "type" : "naUserRootFolder" }';
         if ($do) try { $this->cdb->post($data); } catch (Exception $e) { echo '<pre>'.json_encode(json_decode($data),JSON_PRETTY_PRINT).'</pre>'; echo $e->getMessage(); echo '<br/>'; };
 
         $do = false; try { $doc = $this->cdb->get('bba'); } catch (Exception $e) { $do = true; };

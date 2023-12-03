@@ -317,10 +317,17 @@ class class_NicerAppWebOS_database_API {
             foreach ($dbs as $dbName => $mustDo) {
                 if ($mustDo) {
                     $fncName = 'createDataSet_'.$dbName;
-                    $isAdmin = strpos($dbName, '_administrator')!==false;
+
+                    global $naWebOS;
+                    $un1 = strtolower($naWebOS->ownerInfo['OWNER_NAME']);
+                    $un1 = str_replace('.', '__', $un1);
+                    $un1 = str_replace(' ', '_', $un1);
+
+                    $isAdmin = strpos($dbName, '_'.$un1)!==false;
                     $adminUser = preg_replace('/.*___/','',$dbName);
                     $params = [ $adminUser ];
-                    if ($isAdmin) $fncName = preg_replace('/(___administrator)(___.*)$/','$1',$fncName);
+                    if ($isAdmin) $fncName = preg_replace('/___'.$un1.'/','',$fncName);
+                    //echo $fncName.'<br/>';
                     $x = call_user_func_array ( [ $c['conn'], $fncName ], $params );
                     $localCheck = $this->standardResultHandling($c, $x);
                     $r = array_merge ($r, [$localCheck]);
@@ -338,10 +345,17 @@ class class_NicerAppWebOS_database_API {
             foreach ($dbs as $dbName => $mustDo) {
                 if ($mustDo) {
                     $fncName = 'resetDataSet_'.$dbName;
-                    $isAdmin = strpos($dbName, '_administrator')!==false;
+
+                    global $naWebOS;
+                    $un1 = strtolower($naWebOS->ownerInfo['OWNER_NAME']);
+                    $un1 = str_replace('.', '__', $un1);
+                    $un1 = str_replace(' ', '_', $un1);
+
+                    $isAdmin = strpos($dbName, '_'.$un1)!==false;
                     $adminUser = preg_replace('/.*___/','',$dbName);
                     $params = [ $adminUser ];
-                    if ($isAdmin) $fncName = preg_replace('/(___administrator)(___.*)$/','$1',$fncName);
+                    if ($isAdmin) $fncName = preg_replace('/___'.$un1.'/','',$fncName);
+                    //echo $fncName.'<br/>';
                     $x = call_user_func_array ( [ $c['conn'], $fncName ], $params );
                     $localCheck = $this->standardResultHandling($c, $x);
                     $r = array_merge ($r, [$localCheck]);

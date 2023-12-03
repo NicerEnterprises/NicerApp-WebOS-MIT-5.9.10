@@ -190,7 +190,7 @@ if (mustDo('app_fileManager')) {
 //echo '<pre style="color:blue">'; echo json_encode ($dbs, JSON_PRETTY_PRINT); echo '</pre>';
 
 $dbs2 = addPrefixes($dbs);
-//echo '<pre style="color:blue">'; echo json_encode ($naWebOS->dbsAdmin, JSON_PRETTY_PRINT); echo '</pre>';
+//echo '<pre style="color:lime;background:navy;border-radius:10px;margin:10px;">t118:'; echo json_encode ($naWebOS->dbsAdmin->findConnection('couchdb'), JSON_PRETTY_PRINT); echo '</pre>';
 $allDBs = $naWebOS->dbsAdmin->getAllDatabases ();
 //echo '<pre style="color:green">'; var_dump ($allDBs); echo '</pre>'; die();
 //echo '<pre style="color:green">'; var_dump ($dbs); echo '</pre>'; die();
