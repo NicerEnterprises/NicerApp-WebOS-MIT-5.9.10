@@ -61,7 +61,7 @@ class Sag {
    */
   public static $HTTP_CURL = 'HTTP_CURL';
 
-  private $db;                          //Database name to hit.
+  public $db;                          //Database name to hit.
   private $host;                        //IP or address to connect to.
   private $port;                        //Port to connect to.
   private $pathPrefix = '';             //Prepended to URLs.
@@ -637,6 +637,7 @@ class Sag {
       }
 
       $this->db = $db;
+      //var_dump ('$this->db='.$db);
     }
 
     return $this;
@@ -1267,6 +1268,9 @@ class Sag {
      * For now we only data data as strings. Streams and other formats will be
      * permitted later.
      */
+    //var_dump ('t32;34lkj'); var_dump ($url); var_dump ($data); var_dump ($headers); echo json_encode(debug_backtrace(),JSON_PRETTY_PRINT); die();
+
+
     if($data && !is_string($data)) {
       throw new SagException('Unexpected data format. Please report this bug.');
     }

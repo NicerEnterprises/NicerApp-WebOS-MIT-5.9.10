@@ -40,9 +40,10 @@ class SagCURLHTTPAdapter extends SagHTTPAdapter {
       isset($_SESSION)
       && array_key_exists('cdb_loginName', $_SESSION)
       && array_key_exists('cdb_pw', $_SESSION)
-      ? "{$this->proto}://".$naWebOS->domainForDB.'___'.str_replace(' ','_',str_replace('.','__',$_SESSION['cdb_loginName'])).":".$_SESSION['cdb_pw']."@{$this->host}:{$this->port}{$url}"
+      ? "{$this->proto}://".$naWebOS->domainForDB.'___'.preg_replace('/.*___/','',str_replace(' ','_',str_replace('.','__',$_SESSION['cdb_loginName']))).":".$_SESSION['cdb_pw']."@{$this->host}:{$this->port}{$url}"
       : "{$this->proto}://{$this->host}:{$this->port}{$url}"
     );
+    //var_dump ('t3322'); var_dump ($url); die();
 
     $opts = array(
       CURLOPT_URL => $url,
