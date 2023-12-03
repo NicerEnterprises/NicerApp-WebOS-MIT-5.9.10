@@ -2,7 +2,7 @@
 require_once (dirname(__FILE__).'/boot.php');
 global $naWebOS;
 global $naLAN;
-
+die('403 Forbidden.');
 
 $authorizedFile1 = '45.83.241.21-2023-10-16_07:07:36_plus0200.html';
 $authorizedFile2 = '45.83.241.21-2023-10-16_07:13:08_plus0200.html';

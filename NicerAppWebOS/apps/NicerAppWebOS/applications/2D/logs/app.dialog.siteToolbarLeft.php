@@ -96,6 +96,7 @@ if ($appRec['page']=='index') {
 
     $debug = false;
     $dbName = $db->dataSetName('logentries');
+    $cdb->setDatabase($dbName);
 
     // fetch dataRecord
     $findCommand = [
@@ -118,7 +119,8 @@ if ($appRec['page']=='index') {
     try {
         $call = $cdb->find ($findCommand);
     } catch (Exception $e) {
-        $msg = $fncn.' FAILED while trying to find in \''.$dataSetName.'\' : '.$e->getMessage();
+        echo '<pre>';var_dump ($cdb);echo '</pre>';
+        $msg = $fncn.' FAILED while trying to find in \''.$dbName.'\' : '.$e->getMessage();
         echo $msg;
         die();
     }

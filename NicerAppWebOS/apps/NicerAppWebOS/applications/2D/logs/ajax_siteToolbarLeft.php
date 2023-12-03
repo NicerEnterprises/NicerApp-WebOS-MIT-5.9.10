@@ -3,6 +3,8 @@
 require_once (dirname(__FILE__).'/../../../../../boot.php');
 global $naWebOS;
 global $naLAN;
+$fncn = 'ajax_siteToolbarLeft.php';
+
 //if (!$naLAN) die('403 Forbidden.');
 //echo '<pre style="color:yellow;background:rgba(0,0,50,0.5);border-radius:10px;margin:10px;">'; var_dump ($naWebOS->view); echo '</pre>';
 
@@ -106,6 +108,7 @@ foreach ($naWebOS->view as $appID => $appRec) break;
 
     $debug = false;
     $dbName = $db->dataSetName('logentries');
+    $cdb->setDatabase($dbName);
 
     // fetch dataRecord
     $findCommand = [
@@ -131,7 +134,7 @@ foreach ($naWebOS->view as $appID => $appRec) break;
     try {
         $call = $cdb->find ($findCommand);
     } catch (Exception $e) {
-        $msg = $fncn.' FAILED while trying to find in \''.$dataSetName.'\' : '.$e->getMessage();
+        $msg = $fncn.' FAILED while trying to find in \''.$dbName.'\' : '.$e->getMessage();
         echo $msg;
         die();
     }

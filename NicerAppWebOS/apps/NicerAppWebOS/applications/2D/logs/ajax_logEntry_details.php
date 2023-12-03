@@ -9,6 +9,7 @@ global $naLAN;
 
     $debug = false;
     $dbName = $db->dataSetName('logentries');
+    $cdb->setDatabase($dbName);
 
     // fetch dataRecord
     $findCommand = [

@@ -223,9 +223,11 @@ NicerApp WCS (Website Control System) from Nicer Enterprises
     $naBrowserMarketSharePercentage = -1;
     if (!array_key_exists('HTTP_USER_AGENT',$_SERVER)) $naIsBot = true;
     else {
-        //$preg = preg_match('/bot/i', $_SERVER['HTTP_USER_AGENT']);
-        //$naIsBot = $preg === 1;
+        $preg = preg_match('/bot/i', $_SERVER['HTTP_USER_AGENT']);
+        $preg2 = preg_match('/externalhit/i', $_SERVER['HTTP_USER_AGENT']);
+        $naIsBot = $preg === 1 || $preg2 === 1;
 
+        /*
         $fn1 = dirname(__FILE__).'/apps/NicerAppWebOS/applications/2D/logs/userAgents.desktop.2023-12-02.json';
         $json1 = json_decode(file_get_contents($fn1), true);
         $fn2 = dirname(__FILE__).'/apps/NicerAppWebOS/applications/2D/logs/userAgents.mobile.2023-12-02.json';
@@ -246,7 +248,7 @@ NicerApp WCS (Website Control System) from Nicer Enterprises
                 $naBrowserMarketSharePercentage = $jrec['pct'];
             }
         }
-
+        */
 
     }
 

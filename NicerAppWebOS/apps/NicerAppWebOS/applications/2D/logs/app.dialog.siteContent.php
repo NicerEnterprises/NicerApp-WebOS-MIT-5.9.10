@@ -10,6 +10,7 @@ if ($appRec['page']=='index') {
 
     $debug = false;
     $dbName = $db->dataSetName('logentries');
+    $cdb->setDatabase($dbName);
 
     // fetch dataRecord
     $findCommand = [
@@ -18,7 +19,7 @@ if ($appRec['page']=='index') {
             'isBot' => false,
             'isLAN' => false
         ],
-        'fields' => ['_id', 'isIndex', 'ip', 's1', 's2', 'request'],
+        'fields' => ['_id', 'isIndex', 'ip', 'i', 's1', 's2', 'request'],
         'sort' => [
             [ 's1' => 'asc' ],
             [ 's2' => 'asc' ]
@@ -29,7 +30,8 @@ if ($appRec['page']=='index') {
     try {
         $call = $cdb->find ($findCommand);
     } catch (Exception $e) {
-        $msg = $fncn.' FAILED while trying to find in \''.$dataSetName.'\' : '.$e->getMessage();
+        echo '<pre>';var_dump ($cdb);echo '</pre>';
+        $msg = $fncn.' FAILED while trying to find in \''.$dbName.'\' : '.$e->getMessage();
         //trigger_error ($msg, E_USER_ERROR);
         echo $msg;
         //return false;
@@ -62,7 +64,7 @@ if ($appRec['page']=='index') {
             $now = DateTime::createFromFormat('U.u', $doc->s1);
             $now2 = $now->format("Y-m-d H:i:s.u");
 
-            echo '<div id="'.$doc->_id.'" style="margin:10px;margin-left:'.$marginLeft.'px" onclick="naLog.onclick_logEntry(event);">';
+            echo '<div id="'.$doc->_id.'" i="'.$doc->i.'" style="margin:10px;margin-left:'.$marginLeft.'px" onclick="naLog.onclick_logEntry(event);">';
             echo '<h2><span class="datetimeAccurate">'.$now2.'</span> <span class="ip">'.$doc->ip.'</span> '.$url.'</h2>';
             //echo hmJSON ($docA['request'], 'Request response');
             echo '</div>';

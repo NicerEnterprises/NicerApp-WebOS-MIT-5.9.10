@@ -11,6 +11,7 @@ foreach ($naWebOS->view as $appID => $appRec) break;
 
     $debug = false;
     $dbName = $db->dataSetName('logentries');
+    $cdb->setDatabase($dbName);
 
     // fetch dataRecord
     $findCommand = [
