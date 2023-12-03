@@ -4,7 +4,7 @@ global $useRememberMe; $useRememberMe = true;
 $rootPathNA = realpath(dirname(__FILE__).'/../..').'/NicerAppWebOS';
 require_once ($rootPathNA.'/boot.php');
 
-$debug = false;
+$debug = true;
 if ($debug) {
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
@@ -35,8 +35,8 @@ $username = str_replace('.', '__', $username);
 //echo $cdbDomain.'___'.$username.'<br/>';
 $_SESSION['cdb_pw'] = $_POST['pw'];
 
-
 try {
+    $_SESSION['cdb_loginName'] = $cdbDomain.'___'.$username;
     $cdb_authSession_cookie = $cdb->login($cdbDomain.'___'.$username, $_POST['pw'], Sag::$AUTH_COOKIE);
 } catch (Exception $e) {
     echo 'status : Failed<br/>'.PHP_EOL;
