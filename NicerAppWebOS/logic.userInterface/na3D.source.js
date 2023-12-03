@@ -104,6 +104,8 @@ export class na3D_portraitFrame {
 export class na3D_fileBrowser {
     constructor(el, parent, parameters) {
         var t = this;
+
+        t.debug = true;
         
         t.autoRotate = false;
         t.showLines = true;
@@ -335,58 +337,32 @@ export class na3D_fileBrowser {
             t.scene.matrixWorldAutoUpdate = true;;
             t.camera.matrixWorldAutoUpdate = true;
 
-            //console.log ('t.lookClock', t.lookClock);
+            if (t.debug) console.log ('t.lookClock', t.lookClock);
             if (t.lookClock === -2) {
-                t.lookClock = Date.now() - 1000;
+                t.lookClock = Date.now();
             }
             if (t.lookClock > 0) {
-                var delta2 = Date.now() - 1000;
-                //console.log ('animate(): delta2', delta2 > t.lookClock);
+                debugger;
+                var delta2 = Date.now() - 1500;
+                if (t.debug) console.log ('animate(): delta2', delta2 > t.lookClock);
             };
-            if (t.lookClock > 0 && delta2 > t.lookClock) {
-                //console.log ('t.flyControls.enabled, t.cameraControls.disabled');
-                t.flyControls.enabled = true;
-                t.cameraControls.enabled = false;
-            } else {
-                //console.log ('t.flyControls.disabled, t.cameraControls.enabled');
-                t.flyControls.enabled = false;
-                t.cameraControls.enabled = true;
-            }
-
             const delta = t.clock.getDelta();
-            //if (t.orbitControls.enabled)  t.orbitControls.update(delta);
             var dbg = {
                     't.cameraControls.deltaX' : t.cameraControls.deltaX,
                     't.cameraControls.deltaY' : t.cameraControls.deltaY
                 };
-                //console.log (dbg);
-var threshold = 1;
-/*
-                        if (
-                            !t.cameraControls._isUserControllingTruck
-                            /*&& (
-                                t.cameraControls.deltaX < -1 * threshold
-                                || t.cameraControls.deltaX > threshold
-                            ) || (
-                                t.cameraControls.deltaY < -1 * threshold
-                                || t.cameraControls.deltaY > threshold
-                            )* /
-                        ) {
-                            t.lookClock = -1;
-                            t.flyControls.enabled = false;
-                            t.cameraControls.enabled = true;
-                        }
-*/
+            if (t.debug) console.log (dbg);
+            var threshold = 1;
 
             if (t.flyControls.enabled) {
-                //console.log ('animate() : calling t.flyControls.update()');
+                if (t.debug) console.log ('animate() : calling t.flyControls.update()');
                 t.flyControls.update(delta)
                 t.flyControls.updateMovementVector();
             }
 
             if (t.cameraControls.enabled) {
                 if (t.flyControls.enabled) {
-                    //console.log ('animate() : setting t.cameraControls.setLookAt()');
+                    if (t.debug) console.log ('animate() : setting t.cameraControls.setLookAt()');
                     var tar = t.cameraControls._targetEnd.clone();
                     tar.set(0,0,-10).applyQuaternion(t.camera.quaternion).add(t.camera.position);
                     t.cameraControls.setLookAt (
@@ -399,12 +375,25 @@ var threshold = 1;
                         false
                     );
                 }
-                //console.log ('animate() : calling t.cameraControls.update()');
+                if (t.debug) console.log ('animate() : calling t.cameraControls.update()');
                 //if (t.cameraControls._isUserControllingTruck) debugger;
                 t.cameraControls.update(delta, true);
                 //t.camera.lookAt (t.middle.x, t.middle.y, t.middle.z);
             }
             //t.fpControls.update(0.3);
+
+
+            if (t.lookClock > 0 && delta2 > t.lookClock) {
+                debugger;
+                if (t.debug) console.log ('t.flyControls.enabled, t.cameraControls.disabled');
+                t.flyControls.enabled = true;
+                t.cameraControls.enabled = false;
+            } else {
+                //if (t.debug) console.log ('t.flyControls.disabled, t.cameraControls.enabled');
+                //t.flyControls.enabled = false;
+                //t.cameraControls.enabled = true;
+            }
+
 
             var dbg = {
                     't.cameraControls.deltaX' : t.cameraControls.deltaX,
@@ -414,67 +403,95 @@ var threshold = 1;
                     'cce' : t.cameraControls.enabled,
                     't.lookClock' : t.lookClock
                 };
-                //console.log (dbg);
-                /*
-                var threshold = 1;
-                if (
-                    !t.animPlaying
-                    && (
-                        !t.cameraControls._isUserControllingTruck
-                        && (
-                            t.cameraControls.deltaX > -1 * threshold
-                            && t.cameraControls.deltaX < threshold
-                        ) && (
-                            t.cameraControls.deltaY > -1 * threshold
-                            && t.cameraControls.deltaY < threshold
-                        )
-                    )
-                     && t.lookClock===-1
-                ) {
-                    console.log ('animate(): t.lookClock set');
-                    //debugger;
-                    t.lookClock = Date.now();
-                } else*/ //else if (
-                        if (
-                            //!t.cameraControls._isUserControllingTruck
-                             (
-                                t.cameraControls.deltaX < -1 * threshold
-                                || t.cameraControls.deltaX > threshold
-                            ) || (
-                                t.cameraControls.deltaY < -1 * threshold
-                                || t.cameraControls.deltaY > threshold
-                            )
-                        ) {
-                            //console.log ('animate(): t.lookClock===-1, flyControls.enabled==false');
-                            t.lookClock = -1;
-                            t.flyControls.enabled = false;
-                        } //else {
-                            //console.log ('animate(): cameraControls.enabled==true');
-                            t.cameraControls.enabled = true;
-                        //}
-                    var intersects = t.raycaster.intersectObjects (t.s2);
-                    //console.log ('pointerdown(): t.lookClock set to -1');
-                    //t.lookClock = null;
-                    t.lookClock = -1;
-                    if (intersects[0] && intersects[0].object.type!=='Line') {
-                        t.cameraControls.enabled= false;
-                        t.flyControls.enabled = false;
-                       // console.log ('pointerdown()',t.cameraControls.enabled, t.flyControls.enabled);
-                            //t.camera.lookAt (t.s2[0].position);
-                            //t.cameraControls._camera.lookAt (t.s2[0].position);
-                            //t.cameraControls._camera.position = t.cameraOrigin;
-                    } else {
-                        t.cameraControls.enabled= false;
-                        t.flyControls.enabled = true;
-                        //console.log ('pointerdown()',t.cameraControls.enabled, t.flyControls.enabled);
-                        t.lookClock = Date.now();
-                            //t.camera.lookAt (t.s2[0].position);
-                            //t.cameraControls._camera.lookAt (t.s2[0].position);
-                            //t.cameraControls._camera.position = t.cameraOrigin;
-                    }
+                //debugger;
+            if (t.debug) console.log (dbg);
 
             t.camera.updateProjectionMatrix();
             t.camera.updateWorldMatrix (true, false);
+
+
+
+            var threshold = 1;
+            var x = t.cameraControls._activePointers;
+            //if (x[0]) debugger;
+            if (x[0])
+                if (x[0].mouseButton===1) {
+                    // left or middle mouse button(s) held down
+                    if (
+                        //!t.cameraControls._isUserControllingTruck
+                        (
+                            t.cameraControls.deltaX
+                            || t.cameraControls.deltaY
+                        )
+                        && (
+                            t.cameraControls.deltaX < -1 * threshold
+                            || t.cameraControls.deltaX > threshold
+                            || t.cameraControls.deltaY < -1 * threshold
+                            || t.cameraControls.deltaY > threshold
+                        )
+                    ) {
+                        // mouse pointer falls outside threshold from when first clicked
+
+                        //if (t.lookClock<0) {
+                            if (t.debug) console.log ('animate(): t.lookClock===-1');
+                            t.lookClock = -1;
+                            t.flyControls.enabled = false;
+                            t.cameraControls.enabled = true;
+                        //}
+                    } else {
+                        var intersects = t.raycaster.intersectObjects (t.s2);
+                        //if (t.debug) console.log ('pointerdown(): t.lookClock set to -1');
+                        //t.lookClock = null;
+                        //t.lookClock = -1;
+                        if (intersects[0] && intersects[0].object.type!=='Line') {
+                            //t.cameraControls.enabled= false;
+                            //t.flyControls.enabled = false;
+                            //if (t.debug) console.log ('pointerdown() if',t.cameraControls.enabled, t.flyControls.enabled);
+                                //t.camera.lookAt (t.s2[0].position);
+                                //t.cameraControls._camera.lookAt (t.s2[0].position);
+                                //t.cameraControls._camera.position = t.cameraOrigin;
+                        } else {
+                            //t.cameraControls.enabled= false;
+                            //t.flyControls.enabled = true;
+                            //if (t.debug) console.log ('pointerdown() else',t.cameraControls.enabled, t.flyControls.enabled);
+
+                            if (t.lookClock < 0) {
+                            debugger;
+                                if (t.debug) console.log ('animate(): t.lookClock===-2');
+                                t.lookClock = -2;
+                            } /*else {
+                                t.flyControls.enabled = false;
+                                t.cameraControls.enabled = true;
+                            //}*/
+
+                            //t.camera.lookAt (t.s2[0].position);
+                            //t.cameraControls._camera.lookAt (t.s2[0].position);
+                            //t.cameraControls._camera.position = t.cameraOrigin;
+                        }
+                    }
+                    /*if (
+                        !(
+                                t.cameraControls.deltaX
+                                || t.cameraControls.deltaY
+                        )
+                        || (
+                            t.cameraControls.deltaX === 0
+                            && t.cameraControls.deltaY === 0
+                        )
+                    ) {
+                        t.lookClock = -1;
+                    }*/
+                } else if (x[0].mouseButton===2) {
+                    // right mouse button held down
+                    debugger;
+                    t.lookClock = -1;
+                    t.flyControls.enabled = false;
+                    t.cameraControls.enabled = true;
+                }
+
+
+
+
 
             var intersects = t.raycaster.intersectObjects (t.s2);
             if (intersects[0] && intersects[0].object.type!=='Line') 
@@ -673,6 +690,8 @@ var threshold = 1;
         t.mouse.layerY =  event.layerY;
 
         //$('#site3D_label').html(t.hoverOverName).css({ position:'absolute', padding : 10, zIndex : 5000, top : event.layerY + 10, left : event.layerX + 30 });
+
+
     }
     
     onMouseWheel( event, t ) {
@@ -832,7 +851,7 @@ var threshold = 1;
         }
     }
     initializeItems_walkValue (cd) {
-        //console.log ('value', cd);
+        console.log ('initializeItems_walkValue', 'cd', cd);
     }
     
     onresize (t, levels) {
@@ -1372,8 +1391,8 @@ var threshold = 1;
 
             if (!t.started) {
                 t.started = true;
-                //t.cameraControls.enabled = true;
-                t.pathAnimation2.play(0);
+                t.cameraControls.enabled = true;
+                t.pathAnimation.play(0);
 
 
                 t.renderer.domElement.addEventListener ('pointerdown', function (evt) {
@@ -1403,10 +1422,10 @@ var threshold = 1;
                         't.cameraControls._dragNeedsUpdate' : t.cameraControls._dragNeedsUpdate,
                         't.lookClock' : t.lookClock
                     };
-                    //console.log (dbg);
+                    if (t.debug) console.log (dbg);
                 });
                 t.renderer.domElement.addEventListener ('pointerup', function (evt) {
-                    console.log ('pointerup() t.lookClock === -1, t.cameraControls.enabled');
+                    if (t.debug) console.log ('pointerup() t.lookClock === -1, t.cameraControls.enabled');
                     t.lookClock = -1;
                     t.cameraControls.enabled = true;
                 });
@@ -1486,7 +1505,7 @@ var threshold = 1;
                     if (t.showLines) t.drawLines(t);
                     t.lookClock = -2;
                     t.cameraControls.enabled = false;
-                    //t.flyControls.enabled = true;
+                    t.flyControls.enabled = false;
                 } );
 
             };

@@ -223,12 +223,17 @@ NicerApp WCS (Website Control System) from Nicer Enterprises
     $naBrowserMarketSharePercentage = -1;
     if (!array_key_exists('HTTP_USER_AGENT',$_SERVER)) $naIsBot = true;
     else {
-        $preg = preg_match('/bot/i', $_SERVER['HTTP_USER_AGENT']);
-        $preg1 = preg_match('/\+https:\/\//i', $_SERVER['HTTP_USER_AGENT']);
-        $preg2 = preg_match('/externalhit/i', $_SERVER['HTTP_USER_AGENT']);
-        $preg3 = preg_match('/crawler/i', $_SERVER['HTTP_USER_AGENT']);
-        $naIsBot = $preg === 1 || $preg1 === 1 || $preg2 === 1 || $preg3 === 1;
-
+        $naIsBot = preg_match('/bot/i', $_SERVER['HTTP_USER_AGENT']) === 1;
+        if (!$naIsBot)
+            $naIsBot = preg_match('/\+https:\/\//i', $_SERVER['HTTP_USER_AGENT']) === 1;
+        if (!$naIsBot)
+            $naIsBot = preg_match('/externalhit/i', $_SERVER['HTTP_USER_AGENT']) === 1;
+        if (!$naIsBot)
+            $naIsBot = preg_match('/crawler/i', $_SERVER['HTTP_USER_AGENT']) === 1;
+        if (!$naIsBot)
+            $naIsBot = preg_match('/spider/i', $_SERVER['HTTP_USER_AGENT']) === 1;
+        if (!$naIsBot)
+            $naIsBot = preg_match('/scaninfo\@paloanetworks\.com/i', $_SERVER['HTTP_USER_AGENT']) === 1;
         /*
         $fn1 = dirname(__FILE__).'/apps/NicerAppWebOS/applications/2D/logs/userAgents.desktop.2023-12-02.json';
         $json1 = json_decode(file_get_contents($fn1), true);
