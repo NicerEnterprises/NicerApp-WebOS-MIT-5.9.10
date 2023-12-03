@@ -22,14 +22,15 @@ foreach ($naWebOS->view as $appID => $appRec) break;
             [ 's1' => 'asc' ],
             [ 's2' => 'asc' ]
         ],
-        'use_index' => '_design/249f3b14593cc6f19467c3697f2398397bd9aab6'
+        'use_index' => '_design/249f3b14593cc6f19467c3697f2398397bd9aab6',
+        'limit' => 10 * 1000
     ];
 
     if ($_GET['type']=='robots') $findCommand['selector']['isBot'] = true;
     elseif ($_GET['type']=='LAN') $findCommand['selector']['isLAN'] = true;
     else {
-        $findCommand['selector']['isBot'] = false;
-        $findCommand['selector']['isLAN'] = false;
+        $findCommand['selector']['isBot'] = false;//[ '$or' => [ [ '$eq' => null ], [ '$eq' => false ] ]];
+        $findCommand['selector']['isLAN'] = false;//JUST RESULTS IN BOT HITS SHOWING FOR HUMAN VISITORS! [ '$or' => [ [ '$eq' => null ], [ '$eq' => false ] ]];
     }
 
     //echo '<pre style="padding:8px;border-radius:10px;background:rgba(255,255,255,0.5);color:green;">'; var_dump ($findCommand); echo '</pre>';

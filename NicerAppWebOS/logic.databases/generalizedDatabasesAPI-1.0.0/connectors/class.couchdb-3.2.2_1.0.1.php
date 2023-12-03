@@ -1218,6 +1218,8 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
         #TODO 1-2b // 1- = first to-do item, 2 = 2nd file-set, b = 1 level down into the file-set.
         $fncn = $this->cn.'->addLogEntries($entries)';
         $cdb = $this->cdb;
+        $oldDB = $cdb->db;
+        //var_dump ('$oldDB='.$oldDB);
         $dataSetName = $this->dataSetName('logentries');
         $cdb->setDatabase($dataSetName, false);
 
@@ -1226,6 +1228,7 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
                 $cdb->post($rec);
             } catch (Exception $e) {
                 global $naLog; global $naWebOS;
+                if (is_string($oldDB) && $oldDB!=='') $cdb->setDatabase ($oldDB);
                 /*
                 $naLog->addTo_phpOutput( SEID,
                     $fncn.' : Error while trying to $cdb->post() : $e->getMessage()='.$e->getMessage().', $cdb->getSession()='.json_encode($cdb->getSession()).', $naWebOS->dbs->findConnection(\'couchdb\')->username='.$naWebOS->dbs->findConnection('couchdb')->username
@@ -1234,9 +1237,9 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
                 return false;
             }
         }
+        if (is_string($oldDB) && $oldDB!=='') $cdb->setDatabase ($oldDB);
         return true;
     }
-
 
 
     //--- UTILITY FUNCTIONS

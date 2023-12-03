@@ -78,7 +78,6 @@ import { OrbitControls } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/example
 import { RGBELoader } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/loaders/RGBELoader.js';
 import { DragControls } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/controls/DragControls.js';
 //import { GLTFLoader } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/loaders/GLTFLoader.js';
-*/
 
 export class na3D_portraitFrame {
     
@@ -99,6 +98,7 @@ export class na3D_portraitFrame {
     }
     
 }
+*/
 
 
 export class na3D_fileBrowser {
@@ -323,7 +323,7 @@ export class na3D_fileBrowser {
     }
     
     animate(t, evt) {
-        requestAnimationFrame( function(evt) { setTimeout (function() { t.animate (t,evt) }, 500) });
+        requestAnimationFrame( function(evt) { t.animate (t,evt) });
         //if (t.mouse.x!==0 || t.mouse.y!==0) {
 
             for (var i=0; i<t.s2.length; i++) {
@@ -335,7 +335,7 @@ export class na3D_fileBrowser {
             t.scene.matrixWorldAutoUpdate = true;;
             t.camera.matrixWorldAutoUpdate = true;
 
-            console.log ('t.lookClock', t.lookClock);
+            //console.log ('t.lookClock', t.lookClock);
             if (t.lookClock === -2) {
                 t.lookClock = Date.now() - 1000;
             }
@@ -344,11 +344,11 @@ export class na3D_fileBrowser {
                 //console.log ('animate(): delta2', delta2 > t.lookClock);
             };
             if (t.lookClock > 0 && delta2 > t.lookClock) {
-                console.log ('t.flyControls.enabled, t.cameraControls.disabled');
+                //console.log ('t.flyControls.enabled, t.cameraControls.disabled');
                 t.flyControls.enabled = true;
                 t.cameraControls.enabled = false;
             } else {
-                console.log ('t.flyControls.disabled, t.cameraControls.enabled');
+                //console.log ('t.flyControls.disabled, t.cameraControls.enabled');
                 t.flyControls.enabled = false;
                 t.cameraControls.enabled = true;
             }
@@ -359,7 +359,7 @@ export class na3D_fileBrowser {
                     't.cameraControls.deltaX' : t.cameraControls.deltaX,
                     't.cameraControls.deltaY' : t.cameraControls.deltaY
                 };
-                console.log (dbg);
+                //console.log (dbg);
 var threshold = 1;
 /*
                         if (
@@ -379,14 +379,14 @@ var threshold = 1;
 */
 
             if (t.flyControls.enabled) {
-                console.log ('animate() : calling t.flyControls.update()');
+                //console.log ('animate() : calling t.flyControls.update()');
                 t.flyControls.update(delta)
                 t.flyControls.updateMovementVector();
             }
 
             if (t.cameraControls.enabled) {
                 if (t.flyControls.enabled) {
-                    console.log ('animate() : setting t.cameraControls.setLookAt()');
+                    //console.log ('animate() : setting t.cameraControls.setLookAt()');
                     var tar = t.cameraControls._targetEnd.clone();
                     tar.set(0,0,-10).applyQuaternion(t.camera.quaternion).add(t.camera.position);
                     t.cameraControls.setLookAt (
@@ -399,7 +399,7 @@ var threshold = 1;
                         false
                     );
                 }
-                console.log ('animate() : calling t.cameraControls.update()');
+                //console.log ('animate() : calling t.cameraControls.update()');
                 //if (t.cameraControls._isUserControllingTruck) debugger;
                 t.cameraControls.update(delta, true);
                 //t.camera.lookAt (t.middle.x, t.middle.y, t.middle.z);
@@ -445,28 +445,28 @@ var threshold = 1;
                                 || t.cameraControls.deltaY > threshold
                             )
                         ) {
-                            console.log ('animate(): t.lookClock===-1, flyControls.enabled==false');
+                            //console.log ('animate(): t.lookClock===-1, flyControls.enabled==false');
                             t.lookClock = -1;
                             t.flyControls.enabled = false;
                         } //else {
-                            console.log ('animate(): cameraControls.enabled==true');
+                            //console.log ('animate(): cameraControls.enabled==true');
                             t.cameraControls.enabled = true;
                         //}
                     var intersects = t.raycaster.intersectObjects (t.s2);
-                    console.log ('pointerdown(): t.lookClock set to -1');
+                    //console.log ('pointerdown(): t.lookClock set to -1');
                     //t.lookClock = null;
                     t.lookClock = -1;
                     if (intersects[0] && intersects[0].object.type!=='Line') {
                         t.cameraControls.enabled= false;
                         t.flyControls.enabled = false;
-                        console.log ('pointerdown()',t.cameraControls.enabled, t.flyControls.enabled);
+                       // console.log ('pointerdown()',t.cameraControls.enabled, t.flyControls.enabled);
                             //t.camera.lookAt (t.s2[0].position);
                             //t.cameraControls._camera.lookAt (t.s2[0].position);
                             //t.cameraControls._camera.position = t.cameraOrigin;
                     } else {
                         t.cameraControls.enabled= false;
                         t.flyControls.enabled = true;
-                        console.log ('pointerdown()',t.cameraControls.enabled, t.flyControls.enabled);
+                        //console.log ('pointerdown()',t.cameraControls.enabled, t.flyControls.enabled);
                         t.lookClock = Date.now();
                             //t.camera.lookAt (t.s2[0].position);
                             //t.cameraControls._camera.lookAt (t.s2[0].position);
@@ -1116,7 +1116,7 @@ var threshold = 1;
         var
         tf = t.winners.behind + Math.round((t.winners.behind - t.winners.front) / 2),
         ol = 5000,
-        numPoints = 360,
+        numPoints = 720,
         radius = 25*1000;
         t.middle = {
             x : Math.round((t.winners.west + t.winners.east) / 2),

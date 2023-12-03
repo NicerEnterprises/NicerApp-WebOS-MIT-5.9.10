@@ -34,7 +34,7 @@ foreach ($tables as $idx=>$dbName) {
     try { $docs = $cdb->getAllDocs(); } catch (Exception $e) { echo $e->getMessage(); };
     $data = $docs->body->rows;
     foreach ($data as $idx2=>$recordSummary) {
-        $record = $cdb->get($recordSummary->id);
+        $record = $cdb->get($recordSummary->_id);
         $ret = array_merge ($ret, array(json_decode(json_encode($record->body),true)));
     }
 }

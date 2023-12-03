@@ -195,7 +195,7 @@ debugger;
                     var tree = $('#jsTree').jstree(true);
                     for (var i=0; i<tree.settings.core.data.length; i++) {
                         var it = tree.settings.core.data[i];
-                        if (it.state.selected) tree.select_node(it._id);
+                        if (it.state && it.state.selected) tree.select_node(it._id);
                     }
                 }).on('open_node.jstree', function (e, data) {
                     na.cms.onchange_folderStatus_openOrClosed(e, data);
