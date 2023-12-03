@@ -10,6 +10,7 @@ $adb = $naWebOS->dbsAdmin->findConnection('couchdb');
 $acdb = $adb->cdb;
 
 $dataSetName = $_REQUEST['database']; // i know, couchdb calls a 'table' a 'database'. and that sux.
+$oldDB = $cdb->db;
 $cdb->setDatabase ($dataSetName, false);
 
 $id = $_POST['id'];
@@ -45,6 +46,7 @@ $id = $_POST['id'];
             //echo '<pre>';
             //var_dump ($call->body->docs); //die();
             $call2 = $cdb->get ($call->body->docs[0]->_id);
+            $cdb->setDatabase ($oldDB);
             //var_dump ($call2->body); //die();
             /*
             $r = null;

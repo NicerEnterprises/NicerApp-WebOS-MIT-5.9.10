@@ -832,8 +832,8 @@ debugger;
                 } catch (error) {
                     console.log ('na.cms.saveEditorContent() : FAILED :', error);
                 }
-                for (var ct in dat) {
-                    for (var tn in dat[ct].document) rec.original.id = dat[ct].document[tn].id; // TODO : this prevents different dataIDs in different ct environments from being used. needs a fix, eventually. by changing the dataID field in ___cms_tree__ and ___cms_documents__ to a JSON array (ct => dataID).
+                for (var ct in dat.rec) {
+                    for (var tn in dat.rec[ct].document) rec.original.id = dat.rec[ct].document[tn].id; // TODO : this prevents different dataIDs in different ct environments from being used. needs a fix, eventually. by changing the dataID field in ___cms_tree__ and ___cms_documents__ to a JSON array (ct => dataID).
                     break;
                 }
                 if (typeof callback=='function') callback(rec);

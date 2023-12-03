@@ -55,7 +55,8 @@ if (false && $illegal) {
 
     global $naWebOS;
 
-    $dataIDs = $naWebOS->dbs->cms_editDocument();
+
+    $dataIDs = $naWebOS->dbsAdmin->cms_editDocument();
     $dataIDs_simple = [];
     foreach ($dataIDs as $idx => $dr) {
         $ct = $dr['c']['ct'];
@@ -74,6 +75,7 @@ if (false && $illegal) {
         $ct = $dr['c']['ct'];
         $relTableName = 'data_by_users';
         $dataSetName = $db->dataSetName($relTableName);
+        echo '{"rec":';
         $findCommand = [
             'selector' => [
                 'seo_value' => $dr['resultValue']
@@ -100,7 +102,7 @@ if (false && $illegal) {
         if ( array_key_exists('role',$_POST) && $_POST['role']!=='' ) $document['role'] = $_POST['role'];
 
         $dataIDs_simple[$ct]['document'][$dataSetName] = $document;
-        $dataByUsers = $naWebOS->dbs->editDataSubSet ($ct, $relTableName, $findCommand, $document);
+        $dataByUsers = $naWebOS->dbsAdmin->editDataSubSet ($ct, $relTableName, $findCommand, $document);
         foreach ($dataByUsers as $idx => $dr) {
             $ct2 = $dr['c']['ct'];
             if ($ct==$ct2 && $dr['result']!==true) $dataIDs_simple[$ct]['result'] = false;
@@ -140,5 +142,6 @@ if (false && $illegal) {
     }
 */
     echo json_encode($dataIDs_simple); // reports only what is in or has changed in the logged-in databases.
+    echo '}';
 }
 ?>

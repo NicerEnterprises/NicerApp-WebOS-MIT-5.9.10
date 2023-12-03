@@ -4,6 +4,7 @@ require_once ($rootPath.'/boot.php');
 $debug = true;
 global $naWebOS;
 $cdb = $naWebOS->dbs->findConnection('couchdb')->cdb;
+//echo '<pre>'; var_dump ($dbg); die();
 
 if (!array_key_exists('database',$_POST)) {
     $dbg = [
@@ -56,6 +57,7 @@ $findCommand = array (
     'selector' => array ( 'parent' => $_POST['parent'] ),
     'fields' => array ( '_id', 'text' )    
 );
+//var_dump ($dbName); var_dump ($cdb); echo PHP_EOL; echo json_encode($findCommand,JSON_PRETTY_PRINT);die();
 $call = $cdb->find ($findCommand);
 if (!isset($text)) $text = '';
 $textFinal = $text;
@@ -100,17 +102,18 @@ $recordToAdd = array (
 
 try { $call = $cdb->post($recordToAdd); } catch (Exception $e) {
     if ($debug) {
-        //echo '<pre>'; var_dump ($recordToAdd); echo '</pre>';
+        //echo '<pre>'; echo $e->getMessage(); var_dump ($recordToAdd); echo '</pre>';
         cdb_error (500, $e, 'Could not add dbName='.$dbName.', record='.json_encode($recordToAdd));
     }
     exit();
 }
 //$msg = '$call='.json_encode($call, JSON_PRETTY_PRINT);
-//echo '<pre>'; var_dump ($recordToAdd); echo '<br/>'; var_dump ($msg); var_dump (debug_backtrace(), JSON_PRETTY_PRINT); echo '</pre>'; die();
+//echo '<pre>'; var_dump ($dbName); echo json_encode($recordToAdd, JSON_PRETTY_PRINT); echo '<br/>'; var_dump ($msg); var_dump (debug_backtrace(), JSON_PRETTY_PRINT); echo '</pre>'; die();
 //trigger_error ($msg, E_USER_NOTICE);
 
 if ($_POST['type'] == 'naDocument') {
     $u = array_key_exists('cdb_loginName',$_SESSION) ? $_SESSION['cdb_loginName'] : $cdbConfig['username'];
+    var_dump ($_SESSION); die();
     $u = preg_replace('/.*___/','',$u);
     $u = preg_replace('/__/',' ',$u);
     $u1 = str_replace(' ', '-', $u);

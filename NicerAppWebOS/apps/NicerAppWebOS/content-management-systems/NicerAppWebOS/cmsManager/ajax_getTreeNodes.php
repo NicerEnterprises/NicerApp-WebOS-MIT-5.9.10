@@ -4,7 +4,7 @@ require_once (realpath(dirname(__FILE__).'/../../../../..').'/boot.php');
 global $naWebOS;
 $cdb = $naWebOS->dbs->findConnection('couchdb')->cdb;
 $username = array_key_exists('cdb_loginName',$_SESSION) ? $_SESSION['cdb_loginName'] : $cdbConfig['username'];
-//echo '<pre>';var_dump ($_SESSION);echo '</pre>';die();
+//echo '<pre>t342:';var_dump ($_SESSION);echo '</pre>';die();
 $username = preg_replace ('/.*___/', '', $username);
 $username = str_replace(' ', '__', $username);
 $username = str_replace('.', '_', $username);
@@ -31,11 +31,10 @@ foreach ($tables as $idx=>$dbName) {
 
     //echo '$dbName='.$dbName.'</br>'.PHP_EOL;
 
-    try { $docs = $cdb->getAllDocs(); } catch (Exception $e) { echo $e->getMessage(); };
+    try { $docs = $cdb->getAllDocs(true); } catch (Exception $e) { echo $e->getMessage(); };
     $data = $docs->body->rows;
     foreach ($data as $idx2=>$recordSummary) {
-        $record = $cdb->get($recordSummary->_id);
-        $ret = array_merge ($ret, array(json_decode(json_encode($record->body),true)));
+        $ret = array_merge ($ret, array(json_decode(json_encode($recordSummary->doc),true)));
     }
 }
 
