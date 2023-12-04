@@ -40,11 +40,25 @@ try { $call = $cdb->get ($view['cmsText']['id']); } catch (Exception $e) { echo 
 echo $call->body->document;
 */
 
-$baseURL = '/NicerAppWebOS/siteData/'.$naWebOS->domain.'/';
-$baseDir = $root.'/NicerAppWebOS/siteData/'.$naWebOS->domain.'/';
+$fn = $view['cmsViewMedia']['filename'];
+
+if (substr($view['cmsViewMedia']['basePath'],0,1)!=='/') {
+    $baseURL = '/NicerAppWebOS/siteData/'.$naWebOS->domain.'/';
+    $baseDir = $root.'/NicerAppWebOS/siteData/'.$naWebOS->domain.'/';
+} else {
+    if (
+        !array_key_exists('relPath1',$_GET)
+        || !is_string($_GET['relPath1'])
+        || $_GET['relPath1']===''
+    ) $_GET['relPath1']
+        = realpath(dirname(__FILE__).'/../../../../../..');
+
+    $baseDir = $_GET['relPath1'];
+    $rt = realpath(dirname(__FILE__).'/../../../../../..');
+    $baseURL = str_replace($rt, '', $baseDir);
+}
 $targetDir = $baseDir.$view['cmsViewMedia']['basePath'].'/';
 $targetURL = $baseURL.$view['cmsViewMedia']['basePath'].'/';
-$fn = $view['cmsViewMedia']['filename'];
 
 $dbg = array (
     'baseURL' => $baseURL,
@@ -56,7 +70,7 @@ $dbg = array (
 );
 //echo '<pre>'.json_encode($dbg,JSON_PRETTY_PRINT).'</pre>';
 
-$files = getFilePathList ($targetDir, false, FILE_FORMATS_photos, null, array('file'))['files'];
+$files = getFilePathList ($targetDir, false, FILE_FORMATS_photos, null, array('file'), 1, 1, false);
 
 foreach ($files as $idx => $file) {
     $prev = '';
