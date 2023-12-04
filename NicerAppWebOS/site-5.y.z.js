@@ -1534,6 +1534,9 @@ onclick_btnFullResetOfAllThemes : function (event) {
         na.d.s.visibleDivs = arrayRemove (na.d.s.visibleDivs,'#siteToolbarRight'); $.cookie('visible_siteToolbarRight','', na.m.cookieOptions());
         na.desktop.resize();
 */
+        na.desktop.setConfig('content');
+
+
 
         var 
         fncn = 'na.site.loadContent_displayContent(data,ts,xhr)',
