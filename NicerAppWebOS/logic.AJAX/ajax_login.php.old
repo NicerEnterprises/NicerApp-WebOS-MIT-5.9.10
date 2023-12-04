@@ -114,7 +114,7 @@ if ($callOK) {
 
     } else { //echo 2;
 
-        //recrypt ($_POST['loginName'], $_POST['pw'], $cdb_authSession_cookie);
+        recrypt ($_POST['loginName'], $_POST['pw'], $cdb_authSession_cookie);
 
         $_SESSION['cdb_authSession_cookie'] = $cdb_authSession_cookie;
         setcookie('cdb_authSession_cookie', $cdb_authSession_cookie, time() + 604800, '/'); // 604800 = 7 days measured in seconds (cookie timeout length)

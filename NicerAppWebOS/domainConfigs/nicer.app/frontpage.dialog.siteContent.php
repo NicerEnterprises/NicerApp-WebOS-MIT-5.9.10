@@ -15,7 +15,7 @@
     <p>
     Take a video or (tiled) background of any resolution, and project information onto that using any weblanguage you want.<br/>
     Written in a style simple enough for children to learn from.<br/>
-    Opensourced <a href="https://github.com/NicerEnterprises/NicerApp-WebOS" class="naExternalLink nomod noPushState" target="ghMain">here</a>, development branch <a href="https://github.com/NicerEnterprises/NicerApp-WebOS-dev" class="naExternalLink nomod noPushState" target="ghDev">here</a>
+    Opensourced under an enterprise-commercial MIT-license <a href="https://github.com/NicerEnterprises/NicerApp-WebOS" class="naExternalLink nomod noPushState" target="ghMain">here</a>.
     </p>
 
     <h1 class="contentSectionTitle1"><span class="contentSectionTitle1_span">Available Apps</span></h1>

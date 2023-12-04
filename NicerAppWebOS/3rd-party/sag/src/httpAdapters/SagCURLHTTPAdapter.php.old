@@ -288,7 +288,7 @@ class SagCURLHTTPAdapter extends SagHTTPAdapter {
 
       $err = [
           's1' => $_SESSION['started'],
-          's2' => time(),///microtime(true),
+          's2' => time(),//microtime(true),
           'i' => $_SESSION['startedID'],
           'isIndex' => false,//DONT! $_SERVER['SCRIPT_NAME']==='/NicerAppWebOS/index.php',
           'isBot' => $naIsBot,
