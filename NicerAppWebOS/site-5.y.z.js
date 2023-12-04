@@ -1525,14 +1525,16 @@ onclick_btnFullResetOfAllThemes : function (event) {
             }, 500, appID);
         }
         na.apps.loaded = {};
-        
+
+/*
         // stage 002 : hide all the toolbar DIVs (apps loaded in this loadContent() call will have to make them visible again themselves during their onload() code call
         na.d.s.visibleDivs = arrayRemove (na.d.s.visibleDivs,'#siteToolbarTop'); $.cookie('visible_siteToolbarTop','', na.m.cookieOptions());
         na.d.s.visibleDivs = arrayRemove (na.d.s.visibleDivs,'#siteErrors'); $.cookie('visible_siteErrors','', na.m.cookieOptions());
         na.d.s.visibleDivs = arrayRemove (na.d.s.visibleDivs,'#siteToolbarLeft'); $.cookie('visible_siteToolbarLeft','', na.m.cookieOptions());
         na.d.s.visibleDivs = arrayRemove (na.d.s.visibleDivs,'#siteToolbarRight'); $.cookie('visible_siteToolbarRight','', na.m.cookieOptions());
         na.desktop.resize();
-        
+*/
+
         var 
         fncn = 'na.site.loadContent_displayContent(data,ts,xhr)',
         c = na.site.settings.current,
@@ -1705,6 +1707,7 @@ onclick_btnFullResetOfAllThemes : function (event) {
         c.scriptsToLoadTotal = 0;
         c.scriptsLoaded = false;
         c.scriptsToLoad = 0;
+        debugger;
         for (let divID in dat) {
             i++;
             if (divID==='head') {
@@ -1713,11 +1716,11 @@ onclick_btnFullResetOfAllThemes : function (event) {
             } else if (divID==='extraElements') {
                 $('#extraElements').html(dat[divID]);
             } else {
-                var scripts = dat[divID].match(/\/NicerAppWebOS\/.*\.js?.*"/g);
+                var scripts = dat[divID].match(/<script.*?src="\/NicerAppWebOS\/.*?\.js?.*?"/g);
                 if (scripts) c.scriptsToLoadTotal += scripts.length;
                 if (scripts)
                 for (var i=0; i<scripts.length; i++) {
-                    var src = scripts[i].replace('"', '');
+                    var src = scripts[i].replace(/"/g, '');
                     c.scriptsToLoadTotal -= $('head script[src="'+src+'"]').length;
                 }
 

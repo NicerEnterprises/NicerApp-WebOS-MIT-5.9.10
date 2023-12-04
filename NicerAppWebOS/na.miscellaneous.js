@@ -1282,7 +1282,6 @@ na.m = {
             && na.m.extensionsLoaded()
 
 		);
-        //debugger;
         if (!r && ctx && ctx.debugMe) debugger;
         return r;
     },

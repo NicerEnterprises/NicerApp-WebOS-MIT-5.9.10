@@ -805,7 +805,7 @@ function naWebOS_photoAlbum_resizeFiles ($totalFileCount, $totalJobsCount, $jobs
     //var_dump ($delThumbs); var_dump ($excl); die();
 
     if ($delThumbs) {
-        $files = getFilePathList ($root, true, FILE_FORMATS_photos, $excl2, ['file']);
+        $files = getFilePathList ($root, true, FILE_FORMATS_photos, $excl, ['file'], null, 1, false);
         foreach ($files as $idx => $file) {
             if (strpos($file,'/thumbs')!==false) {
                 $pi = pathinfo($file);
@@ -815,9 +815,9 @@ function naWebOS_photoAlbum_resizeFiles ($totalFileCount, $totalJobsCount, $jobs
         }
         exit();
     } else {
-        $files = getFilePathList ($root, true, FILE_FORMATS_photos, $excl, ['file']);
+        $files = getFilePathList ($root, true, FILE_FORMATS_photos, $excl, ['file'], null, 1, false);
     }
-    //echo '<pre>'; var_dump ($files); echo '</pre>';
+    //echo '<pre>'; var_dump ($files); echo '</pre>'; die();
 
     foreach ($files as $idx => $file) {
         if (strpos($file,'/thumbs/thumbs')!==false) {
@@ -1226,7 +1226,8 @@ function getFilePathList (
 		I also noted some BUGS in retrieving these dates from my system.
 	*/
 	$listCall = "",						// interesting feature; lets you include results from any informational file function(s).
-    $pathStart = null
+    $pathStart = null,
+    $flatList = false
 /*	TODO : fix $*Date* parameter handling,
 	returns an array consisting of all files in a directory structure, filtered by the parameters given.
 	results are returned in directory order. if ($recursive) then subdirectory content is listed before file content.
@@ -1267,8 +1268,13 @@ another example:
     if (is_null($pathStart)) $pathStart = $path;
 
 	//if (stripos($path, $pathStart)!==false) {
-		//echo '<pre style="color:cyan;">'; var_dump ($path); echo '</pre>'; exit();
-		if (!realpath($path)) trigger_error ($fncn.' : FATAL ERROR : "'.$path.'" does not exist.', E_USER_ERROR);
+		if ($debug) { echo '<pre style="color:cyan;">'; var_dump ($path); var_dump ($excludeFolders); echo '</pre>'; };
+		if (!realpath($path)) {
+            $msg = $fncn.' : FATAL ERROR : "'.$path.'" does not exist.';
+            trigger_error ($msg, E_USER_ERROR);
+            echo $msg;
+            die();
+        }
 		$path = realpath($path);
 
 		if (!is_null($excludeFolders)) {
@@ -1286,15 +1292,16 @@ another example:
 
 
         $result = [];
-		if (is_null($excludeFolders) || (
-            $r === 0
-		)) {
+		if (
+            is_null($excludeFolders)
+            || $r === 0
+            || $recursive
+		) {
             //if (!in_array("file",$fileTypesFilter)) $fileTypesFilter[count($fileTypesFilter)]="file";
             //htmlOut (" --== $path ==--");
 
 
             if ($path[strlen($path)-1]!="/") $path.="/";
-            //echo $path.'<br/>';
             if ($handle = opendir($path)) {
                 /* This is the correct way to loop over the directory. */
                 while (false !== ($file = readdir($handle))) {
@@ -1316,9 +1323,9 @@ another example:
                             var_dump ($excludeFolders); echo PHP_EOL;
                             var_dump ($pass); echo PHP_EOL;
                         }
-                        if ($pass/* && !$recursive*/) $pass = preg_match ($fileSpecRE, $filepath) === 1;
+                        if ($pass/* && !$recursive*/) $pass = preg_match ($fileSpecRE, $filepath) === 1 || $recursive;
                         if ($debug) { echo '#p1='; var_dump ($pass); echo PHP_EOL; }
-                        if ($pass && !is_null($excludeFolders) && $excludeFolders!=='') $pass = preg_match ($excludeFolders, $filepath) === 0;
+                        if ($pass && !is_null($excludeFolders) && $excludeFolders!=='') $pass = preg_match ($excludeFolders, $filepath) === 0 || $recursive;
                         if ($debug) { echo '#p2='; var_dump ($pass); echo PHP_EOL; }
                         if ($debug) echo '</pre>';
                         if ($pass && count($ownerFilter)>0) {
@@ -1367,6 +1374,19 @@ another example:
                         */
 
                         if (false && $debug) { echo 'preg_match($excludeFolders, $filepath.$r)='; var_dump(preg_match($excludeFolders, $filepath.$r)); echo '<br/>'.PHP_EOL; }
+
+                        if ($debug) {
+                            $dbg = [
+                            //'bt' => debug_backtrace(),
+                            'fp' => $path.$file,
+                            'r' => $recursive,
+                            'ft' => $ft,
+                            'pass' => $pass,
+                            'c' => (is_null($depth) || $level < $depth)
+                            ];
+                            echo '<pre>'; var_dump ($dbg); echo '</pre>';
+                        }
+
                         if (
                             $recursive
                             && $ft=="dir"
@@ -1380,10 +1400,10 @@ another example:
                             $subdir = @getFilePathList ($filepath,$recursive, $fileSpecRE, $excludeFolders,
                                 $fileTypesFilter, $depth, $level+1, $returnRecursive, $ownerFilter, $fileSizeMin, $fileSizeMax,
                                 $aTimeMin, $aTimeMax, $mTimeMin, $mTimeMax,
-                                $cTimeMin, $cTimeMax, $listCall, $pathStart);
+                                $cTimeMin, $cTimeMax, $listCall, $pathStart, $flatList);
                             if ($debug) { echo '<pre>$subdir='; var_dump($subdir); echo '</pre>'.PHP_EOL; };
                             if (count($subdir) > 0)
-                                if (!$returnRecursive) {
+                                if (!$returnRecursive || $flatList===true) {
                                     if (!is_null($subdir) && count($subdir)>0) array_splice ($result, count($result)+1, 0, $subdir);
                                 } else {
                                     if (
@@ -1409,8 +1429,14 @@ another example:
                                 } else {
                                     $result[$idx] = basename($filepath.$r);
                                 }*/
-                                if (!array_key_exists('files',$result)) $result['files'] = [];
-                                $result['files'][basename($filepath)] = $filepath;//DON'T! str_replace($pathStart,'',$filepath);
+                                //if (!array_key_exists('files',$result)) $result['files'] = [];
+                                //$result['files'][basename($filepath)] = $filepath;//DON'T! str_replace($pathStart,'',$filepath);
+                                if (!$returnRecursive) {
+                                    $result[$idx] = $filepath.$r;
+                                } else {
+                                    if (!array_key_exists('files',$result)) $result['files'] = [];
+                                    $result['files'][basename($filepath)] = $filepath;
+                                }
                             }
 
                         }

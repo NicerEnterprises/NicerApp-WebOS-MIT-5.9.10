@@ -32,7 +32,7 @@ import { RGBELoader } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/j
 import { DragControls } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/controls/DragControls.js';
     
     import { na3D_fileBrowser }
-		from '/NicerAppWebOS/logic.userInterface/na3D.source.js';
+		from '/NicerAppWebOS/logic.userInterface/na3D.source.js.php';
 		
     //$(document).ready(function() {
         setTimeout (function() {

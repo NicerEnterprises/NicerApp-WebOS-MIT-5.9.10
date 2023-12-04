@@ -586,7 +586,7 @@ class NicerAppWebOS {
     public function getVividButtonCSSfiles () {
         global $rootPath_na;
         $basePath = $rootPath_na.'/NicerAppWebOS/logic.userInterface/vividButton-4.1.0';
-        $files = getFilePathList ($basePath, false, '/btn_.*\.css/', null, array('file'), 1)['files'];
+        $files = getFilePathList ($basePath, false, '/btn_.*\.css/', null, array('file'), 1, 1, true)['files'];
         foreach ($files as $idx => $file) {
             $files[$idx] = str_replace($this->basePath, '', $file);
         }
@@ -597,7 +597,7 @@ class NicerAppWebOS {
     public function getVividButtonJavascriptFiles () {
         global $rootPath_na;
         $basePath = $rootPath_na.'/NicerAppWebOS/logic.userInterface/vividButton-4.1.0';
-        $files = getFilePathList ($basePath, false, '/btn_.*\.source\.js/', null, array('file'), 1)['files'];
+        $files = getFilePathList ($basePath, false, '/btn_.*\.source\.js/', null, array('file'), 1, 1, true)['files'];
         foreach ($files as $idx => $file) {
             $files[$idx] = str_replace($this->basePath, '', $file);
         }
@@ -662,7 +662,7 @@ class NicerAppWebOS {
         global $naWebOS;
         // output frontpage.dialog.*.php
         $folder = $this->basePath.'/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/3rd-party-site.wikipedia.org/';
-        $files = getFilePathList($folder, false, '/app.dialog.*\.php/', null, array('file'), 1);
+        $files = getFilePathList($folder, false, '/app.dialog.*\.php/', null, array('file'), 1, 1, true)['files'];
         //{ echo $folder.'<br/>'.PHP_EOL; echo json_encode($files); echo PHP_EOL.PHP_EOL; };
         $ret = [];
         foreach ($files as $idx2 => $filepath) {
@@ -700,7 +700,7 @@ class NicerAppWebOS {
             if ($viewID==='/') {
                 // output frontpage.dialog.*.php
                 $folder = $this->basePath.'/NicerAppWebOS/domainConfigs/'.$naWebOS->domain.'/';
-                $files = getFilePathList($folder, false, '/frontpage.dialog.*\.php/', null, array('file'), 1)['files'];
+                $files = getFilePathList($folder, false, '/frontpage.dialog.*\.php/', null, array('file'), 1, 1, true)['files'];
                 //if ($debug) { echo $folder.'<br/>'.PHP_EOL; echo json_encode($files); echo PHP_EOL.PHP_EOL; };
 
                 foreach ($files as $idx2 => $filepath) {
@@ -719,7 +719,7 @@ class NicerAppWebOS {
                 // request view settings from database
                 $view = is_object($this->view)?(array)$this->view:$this->view;
                 //echo '<pre>'; var_dump($view);die();
-                $ret = [ 'siteContent' => '<pre>'.json_encode($view,JSON_PRETTY_PRINT).'</pre>'];
+                $ret = [ ];// DONT! 'siteContent' => '<pre>'.json_encode($view,JSON_PRETTY_PRINT).'</pre>'];
                 if (is_array($view)) {
                     if (array_key_exists('misc', $view)) {
                         $fsid = $view['misc']['folder'];
@@ -741,7 +741,7 @@ class NicerAppWebOS {
                                 .' BACKTRACE='.json_encode(debug_backtrace(), JSON_PRETTY_PRINT);
                             trigger_error ($msg, E_USER_WARNING);
                         } else {
-                            $files = getFilePathList ($this->basePath.'/'.$viewsFolder, true, '/app.*/', null, array('file'), 1)['files'];
+                            $files = getFilePathList ($this->basePath.'/'.$viewsFolder, true, '/app.*/', null, array('file'), 1, 1, true)['files'];
                             //if ($debug) { var_dump ($rootPath.'/'.$viewsFolder); echo '<pre style="color:yellow;background:red;">'; var_dump ($files); echo '</pre>'.PHP_EOL.PHP_EOL;  }; die();
 
                             $titleFile = $this->basePath.'/'.$viewsFolder.'/app.title.site.php';
@@ -907,7 +907,7 @@ class NicerAppWebOS {
                 foreach ($view as $viewsFolder => $viewSettings) {
                     $rootPath = str_replace('/NicerAppWebOS','',$rootPath_na);
                     if (file_exists($rootPath.'/'.$viewsFolder)) {
-                        $files = getFilePathList ($rootPath.'/'.$viewsFolder, false, '/app.*/', null, array('file'), 1)['files'];
+                        $files = getFilePathList ($rootPath.'/'.$viewsFolder, false, '/app.*/', null, array('file'), 1, 1, true)['files'];
                         //if ($debug)
                         //{ var_dump ($rootPath.'/'.$viewsFolder); echo '<pre style="color:yellow;background:red;">'; var_dump ($files); echo '</pre>'.PHP_EOL.PHP_EOL;  };
 

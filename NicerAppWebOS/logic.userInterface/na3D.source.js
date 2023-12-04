@@ -105,7 +105,7 @@ export class na3D_fileBrowser {
     constructor(el, parent, parameters) {
         var t = this;
 
-        t.debug = true;
+        t.debug = false;
         
         t.autoRotate = false;
         t.showLines = true;
@@ -342,7 +342,7 @@ export class na3D_fileBrowser {
                 t.lookClock = Date.now();
             }
             if (t.lookClock > 0) {
-                debugger;
+                //debugger;
                 var delta2 = Date.now() - 1500;
                 if (t.debug) console.log ('animate(): delta2', delta2 > t.lookClock);
             };
@@ -384,7 +384,7 @@ export class na3D_fileBrowser {
 
 
             if (t.lookClock > 0 && delta2 > t.lookClock) {
-                debugger;
+                //debugger;
                 if (t.debug) console.log ('t.flyControls.enabled, t.cameraControls.disabled');
                 t.flyControls.enabled = true;
                 t.cameraControls.enabled = false;
@@ -456,7 +456,7 @@ export class na3D_fileBrowser {
                             //if (t.debug) console.log ('pointerdown() else',t.cameraControls.enabled, t.flyControls.enabled);
 
                             if (t.lookClock < 0) {
-                            debugger;
+                            //debugger;
                                 if (t.debug) console.log ('animate(): t.lookClock===-2');
                                 t.lookClock = -2;
                             } /*else {
@@ -483,7 +483,7 @@ export class na3D_fileBrowser {
                     }*/
                 } else if (x[0].mouseButton===2) {
                     // right mouse button held down
-                    debugger;
+                    //debugger;
                     t.lookClock = -1;
                     t.flyControls.enabled = false;
                     t.cameraControls.enabled = true;
@@ -706,6 +706,30 @@ export class na3D_fileBrowser {
             var cit/*clickedItem*/ = intersects[i].object, done = false;
             while (cit && !done) {
                 na.site.setStatusMsg (cit.it.fullPath, true, 7 * 1000);
+
+                var
+                relPath = cit.it.fullPath.split('/');
+                relPath.pop(1);
+
+                var
+                arr = {
+                    misc : {
+                        folder : '/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/NicerAppWebOS'
+                    },
+                    cmsViewMediaAlbum : {
+                        relPath : relPath.join('/')
+                    }
+                },
+                base64 = na.m.base64_encode_url(JSON.stringify(arr));
+                na.site.loadContent(event, base64);
+                /*
+                setTimeout(function() {
+                    delete na.site.settings.current.loadingApps;
+                    delete na.site.settings.current.startingApps;
+                    na.d.s.visibleDivs.push ('#siteToolbarLeft');
+                    na.desktop.resize();
+                }, 3000);
+                */
 
                 done = true;
             }

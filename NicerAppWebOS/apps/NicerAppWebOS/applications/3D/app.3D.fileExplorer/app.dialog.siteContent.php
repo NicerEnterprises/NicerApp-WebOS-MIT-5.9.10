@@ -51,4 +51,5 @@
     </div>
     <div id="site3D_label" class="label" theme="<?php echo $theme;?>"></div>
     <script type="module" src="/NicerAppWebOS/3rd-party/3D/libs/three.js/build/three.module.js"></script>
-    <script type="module" src="/NicerAppWebOS/apps/NicerAppWebOS/applications/3D/app.3D.fileExplorer/main.js"></script>
+    <!--<script type="module" src="/NicerAppWebOS/apps/NicerAppWebOS/applications/3D/app.3D.fileExplorer/main.js"></script>-->
+    <script type="module" src="/NicerAppWebOS/logic.AJAX/ajax_loadJSmodule.php?file=/NicerAppWebOS/apps/NicerAppWebOS/applications/3D/app.3D.fileExplorer/main.js"></script>
