@@ -134,10 +134,10 @@ NicerApp WCS (Website Control System) from Nicer Enterprises
     }
 
     if ($_SERVER['SCRIPT_NAME']=='/NicerAppWebOS/index.php') {
-        $_SESSION['started'] = microtime(true);
+        $_SESSION['started'] = time();//microtime(true);
         $_SESSION['startedID'] = cdb_randomString(50);
 
-        $now = DateTime::createFromFormat('U.u', $_SESSION['started']);
+        $now = DateTime::createFromFormat('U', $_SESSION['started']);
         $now->setTimezone(new DateTimeZone(exec('date +%z')));
         //$date = $now->format("Y-m-d_H:i:s.u");
         $date =
@@ -174,9 +174,9 @@ NicerApp WCS (Website Control System) from Nicer Enterprises
         $_SESSION['naErrors_startup'] = [];
         $_SESSION['naErrors_js'] = [ 'bootup' => [] ];
     } elseif ($_SERVER['SCRIPT_NAME']=='/NicerAppWebOS/db_init.php') {
-        $_SESSION['started'] = microtime(true);
+        $_SESSION['started'] = time();//microtime(true);
 
-        $now = DateTime::createFromFormat('U.u', $_SESSION['started']);
+        $now = DateTime::createFromFormat('U', $_SESSION['started']);
         $now->setTimezone(new DateTimeZone(exec('date +%z')));
         //$date = $now->format("Y-m-d_H:i:s.u");
         $date =
@@ -234,28 +234,27 @@ NicerApp WCS (Website Control System) from Nicer Enterprises
             $naIsBot = preg_match('/spider/i', $_SERVER['HTTP_USER_AGENT']) === 1;
         if (!$naIsBot)
             $naIsBot = preg_match('/scaninfo\@paloanetworks\.com/i', $_SERVER['HTTP_USER_AGENT']) === 1;
-        /*
+
         $fn1 = dirname(__FILE__).'/apps/NicerAppWebOS/applications/2D/logs/userAgents.desktop.2023-12-02.json';
         $json1 = json_decode(file_get_contents($fn1), true);
         $fn2 = dirname(__FILE__).'/apps/NicerAppWebOS/applications/2D/logs/userAgents.mobile.2023-12-02.json';
         $json2 = json_decode(file_get_contents($fn2), true);
 
-        $naIsBot = true;
+        //$naIsBot = true;
         foreach ($json1 as $idx => $jrec) {
             if ($jrec['ua']===$_SERVER['HTTP_USER_AGENT']) {
-                $naIsBot = false;
+                //$naIsBot = false;
                 $naIsDesktop = true;
                 $naBrowserMarketSharePercentage = $jrec['pct'];
             }
         }
         foreach ($json2 as $idx => $jrec) {
             if ($jrec['ua']===$_SERVER['HTTP_USER_AGENT']) {
-                $naIsBot = false;
+                //$naIsBot = false;
                 $naIsMobile = true;
                 $naBrowserMarketSharePercentage = $jrec['pct'];
             }
         }
-        */
 
     }
 
@@ -302,7 +301,7 @@ NicerApp WCS (Website Control System) from Nicer Enterprises
             ? microtime(true)
             : $_SESSION['started']
         ),
-        's2' => microtime(true),
+        's2' => time(),//microtime(true),
         'i' => (
             session_status() === PHP_SESSION_NONE
             ? false

@@ -213,10 +213,10 @@ class SagCURLHTTPAdapter extends SagHTTPAdapter {
 
 
       //var_dump ($na_error_log_filepath_html); die();
-      $now = DateTime::createFromFormat('U.u', (
+      $now = DateTime::createFromFormat('U', (
         array_key_exists('started', $_SESSION)
           ? $_SESSION['started']
-          : microtime(true)
+          : time()//microtime(true)
       ));
       $now->setTimezone(new DateTimeZone(exec('date +%z')));
       $date = $now->format("Y-m-d H:i:s.u ").preg_replace('/.*\s/','',date(DATE_RFC2822));
@@ -288,7 +288,7 @@ class SagCURLHTTPAdapter extends SagHTTPAdapter {
 
       $err = [
           's1' => $_SESSION['started'],
-          's2' => microtime(true),
+          's2' => time(),//microtime(true),
           'i' => $_SESSION['startedID'],
           'isIndex' => false,//DONT! $_SERVER['SCRIPT_NAME']==='/NicerAppWebOS/index.php',
           'isBot' => $naIsBot,

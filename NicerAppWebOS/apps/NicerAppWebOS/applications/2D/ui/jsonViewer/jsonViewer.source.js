@@ -1245,11 +1245,11 @@ nicerapp.hms = nicerapp.jsonViewer = {
 			};
 			
 			var pauseFactor = pvCmd.buildIdx;
-			if (pauseFactor > pvCmd.lastPause + 30) {
+			if (pauseFactor > pvCmd.lastPause + 15) {
 				setTimeout (function () {
 					pvCmd.lastPause = pauseFactor;
 					na.hms.tools.printNextLevel_buildList (pvCmd);
-				},50);
+				},100);
 				return false;
 				
 			} else {

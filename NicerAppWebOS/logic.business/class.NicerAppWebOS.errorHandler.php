@@ -84,14 +84,14 @@ class class_NicerAppWebOS__errorHandler {
             'type' => 'PHP error',
             's1' => (
                 session_status() === PHP_SESSION_NONE
-                ? microtime(true)
+                ? time()//microtime(true)
                 : (
                     array_key_exists('started',$_SESSION)
                     ? $_SESSION['started']
-                    : microtime(true)
+                    : time()//microtime(true)
                 )
             ),
-            's2' => microtime(true),
+            's2' => time(),//microtime(true),
             'isIndex' => $_SERVER['SCRIPT_NAME']==='/NicerAppWebOS/index.php',
             'isBot' => $naIsBot,
             'isLAN' => $naLAN,
