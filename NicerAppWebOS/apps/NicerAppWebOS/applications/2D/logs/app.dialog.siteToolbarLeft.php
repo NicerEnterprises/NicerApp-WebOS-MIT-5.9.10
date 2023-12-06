@@ -111,7 +111,8 @@ if ($appRec['page']=='index') {
             [ 's1' => 'asc' ],
             [ 's2' => 'asc' ]
         ],
-        'use_index' => '_design/249f3b14593cc6f19467c3697f2398397bd9aab6'
+        'use_index' => '_design/249f3b14593cc6f19467c3697f2398397bd9aab6',
+        'limit' => 10 * 1000
     ];
 
 
@@ -128,8 +129,8 @@ if ($appRec['page']=='index') {
     foreach ($call->body->docs as $docID => $doc) {
         $docA = json_decode(json_encode($doc), true);
 
-        $now = DateTime::createFromFormat('U.u', $doc->s1);
-        $now2 = $now->format("Y-m-d H:i:s.u");
+        $now = DateTime::createFromFormat('U', $doc->s1);
+        $now2 = $now->format("Y-m-d H:i:s");
 
         $class = '';
         if ($doc->isBot) $class.='bot ';

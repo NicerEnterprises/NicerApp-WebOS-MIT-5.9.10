@@ -48,8 +48,8 @@ global $naLAN;
         if (!$doc->isIndex) $marginLeft = 50;
         $docA = json_decode(json_encode($doc), true);
 
-        $now = DateTime::createFromFormat('U.u', $doc->s2);
-        $now2 = $now->format("Y-m-d H:i:s.u");
+        $now = DateTime::createFromFormat('U', $doc->s2);
+        $now2 = $now->format("Y-m-d H:i:s");
 
         $url = '';
         if (array_key_exists('request', $docA))

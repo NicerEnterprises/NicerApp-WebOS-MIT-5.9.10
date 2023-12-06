@@ -24,7 +24,8 @@ if ($appRec['page']=='index') {
             [ 's1' => 'asc' ],
             [ 's2' => 'asc' ]
         ],
-        'use_index' => '_design/249f3b14593cc6f19467c3697f2398397bd9aab6'
+        'use_index' => '_design/249f3b14593cc6f19467c3697f2398397bd9aab6',
+        'limit' => 10 * 1000
     ];
     //echo '<pre style="padding:8px;border-radius:10px;background:rgba(255,255,255,0.5);color:green;">'; var_dump ($findCommand); echo '</pre>';
     try {
@@ -61,8 +62,8 @@ if ($appRec['page']=='index') {
 
 
         if (array_key_exists('request', $docA)) {
-            $now = DateTime::createFromFormat('U.u', $doc->s1);
-            $now2 = $now->format("Y-m-d H:i:s.u");
+            $now = DateTime::createFromFormat('U', $doc->s1);
+            $now2 = $now->format("Y-m-d H:i:s");
 
             echo '<div id="'.$doc->_id.'" i="'.$doc->i.'" style="margin:10px;margin-left:'.$marginLeft.'px" onclick="naLog.onclick_logEntry(event);">';
             echo '<h2><span class="datetimeAccurate">'.$now2.'</span> <span class="ip">'.$doc->ip.'</span> '.$url.'</h2>';
@@ -111,9 +112,9 @@ if ($appRec['page']=='index') {
         }
 */
     }
-    $html = '';
-    $html .= '<script type="text/javascript">setTimeout (function() {na.site.settings.current.running_loadTheme = false; na.site.settings.current.loadingApps = false; na.hms.startProcessing()}, 1500); na.site.transformLinks()</script>';
-    echo $html;
+    //$html = '';
+    //$html .= '<script type="text/javascript">setTimeout (function() {na.site.settings.current.running_loadTheme = false; na.site.settings.current.loadingApps = false; na.hms.startProcessing()}, 1500); na.site.transformLinks()</script>';
+    //echo $html;
 
 
 

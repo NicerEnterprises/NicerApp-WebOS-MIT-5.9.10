@@ -67,8 +67,8 @@ foreach ($naWebOS->view as $appID => $appRec) break;
             $url = $docA['httpOpts']['ALL cURL fields']['CURLOPT_URL'];
 
         if ($docA['isIndex']) {
-            $now = DateTime::createFromFormat('U.u', $doc->s2);
-            $now2 = $now->format("Y-m-d H:i:s.u");
+            $now = DateTime::createFromFormat('U', $doc->s2);
+            $now2 = $now->format("Y-m-d H:i:s");
 
             echo '<div id="'.$doc->_id.'" i="'.$doc->i.'" style="margin:10px;margin-left:'.$marginLeft.'px" onclick="naLog.onclick_logEntry(event);">';
             echo '<h2><span class="datetimeAccurate">'.$now2.'</span> <span class="ip">'.$doc->ip.'</span> '.$url.'</h2>';
@@ -117,9 +117,9 @@ foreach ($naWebOS->view as $appID => $appRec) break;
         }
 */
     }
-    $html = '';
-    $html .= '<script type="text/javascript">setTimeout (function() {na.site.settings.current.running_loadTheme = false; na.site.settings.current.loadingApps = false; na.hms.startProcessing()}, 1500); na.site.transformLinks()</script>';
-    echo $html;
+    //$html = '';
+    //$html .= '<script type="text/javascript">setTimeout (function() {na.site.settings.current.running_loadTheme = false; na.site.settings.current.loadingApps = false; na.hms.startProcessing()}, 1500); na.site.transformLinks()</script>';
+    //echo $html;
 
 
 

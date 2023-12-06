@@ -22,7 +22,8 @@ global $naLAN;
             [ 's1' => 'asc' ],
             [ 's2' => 'asc' ]
         ],
-        'use_index' => '_design/249f3b14593cc6f19467c3697f2398397bd9aab6'
+        'use_index' => '_design/249f3b14593cc6f19467c3697f2398397bd9aab6',
+        'limit' => 10 * 1000
     ];
     //echo '<pre style="padding:8px;border-radius:10px;background:rgba(255,255,255,0.5);color:green;">'; var_dump ($findCommand); echo '</pre>';
     try {
@@ -48,8 +49,8 @@ global $naLAN;
         if (!$call2->body->isIndex) $marginLeft = 50;
         $docA = json_decode(json_encode($call2->body), true);
 
-        $now = DateTime::createFromFormat('U.u', $call2->body->s2);
-        $now2 = $now->format("Y-m-d H:i:s.u");
+        $now = DateTime::createFromFormat('U', $call2->body->s2);
+        $now2 = $now->format("Y-m-d H:i:s");
 
         $url = '';
         if (array_key_exists('request', $docA))
