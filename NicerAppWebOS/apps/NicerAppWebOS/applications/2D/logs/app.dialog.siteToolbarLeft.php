@@ -1,4 +1,4 @@
-<div style="display:inline-block;height:100px;max-height:100px;">
+    <div style="display:flex;align-items:center;height:100px;max-height:100px;align-items: center;justify-content: space-between;">
 <?php
 global $naWebOS;
 global $naLAN;
@@ -6,9 +6,9 @@ global $naLAN;
 //echo '<pre style="color:yellow;background:rgba(0,0,50,0.5);border-radius:10px;margin:10px;">'; var_dump ($naWebOS->view); echo '</pre>';
 
 echo $naWebOS->html_vividButton (
-    1, 'float:left;',
+    1, 'order:1',
 
-    'btnRobots', 'vividButton_icon_100x100 relative', '_100x100', 'relative',
+    'btnRobots', 'vividButton_icon_100x100 grouped', '_100x100', 'grouped',
     '',
     'if (!$(this).is(\'.disabled\')) { naLog.showEvents(event,\'robots\'); }',
     '',
@@ -29,9 +29,9 @@ echo $naWebOS->html_vividButton (
     null
 );
 echo $naWebOS->html_vividButton (
-    3, 'float:left',
+    3, 'order:2',
 
-    'btnHumans', 'vividButton_icon_100x100 relative', '_100x100', 'relative',
+    'btnHumans', 'vividButton_icon_100x100 grouped', '_100x100', 'grouped',
     '',
     'if (!$(this).is(\'.disabled\')) { naLog.showEvents(event,\'humans\'); }',
     '',
@@ -52,9 +52,9 @@ echo $naWebOS->html_vividButton (
     null
 );
 echo $naWebOS->html_vividButton (
-    5, 'float:left',
+    5, 'order:3',
 
-    'btnLAN', 'vividButton_icon_100x100 relative', '_100x100', 'relative',
+    'btnLAN', 'vividButton_icon_100x100 grouped', '_100x100', 'grouped',
     '',
     'if (!$(this).is(\'.disabled\')) { naLog.showEvents(event,\'LAN\'); }',
     '',
@@ -101,17 +101,19 @@ if ($appRec['page']=='index') {
     // fetch dataRecord
     $findCommand = [
         'selector' => [
-            'type' => 'new request',
+            's2' => [ '$gt' => 0 ],
             'isIndex' => true,
             'isBot' => false,
             'isLAN' => false
         ],
-        'fields' => ['_id', 'ip', 's1', 's2', 'i', 'isIndex', 'isBot', 'request'],
+        'fields' => ['_id', 's2', 'isIndex', 'isBot', 'isLAN' ],
         'sort' => [
-            [ 's1' => 'asc' ],
-            [ 's2' => 'asc' ]
+            [ 's2' => 'desc' ],
+            [ 'isIndex' => 'desc' ],
+            [ 'isBot' => 'desc' ],
+            [ 'isLAN' => 'desc' ]
         ],
-        'use_index' => '_design/249f3b14593cc6f19467c3697f2398397bd9aab6',
+        'use_index' => $naWebOS->globals['cdbDesignDocs']['logentries_pageLoad'],
         'limit' => 10 * 1000
     ];
 
@@ -120,22 +122,35 @@ if ($appRec['page']=='index') {
     try {
         $call = $cdb->find ($findCommand);
     } catch (Exception $e) {
-        echo '<pre>';var_dump ($cdb);echo '</pre>';
-        $msg = $fncn.' FAILED while trying to find in \''.$dbName.'\' : '.$e->getMessage();
+        echo '<pre>tt33 ';var_dump ($cdb);echo '</pre>';
+        //echo '<pre>'; echo json_encode(debug_backtrace(), JSON_PRETTY_PRINT); echo '</pre>';
+        $msg = $fncn.' FAILED (siteToolbarLeft) while trying to find in \''.$dbName.'\' : '.$e->getMessage();
         echo $msg;
         die();
     }
 
     foreach ($call->body->docs as $docID => $doc) {
-        $docA = json_decode(json_encode($doc), true);
+        $call2 = $cdb->get($doc->_id);
+        //echo '<pre>';var_dump ($call2->body);echo '</pre>';
+        $docA = json_decode(json_encode($call2->body), true);
 
-        $now = DateTime::createFromFormat('U', $doc->s1);
+        $now = DateTime::createFromFormat('U', $call2->body->s2);
         $now2 = $now->format("Y-m-d H:i:s");
 
         $class = '';
-        if ($doc->isBot) $class.='bot ';
+        if ($call2->body->isBot) $class.='bot ';
 
-        echo '<h2 class="logEntry '.$class.'" s1="'.$doc->s1.'" i="'.$doc->i.'"  onclick="naLog.onclick_logEntry(event);"><span class="datetimeAccurate">'.$now2.'</span> <span class="ip">'.$doc->ip.'</span><br/>'.$docA['request']['$_SERVER']['REQUEST_URI'].'</h2>';
+        $url = '';
+        $tooltip = '';
+        if (array_key_exists('request', $docA)) {
+            $url = $docA['request']['$_SERVER']['REQUEST_URI'];
+            $tooltip = str_replace('\/','/',str_replace('"', "'", str_replace(' ', '&nbsp;', str_replace(PHP_EOL, '<br/>', json_encode($docA['request']['$naWebOS->view'],JSON_PRETTY_PRINT)))));
+        }
+        if (array_key_exists('httpOpts', $docA))
+            $url = $docA['httpOpts']['ALL cURL fields']['CURLOPT_URL'];
+
+
+        echo '<h2 class="logEntry '.$class.' tooltip" s1="'.$call2->body->s1.'" i="'.$call2->body->i.'" title="'.$tooltip.'" alt="'.$tooltip.'"  onclick="naLog.onclick_logEntry(event);"><span class="datetimeAccurate">'.$now2.'</span> <span class="ip">'.$call2->body->ip.'</span><br/>'.$url.'</h2>';
 
     }
 

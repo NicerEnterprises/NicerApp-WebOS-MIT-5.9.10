@@ -81,46 +81,52 @@ class class_NicerAppWebOS__errorHandler {
         $errTXT = "[".$naIP." : ".$date."] PHP ".$errtype.' error in "'.$errfile.'":'.$errline." : ".$errstr.", backtrace = ".PHP_EOL.$this->backtrace('txt');
 
         return [
-            'type' => 'PHP error',
-            's1' => (
-                session_status() === PHP_SESSION_NONE
-                ? time()//microtime(true)
-                : (
-                    array_key_exists('started',$_SESSION)
-                    ? $_SESSION['started']
-                    : time()//microtime(true)
+            'indexes' => [
+                'type' => 'PHP error',
+                's1' => (
+                    session_status() === PHP_SESSION_NONE
+                    ? time()//microtime(true)
+                    : (
+                        array_key_exists('started',$_SESSION)
+                        ? $_SESSION['started']
+                        : time()//microtime(true)
+                    )
+                ),
+                's2' => time(),//microtime(true),
+                's2to' => $dtz_offset,
+                'year' => date('Y'),
+                'month' => date('m'),
+                'day' => date('d'),
+                'isIndex' => $_SERVER['SCRIPT_NAME']==='/NicerAppWebOS/index.php',
+                'ip' => $naIP,
+                'sid' => session_id(),
+                'nav' => $naVersionNumber,
+                'isBot' => $naIsBot,
+                'isLAN' => $naLAN,
+                'isDesktop' => $naIsDesktop,
+                'isMobile' => $naIsMobile,
+                'browserMarketSharePercentage' => $naBrowserMarketSharePercentage,
+                'i' => (
+                    session_status() === PHP_SESSION_NONE
+                    ? false
+                    : (
+                        array_key_exists('startedID',$_SESSION)
+                        ? $_SESSION['startedID']
+                        : false
+                    )
                 )
-            ),
-            's2' => time(),//microtime(true),
-            'isIndex' => $_SERVER['SCRIPT_NAME']==='/NicerAppWebOS/index.php',
-            'isBot' => $naIsBot,
-            'isLAN' => $naLAN,
-            'isDesktop' => $naIsDesktop,
-            'isMobile' => $naIsMobile,
-            'browserMarketSharePercentage' => $naBrowserMarketSharePercentage,
-            'i' => (
-                session_status() === PHP_SESSION_NONE
-                ? false
-                : (
-                    array_key_exists('startedID',$_SESSION)
-                    ? $_SESSION['startedID']
-                    : false
-                )
-            ),
-            't' => $unixTimeStamp,
-            'to' => $dtz_offset,
-            'ts' => $timestamp,
-            'ip' => $naIP,
-            'sid' => session_id(),
-            'nav' => $naVersionNumber,
-            'html' => $errHTML,
-            'ansi' => $errANSI,
-            'txt' => $errTXT,
-            'classErrorType' => $classErrorType,
-            'errType' => $errtype,
-            'errMsg' => $errstr,
-            'errFile' => $errfile,
-            'errLine' => $errline
+            ],
+            'rec' => [
+                'ts' => $timestamp,
+                'html' => $errHTML,
+                'ansi' => $errANSI,
+                'txt' => $errTXT,
+                'classErrorType' => $classErrorType,
+                'errType' => $errtype,
+                'errMsg' => $errstr,
+                'errFile' => $errfile,
+                'errLine' => $errline
+            ]
         ];
      }
     

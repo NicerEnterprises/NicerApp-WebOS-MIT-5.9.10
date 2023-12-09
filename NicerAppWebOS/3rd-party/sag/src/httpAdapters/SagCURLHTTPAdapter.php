@@ -270,7 +270,8 @@ class SagCURLHTTPAdapter extends SagHTTPAdapter {
           .'curl response = '
           .json_encode(json_decode($response->body), JSON_PRETTY_PRINT).PHP_EOL.PHP_EOL
           .'----------------------'.PHP_EOL.PHP_EOL;
-        //file_put_contents ($_SESSION['na_error_log_filepath_txt'], $dbgTxt, FILE_APPEND);
+        //echo '<pre>t33321:';var_dump (debug_backtrace());
+        if (array_key_exists('na_error_log_filepath_txt', $_SESSION)) file_put_contents ($_SESSION['na_error_log_filepath_txt'], $dbgTxt, FILE_APPEND);
       //}
 
       global $phpScript_startupTime;
@@ -287,22 +288,24 @@ class SagCURLHTTPAdapter extends SagHTTPAdapter {
       $timestamp = date(DATE_RFC2822);
 
       $err = [
+          'type' => 'CouchDB query',
           's1' => $_SESSION['started'],
           's2' => time(),///microtime(true),
+          'to' => $dtz_offset,
+          'year' => date('Y'),
+          'month' => date('m'),
+          'day' => date('d'),
           'i' => $_SESSION['startedID'],
           'isIndex' => false,//DONT! $_SERVER['SCRIPT_NAME']==='/NicerAppWebOS/index.php',
+          'ip' => $naIP,
+          'sid' => session_id(),
+          'nav' => $naVersionNumber,
           'isBot' => $naIsBot,
           'isLAN' => $naLAN,
           'isDesktop' => $naIsDesktop,
           'isMobile' => $naIsMobile,
           'browserMarketSharePercentage' => $naBrowserMarketSharePercentage,
-          't' => $unixTimeStamp,
-          'to' => $dtz_offset,
           'ts' => $timestamp,
-          'ip' => $naIP,
-          'sid' => session_id(),
-          'nav' => $naVersionNumber,
-          'type' => 'db',
           'httpOpts' => $dbgOpts,
           'httpResponse' => json_decode($response->body,true),
           'txt' => $dbgTxt

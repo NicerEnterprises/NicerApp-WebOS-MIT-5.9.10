@@ -1348,7 +1348,7 @@ onclick_btnFullResetOfAllThemes : function (event) {
             ec = lcc.ec,
 
             state = History.getState(),
-            url1 = state.url.replace(document.location.origin,'').replace('/view/', '').replace(/^\//,'');
+            url1 = state.url.replace(document.location.origin,'')./*replace('/view/', '').*/replace(/^\//,'');
         }
         
         if (url1==='') url1 = '/';
@@ -2140,13 +2140,22 @@ onclick_btnFullResetOfAllThemes : function (event) {
                         }, 2000);
                     }, 500);
                 }
-                
-            } else */if (el.id=='btnChangeBackground' /*&& parseInt($.cookie('haveShownTutorial'))<3*/) {
+
+            } else */
+
+            if (el.id=='btnChangeBackground' /*&& parseInt($.cookie('haveShownTutorial'))<3*/) {
                 na.site.settings.btnChangeBackground = el;
-                var ptSettings = {
+                try {
+                    var html = $($(el).attr('title'));
+                } catch (error) {
+                    var html = $(el).attr('title');
+                }
+                debugger;
+                var
+                ptSettings = {
                     theme : theme,
                     contentAsHTML : true,
-                    content : $(el).attr('title'),
+                    content : html,
                     animation : 'grow',
                     alignTo : 'target',
                     alignX : 'inner-right',
@@ -2180,10 +2189,17 @@ onclick_btnFullResetOfAllThemes : function (event) {
                 el.id!=='btnChangeBackground'
                 && el.id!=='btnLoginLogout'
             ) */{
-                var ptSettings = {
+                try {
+                    var html = $($(el).attr('title'));
+                } catch (error) {
+                    var html = $(el).attr('title');
+                }
+                debugger;
+                var
+                ptSettings = {
                     theme : theme,
                     contentAsHTML : true,
-                    content : $(el).attr('title')
+                    content : html
                 };
                 if (na.m.userDevice.isPhone) ptSettings.showOn = 'none';
                 if (ptSettings.content!=='') $(el).tooltipster(ptSettings);

@@ -40,6 +40,11 @@ NicerApp WCS (Website Control System) from Nicer Enterprises
     require_once ($rootPath_na.'/NicerAppWebOS/apps/NicerAppWebOS/userInterfaces/comments/boot.php');
 
 
+    global $naGlobals;
+    $naGlobals = [
+        'cdb_designDoc_logentries' => '_design/4ed57c36e325319b9e5b0730589fb06ae6b177ee'
+    ];
+
 
     //require_once ($rootPath_na.'/NicerAppWebOS/apps/NicerAppWebOS/application-programmer-interfaces/technology/codeTranslationSystems/boot.php');
 
@@ -116,23 +121,7 @@ NicerApp WCS (Website Control System) from Nicer Enterprises
 
     global $naWebOS;
     $naWebOS = new NicerAppWebOS();
-    if ($na_full_init) {
-        // MUST BE in the following order:
-        $naWebOS->initializeDatabases();
-        $naWebOS->initializeGlobals();
-    }
-
-    $appName = '[UNKNOWN_APP]';
-    if (is_object($naWebOS) && is_array($naWebOS->view))
-    foreach ($naWebOS->view as $an => $ar) {
-        if ($an=='/') $appName = '-';
-        else {
-            $ap = explode('/', $an);
-            $appName = $ap[count($ap)-1];
-        }
-        break;
-    }
-
+    //echo '<pre>t555'; var_dump ($_SERVER); die();
     if ($_SERVER['SCRIPT_NAME']=='/NicerAppWebOS/index.php') {
         $_SESSION['started'] = time();//microtime(true);
         $_SESSION['startedID'] = cdb_randomString(50);
@@ -146,7 +135,8 @@ NicerApp WCS (Website Control System) from Nicer Enterprises
                 '+','plus',
                 preg_replace('/.*\s/','',date(DATE_RFC2822))
             );
-        $naBot = stripos($_SERVER['HTTP_USER_AGENT'], 'bot')!==0;
+        $naBot = stripos($_SERVER['HTTP_USER_AGENT'], 'bot')!==false;
+        //echo '<pre>t584'; var_dump($naBot); die();
 
         if (!$naBot) {
             $_SESSION['na_error_log_filepath_html'] =
@@ -208,6 +198,23 @@ NicerApp WCS (Website Control System) from Nicer Enterprises
         $_SESSION['naErrors_js'] = [ 'bootup' => [] ];
     }
 
+    if ($na_full_init) {
+        // MUST BE in the following order:
+        $naWebOS->initializeDatabases();
+        $naWebOS->initializeGlobals();
+    }
+
+    $appName = '[UNKNOWN_APP]';
+    if (is_object($naWebOS) && is_array($naWebOS->view))
+    foreach ($naWebOS->view as $an => $ar) {
+        if ($an=='/') $appName = '-';
+        else {
+            $ap = explode('/', $an);
+            $appName = $ap[count($ap)-1];
+        }
+        break;
+    }
+
     $dbg = null;
     $dbg = [
         '$_SERVER' => $_SERVER,
@@ -255,8 +262,8 @@ NicerApp WCS (Website Control System) from Nicer Enterprises
                 $naBrowserMarketSharePercentage = $jrec['pct'];
             }
         }
-
     }
+    //echo '<p style="color:purple">'; var_dump($naIsBot); echo '</p>';
 
     $lanConfigFilepath = realpath(dirname(__FILE__)).'/domainConfigs/'.$naWebOS->domain.'/naLAN.json';
     $lanConfigExampleFilepath = realpath(dirname(__FILE__)).'/domainConfigs/'.$naWebOS->domain.'/naLAN.EXAMPLE.json';
@@ -296,6 +303,7 @@ NicerApp WCS (Website Control System) from Nicer Enterprises
     //$unixTimeStamp = time();//date(DATE_ATOM);//date(DATE_RFC2822);//date('Y-m-d H:i:sa');
     $timestamp = date(DATE_RFC2822);
     $err = [
+        'type' => 'New request',
         's1' => (
             session_status() === PHP_SESSION_NONE
             ? microtime(true)
@@ -318,15 +326,14 @@ NicerApp WCS (Website Control System) from Nicer Enterprises
         'ip' => $naIP,
         'sid' => session_id(),
         'nav' => $naVersionNumber,
-        'request' => $dbg,
-        'type' => 'new request'
+        'request' => $dbg
     ];
     global $naLog;
     $naLog->add ( [ $err ] );
     //trigger_error ($msg, E_USER_NOTICE);
     //echo '<pre>'; var_dump ($_SERVER); die();
 
-    ini_set ('error_log', $na_error_log_filepath_txt);
+    ini_set ('error_log', $_SESSION['na_error_log_filepath_txt']);
 
     // at the *bottom* of this file (that's for good reasons),
     // you will find : require_once(dirname(__FILE__).'/apps/nicer.app/api.paymentSystems/boot.php');
@@ -340,7 +347,7 @@ NicerApp WCS (Website Control System) from Nicer Enterprises
     // make globals variable holding the version number
     $naVersionNumber = file_get_contents(dirname(__FILE__).'/VERSION.txt');
     global $naVersionNumber;
-    $naVersion = 'https://github.com/NicerEnterprises/nicerapp '.$naVersionNumber;
+    $naVersion = 'https://github.com/NicerEnterprises/NicerAppWebOS '.$naVersionNumber;
     global $naVersion; 
     
     // overrides by the site operator go here :

@@ -1124,9 +1124,22 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
 
         $rec = [
             'index' => [
-                'fields' => [ 's1', 's2' ]
+                'fields' => [ 's1', 's2', 'i', 'type', 'isIndex', 'isBot', 'isLAN']
             ],
-            'name' => 'timeIndex',
+            'name' => 'all',
+            'type' => 'json'
+        ];
+        try {
+            $this->cdb->setIndex ($rec);
+        } catch (Exception $e) {
+            if ($this->debug) { echo '<pre style="color:red">'; var_dump ($e); echo '</pre>'; exit(); }
+        }
+
+        $rec = [
+            'index' => [
+                'fields' => [ 's2', 'isIndex', 'isBot', 'isLAN' ]
+            ],
+            'name' => 'pageLoad',
             'type' => 'json'
         ];
         try {
@@ -1224,13 +1237,13 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
         $oldDB = $cdb->db;
         //var_dump ('$oldDB='.$oldDB);
         $dataSetName = $this->dataSetName('logentries');
-        $cdb->setDatabase($dataSetName, false);
+        global $naLog; global $naWebOS;
 
         foreach ($entries as $k => $rec) {
+            $cdb->setDatabase($dataSetName, false);
             try {
                 $cdb->post($rec);
             } catch (Exception $e) {
-                global $naLog; global $naWebOS;
                 if (is_string($oldDB) && $oldDB!=='') $cdb->setDatabase ($oldDB);
                 /*
                 $naLog->addTo_phpOutput( SEID,

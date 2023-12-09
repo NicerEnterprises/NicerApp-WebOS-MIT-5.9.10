@@ -15,21 +15,23 @@ global $naLAN;
     $findCommand = [
         'selector' => [
             'i' => $_GET['i'],
-            'isIndex' => true
+            's2' => [ '$ne' => null ]
         ],
         'fields' => ['_id'],
         'sort' => [
-            [ 's1' => 'asc' ],
-            [ 's2' => 'asc' ]
+                [ 's2' => 'desc' ],
+                [ 'isIndex' => 'desc' ],
+                [ 'isBot' => 'desc' ],
+                [ 'isLAN' => 'desc' ]
         ],
-        'use_index' => '_design/249f3b14593cc6f19467c3697f2398397bd9aab6',
+        'use_index' => $naWebOS->globals['cdbDesignDocs']['logentries_pageLoad'],
         'limit' => 10 * 1000
     ];
     //echo '<pre style="padding:8px;border-radius:10px;background:rgba(255,255,255,0.5);color:green;">'; var_dump ($findCommand); echo '</pre>';
     try {
         $call = $cdb->find ($findCommand);
     } catch (Exception $e) {
-        $msg = $fncn.' FAILED while trying to find in \''.$dataSetName.'\' : '.$e->getMessage();
+        $msg = $fncn.' FAILED (ajax_logEntry) while trying to find in \''.$dbName.'\' : '.$e->getMessage();
         //trigger_error ($msg, E_USER_ERROR);
         echo $msg;
         //return false;
@@ -53,8 +55,11 @@ global $naLAN;
         $now2 = $now->format("Y-m-d H:i:s");
 
         $url = '';
-        if (array_key_exists('request', $docA))
+        $tooltip = '';
+        if (array_key_exists('request', $docA)) {
             $url = $docA['request']['$_SERVER']['REQUEST_URI'];
+            $tooltip = str_replace('"', "'", str_replace(' ', '&nbsp;', str_replace(PHP_EOL, '<br/>', json_encode($docA['request']['$naWebOS->view'],JSON_PRETTY_PRINT))));
+        }
         if (array_key_exists('httpOpts', $docA))
             $url = $docA['httpOpts']['ALL cURL fields']['CURLOPT_URL'];
 
@@ -66,7 +71,7 @@ global $naLAN;
         if (array_key_exists('classErrorType', $docA)) $class .= $docA['classErrorType'].' ';
 
         echo '<div style="margin-left:'.$marginLeft.'px">';
-        echo '<h2 id="'.$doc->_id.'" class="logEntry '.$class.'" onclick="naLog.onclick_logEntry_details(event);"><span class="datetimeAccurate">'.$now2.'</span> <span class="ip">'.$call2->body->ip.'</span> '.$url.'</h2>';
+        echo '<h2 id="'.$doc->_id.'" class="logEntry '.$class.'" onclick="naLog.onclick_logEntry_details(event);" tooltip="'.$tooltip.'" title="'.$tooltip.'" alt="'.$tooltip.'"><span class="datetimeAccurate">'.$now2.'</span> <span class="ip">'.$call2->body->ip.'</span> '.$url.'</h2>';
         if (array_key_exists('classErrorType', $docA)) {
             echo '<h3 style="margin-left:'.$marginLeft.'px" class="logEntry error '.$class.'">';
             echo $docA['errType'].'<br/>';

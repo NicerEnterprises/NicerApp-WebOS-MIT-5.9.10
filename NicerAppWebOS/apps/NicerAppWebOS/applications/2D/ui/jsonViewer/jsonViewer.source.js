@@ -751,6 +751,7 @@ nicerapp.hms = nicerapp.jsonViewer = {
 			);
 			na.hms.options.current.activeThemes = na.hms.options.current.themes;
 
+			if (typeof cmd.hmd.hms.header==='undefined') cmd.hmd.hms.header = true;
 
 			if (!cmd.themeName) {
 				if (cmd.options && cmd.options.themeName) cmd.themeName = cmd.options.themeName;
@@ -789,53 +790,54 @@ nicerapp.hms = nicerapp.jsonViewer = {
 			var css = na.colorGradients.generateCSS_for_jsonViewer (na.hms.options.current.theme, cmd.hmd);
 			na.hms.tools.insertCSS(cmd, cmd.hmd, css, na.hms.options.current.theme, 'cmd-data');
 
-			// start generating the HTML needed for this dump:
-			var varID = '--ROOT--';
-			var htmlLegend = 
-				'<div class="hmLegend1">' + cmd.title + '</div>' + 
-				'<div class="hmLegend2">' + 
-				'<table class="hmLegend2"><tr style="width:100%;">' + 
-					'<td>'+
-					'[ ' + 
-					(cmd.trace 
-						? '<a class="hmTrace" title="Show trace" href="#" onclick="return na.hms.ui.showTrace(\'' + cmd.id + '\');">trace</a>'
-						:  (cmd.trace 
-							? 'trace failed to decode' 
-							:  (cmd.dataOrigin && cmd.dataOrigin == 'js' 
-									? ', <span class="hmTrace">' + 'trace <a target="_blank" href="http://getfirefox.com">sent</a> to ' + '<a target="_blank" href="#"href="http://getfirebug.com/">console</a>' + '</span>' 
-									: ''
+			if (cmd.hmd.hms.header) {
+				// start generating the HTML needed for this dump:
+				var varID = '--ROOT--';
+				var htmlLegend =
+					'<div class="hmLegend1">' + cmd.title + '</div>' +
+					'<div class="hmLegend2">' +
+					'<table class="hmLegend2"><tr style="width:100%;">' +
+						'<td>'+
+						'[ ' +
+						(cmd.trace
+							? '<a class="hmTrace" title="Show trace" href="#" onclick="return na.hms.ui.showTrace(\'' + cmd.id + '\');">trace</a>'
+							:  (cmd.trace
+								? 'trace failed to decode'
+								:  (cmd.dataOrigin && cmd.dataOrigin == 'js'
+										? ', <span class="hmTrace">' + 'trace <a target="_blank" href="http://getfirefox.com">sent</a> to ' + '<a target="_blank" href="#"href="http://getfirebug.com/">console</a>' + '</span>'
+										: ''
+									)
 								)
-							)
-					) + 
-					(cmd.dataOrigin 
-						? ', <span class="cmd.hmdOrigin">generated in ' 
-							+ (cmd.dataOrigin == 'js' 
-									? 'javascript' 
-									: cmd.dataOrigin
-								) 
-							+ '</span>, ' 
-							+ '<span class="hmDateTime hmTime">' + cmd.time + 's since ' + 
-								(cmd.dataOrigin == 'js' 
-									? 'page has loaded.' 
-									: 'server receiving request'
-								) 
-							+ 	'</span>' 
-						: ''
-					) + 
-					' ]' + 	
-					'<br/>' + 
-					
-					( cmd.hmd && cmd.hmd.hms && cmd.hmd.hms.topKeys > 0 
-						? na.hms.tools.htmlArrayHeader(cmd.hmd, 'key', true)
-						: na.m.sizeHumanReadable(cmd.hmd.hms.byteSize)
-					) + 
-					'</td>' +
-					'<td style="text-align:right">' +
-					'[ <span class="hmDateTime hmDate">' + cmd.date + '</span> ]<br/>' + 
-					'[ ' + na.m.sizeHumanReadable(cmd.byteSize.transportData + cmd.byteSize.transportTrace) + ' during transport ]' + '<br/>' +
-					'</td>' + 
-					'</tr></table></div>';
-					
+						) +
+						(cmd.dataOrigin
+							? ', <span class="cmd.hmdOrigin">generated in '
+								+ (cmd.dataOrigin == 'js'
+										? 'javascript'
+										: cmd.dataOrigin
+									)
+								+ '</span>, '
+								+ '<span class="hmDateTime hmTime">' + cmd.time + 's since ' +
+									(cmd.dataOrigin == 'js'
+										? 'page has loaded.'
+										: 'server receiving request'
+									)
+								+ 	'</span>'
+							: ''
+						) +
+						' ]' +
+						'<br/>' +
+
+						( cmd.hmd && cmd.hmd.hms && cmd.hmd.hms.topKeys > 0
+							? na.hms.tools.htmlArrayHeader(cmd.hmd, 'key', true)
+							: na.m.sizeHumanReadable(cmd.hmd.hms.byteSize)
+						) +
+						'</td>' +
+						'<td style="text-align:right">' +
+						'[ <span class="hmDateTime hmDate">' + cmd.date + '</span> ]<br/>' +
+						'[ ' + na.m.sizeHumanReadable(cmd.byteSize.transportData + cmd.byteSize.transportTrace) + ' during transport ]' + '<br/>' +
+						'</td>' +
+						'</tr></table></div>';
+			}
 			var rd = 'This version was released / updated on ' + na.hms.about.lastUpdated;
 			var htmlFooter = 
 				'<table cellspacing="3" id="' + cmd.id + '_footer" cellspacing="3" style="width:100%;">'
@@ -853,7 +855,7 @@ nicerapp.hms = nicerapp.jsonViewer = {
 
 
 
-			if (cmd.trace) {
+			if (cmd.hmd.hms.header && cmd.trace) {
 				var oldTheme = na.hms.options.current.theme;
 				var localTheme = na.hms.tools.getThemeByName('--trace--');
 				if (cmd.trace.hmo && cmd.trace.hmo.themeName) {
@@ -953,12 +955,15 @@ nicerapp.hms = nicerapp.jsonViewer = {
 					?'<div id="' + cmd.scrollpaneID + '" class="vividScrollpane vividTheme__scroll_black" style="width:100%;height:100%;">' 
 					:''
 				)
-				+'<div id="' + cmd.hmd.hms.keyID + '_div" class="hm ' + theme + '">' + 
-				'<table id="' + cmd.hmd.hms.keyID + '_table" cellpadding="0" cellspacing="2" class="jsonViewer hm' + theme + '" style="" ' + tableProps + '>' + 
-					'<tbody>'+
-					'<tr><td class="hmTitle" colspan="999"><div>' + htmlLegend + '</div></td></tr>' + 
-					(cmd.trace ? htmlTrace : '') +
-					(cmd.hmd === false ?
+				+ ( cmd.hmd.hms.header
+					? '<div id="' + cmd.hmd.hms.keyID + '_div" class="hm ' + theme + '">' +
+						'<table id="' + cmd.hmd.hms.keyID + '_table" cellpadding="0" cellspacing="2" class="jsonViewer hm' + theme + '" style="" ' + tableProps + '>' +
+						'<tbody>'+
+						'<tr><td class="hmTitle" colspan="999"><div>' + htmlLegend + '</div></td></tr>' +
+						(cmd.trace ? htmlTrace : '')
+					: ''
+				)
+				+ (cmd.hmd === false ?
 						'<tr><td colspan="999">' + 'Could not decypher data in this jsonViewer instance, sorry.<br/>' + '</td></tr>' 
 						:'<tr><td colspan="999"><div>'
 						+l1
@@ -1231,7 +1236,6 @@ nicerapp.hms = nicerapp.jsonViewer = {
 			if (!na.hms.failCounter[pvCmd.cmd.id]) na.hms.failCounter[pvCmd.cmd.id] = 0;
 			if (!html) {
 				if (na.hms.failCounter[pvCmd.cmd.id] > 20) {
-					debugger;
 					var html = 'No data found.';
 					$('#'+pvCmd.cmd.id+'_longMsg').html(html);
 					return false;
@@ -1299,7 +1303,6 @@ nicerapp.hms = nicerapp.jsonViewer = {
 				return true;
 			} else {
 				//pvCmd.buildIdx++; // BAD IDEA
-				debugger;
 				return false;
 			};
 			

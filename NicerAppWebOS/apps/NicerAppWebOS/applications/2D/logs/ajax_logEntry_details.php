@@ -11,6 +11,7 @@ global $naLAN;
     $dbName = $db->dataSetName('logentries');
     $cdb->setDatabase($dbName);
 
+    /*
     // fetch dataRecord
     $findCommand = [
         'selector' => [
@@ -18,8 +19,8 @@ global $naLAN;
         ],
         'fields' => ['_id', 'isIndex', 'ip', 's1', 's2', 'i', 'request', 'httpOpts', 'httpResponse'],
         'sort' => [
-            [ 's1' => 'asc' ],
-            [ 's2' => 'asc' ]
+            [ 's1' => 'desc' ],
+            [ 's2' => 'desc' ]
         ],
         'use_index' => '_design/249f3b14593cc6f19467c3697f2398397bd9aab6'
     ];
@@ -33,11 +34,12 @@ global $naLAN;
         //return false;
         die();
     }
-
-
+    */
+    $call = $cdb->get($_GET['id']);
+    $doc = $call->body;
 
     //echo '<pre style="color:white;background:rgba(0,50,0,0.5);border-radius:10px;margin:10px;">'; var_dump($call); echo '</pre>'; die();
-    foreach ($call->body->docs as $docIdx => $doc) {
+    //foreach ($call->body as $docIdx => $doc) {
         //echo '<pre style="padding:5px;margin:8px;color:white;background:rgba(0,50,0,0.5);">'; var_dump ($doc); echo '</pre>';
         //$call2 = $cdb->get($doc->_id);
         //echo $call2->body->entry->request->html;
@@ -106,6 +108,6 @@ global $naLAN;
             }
         }
 */
-    }
+    //}
     $html .= '<script type="text/javascript">setTimeout (function() {na.site.settings.current.running_loadTheme = false; na.site.settings.current.loadingApps = false; na.hms.startProcessing()}, 1500); na.site.transformLinks()</script>';
     echo $html;

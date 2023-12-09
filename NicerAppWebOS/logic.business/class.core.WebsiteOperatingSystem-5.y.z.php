@@ -195,6 +195,12 @@ class NicerAppWebOS {
         $fncn = $this->cn.'->initializeGlobals()';
         $view = $fncn.' : FATAL ERROR : Could not look up view settings in database.<p style="color:blue;background:rgba(255,255,255,0.65);">$_GET='.str_replace("\n", "<br/>\n", json_encode($_GET,JSON_PRETTY_PRINT)).'</p>'; // assume the worst
 
+        $this->globals = [
+            'cdbDesignDocs' => [
+                'logentries_pageLoad' => '_design/b13265782ef772fafebf4ce4c02d6605f0412f73'
+            ]
+        ];
+
         $this->comments = new class_NicerApp_WebOS_siteComments();
 
         global $argv;

@@ -16,14 +16,18 @@ foreach ($naWebOS->view as $appID => $appRec) break;
     // fetch dataRecord
     $findCommand = [
         'selector' => [
+            's2' => [ '$gt' => 0 ],
             'isIndex' => true
         ],
-        'fields' => ['_id', 'isIndex', 'isBot', 'isLAN', 'i', 'ip', 's1', 's2', 'request', 'httpOpts'],
+        'fields' => ['_id'],
         'sort' => [
-            [ 's1' => 'asc' ],
-            [ 's2' => 'asc' ]
+                [ 's2' => 'desc' ],
+                [ 'isIndex' => 'desc' ],
+                [ 'isBot' => 'desc' ],
+                [ 'isLAN' => 'desc' ]
+
         ],
-        'use_index' => '_design/249f3b14593cc6f19467c3697f2398397bd9aab6',
+        'use_index' => $naWebOS->globals['cdbDesignDocs']['logentries_pageLoad'],
         'limit' => 10 * 1000
     ];
 
@@ -38,7 +42,7 @@ foreach ($naWebOS->view as $appID => $appRec) break;
     try {
         $call = $cdb->find ($findCommand);
     } catch (Exception $e) {
-        $msg = $fncn.' FAILED while trying to find in \''.$dataSetName.'\' : '.$e->getMessage();
+        $msg = $fncn.' FAILED (ajax_siteContent) while trying to find in \''.$dbName.'\' : '.$e->getMessage();
         //trigger_error ($msg, E_USER_ERROR);
         echo $msg;
         //return false;
@@ -50,7 +54,7 @@ foreach ($naWebOS->view as $appID => $appRec) break;
     //echo '<pre style="color:white;background:rgba(0,50,0,0.5);border-radius:10px;margin:10px;">'; var_dump($call); echo '</pre>';
     foreach ($call->body->docs as $docID => $doc) {
         //echo '<pre style="padding:5px;margin:8px;color:white;background:rgba(0,50,0,0.5);">'; var_dump ($doc); echo '</pre>';
-        //$call2 = $cdb->get($doc->_id);
+        $call2 = $cdb-> get($doc->_id);
         //echo $call2->body->entry->request->html;
 
         //echo '<pre style="color:white;background:rgba(0,50,0,0.5);border-radius:10px;padding:5px;margin:10px;">'; var_dump($doc); echo '</pre>';
@@ -58,42 +62,55 @@ foreach ($naWebOS->view as $appID => $appRec) break;
 
         $marginLeft = 10;
         if (!$doc->isIndex) $marginLeft = 50;
-        $docA = json_decode(json_encode($doc), true);
+        $docA = json_decode(json_encode($call2->body), true);
 
         $url = '';
-        if (array_key_exists('request', $docA))
+        $tooltip = '';
+        if (array_key_exists('request', $docA)) {
             $url = $docA['request']['$_SERVER']['REQUEST_URI'];
+            $tooltip = str_replace('\/','/',str_replace('"', "'", str_replace(' ', '&nbsp;', str_replace(PHP_EOL, '<br/>', json_encode($docA['request']['$naWebOS->view'],JSON_PRETTY_PRINT)))));
+        }
+
         if (array_key_exists('httpOpts', $docA))
             $url = $docA['httpOpts']['ALL cURL fields']['CURLOPT_URL'];
 
         if ($docA['isIndex']) {
-            $now = DateTime::createFromFormat('U', $doc->s2);
+            $now = DateTime::createFromFormat('U', $call2->body->s2);
             $now2 = $now->format("Y-m-d H:i:s");
 
-            echo '<div id="'.$doc->_id.'" i="'.$doc->i.'" style="margin:10px;margin-left:'.$marginLeft.'px" onclick="naLog.onclick_logEntry(event);">';
-            echo '<h2><span class="datetimeAccurate">'.$now2.'</span> <span class="ip">'.$doc->ip.'</span> '.$url.'</h2>';
+            echo '<div id="'.$doc->_id.'" i="'.$call2->body->i.'" class="tooltip" style="margin:10px;margin-left:'.$marginLeft.'px" onclick="naLog.onclick_logEntry(event);" title="'.$tooltip.'" alt="'.$tooltip.'">';
+            echo '<h2><span class="datetimeAccurate">'.$now2.'</span> <span class="ip">'.$call2->body->ip.'</span> '.$url.'</h2>';
             //echo hmJSON ($docA['request'], 'Request response');
             echo '</div>';
         }
-/*
+
+        /*
         // fetch dataRecord
         $findCommand2 = [
             'selector' => [
-                //'type' => 'new request',
-                's1' => $doc->s1
+                'type' => 'new request',
+                'isIndex' => true,
+                'isBot' => false,
+                'isLAN' => false,
+                's1' => (is_null($doc->s1)?1:$doc->s1),
+                's2' => [ '$gt' => 0 ]
             ],
-            'fields' => ['_id', 'isIndex', 'ip', 's1', 's2', 'request', 'httpOpts', 'httpResponse'],
+            'fields' => ['_id', 'isIndex', 'isBot', 'isLAN', 'type', 'ip', 's1', 's2', 'request', 'httpOpts', 'httpResponse'],
             'sort' => [
-                [ 's1' => 'asc' ],
-                [ 's2' => 'asc' ]
+                [ 's1' => 'desc' ],
+                [ 's2' => 'desc' ],
+                [ 'type' => 'desc' ],
+                [ 'isIndex' => 'desc' ],
+                [ 'isBot' => 'desc' ],
+                [ 'isLAN' => 'desc' ]
             ],
             'use_index' => '_design/249f3b14593cc6f19467c3697f2398397bd9aab6'
         ];
-        //echo '<pre style="padding:8px;border-radius:10px;background:rgba(255,255,255,0.5);color:green;">'; var_dump ($findCommand); echo '</pre>';
+        echo '<pre style="padding:8px;border-radius:10px;background:rgba(255,255,255,0.5);color:green;">'; var_dump ($findCommand); echo '</pre>';
         try {
             $call2 = $cdb->find ($findCommand2);
         } catch (Exception $e) {
-            $msg = $fncn.' FAILED while trying to find in \''.$dataSetName.'\' : '.$e->getMessage();
+            $msg = $fncn.' FAILED while trying to find in \''.$dbName.'\' : '.$e->getMessage();
             //trigger_error ($msg, E_USER_ERROR);
             echo $msg;
             //return false;
@@ -101,25 +118,31 @@ foreach ($naWebOS->view as $appID => $appRec) break;
         }
 
         foreach ($call2->body->docs as $docID2 => $doc2) {
-            $now3 = DateTime::createFromFormat('U.u', $doc2->s2);
-            $now4 = $now3->format("Y-m-d H:i:s.u");
+            $now3 = DateTime::createFromFormat('U', $doc2->s2);
+            $now4 = $now3->format("Y-m-d H:i:s");
             if (!$doc2->isIndex) {
                 $marginLeft = 50;
                 $docB = json_decode(json_encode($doc2), true);
+                $url = '';
+                if (array_key_exists('request', $docA))
+                    $url = $docA['request']['$_SERVER']['REQUEST_URI'];
+                if (array_key_exists('httpOpts', $docA))
+                    $url = $docA['httpOpts']['ALL cURL fields']['CURLOPT_URL'];
                 echo '<div style="margin-left:'.$marginLeft.'px">';
-                echo '<h3><span class="datetimeAccurate">'.$now4.'</span> <span class="ip">'.$doc2->ip.'</span> '.$docB['request']['$_SERVER']['REQUEST_URI'].'</h3>';
-                if (array_key_exists('request', $docB)) echo hmJSON ($docB['request'], 'Request response');
-                if (array_key_exists('httpOpts', $docB)) echo hmJSON ($docB['httpOpts'], 'HTTP options');
-                if (array_key_exists('httpResponse', $docB)) echo hmJSON ($docB['httpResponse'], 'HTTP response');
+                echo '<h3><span class="datetimeAccurate">'.$now4.'</span> <span class="ip">'.$doc2->ip.'</span> '.$url.'</h3>';
+                //if (array_key_exists('request', $docB)) echo hmJSON ($docB['request'], 'Request response');
+                //if (array_key_exists('httpOpts', $docB)) echo hmJSON ($docB['httpOpts'], 'HTTP options');
+                ///if (array_key_exists('httpResponse', $docB)) echo hmJSON ($docB['httpResponse'], 'HTTP response');
                 //else { echo '<pre>'; var_dump ($docB); echo '</pre>'; };
                 echo '</div>';
             }
         }
-*/
+        */
     }
-    //$html = '';
-    //$html .= '<script type="text/javascript">setTimeout (function() {na.site.settings.current.running_loadTheme = false; na.site.settings.current.loadingApps = false; na.hms.startProcessing()}, 1500); na.site.transformLinks()</script>';
-    //echo $html;
+
+    $html = '';
+    $html .= '<script type="text/javascript">setTimeout (function() {na.site.settings.current.running_loadTheme = false; na.site.settings.current.loadingApps = false; na.hms.startProcessing()}, 1500); na.site.transformLinks(); na.site.startTooltips(event,$("#siteContent")[0]);</script>';
+    echo $html;
 
 
 
