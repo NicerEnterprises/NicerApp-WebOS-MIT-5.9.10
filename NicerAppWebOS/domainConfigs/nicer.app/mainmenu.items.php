@@ -1,8 +1,7 @@
 <?php 
     global $naWebOS;
     global $na_apps_structure;
-    $na_apps_structure = array( // the PHP variable name $na_apps_structure is the point where the trunk of the tree goes either into the air, or the ground (as the root-kit system or spyware application.
-
+    $na_apps_structure = array(
         "newsHeadlines_englishNews" => [
             'apps-current' => [
                 'NicerApp-WebOS__pageSettings' => [
@@ -27,7 +26,7 @@
                     "apps" => [
                         'news' => [ // a more JSON and shorter way of declaring a tree-like JSON array.
                             'section' => 'English_News__World_Headlines',
-                            'SEO_value' => [ 'world-news', 'news-world', 'news-world-headlines' ]
+                            'SEO_value' => [ 'world-news', 'news-world', 'world-headlines', 'news-world-headlines' ]
                         ]
                      ]
                 ]
@@ -40,7 +39,7 @@
                        'folder' => '/NicerAppWebOS/apps/NicerAppWebOS/applications/2D'
                     ],
                     "apps" => [
-                        'news' => [ // a more JSON and shorter way of declaring a tree-like JSON array.
+                        'news' => [
                             'section' => 'English_News__Topics__Business',
                             'SEO_value' => [ 'nbh', 'news-business', 'business', 'news-business-headlines' ]
                         ]

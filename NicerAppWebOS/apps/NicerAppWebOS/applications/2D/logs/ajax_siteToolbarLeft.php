@@ -99,8 +99,8 @@ echo $naWebOS->html_vividButton (
 //echo '<img src="/NicerAppWebOS/siteMedia/btnRobot.png" style="width:100px;height:100px;"/>';
 //echo '<img src="/NicerAppWebOS/siteMedia/btnHumans.png" style="width:100px;height:100px;"/>';
 
-
-foreach ($naWebOS->view as $appID => $appRec) break;
+//if (!is_null($naWebOS->view)) {
+    foreach ($naWebOS->view as $appID => $appRec) break;
 //if ($appRec['page']=='index') {
     $db = $naWebOS->dbs->findConnection('couchdb');
     $cdb = $db->cdb;
@@ -149,7 +149,7 @@ foreach ($naWebOS->view as $appID => $appRec) break;
         $now2 = $now->format("Y-m-d H:i:s");
 
         $class = '';
-        if ($doc->isBot) $class.='bot ';
+        if ($call2->body->isBot) $class.='bot ';
 
         $url = '';
         $tooltip = '';

@@ -1152,6 +1152,32 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
         echo 'Created and populated database '.$dataSetName.'<br/>';
     }
 
+    public function createDataSet_ip_info() {
+        $dataSetName = $this->dataSetName('ip_info');
+        try { $this->cdb->deleteDatabase ($dataSetName); } catch (Exception $e) { };
+        $this->cdb->setDatabase($dataSetName, true);
+        try {
+            $call = $this->cdb->setSecurity ($this->security_guest);
+        } catch (Exception $e) {
+            if ($this->debug) { echo '<pre style="color:red">'; var_dump ($e); echo '</pre>'; exit(); }
+        }
+
+        $rec = [
+            'index' => [
+                'fields' => [ 'ip' ]
+            ],
+            'name' => 'ipIndex',
+            'type' => 'json'
+        ];
+        try {
+            $this->cdb->setIndex ($rec);
+        } catch (Exception $e) {
+            if ($this->debug) { echo '<pre style="color:red">'; var_dump ($e); echo '</pre>'; exit(); }
+        }
+
+        echo 'Created and populated database '.$dataSetName.'<br/>';
+    }
+
     public function createDataSet_data_by_users() {
         $dataSetName = $this->dataSetName('data_by_users');
         try { $this->cdb->deleteDatabase ($dataSetName); } catch (Exception $e) { };

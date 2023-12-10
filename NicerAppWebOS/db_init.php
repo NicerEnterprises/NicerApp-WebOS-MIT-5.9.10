@@ -35,6 +35,7 @@ $dbs = [
     'analytics',
     'errorHandling',
     'logEntries',
+    'ip_info',
     'data_by_users',
     'views',
     'cms_tree',
@@ -62,6 +63,7 @@ $dbsReset = [
     'analytics',
     'errorHandling',
     'logEntries',
+    'ip_info',
     'data_by_users',
     'views',
     'cms_tree',
@@ -154,6 +156,7 @@ if (mustDo('cms')) {
     $un1 = str_replace(' ', '_', $un1);
     $un1 = str_replace('.', '__', $un1);
     $dbs = goDo ($dbs, [
+        'ip_info',
         'cms_tree',
         'cms_tree___role___guests',
         'cms_tree___user___administrator___'.$un1,

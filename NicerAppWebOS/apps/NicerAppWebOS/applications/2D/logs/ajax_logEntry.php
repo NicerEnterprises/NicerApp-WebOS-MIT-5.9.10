@@ -56,9 +56,38 @@ global $naLAN;
 
         $url = '';
         $tooltip = '';
+        if (array_key_exists('bd',$docA)) $bd = $docA['bd']; else $bd = '';
+        if (array_key_exists('bd',$docA)) $ipInfo = $docA['ipInfo']['city'].', '.$docA['ipInfo']['country']; else $ipInfo = '';
+
         if (array_key_exists('request', $docA)) {
             $url = $docA['request']['$_SERVER']['REQUEST_URI'];
             $tooltip = str_replace('"', "'", str_replace(' ', '&nbsp;', str_replace(PHP_EOL, '<br/>', json_encode($docA['request']['$naWebOS->view'],JSON_PRETTY_PRINT))));
+
+            /*
+            $ua = $docA['request']['$_SERVER']['HTTP_USER_AGENT'];
+            $xec = 'curl -A "'.urlencode($ua).'" https://beamtic.com/api/user-agent';
+
+            exec ($xec, $output, $result);
+            echo '<pre>'; var_dump ($xec); var_dump($output); echo '</pre>';
+
+            $request_headers = []; // Prepare a new array
+            $request_headers[] = 'user-agent: '.$ua;
+            $request_headers[] = 'referer: https://nicer.app/';
+            $request_headers[] = 'accept: text/html,application/xhtml+xml,application/xml;q=0.9,* / *;q=0.8';
+
+            // Prepare the HTTP request
+            $ch = curl_init("https://beamtic.com/api/user-agent");
+
+            // Provide the request headers as an indexed array
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $request_headers);
+
+            // Performs the Request, with specified curl_setopt() options (if any).
+            $response_body = curl_exec($ch);
+            echo htmlentities($response_body);
+
+            //echo implode("\n",$output);
+            $docA['request']['ua'] = json_decode(implode("\n",$output));
+            */
         }
         if (array_key_exists('httpOpts', $docA))
             $url = $docA['httpOpts']['ALL cURL fields']['CURLOPT_URL'];
@@ -71,7 +100,8 @@ global $naLAN;
         if (array_key_exists('classErrorType', $docA)) $class .= $docA['classErrorType'].' ';
 
         echo '<div style="margin-left:'.$marginLeft.'px">';
-        echo '<h2 id="'.$doc->_id.'" class="logEntry '.$class.'" onclick="naLog.onclick_logEntry_details(event);" tooltip="'.$tooltip.'" title="'.$tooltip.'" alt="'.$tooltip.'"><span class="datetimeAccurate">'.$now2.'</span> <span class="ip">'.$call2->body->ip.'</span> '.$url.'</h2>';
+        if ($ipInfo!=='') echo '<h2 id="'.$doc->_id.'" class="logEntry '.$class.'" onclick="naLog.onclick_logEntry_details(event);" tooltip="'.$tooltip.'" title="'.$tooltip.'" alt="'.$tooltip.'"><span class="datetimeAccurate">'.$now2.'</span> <span class="ip">'.$call2->body->ip.'</span> <span class="url">'.$url.'</span> <span class="bd">'.$bd.'</span> <span class="ipInfo">'.$ipInfo.'</span></h2>';
+        else echo '<h2 id="'.$doc->_id.'" class="logEntry '.$class.'" onclick="naLog.onclick_logEntry_details(event);" tooltip="'.$tooltip.'" title="'.$tooltip.'" alt="'.$tooltip.'"><span class="datetimeAccurate">'.$now2.'</span> <span class="ip">'.$call2->body->ip.'</span> <span class="url">'.$url.'</span> <span class="bd">'.$bd.'</span></h2>';
         if (array_key_exists('classErrorType', $docA)) {
             echo '<h3 style="margin-left:'.$marginLeft.'px" class="logEntry error '.$class.'">';
             echo $docA['errType'].'<br/>';

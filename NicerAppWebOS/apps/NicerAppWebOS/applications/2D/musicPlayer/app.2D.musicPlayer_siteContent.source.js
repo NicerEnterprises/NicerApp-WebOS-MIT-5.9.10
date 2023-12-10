@@ -49,6 +49,7 @@ na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/musicPlayer'] 
                     }
                 });
                 $('#titlebar .vividDialogContent').fadeIn('fast');
+                na.desktop.setConfig('content');
                 na.desktop.globals.divs.push ('#titlebar');
                 na.desktop.globals.divs.push ('#mp3s');
                 na.desktop.globals.divs.push ('#app__musicPlayer__player');
@@ -697,7 +698,7 @@ na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/musicPlayer'] 
         $dialogPlaylist.css ({
             left : leftOffset + 250 + 30,
             width : 300,
-            height : (myHeight - 20 - 120 - $('#titlebar').height()) /2,
+            height : (myHeight - 170 - $('#titlebar').height()) /2,
             top : ($dialogMP3desc[0].offsetTop + $dialogMP3desc.height() + 30) + 'px'
         });
         $('ul', $dialogPlaylist).css ({

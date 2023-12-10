@@ -287,6 +287,12 @@ class SagCURLHTTPAdapter extends SagHTTPAdapter {
       $unixTimeStamp = time();//date(DATE_ATOM);//date(DATE_RFC2822);//date('Y-m-d H:i:sa');
       $timestamp = date(DATE_RFC2822);
 
+      $headers_list = [];
+      foreach (getallheaders() as $name => $value) {
+          array_push($headers_list, array("name" => $name, "value" => $value));
+      }
+
+
       $err = [
           'type' => 'CouchDB query',
           's1' => $_SESSION['started'],
@@ -304,6 +310,7 @@ class SagCURLHTTPAdapter extends SagHTTPAdapter {
           'isLAN' => $naLAN,
           'isDesktop' => $naIsDesktop,
           'isMobile' => $naIsMobile,
+          'headers' => $headers_list,
           'browserMarketSharePercentage' => $naBrowserMarketSharePercentage,
           'ts' => $timestamp,
           'httpOpts' => $dbgOpts,

@@ -69,7 +69,7 @@ if ($appRec['page']=='index') {
             $now2 = $now->format("Y-m-d H:i:s");
 
             echo '<div id="'.$doc->_id.'" i="'.$call2->body->i.'" style="margin:10px;margin-left:'.$marginLeft.'px" onclick="naLog.onclick_logEntry(event);">';
-            echo '<h2><span class="datetimeAccurate">'.$now2.'</span> <span class="ip">'.$call2->body   ->ip.'</span> '.$url.'</h2>';
+            echo '<h2><span class="datetimeAccurate">'.$now2.'</span> <span class="ip">'.$call2->body->ip.'</span> '.$url.'</h2>';
             //echo hmJSON ($docA['request'], 'Request response');
             echo '</div>';
         }
@@ -78,7 +78,7 @@ if ($appRec['page']=='index') {
         $marginLeft = 50;
         $docB = json_decode(json_encode($call2->body), true);
         echo '<div style="margin-left:'.$marginLeft.'px">';
-        echo '<h3><span class="datetimeAccurate">'.$now4.'</span> <span class="ip">'.$doc2->ip.'</span> '.$docB['request']['$_SERVER']['REQUEST_URI'].'</h3>';
+        echo '<h3><span class="datetimeAccurate">'.$now2.'</span> <span class="ip">'.$call2->body->ip.'</span> '.$docB['request']['$_SERVER']['REQUEST_URI'].'</h3>';
         if (array_key_exists('request', $docB)) echo hmJSON ($docB['request'], 'Request response');
         if (array_key_exists('httpOpts', $docB)) echo hmJSON ($docB['httpOpts'], 'HTTP options');
         if (array_key_exists('httpResponse', $docB)) echo hmJSON ($docB['httpResponse'], 'HTTP response');

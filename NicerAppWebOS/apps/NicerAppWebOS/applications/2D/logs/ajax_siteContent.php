@@ -4,7 +4,8 @@ global $naWebOS;
 global $naLAN;
 //if (!$naLAN) die('403 Forbidden.');
 //echo '<pre style="color:yellow;background:rgba(0,0,50,0.5);border-radius:10px;margin:10px;">'; var_dump ($naWebOS->view); echo '</pre>';
-foreach ($naWebOS->view as $appID => $appRec) break;
+//if (!is_null($naWebOS->view)) {
+    foreach ($naWebOS->view as $appID => $appRec) break;
 //if ($appRec['page']=='index') {
     $db = $naWebOS->dbs->findConnection('couchdb');
     $cdb = $db->cdb;
@@ -61,7 +62,7 @@ foreach ($naWebOS->view as $appID => $appRec) break;
 
 
         $marginLeft = 10;
-        if (!$doc->isIndex) $marginLeft = 50;
+        if (!$call2->body->isIndex) $marginLeft = 50;
         $docA = json_decode(json_encode($call2->body), true);
 
         $url = '';
