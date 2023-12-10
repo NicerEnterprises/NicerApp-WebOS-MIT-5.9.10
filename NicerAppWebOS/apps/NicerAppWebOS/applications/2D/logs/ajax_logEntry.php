@@ -62,32 +62,6 @@ global $naLAN;
         if (array_key_exists('request', $docA)) {
             $url = $docA['request']['$_SERVER']['REQUEST_URI'];
             $tooltip = str_replace('"', "'", str_replace(' ', '&nbsp;', str_replace(PHP_EOL, '<br/>', json_encode($docA['request']['$naWebOS->view'],JSON_PRETTY_PRINT))));
-
-            /*
-            $ua = $docA['request']['$_SERVER']['HTTP_USER_AGENT'];
-            $xec = 'curl -A "'.urlencode($ua).'" https://beamtic.com/api/user-agent';
-
-            exec ($xec, $output, $result);
-            echo '<pre>'; var_dump ($xec); var_dump($output); echo '</pre>';
-
-            $request_headers = []; // Prepare a new array
-            $request_headers[] = 'user-agent: '.$ua;
-            $request_headers[] = 'referer: https://nicer.app/';
-            $request_headers[] = 'accept: text/html,application/xhtml+xml,application/xml;q=0.9,* / *;q=0.8';
-
-            // Prepare the HTTP request
-            $ch = curl_init("https://beamtic.com/api/user-agent");
-
-            // Provide the request headers as an indexed array
-            curl_setopt($ch, CURLOPT_HTTPHEADER, $request_headers);
-
-            // Performs the Request, with specified curl_setopt() options (if any).
-            $response_body = curl_exec($ch);
-            echo htmlentities($response_body);
-
-            //echo implode("\n",$output);
-            $docA['request']['ua'] = json_decode(implode("\n",$output));
-            */
         }
         if (array_key_exists('httpOpts', $docA))
             $url = $docA['httpOpts']['ALL cURL fields']['CURLOPT_URL'];
