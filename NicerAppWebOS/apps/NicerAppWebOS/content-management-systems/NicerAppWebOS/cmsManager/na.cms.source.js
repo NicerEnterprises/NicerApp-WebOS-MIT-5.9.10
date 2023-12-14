@@ -29,15 +29,17 @@ na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/Nic
                         });
 
                         $('#document_headers').detach().appendTo('body').css({display:'block',opacity:0.0001,zIndex:-1});
-                        debugger;
                         if ($(window).width() < 400) {
                             na.cms.settings.current.activeDialog = '#siteContent';
+                            na.desktop.settings.visibleDivs =
                             arrayRemove(na.desktop.settings.visibleDivs, '#siteToolbarLeft');
+                            na.desktop.settings.visibleDivs =
                             arrayRemove(na.desktop.settings.visibleDivs, '#siteContent');
                             na.desktop.settings.visibleDivs.push('#siteContent');
                             na.desktop.resize();
                         } else {
-                            arrayRemove(na.desktop.settings.visibleDivs, '#siteToolbarLeft');
+                            na.desktop.settings.visibleDivs = arrayRemove(na.desktop.settings.visibleDivs, '#siteToolbarLeft');
+                            na.desktop.settings.visibleDivs =
                             arrayRemove(na.desktop.settings.visibleDivs, '#siteContent');
                             na.desktop.settings.visibleDivs.push('#siteToolbarLeft');
                             na.desktop.settings.visibleDivs.push('#siteContent');

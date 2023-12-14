@@ -194,7 +194,17 @@ if (mustDo('app_fileManager')) {
 
 $dbs2 = addPrefixes($dbs);
 //echo '<pre style="color:lime;background:navy;border-radius:10px;margin:10px;">t118:'; echo json_encode ($naWebOS->dbsAdmin->findConnection('couchdb'), JSON_PRETTY_PRINT); echo '</pre>';
-$allDBs = $naWebOS->dbsAdmin->getAllDatabases ();
+try {
+    $allDBs = $naWebOS->dbsAdmin->getAllDatabases ();
+} catch (Exception $e) {
+    $fn = dirname(__FILE__).'/domainConfigs/'.$naWebOS->domain.'/databases.username-admin.json';
+    $msg =
+        $e->getMessage().'<br/>'
+        .str_replace('#', '<br/>&nbsp;&nbsp;&nbsp;#', $e->getTraceAsString()).'<br/>'
+        .'credentials used are in '.$fn;
+    echo $msg;
+    die();
+}
 //echo '<pre style="color:green">'; var_dump ($allDBs); echo '</pre>'; die();
 //echo '<pre style="color:green">'; var_dump ($dbs); echo '</pre>'; die();
 echo $naWebOS->dbsAdmin->listDatabases ($allDBs, $dbs, $dbsReset);

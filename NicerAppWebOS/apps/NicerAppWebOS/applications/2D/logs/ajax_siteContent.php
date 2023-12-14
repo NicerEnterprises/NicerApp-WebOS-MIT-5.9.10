@@ -2,7 +2,7 @@
 require_once (dirname(__FILE__).'/../../../../../boot.php');
 global $naWebOS;
 global $naLAN;
-//if (!$naLAN) die('403 Forbidden.');
+if (!$naLAN) die('403 Forbidden.');
 //echo '<pre style="color:yellow;background:rgba(0,0,50,0.5);border-radius:10px;margin:10px;">'; var_dump ($naWebOS->view); echo '</pre>';
 //if (!is_null($naWebOS->view)) {
     foreach ($naWebOS->view as $appID => $appRec) break;
@@ -73,7 +73,10 @@ global $naLAN;
         }
 
         if (array_key_exists('httpOpts', $docA))
-            $url = $docA['httpOpts']['ALL cURL fields']['CURLOPT_URL'];
+            if (array_key_exists('ALL cURL fields', $docA['httpOpts']))
+                $url = $docA['httpOpts']['ALL cURL fields']['CURLOPT_URL'];
+            else
+                $url = $docA['httpOpts']['CURLOPT_URL'];
 
         if ($docA['isIndex']) {
             $now = DateTime::createFromFormat('U', $call2->body->s2);

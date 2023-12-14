@@ -28,7 +28,7 @@ class class_NicerAppWebOS_database_API {
 
         $p = safeLoadJSONfile ($dbsConfigFile, $exampleConfigFile);
         $this->settings = $p;
-        //var_dump ($username); var_dump ($dbsConfigFile); var_dump ($p); echo '<br/>';
+        //echo '<pre style="color:lime;background:navy;">';var_dump ($username); var_dump ($dbsConfigFile); var_dump ($p); echo '</pre>';
 
         $dbt = $p['databases'];
         foreach ($dbt as $ct => $cRec) {

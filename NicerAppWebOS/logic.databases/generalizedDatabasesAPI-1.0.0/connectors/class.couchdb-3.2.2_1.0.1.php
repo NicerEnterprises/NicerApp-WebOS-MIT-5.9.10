@@ -37,8 +37,11 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
         $this->cdb->useSSL($cRec['useSSL']);
 
     //if (php_sapi_name() === 'cli') return 'php_sapi_name()='.php_sapi_name(); // BAD!
-        //echo 't77;<pre style="color:navy">'; var_dump ($cRec); var_dump ($username); echo '</pre>';
-        if (!is_null($cRec)) $naLoginResult = cdb_login ($this->cdb, $cRec, $cRec['username']); else $naLoginResult = cdb_login ($this->cdb, null, null);
+        //echo 'Credentials for '.$username.' :<br/><pre style="color:navy">'; var_dump ($cRec); echo '</pre>';
+        if (!is_null($cRec))
+            $naLoginResult = cdb_login ($this->cdb, $cRec, $cRec['username']);
+        else
+            $naLoginResult = cdb_login ($this->cdb, null, null);
 
         if (!$naLoginResult) die ('500 - could not login to NicerApp WebOS.');
 
@@ -53,7 +56,7 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
         }
 
         $u = $this->cdb->getSession()->body->userCtx;
-        //echo '<pre style="color:red">'; var_dump ($u); die();
+        //echo '<pre style="color:red;background:yellow;">'; var_dump ($u); //die();
         $this->username = $u->name;
         $this->roles = $u->roles;
 
@@ -189,6 +192,8 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
             echo '</pre>';
         }
         //echo '<pre style="color:green;">'.$username.'</pre>';
+        //echo '<pre style="color:orange;">'.json_encode(debug_backtrace(),JSON_PRETTY_PRINT).'</pre>';
+
         if (!is_null($usersFinal))
         foreach ($usersFinal as $username1 => $userDoc) {
             $dbg = [
@@ -407,7 +412,7 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
         //try { $this->cdb->deleteDatabase ($dataSetName); } catch (Exception $e) { };
         $this->cdb->setDatabase($dataSetName,true);
         //echo '<pre>'; var_dump ($this->security_guest); echo '</pre>'; die();
-        if (is_null($this->security_guest)) { trigger_error ('FATAL ERROR : $this->security_guest is null. see $this->setGlobals()', E_USER_ERROR); die(); }
+        if (is_null($this->security_guest)) { trigger_error ('$this->security_guest is null. see $this->setGlobals().<br/>'.PHP_EOL.'$this->connectionSettings=<pre>'.json_encode($this->connectionSettings,JSON_PRETTY_PRINT).'</pre>', E_USER_ERROR); die(); }
         try { 
             $call = $this->cdb->setSecurity ($this->security_guest);
         } catch (Exception $e) {
@@ -1408,7 +1413,7 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
         return true;
     }
 
-    public function delete_allThemes_byName ($themeName) {
+    public function delete_allThemes_byName ($themeName, $specificityName) {
         if ($themeName=='default') {
             echo 'ERROR : can not the delete themes which are named "default".<br/>'.PHP_EOL;
             return false;
@@ -1423,7 +1428,10 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
             try { $call2 = $this->cdb->get($row->id); } catch (Exception $e) { return false; }
             //var_dump ($call2);
             if (property_exists($call2->body,'theme')) {
-                if ($call2->body->theme==$themeName) {
+                if (
+                    $call2->body->theme==$themeName
+                    && $call2->body->specificityName==$specificityName
+                ) {
                     $response = $this->cdb->delete ($call2->body->_id, $call2->body->_rev);
                     //try { $call3 = $this->cdb->get($row->id); } catch (Exception $e) { $call3 = false; }
                     //while ($call3 && $call3->body->ok) {

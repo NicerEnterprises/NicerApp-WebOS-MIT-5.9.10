@@ -2,7 +2,7 @@
 require_once (dirname(__FILE__).'/../../../../../boot.php');
 global $naWebOS;
 global $naLAN;
-//if (!$naLAN) die('403 Forbidden.');
+if (!$naLAN) die('403 Forbidden.');
 
     $db = $naWebOS->dbs->findConnection('couchdb');
     $cdb = $db->cdb;
@@ -57,10 +57,19 @@ global $naLAN;
         if (array_key_exists('request', $docA))
             $url = $docA['request']['$_SERVER']['REQUEST_URI'];
         if (array_key_exists('httpOpts', $docA))
-            $url = $docA['httpOpts']['ALL cURL fields']['CURLOPT_URL'];
+            if (array_key_exists('ALL cURL fields', $docA['httpOpts']))
+                $url = $docA['httpOpts']['ALL cURL fields']['CURLOPT_URL'];
+            else
+                $url = $docA['httpOpts']['CURLOPT_URL'];
+
+
+        if (array_key_exists('bd',$docA)) $bd = $docA['bd']; else $bd = '';
+        if (array_key_exists('ipInfo',$docA)) $ipInfo = $docA['ipInfo']['city'].', '.$docA['ipInfo']['country']; else $ipInfo = '';
+
 
         echo '<div style="margin-left:'.$marginLeft.'px">';
-        echo '<h2 class="logEntry"><span class="datetimeAccurate">'.$now2.'</span> <span class="ip">'.$doc->ip.'</span> '.$url.'</h2>';
+        if ($ipInfo!=='') echo '<h2 id="'.$doc->_id.'" class="logEntry '.$class.'" onclick="naLog.onclick_logEntry_details(event);" tooltip="'.$tooltip.'" title="'.$tooltip.'" alt="'.$tooltip.'"><span class="datetimeAccurate">'.$now2.'</span> <span class="ip">'.$call2->body->ip.'</span> <span class="url">'.$url.'</span> <span class="bd">'.$bd.'</span> <span class="ipInfo">'.$ipInfo.'</span></h2>';
+        else echo '<h2 id="'.$doc->_id.'" class="logEntry '.$class.'" onclick="naLog.onclick_logEntry_details(event);" tooltip="'.$tooltip.'" title="'.$tooltip.'" alt="'.$tooltip.'"><span class="datetimeAccurate">'.$now2.'</span> <span class="ip">'.$call2->body->ip.'</span> <span class="url">'.$url.'</span> <span class="bd">'.$bd.'</span></h2>';
         if (array_key_exists('request', $docA)) echo hmJSON ($docA['request'], 'Request response');
         if (array_key_exists('httpOpts', $docA)) echo hmJSON ($docA['httpOpts'], 'HTTP options');
         //if (array_key_exists('httpResponse', $docA)) echo '<pre>'; var_dump ($docA['httpResponse']); echo '</pre>'; //echo hmJSON ($docA['httpResponse'], 'HTTP response');

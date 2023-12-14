@@ -2,7 +2,7 @@
 require_once (dirname(__FILE__).'/../../../../../boot.php');
 global $naWebOS;
 global $naLAN;
-//if (!$naLAN) die('403 Forbidden.');
+if (!$naLAN) die('403 Forbidden.');
 
     $db = $naWebOS->dbs->findConnection('couchdb');
     $cdb = $db->cdb;
@@ -57,14 +57,17 @@ global $naLAN;
         $url = '';
         $tooltip = '';
         if (array_key_exists('bd',$docA)) $bd = $docA['bd']; else $bd = '';
-        if (array_key_exists('bd',$docA)) $ipInfo = $docA['ipInfo']['city'].', '.$docA['ipInfo']['country']; else $ipInfo = '';
+        if (array_key_exists('ipInfo',$docA)) $ipInfo = $docA['ipInfo']['city'].', '.$docA['ipInfo']['country']; else $ipInfo = '';
 
         if (array_key_exists('request', $docA)) {
             $url = $docA['request']['$_SERVER']['REQUEST_URI'];
             $tooltip = str_replace('"', "'", str_replace(' ', '&nbsp;', str_replace(PHP_EOL, '<br/>', json_encode($docA['request']['$naWebOS->view'],JSON_PRETTY_PRINT))));
         }
         if (array_key_exists('httpOpts', $docA))
-            $url = $docA['httpOpts']['ALL cURL fields']['CURLOPT_URL'];
+            if (array_key_exists('ALL cURL fields', $docA['httpOpts']))
+                $url = $docA['httpOpts']['ALL cURL fields']['CURLOPT_URL'];
+            else
+                $url = $docA['httpOpts']['CURLOPT_URL'];
 
         $class = '';
         if (array_key_exists('httpResponse', $docA)) {

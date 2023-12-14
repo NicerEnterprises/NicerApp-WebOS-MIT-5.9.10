@@ -2,7 +2,7 @@
 <?php
 global $naWebOS;
 global $naLAN;
-//if (!$naLAN) die('403 Forbidden.');
+if (!$naLAN) die('403 Forbidden.');
 //echo '<pre style="color:yellow;background:rgba(0,0,50,0.5);border-radius:10px;margin:10px;">'; var_dump ($naWebOS->view); echo '</pre>';
 
 echo $naWebOS->html_vividButton (
@@ -147,7 +147,10 @@ if ($appRec['page']=='index') {
             $tooltip = str_replace('\/','/',str_replace('"', "'", str_replace(' ', '&nbsp;', str_replace(PHP_EOL, '<br/>', json_encode($docA['request']['$naWebOS->view'],JSON_PRETTY_PRINT)))));
         }
         if (array_key_exists('httpOpts', $docA))
-            $url = $docA['httpOpts']['ALL cURL fields']['CURLOPT_URL'];
+            if (array_key_exists('ALL cURL fields', $docA['httpOpts']))
+                $url = $docA['httpOpts']['ALL cURL fields']['CURLOPT_URL'];
+            else
+                $url = $docA['httpOpts']['CURLOPT_URL'];
 
 
         echo '<h2 class="logEntry '.$class.' tooltip" s1="'.$call2->body->s1.'" i="'.$call2->body->i.'" title="'.$tooltip.'" alt="'.$tooltip.'"  onclick="naLog.onclick_logEntry(event);"><span class="datetimeAccurate">'.$now2.'</span> <span class="ip">'.$call2->body->ip.'</span><br/>'.$url.'</h2>';

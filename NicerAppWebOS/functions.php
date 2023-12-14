@@ -297,9 +297,11 @@ function cdb_login($cdb, $cRec, $username) {
     $fncn = '.../NicerAppWebOS/functions.php::cdb_login()';
 
     $done = false;
+    /* ANTIQUATED CODE :
     if (
         $username=='nicer_app___Rene_AJM_Veerman'
         || $username=='said_by___Rene_AJM_Veerman'
+        || $username=='192_168_178_29___Rene_AJM_Veerman'
     ) {
         try {
             $cdb->login ($cRec['username'], $cRec['password']);
@@ -312,59 +314,11 @@ function cdb_login($cdb, $cRec, $username) {
         }
         $done = true;
     } else {
-        if (
-            is_array($_COOKIE)
-            && array_key_exists('cdb_authSession_cookie',$_COOKIE)
-            && is_string($_COOKIE['cdb_authSession_cookie'])
-            && $_COOKIE['cdb_authSession_cookie']!==''
-        ) {
-            $r = $cdb->loginByCookie ($_COOKIE['cdb_authSession_cookie']);
+    */
 
-            try {
-            $cdb_session = $cdb->getSession();
-            } catch (Throwable $e) {
-                $_SESSION['cdb_loginName'] = $cRec['username'];
-                $cdb->login ($cRec['username'], $cRec['password'], Sag::$AUTH_COOKIE);
-                $cdb_session = $cdb->getSession();
-                if (
-                    is_object($cdb_session)
-                    && $cdb_session->body->ok
-                    && !is_null($cdb_session->body->userCtx->name)
-                ) {
-                    $done = true;
-                }
-            }
-            if (
-                is_object($cdb_session)
-                && $cdb_session->body->ok
-                && !is_null($cdb_session->body->userCtx->name)
-            ) {
-                $done = true;
-            } else {
-                $cdb->login ($cRec['username'], $cRec['password'], Sag::$AUTH_COOKIE);
-                //if ($cRec['username']!=='Guest') trigger_error ('Session cookie expired. You have been logged in as \''.$cRec['username'].'\'', E_USER_WARNING);
-                //echo '<pre>'; var_dump ($cdb->getSession()); exit();
-                if (
-                    is_object($cdb_session)
-                    && $cdb_session->body->ok
-                    && !is_null($cdb_session->body->userCtx->name)
-                ) {
-                    $done = true;
-                }
-            }
-        } elseif (
-            is_array($_COOKIE)
-            && array_key_exists('AuthSession',$_COOKIE)
-            && is_string($_COOKIE['AuthSession'])
-            && $_COOKIE['AuthSession']!==''
-        ) {
-            $r = $cdb->loginByCookie ($_COOKIE['AuthSession']);
-            $done = true;
-        }
-    }
+    //echo '<pre style="color:white;background:navy;">'; var_dump ($username); var_dump($cRec); echo '</pre>';
 
-    //echo 't593:'; var_dump ($done);
-    if (!$done) {
+    if (is_array($cRec)) {
         try {
             $cdb->login ($cRec['username'], $cRec['password']);
             $done = true;
@@ -372,6 +326,64 @@ function cdb_login($cdb, $cRec, $username) {
             trigger_error ($fncn.' : could not login using credentials '.json_encode($cRec).', $e->getMessage()='.$e->getMessage(), E_USER_WARNING);
         }
     }
+
+    //echo 't333:'; var_dump ($done);
+
+    if (
+        !$done
+        && is_array($_COOKIE)
+        && array_key_exists('cdb_authSession_cookie',$_COOKIE)
+        && is_string($_COOKIE['cdb_authSession_cookie'])
+        && $_COOKIE['cdb_authSession_cookie']!==''
+    ) {
+        $r = $cdb->loginByCookie ($_COOKIE['cdb_authSession_cookie']);
+
+        try {
+        $cdb_session = $cdb->getSession();
+        } catch (Throwable $e) {
+            $_SESSION['cdb_loginName'] = $cRec['username'];
+            $cdb->login ($cRec['username'], $cRec['password'], Sag::$AUTH_COOKIE);
+            $cdb_session = $cdb->getSession();
+            if (
+                is_object($cdb_session)
+                && $cdb_session->body->ok
+                && !is_null($cdb_session->body->userCtx->name)
+            ) {
+                $done = true;
+            }
+        }
+        if (
+            is_object($cdb_session)
+            && $cdb_session->body->ok
+            && !is_null($cdb_session->body->userCtx->name)
+        ) {
+            $done = true;
+        } else {
+            $cdb->login ($cRec['username'], $cRec['password'], Sag::$AUTH_COOKIE);
+            //if ($cRec['username']!=='Guest') trigger_error ('Session cookie expired. You have been logged in as \''.$cRec['username'].'\'', E_USER_WARNING);
+            //echo '<pre>'; var_dump ($cdb->getSession()); exit();
+            if (
+                is_object($cdb_session)
+                && $cdb_session->body->ok
+                && !is_null($cdb_session->body->userCtx->name)
+            ) {
+                $done = true;
+            }
+        }
+    } elseif (
+        !$done
+        && is_array($_COOKIE)
+        && array_key_exists('AuthSession',$_COOKIE)
+        && is_string($_COOKIE['AuthSession'])
+        && $_COOKIE['AuthSession']!==''
+    ) {
+        $r = $cdb->loginByCookie ($_COOKIE['AuthSession']);
+        $done = true;
+    }
+
+
+    //echo 't593:'; var_dump ($done);
+
     if ($done) {
         try {
             $cdb_session = $cdb->getSession();
@@ -410,7 +422,8 @@ function cdb_login($cdb, $cRec, $username) {
                 'roles' => $cdb_session->body->userCtx->roles
             ];
         }
-    } else return false;
+    }
+    return false;
 }
 
 

@@ -1214,7 +1214,7 @@ class NicerAppWebOS {
         ];
     }
     
-    public function getPageCSS($js=true, $doSetSpecificity=true) {
+    public function getPageCSS($js=true, $doSetSpecificity=true, $doIncludeClientOnlyThemes=true, $stickToCurrentSpecificity=false, $specificityName=null) {
         global $naDebugAll;
         global $naLAN;
         $debug = false;
@@ -1250,6 +1250,16 @@ class NicerAppWebOS {
             if (
                 !array_key_exists('has_read_permission',$selector)
                 || !$selector['has_read_permission']
+            ) continue;
+
+            if (
+                !$doIncludeClientOnlyThemes
+                && strpos($selector['specificityName'], ' client')!==false
+            ) continue;
+
+            if (
+                $stickToCurrentSpecificity
+                && $selector['specificityName']!==$specificityName
             ) continue;
 
             $css = $this->getPageCSS_specific($selector);

@@ -47,6 +47,8 @@ na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/news'] = {
                         var
                         na1 = na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/news'], g = na1.globals, s = na1.settings, c = s.current, db = c.db,
                         loadedIn = s.loadedIn['#siteContent'];
+
+                        na.desktop.setConfig('content');
                         
                         s.settings_onload = settings;
                         settings.onHold = true; // signals a wait for na.site.loadTheme() has started

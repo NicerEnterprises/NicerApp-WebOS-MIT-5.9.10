@@ -23,7 +23,7 @@ $ip = (array_key_exists('X-Forwarded-For',apache_request_headers())?apache_reque
 }*/
 
 global $naWebOS;
-$naWebOS = new NicerAppWebOS();
+
 $cdbDomain = str_replace('.','_',$naWebOS->domain);
 
 $cdb = $naWebOS->dbs->findConnection('couchdb')->cdb;

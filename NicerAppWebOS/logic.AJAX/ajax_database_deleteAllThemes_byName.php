@@ -6,7 +6,7 @@ global $naWebOS;
 if (!array_key_exists('themeName', $_POST) || $_POST['themeName']=='default') { echo 'status : Failed.'; die(); };
 
 // do the changing of theme names as the couchdb admin user-id, meaning permissions won't matter one bit for this change.
-$result = $naWebOS->dbsAdmin->findConnection('couchdb')->delete_allThemes_byName ($_POST['themeName']);
+$result = $naWebOS->dbsAdmin->findConnection('couchdb')->delete_allThemes_byName ($_POST['themeName'], $_POST['specificityName']);
 if ($result) echo 'status : Success.'; else echo 'status : Failed.';
 
 

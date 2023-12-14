@@ -345,7 +345,11 @@ NicerApp WCS (Website Control System) from Nicer Enterprises
 
     $debug = false;
     $dbName = $db->dataSetName('ip_info');
-    $cdb->setDatabase($dbName);
+    try {
+        $cdb->setDatabase($dbName);
+    } catch (Throwable $e) {
+    } catch (Exception $e) {
+    }
 
     // fetch dataRecord
     $findCommand = [
@@ -359,9 +363,9 @@ NicerApp WCS (Website Control System) from Nicer Enterprises
     try {
         $call = $cdb->find ($findCommand);
     } catch (Exception $e) {
-        $msg = ' FAILED (boot.php) while trying to find in \''.$dbName.'\' : '.$e->getMessage();
+        //$msg = ' FAILED (boot.php) while trying to find in \''.$dbName.'\' : '.$e->getMessage();
         //trigger_error ($msg, E_USER_ERROR);
-        echo $msg;
+        //echo $msg;
         //return false;
         //die();
     }
@@ -410,6 +414,7 @@ NicerApp WCS (Website Control System) from Nicer Enterprises
         'headers' => $headers_list,
         'headersResult' => $result_json,
         'bd' => $bd,
+        'bdDetails' => json_decode(json_encode($result_json), true),
         'ipInfo' => $ipInfo,
         'browserMarketSharePercentage' => $naBrowserMarketSharePercentage,
         'to' => $dtz_offset,

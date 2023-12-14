@@ -30,6 +30,8 @@ echo "SETTING PERMISSIONS BASELINE (this may take a short while)"
 sudo chown -R $NA_MAIN_USER:$NA_MAIN_GROUP *
 sudo chmod -R $NA_MAIN_PERMISSIONS *
 
+chmod -R 644 .git .gitignore .htaccess .htaccess.gzipping 
+
 sudo find $ROOT_PATH -type d -exec chmod u+x,g+x {} \;
 
 sudo find $ROOT_PATH/NicerAppWebOS/scripts.maintenance -type f -iname "*.sh" -exec chmod $NA_SHELLSCRIPTS_PERMISSIONS {} \;

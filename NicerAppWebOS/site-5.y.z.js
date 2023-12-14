@@ -2,7 +2,10 @@ var NicerApp_WebOS = nicerapp = na = {};
 na.site = {
     about : {
         firstCreated : '10 January 2002',
-        copyright : '<table style="height:100%;"><tr><td>Copyright (C) and All Rights Reserved (R) 2002-2023 by <a href="mailto:rene.veerman.netherlands@gmail.com" class ="contentSectionTitle3_a"><span class="contentSectionTitle3_span">Rene A.J.M. Veerman</span></a></td><td style="width:40px;"><div class="vividButton" theme="dark" style="position:relative;color:white;height:20px;width:40px;" onclick="na.site.dismissCopyrightMessage();">Ok</div></td></table>'
+        copyright : '<table style="height:100%;"><tr><td>Copyright (C) 2002-2023 by <a href="mailto:rene.veerman.netherlands@gmail.com" class ="contentSectionTitle3_a"><span class="contentSectionTitle3_span">Rene A.J.M. Veerman</span></a></td><td style="width:40px;"><div class="vividButton" theme="dark" style="position:relative;color:white;height:20px;width:40px;" onclick="na.site.dismissCopyrightMessage();">Ok</div></td></table>',
+        easterEggs : {
+            '2023-12(Dec)-13(Tue) 11:34CET (Amsterdam.NL\'s timezone)' : '<p>at a certain point in a soul\'s career,<br/>that soul (learns to) trancend(s) judgement of IQ and EQ of others.<br/>this is usually only once enough kung-fu has been practiced though.<br/><a class="noPushState nomod" href="https://youtube.com/@cheetahKungFu" target="ckf">https://youtube.com/@cheetahKungFu</a></p>'
+        }
     },
     
     errors : {
@@ -75,9 +78,9 @@ na.site = {
 
         na.site.settings.defaultStatusMsg = (
             $.cookie('agreedToPolicies')!=='true'
-            ? '<table style="width:99%;"><tr><td><a href="/" style="padding:0;text-shadow:0px 0px 5px rgba(0,0,0,0.8);">'+na.site.globals.domain+'</a> only uses cookies for remembering user settings.</td>'
+            ? '<table style=""><tr><td><a href="/" style="padding:0;text-shadow:0px 0px 5px rgba(0,0,0,0.8);">'+na.site.globals.domain+'</a> only uses cookies for remembering user settings.</td>'
                 + '<td style="width:66px;"><div class="vividButton" theme="dark" style="position:relative;color:white;width:40px;height:20px;" onclick="na.site.dismissCookieWarning();">Ok</div></td></table>'
-            : '<table style="height:100%;"><tr><td>Opensourced <a href="https://github.com/NicerEnterprises/NicerApp-WebOS" target="_new" class="nomod noPushState contentSectionTitle1_a"><span class="contentSectionTitle1_span">here</span></a>, Copyright 2002-2023 by <a href="mailto:rene.veerman.netherlands@gmail.com" class ="contentSectionTitle3_a"><span class="contentSectionTitle3_span">Rene A.J.M. Veerman</span></a></td><td style="width:40px;"><div class="vividButton" theme="dark" style="position:relative;color:white;height:20px;width:40px;" onclick="na.site.dismissCopyrightMessage();">Ok</div></td></table>'
+            : '<table style="height:100%;"><tr><td>Opensourced <a href="https://github.com/NicerEnterprises/NicerApp-WebOS" target="_new" class="nomod noPushState contentSectionTitle1_a"><span class="contentSectionTitle1_span">here</span></a>, Copyright (C) 2002-2023 by <a href="mailto:rene.veerman.netherlands@gmail.com" class ="contentSectionTitle3_a"><span class="contentSectionTitle3_span">Rene A.J.M. Veerman</span></a></td><td style="width:40px;"><div class="vividButton" theme="dark" style="position:relative;color:white;height:20px;width:40px;" onclick="na.site.dismissCopyrightMessage();">Ok</div></td></table>'
         );
 
 
@@ -932,7 +935,7 @@ na.site = {
     },
     
     setSpecificity : function(simple) {
-        $('.na_themes_dropdown').html('<div class="vividDropDownBox_selected vividScrollpane" style="white-space:normal;"></div><div class="vividDropDownBox_selector"><div class="vividScrollpane" style="padding:0px;"></div></div>').delay(50);
+        $('.na_themes_dropdown, #btnOptions_menu__themes_dropdown').html('<div class="vividDropDownBox_selected vividScrollpane" style="white-space:normal;"></div><div class="vividDropDownBox_selector"><div class="vividScrollpane" style="padding:0px;"></div></div>').delay(50);
         $('.vividDropDownBox_selected, .vividDropDownBox_selector').each(function(idx,el) {
             var w = 0;
             $('.vividButton4, .vividButton, .vividButton_icon_50x50', $(el).parent().parent() ).each(function(idx2, el2) {
@@ -979,7 +982,7 @@ na.site = {
                 simple
                     ? (
                         na.site.globals.themeSpecificityName === na.site.globals.themesDBkeys[i].specificityName
-                        || na.site.globals.specificityName === na.site.globals.themesDBkeys[i].specificityName
+                        //NONSENSE! :D || na.site.globals.specificityName === na.site.globals.themesDBkeys[i].specificityName
                     )
                     : b && b.state == b.btnCode.selectedState
                         ? (
@@ -1004,29 +1007,55 @@ na.site = {
         };
 
         na.te.s.c.selectedThemeName = na.site.globals.themeName;
+        $('.themeItem').remove();
         for (var themeName in na.site.globals.themes) {
             var theme = na.site.globals.themes[themeName];
             for (var i in na.site.globals.themesDBkeys) {
                 var it = na.site.globals.themesDBkeys[i];
                 if (
-                    it.user === theme.user
-                    || it.role === theme.role
-                    || it.url === theme.url
-                    || it.view === theme.view
-                    || it.specificityName === theme.specificityName
-                ) {
-                    var divEl2 = document.createElement('div');
-                    $(divEl2).html(themeName).attr('value',i);
+                        it.user === theme.user
+                        || it.role === theme.role
+                        || it.url === theme.url
+                        || it.view === theme.view
+                        || it.specificityName === theme.specificityName
 
-                    if (themeName==na.site.globals.themeName) {
-                        $(divEl2).addClass('selected');
-                        $('.na_themes_dropdown__themes > .vividDropDownBox_selected').html(themeName);
+                ) {
+                    if (!$('.na_themes_dropdown__themes > .vividDropDownBox_selector > .vividScrollpane:contains("'+themeName+'")')[0]) {
+                        var divEl2 = document.createElement('div');
+                        $(divEl2).html(themeName).attr('value',i);
+
+                        if (themeName==na.site.globals.themeName) {
+                            $(divEl2).addClass('selected');
+                            $('.na_themes_dropdown__themes > .vividDropDownBox_selected').html(themeName);
+                        }
+                        $('.na_themes_dropdown__themes > .vividDropDownBox_selector > .vividScrollpane, #btnOptions_menu__themes_dropdown > .vividDropDownBox_selector > .vividScrollpane').append($(divEl2).clone(true,true)).delay(50);
+
                     }
-                    $('.na_themes_dropdown__themes > .vividDropDownBox_selector > .vividScrollpane').append($(divEl2).clone(true,true));
-                    break;
                 }
             };
         }
+
+        na.te.s.c.oldThemeNames = [];
+        na.te.s.c.selectedButtonID = 'btnSetPermissionsForTheme';
+        $('.themeItem').remove();
+        var
+        t = $('#btnOptions_menu__themes_dropdown > .vividDropDownBox_selector > .vividScrollpane > div'),
+        html = '';
+        for (var i=0; i<t.length; i++) {
+            var
+            sel = (
+                $('#btnOptions_menu__themes_dropdown > .vividDropDownBox_selected').html() === $(t[i])[0].innerText
+                ? ' selected onfocus'
+                : ''
+            );
+            html += '<div id="theme_'+i+'_div" class="themeItem'+sel+'"><input id="theme_'+i+'" type="text" onclick="na.te.themeNameSelected(\'theme_'+i+'\')" onchange="na.te.themeNameChanged('+i+', \'theme_'+i+'\')" value="'+$(t[i])[0].innerText+'"/></div>';
+            //if ($(t[i]).is('.selected')) $('#themeName').val($(t[i]).html());
+            na.te.s.c.oldThemeNames.push ($(t[i]).html());
+        }
+        $('#themePermissionsControls').append(html);
+
+
+
         $('.na_themes_dropdown__specificity').hover(function() {
             clearTimeout(na.site.settings.current.timeout_onmouseover_specificity);
             na.site.settings.current.timeout_onmouseover_specificity = setTimeout(function() {
@@ -1059,15 +1088,6 @@ na.site = {
 
         //if (!na.m.desktopIdle()) {
             na.te.s.c.selectedThemeName = na.site.globals.themeName;
-            //$('.themeItem').each(function(idx,ti) {
-            $('.themeItem').removeClass('onfocus');
-
-/*
-                $(ti).removeClass('onfocus');
-                if ($(ti).val()==na.te.s.c.selectedThemeName) {
-                    $(ti).addClass('onfocus');
-                }
-*/
 
             $('.na_themes_dropdown__themes').hover(function() {
                 clearTimeout(na.site.settings.current.timeout_onmouseout_themes);
@@ -1156,7 +1176,11 @@ na.site = {
             });
             
         }*/
-        
+        var btn = $('#'+na.te.settings.current.selectedButtonID)[0];
+        if (btn) debugger;
+        na.te.onclick(btn, false);
+
+
         na.site.setSiteLoginLogout();
     },
     
@@ -1201,7 +1225,7 @@ na.site = {
     },
     
 
-onclick_btnFullResetOfAllThemes : function (event) {
+    onclick_btnFullResetOfAllThemes : function (event) {
         var
         url = '/NicerAppWebOS/logic.AJAX/ajax_database_deleteAllThemes.php',
         ajaxCmd = {
@@ -1223,6 +1247,7 @@ onclick_btnFullResetOfAllThemes : function (event) {
             type : 'POST',
             url : url,
             success : function (data, ts, xhr) {
+                debugger;
                 if (data.indexOf('status : Success')!==-1) na.site.loadTheme(null, null, true, true);
             },
             error : function (xhr, textStatus, errorThrown) {
@@ -1611,7 +1636,7 @@ onclick_btnFullResetOfAllThemes : function (event) {
                     //{ getPageSpecificSettings : [na.m.newEventFunction (na.site.getPageSpecificSettings)] }
                     { loadTheme : [na.m.newEventFunction (function() {
                         na.m.waitForCondition ('loadContent_displayContent : na.m.HTMLidle() && !na.site.settings.current.running_loadContent?', function () { var r1 = na.m.HTMLidle(); var r2=!na.site.settings.current.running_loadContent; return r1 && r2;}, function () {
-                            na.site.loadTheme (null, null, false, false);
+                            na.site.loadTheme (null, null, true, true);
                         }, 100);
                     })] },
                     { reloadMenu : [na.m.newEventFunction(na.site.reloadMenu)] },
@@ -2150,7 +2175,6 @@ onclick_btnFullResetOfAllThemes : function (event) {
                 } catch (error) {
                     var html = $(el).attr('title');
                 }
-                debugger;
                 var
                 ptSettings = {
                     theme : theme,
@@ -2194,7 +2218,6 @@ onclick_btnFullResetOfAllThemes : function (event) {
                 } catch (error) {
                     var html = $(el).attr('title');
                 }
-                debugger;
                 var
                 ptSettings = {
                     theme : theme,
@@ -3067,7 +3090,7 @@ onclick_btnFullResetOfAllThemes : function (event) {
         });
     },
 
-    loadTheme : function (callback, theme, doGetPageSpecificSettings, doSwitchSpecificities, specificityName, loadBackground) {
+    loadTheme : function (callback, theme, doGetPageSpecificSettings, doSwitchSpecificities, specificityName, loadBackground, includeClientOnlyThemes, preserveCurrentTheme, stickToCurrentSpecificity) {
         var 
         fncn = 'na.site.loadTheme(callback,theme)',
         s = na.te.settings.current.specificity,
@@ -3075,6 +3098,7 @@ onclick_btnFullResetOfAllThemes : function (event) {
         apps = na.site.globals.app;
 
         if (typeof specificityName=='undefined') specificityName = na.site.globals.specificityName;
+        if (typeof preserveCurrentTheme=='undefined') preserveCurrentTheme = true;
 
         for (var app in apps) break;
 
@@ -3094,11 +3118,21 @@ onclick_btnFullResetOfAllThemes : function (event) {
 
         //if (!s) var s = { url : '[default]' };
         if (doGetPageSpecificSettings) {
+
+            if (preserveCurrentTheme) {
+                var ct = na.site.globals.themes[theme];
+            } else {
+                var ct = null;
+            }
+            debugger;
             na.site.loadTheme_doGetPageSpecificSettings (function() {
-                na.site.loadTheme_do (callback, theme, specificityName, loadBackground);
-            }, doSwitchSpecificities);
+
+                na.site.loadTheme_do (callback, specificityName, theme, loadBackground);
+
+            }, doSwitchSpecificities, includeClientOnlyThemes, specificityName, theme, ct, stickToCurrentSpecificity);
+
         } else {
-            na.site.loadTheme_do (callback, theme, specificityName, loadBackground);
+            na.site.loadTheme_do (callback, specificityName, theme, loadBackground);
         };
     },
     loadTheme_initializeExtras : function () {
@@ -3134,7 +3168,10 @@ onclick_btnFullResetOfAllThemes : function (event) {
                         */
 
     },
-    loadTheme_doGetPageSpecificSettings : function(callback, doSwitchSpecificities) {
+    loadTheme_doGetPageSpecificSettings : function(callback, doSwitchSpecificities, includeClientOnlyThemes, specificityName, theme, ct, stickToCurrentSpecificity) {
+        if (typeof includeClientOnlyThemes=='undefined') includeClientOnlyThemes = true;
+        if (typeof stickToCurrentSpecificity=='undefined') stickToCurrentSpecificity = true;
+
         var
         state = History.getState(),
         url = state.url.replace(document.location.origin,'').replace('/view/', ''),
@@ -3144,7 +3181,11 @@ onclick_btnFullResetOfAllThemes : function (event) {
             type : 'GET',
             url : url3,
             data : {
-                viewID : na.m.base64_encode_url(JSON.stringify(na.site.globals.app))// url2
+                viewID : na.m.base64_encode_url(JSON.stringify(na.site.globals.app)),// url2
+                includeClientOnlyThemes : includeClientOnlyThemes || na.site.globals.specificityName.match(' client')?'true':'false',
+                stickToCurrentSpecificity : stickToCurrentSpecificity,
+                specificityName : na.te.s.c.specificity.specificityName,
+                c : na.m.changedDateTime_current()
             },
             success : function (data2, ts2, xhr2) {
                 if (
@@ -3156,7 +3197,16 @@ onclick_btnFullResetOfAllThemes : function (event) {
                     $('#cssPageSpecific, #jsPageSpecific').remove();
                     $('head').append(data2).delay(100);
                 }
-                //if (doSwitchSpecificities) na.site.setSpecificity(true); // DOESNT WORK WITH NEW THEMES
+                if (doSwitchSpecificities) {
+                    debugger;
+                    if (ct && !na.site.globals.themes[ct.theme]) {
+                        na.site.globals.themes[ct.theme] = ct;
+                        na.site.globals.themeName = ct.theme;
+                    } else {
+                        if (theme) na.site.globals.themeName = theme;
+                    }
+                    na.site.setSpecificity(true);
+                }
                 setTimeout(function () {
                     if (typeof callback=='function') callback(true);
                 }, 50);
@@ -3166,11 +3216,12 @@ onclick_btnFullResetOfAllThemes : function (event) {
             }
         };
         //setTimeout (function() {
+            debugger;
             $.ajax(ac2);
         //}, 250);
     },
 
-    loadTheme_do : function (callback, theme, specificityName, loadBackground) {
+    loadTheme_do : function (callback, specificityName, theme, loadBackground) {
         var
         fncn = 'na.site.loadTheme_do(callback,theme)',
         s = na.te.settings.current.specificity,
@@ -3181,7 +3232,10 @@ onclick_btnFullResetOfAllThemes : function (event) {
             //theme : theme//,
             //dialogs : JSON.stringify (na.desktop.settings.visibleDivs)
         };
-        if (typeof specificityName=='undefined') specificityName = na.site.globals.specificityName;
+        if (
+            typeof specificityName=='undefined'
+            || specificityName===null
+        ) specificityName = na.site.globals.specificityName;
         if (typeof apps=='object')
             for (var app in apps) break;
         else app = apps;
@@ -3550,10 +3604,6 @@ onclick_btnFullResetOfAllThemes : function (event) {
         if (!na.te.s.c.forDialogID && !na.te.s.c.forElements) na.te.onload();
 
         if (!theme) theme = na.site.globals.themeName;
-        if ($('#'+theme)[0]) {
-            theme = $('#'+theme).val();
-        };
-
         na.site.settings.current.running_saveTheme = true;
 
         if (typeof apps=='object')
