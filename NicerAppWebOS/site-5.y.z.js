@@ -3742,13 +3742,6 @@ na.site = {
                 };
             }
             if (!themeData.themeSettings.Apps) themeData.themeSettings.Apps = {};
-            //if (!themeData.themeSettings.Extras)
-            try {
-                themeData.themeSettings.Extras = na.te.transform_jsTree_to_siteGlobalsThemes();
-            } catch (err) {
-                //debugger;
-            }
-
 
             var
             regExDialogs = /#site(.*)[\s\w\.\#\d\>]*/,
@@ -3772,6 +3765,14 @@ na.site = {
                     $.extend( themeData.themeSettings['Apps'][appName]['css'], na.site.fetchTheme(divSel) );
             }
         };
+
+        //if (!themeData.themeSettings.Extras)
+        try {
+            themeData.themeSettings.Extras = na.te.transform_jsTree_to_siteGlobalsThemes();
+        } catch (err) {
+            //debugger;
+        }
+
         return themeData;
     },
     

@@ -848,6 +848,7 @@ na.te = na.themeEditor = {
             var it = jsonNodes[i];
             na.te.transform_jsTree_to_siteGlobalsThemes__do (it, themeSettings);
         }
+        debugger;
         return themeSettings;
     },
 
