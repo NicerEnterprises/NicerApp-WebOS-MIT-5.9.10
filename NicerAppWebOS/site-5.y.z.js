@@ -3752,7 +3752,10 @@ na.site = {
                 if (!themeData.themeSettings['Dialogs'][divName])
                     themeData.themeSettings['Dialogs'][divName] = { css : {} };
                 themeData.themeSettings['Dialogs'][divName]['css'] =
-                    $.extend (themeData.themeSettings['Dialogs'][divName]['css'], na.site.fetchTheme(divSel));
+                    $.extend (
+                        themeData.themeSettings['Dialogs'][divName]['css'],
+                        na.site.fetchTheme(divSel)
+                    );
             } else if (divSel.match(regExApps)) {
                 var
                 m = divSel.match(regExApps),
@@ -3762,7 +3765,10 @@ na.site = {
                     themeData.themeSettings['Apps'][appName] = { css : {} };
                 //if (!themeData.themeSettings['Apps'][appName]['css'][divSel])
                 themeData.themeSettings['Apps'][appName]['css'] =
-                    $.extend( themeData.themeSettings['Apps'][appName]['css'], na.site.fetchTheme(divSel) );
+                    $.extend(
+                        themeData.themeSettings['Apps'][appName]['css'],
+                        na.site.fetchTheme(divSel)
+                    );
             }
         };
 
