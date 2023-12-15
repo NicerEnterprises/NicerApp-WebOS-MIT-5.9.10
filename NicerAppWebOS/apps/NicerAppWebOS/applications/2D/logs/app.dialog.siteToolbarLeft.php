@@ -153,7 +153,7 @@ if ($appRec['page']=='index') {
                 $url = $docA['httpOpts']['CURLOPT_URL'];
 
 
-        echo '<h2 class="logEntry '.$class.' tooltip" s1="'.$call2->body->s1.'" i="'.$call2->body->i.'" title="'.$tooltip.'" alt="'.$tooltip.'"  onclick="naLog.onclick_logEntry(event);"><span class="datetimeAccurate">'.$now2.'</span> <span class="ip">'.$call2->body->ip.'</span><br/>'.$url.'</h2>';
+        echo '<h2 class="logEntry '.$class.' tooltip flex" s1="'.$call2->body->s1.'" i="'.$call2->body->i.'" title="'.$tooltip.'" alt="'.$tooltip.'"  onclick="naLog.onclick_logEntry(event);"><span class="datetimeAccurate">'.$now2.'</span> <span class="ip">'.$call2->body->ip.'</span><br/>'.$url.'</h2>';
 
     }
 

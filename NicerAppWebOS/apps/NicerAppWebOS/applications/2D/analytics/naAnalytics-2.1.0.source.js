@@ -204,14 +204,16 @@ na.an = na.analytics = {
 			if (el.removeEventListener) {
 			// Standards browsers
 				el.removeEventListener (eventName, handler, useCapture);
-			} else if (el.detachEvent) {
+		}	 else if (el.detachEvent) {
 				el.detachEvent ('on'+eventName, handler);
 			}
 		}
 	},
     
     logEvent : function (evt) {
-        if (!na.site.globals.naLAN) {
+        if (!na.site.globals.naLAN
+            && !navigator.userAgent.match(/bot/i)
+        ) {
             var
             date = new Date(),
             timeInMilliseconds = date.getTime(),
@@ -273,7 +275,9 @@ na.an = na.analytics = {
     logMetaEvent : function (msg, stacktrace) {
         if (typeof stacktrace=='undefined') stacktrace = false;
         //na.analytics.pouchdb.logMetaEvent (msg);
-        if (!na.site.globals.naLAN) {
+        if (!na.site.globals.naLAN
+            && !navigator.userAgent.match(/bot/i)
+        ) {
             var
             date = new Date(),
             timeInMilliseconds = date.getTime(),
