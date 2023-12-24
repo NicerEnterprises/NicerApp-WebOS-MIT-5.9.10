@@ -41,7 +41,7 @@
                     "apps" => [
                         'news' => [
                             'section' => 'English_News__Topics__Business',
-                            'SEO_value' => [ 'nbh', 'news-business', 'business', 'news-business-headlines' ]
+                            'SEO_value' => [ 'nbh', 'news-business', 'business', 'business-news', 'news-business-headlines' ]
                         ]
                      ]
                 ]
@@ -200,6 +200,22 @@
             ]
         ],
 
+        "music_index__DJ_Stiltje" => [
+            'apps-current' => [
+                'NicerApp-WebOS__pageSettings' => [
+                    "misc" => [
+                       'folder' => '/NicerAppWebOS/apps/NicerAppWebOS/applications/2D'
+                    ],
+                    "apps" => [
+                        'musicPlayer' => [
+                            'set' => 'DJ_Stiltje',
+                            'SEO_value' => [ 'music-djStiltje' ]
+                        ]
+                     ]
+                ]
+            ]
+        ],
+
         "music_index__Deep_House" => [
             'apps-current' => [
                 'NicerApp-WebOS__pageSettings' => [
@@ -210,6 +226,23 @@
                         'musicPlayer' => [ 
                             'set' => 'Deep_House',
                             'SEO_value' => 'music2021--categoryName-deepHouse'
+                        ]
+                     ]
+                ]
+            ]
+        ],
+
+
+        "music_index__Arabic" => [
+            'apps-current' => [
+                'NicerApp-WebOS__pageSettings' => [
+                    "misc" => [
+                       'folder' => '/NicerAppWebOS/apps/NicerAppWebOS/applications/2D'
+                    ],
+                    "apps" => [
+                        'musicPlayer' => [
+                            'set' => 'Arabic_Tropical_Electronic_Downtempo',
+                            'SEO_value' => [ 'music_Arabic', 'music2023--categoryName-Arabic' ]
                         ]
                      ]
                 ]

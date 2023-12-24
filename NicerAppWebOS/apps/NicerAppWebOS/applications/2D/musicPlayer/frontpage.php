@@ -81,7 +81,11 @@
         <br/><br/>
         <a class="contentSectionTitle3_a naVividTextCSS" href="<?php echo $naURLs['music_index__DJ_Firesnake']?>"><span class="contentSectionTitle3_span">DJ FireSnake</span></a>
         <br/><br/>
+        <a class="contentSectionTitle3_a naVividTextCSS" href="<?php echo $naURLs['music_index__DJ_Stiltje']?>"><span class="contentSectionTitle3_span">DJ Stiltje</span></a>
+        <br/><br/>
         <a class="contentSectionTitle3_a naVividTextCSS" href="<?php echo $naURLs['music_index__Deep_House']?>"><span class="contentSectionTitle3_span">Deep House</span></a>
+        <br/><br/>
+        <a class="contentSectionTitle3_a naVividTextCSS" href="<?php echo $naURLs['music_index__Arabic']?>"><span class="contentSectionTitle3_span">Arabic Tropical Electronic Downtempo</span></a>
         <br/><br/>
         <a class="contentSectionTitle3_a naVividTextCSS" href="<?php echo $naURLs['music_index__Black_Horse__Mongolian_Traditional_Classical_Music_Art']?>"><span class="contentSectionTitle3_span">Black Horse - Mongolian Traditional Classical Music Art</span></a>
         <br/><br/>

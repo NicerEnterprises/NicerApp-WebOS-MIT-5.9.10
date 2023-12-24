@@ -336,7 +336,7 @@ NicerApp WCS (Website Control System) from Nicer Enterprises
     $result_json = json_decode($result);
 
     # -- Echo the Simple Software String
-    if (property_exists($result_json, 'detection')) $bd = $result_json->detection->simple_software_string; else $bd = '';
+    if (is_object($result_json) && property_exists($result_json, 'detection')) $bd = $result_json->detection->simple_software_string; else $bd = '';
     //echo '<pre>'; var_dump ($result_json); echo '</pre>';
 
 

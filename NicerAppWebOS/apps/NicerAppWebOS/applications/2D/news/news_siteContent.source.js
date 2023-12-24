@@ -712,7 +712,7 @@ na.m.preventScreenLock();
                             itemsLoadedCount = 0;
                         };
 
-
+debugger;
                         if (itemsLoadedCount < 50) {
                             c.read_loop_minutesIntoPast = 60 * g.readHistory_numHours;
                             c.read_loop_millisecondsToDoNext = 1000;
@@ -800,12 +800,12 @@ na.m.preventScreenLock();
                         if (!c.dtCurrent) c.dtCurrent = new Date();
                         c.dtEnd = c.dtCurrent;
                         c.dtCurrent = new Date(c.dtEnd.getTime() - (1000 * 60 * 60 * 1.5));//c.read_loop_minutesIntoPast));
-                        if (c.unread < 100) {
-                            na1.loadNews_read_loop();
-                        } else {
+                        //if (c.unread < 100) {
+                          //  na1.loadNews_read_loop();
+                        //} else {
                             clearTimeout (c.timerLoadNews_read_loop);
                             c.timerLoadNews_read_loop = setTimeout (na1.loadNews_read_loop, c.read_loop_millisecondsToDoNext);
-                        }
+                        //}
                     }, 200);
                 },
                 error : function (xhr, textStatus, errorThrown) {
@@ -1031,6 +1031,7 @@ na.m.preventScreenLock();
             if (!it) debugger;
             if (!it.displayCount) it.displayCount = -1;
             it.displayCount++;
+            if (it.displayCount > 100) return false;
 
             if (typeof it.displayCount=='number' && it.displayCount > 0) {
                 it = null;
