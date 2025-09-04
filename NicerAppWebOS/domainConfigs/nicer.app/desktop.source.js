@@ -112,7 +112,9 @@ na.desktop = {
             }
         }
         if (!cookies) divs[0] = '#btnOptions';
-        na.d.s.visibleDivs = divs;
+        //na.d.s.visibleDivs = divs;
+        //doesnt work: na.d.setConfig ('contentStatusbar');
+        na.d.s.visibleDivs = na.d.g.configs['contentStatusbar'];
         
         /*
         na.d.s.bypassScreenResolutionSizesLoading = true;

@@ -110,17 +110,15 @@
     </div>
 
     <div class="naDiaryDay">
-    <h1 class="naDiaryDayHeader" style="color:lime;">2025-09-03(Wednesday) 21:10CEST After 5 hours of sleep, Gavan's online DIARY continues again...  (Winners of the day : Gavan + edu.cia.gov + edu.whitehouse.gov + edu.mil + edu.mivd.nl + edu.aivd.nl + edu.politie.nl + edu.nsa.gov + edu.cyber.nsa.gov + edu.fbi) :</h1>
     </div>
 
 
     <div class="naDiaryDay">
-    <h1 class="naDiaryDayHeader" style="background:rgba(0,0,255,0.55);color:lime;">2025-09-02(Tuesday) 21:10CEST Rene's online DIARY continues HERE (Winner of the day : Gavan)</h1>
 
-            <h1 class="naDiaryDaySegmentHeader">+-21:30CEST Amsterdam.NL timezone, 2025-09-02(Tuesday):</h1>
+            <h1 class="naDiaryDaySegmentHeader">2025-09-02(Tuesday), +-21:30CEST Amsterdam.NL timezone :</h1>
             <div class="naDiaryDaySegment">
             <ol>
-                <li>The Christian God has promised to turn me into a REAL living God-type being just now, to go in effect in about four-thousand years from now..<br/>
+                <li>The Christian God has promised to turn me into a REAL living God-type being just now, to go in effect in about twenty-five-hundred years from now..<br/>
                 And my formerly Angelic wife Emma L. Veerman-Artistia into a REAL living Goddess type being as well! :-)<br/>
                 Our purpose as lifeforms will continue to be to stay strong at all times, to be able to serve humanity, and all life forms humanity (dead or alive) depend on as well.</li>
                 <li>I reserve the HUMAN RIGHT to cause the justified discomfort, harm, injury, death or extermination of other lifeform(s), for real, but in most cases; instead in mental and (body-)language projections i cast from within a building when severely depressed or in fear and in need of socially displaying my true current emotions.<br/>

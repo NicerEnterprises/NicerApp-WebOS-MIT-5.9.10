@@ -151,6 +151,9 @@ class class_NicerAppWebOS_log {
 
     public function add ($entries, $sessionKeyName='naErrors') {
         global $naWebOS;
+        global $naIsBot;
+        if ($naIsBot) return false;
+
         //echo '<h1>class.NicerAppWebOS.log.php</h1><pre>';var_dump ($naWebOS->dbs);echo '</pre>';
 
         $e = new Exception();
@@ -225,6 +228,9 @@ class class_NicerAppWebOS_log {
     }
 
     public function addTo_phpOutput ($sk, $val) {
+        global $naIsBot;
+        if ($naIsBot) return false;
+
         $key = date(DATE_ATOM);
         if (php_sapi_name()!=='cli') {
             if (!array_key_exists($sk, $_SESSION)) $_SESSION[$sk] = [];

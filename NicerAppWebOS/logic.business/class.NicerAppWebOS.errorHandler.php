@@ -5,6 +5,9 @@ class class_NicerAppWebOS__errorHandler {
     
     
     public function add ($errno, $errstr, $errfile, $errline) {
+        global $naIsBot;
+        if ($naIsBot) return false;
+
         //var_dump (error_reporting());
         //var_dump ($errno);
         /*if (!(error_reporting() & $errno)) {
@@ -133,6 +136,9 @@ class class_NicerAppWebOS__errorHandler {
      }
     
     public function addStr ($html, $txt='') {
+        global $naIsBot;
+        if ($naIsBot) return false;
+
         global $naWebOS;
         $db = $naWebOS->dbs->findConnection('couchdb');
         $cdb = $db->cdb;

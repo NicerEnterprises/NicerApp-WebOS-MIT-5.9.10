@@ -98,7 +98,7 @@ na.site = {
         }*/
         if ($('#siteToolbarLeft > .vividDialogContent').html().trim()==='{$div_siteToolbarLeft}') {
             na.d.s.visibleDivs = arrayRemove (na.d.s.visibleDivs,'#siteToolbarLeft');
-            $.cookie('visible_siteToolbarLeft','');
+            $.cookie('visible_siteToolbarLeft','',na.m.cookieOptions());
         } else {
             na.d.s.visibleDivs.push('#siteToolbarLeft'); $.cookie('visible_siteToolbarLeft','true', na.m.cookieOptions());
         }
@@ -1562,7 +1562,7 @@ na.site = {
         na.d.s.visibleDivs = arrayRemove (na.d.s.visibleDivs,'#siteToolbarRight'); $.cookie('visible_siteToolbarRight','', na.m.cookieOptions());
         na.desktop.resize();
 */
-        na.desktop.setConfig('content');
+        na.desktop.setConfig('contentStatusBar');
 
 
 
