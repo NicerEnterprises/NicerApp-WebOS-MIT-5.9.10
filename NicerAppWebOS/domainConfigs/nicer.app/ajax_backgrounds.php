@@ -6,7 +6,6 @@ $cacheFilePath = realpath(dirname(__FILE__).'/../../..').'/NicerAppWebOS/siteCac
 
 $cacheFile = $cacheFilePath.'/backgrounds.json';
 //unlink ($cacheFile);//echo '<pre>';
-
 if (!file_exists($cacheFile)) {
     $mi = [];
 

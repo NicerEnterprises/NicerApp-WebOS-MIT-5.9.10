@@ -211,10 +211,11 @@ echo $naWebOS->dbsAdmin->listDatabases ($allDBs, $dbs, $dbsReset);
 
 //echo require_return(dirname(__FILE__).'/domainConfigs/'.$naWebOS->domain.'/database.users.json.php', true); die();
 
-$users = safeLoadJSONfile(dirname(__FILE__).'/domainConfigs/'.$naWebOS->domain.'/database.users.json.php', true);
+//var_dump(dirname(__FILE__).'/domains/'.$naWebOS->domain.'/domainConfig/database.users.json.php'); die();
+$users = safeLoadJSONfile(dirname(__FILE__).'/domains/'.$naWebOS->domain.'/domainConfig/database.users.json.php', true);
 //echo '<pre style="color:black;background:skyblue;">'; var_dump ($users); die();
 //$users = json_decode($usersJSON, true);
-$groups = safeLoadJSONfile(dirname(__FILE__).'/domainConfigs/'.$naWebOS->domain.'/database.groups.json.php', true);
+$groups = safeLoadJSONfile(dirname(__FILE__).'/domains/'.$naWebOS->domain.'/domainConfig/database.groups.json.php', true);
 //echo '<pre>'; var_dump ($groups); die();
 //$groups = json_decode($groupsJSON, true);
 

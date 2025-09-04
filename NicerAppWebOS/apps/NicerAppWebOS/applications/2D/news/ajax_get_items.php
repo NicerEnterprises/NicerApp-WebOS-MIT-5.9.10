@@ -6,7 +6,7 @@ require_once (dirname(__FILE__).'/class.newsApp-3.php');
 $debug = false;
 
 global $naWebOS;
-
+//echo 1; exit();
     //header ('Content-Type: application/json');
     //ob_start("ob_gzhandler");
     //ini_set ('memory_limit', '1G');

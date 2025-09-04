@@ -3,10 +3,10 @@ $rootPath_na = realpath(dirname(__FILE__).'/../..'); global $rootPath_na;
 
 class NicerAppWebOS {
     public $cn = '.../NicerAppWebOS/logic.business/class.core.WebsiteOperatingSystem-5.y.z.php::class NicerAppWebOS';
-    public $version = '5.5.4';
+    public $version = '5.10.0';
     public $about = array(
         'whatsThis' => 'NicerApp Content Management System PHP class',
-        'version' => '5.5.4',
+        'version' => '5.10.0',
         'lastModified' => 'Saturday, Oct 28th, 2023, 06:40 CEST (Amsterdam.NL timezone)',
         'copyright' => 'Copyright 2002-2023 by Rene A.J.M. Veerman <rene.veerman.netherlandsd@gmail.com>'
     );
@@ -14,6 +14,9 @@ class NicerAppWebOS {
     public $initialized = false;
     public $baseIndentLevel = 2;
     public $cssTheme = 'dark';
+    public $theme = 'default';
+    public $url = '[unknown-init]';
+    public $globals = [];
     
     public $ip = null;
     public $domain;
@@ -420,6 +423,7 @@ class NicerAppWebOS {
         
         if (is_null($content)) $content = $this->getContent();
         //echo '<pre>'; var_dump ($content); die();
+        global $naIsBot;
         $replacements = array (
             //'{$view}' => ( is_array($view) ? json_encode($view, JSON_PRETTY_PRINT) : '{}' ),
             '{$title}' => array_key_exists('title',$content) && is_string($content['title']) && $content['title']!==''?$content['title']:execPHP($titleFile),
@@ -427,7 +431,7 @@ class NicerAppWebOS {
             '{$cssLinks}' => $cssLinks,
             '{$javascriptLinks}' => $javascriptLinks,
             '{$customerHTML}' => $templateCustomer,
-            '{$pageSpecificCSS}' => $this->getPageCSS(),
+            '{$pageSpecificCSS}' => ($naIsBot?'/* $naIsBot === true; no themes for you. */':$this->getPageCSS()), // uses up much CPU power and disk activity
             '{$theme}' => $this->cssTheme,
             '{$viewport}' => $this->getMetaTags_viewport(),
             '{$siteMenu_avoid}' => $siteMenu_avoid
@@ -495,6 +499,7 @@ class NicerAppWebOS {
                 $file = str_replace ('apps/{$domain}', 'apps/'.$this->viewsMID, $file);
                 $file = str_replace ('apps/'.$this->domain, 'apps/'.$this->viewsMID, $file);
                 $file = str_replace ('{$domain}', $this->domain, $file);
+                if (property_exists($this, 'webPath')) $file = str_replace ('{$webPath}', $this->webPath, $file);
                 //trigger_error ($file.' (2)', E_USER_NOTICE);
                 if (file_exists($this->basePath.'/'.$file)) {
                     $url = str_replace ($this->basePath,'',$file);
@@ -535,6 +540,7 @@ class NicerAppWebOS {
                 $file = str_replace ('apps/{$domain}', 'apps/'.$this->viewsMID, $file);
                 $file = str_replace ('apps/'.$this->domain, 'apps/'.$this->viewsMID, $file);
                 $file = str_replace ('{$domain}', $this->domain, $file);
+                $file = str_replace ('{$webPath}', $this->webPath, $file);
                 //trigger_error ($file.' (2)', E_USER_NOTICE);
                 if (file_exists($this->basePath.'/'.$file)) {
                     $url = str_replace ($this->basePath,'',$file);
@@ -578,6 +584,7 @@ class NicerAppWebOS {
                 $file = str_replace ('apps/{$domain}', 'apps/'.$this->viewsMID, $file);
                 $file = str_replace ('apps/'.$this->domain, 'apps/'.$this->viewsMID, $file);
                 $file = str_replace ('{$domain}', $this->domain, $file);
+                $file = str_replace ('{$webPath}', $this->webPath, $file);
                 //trigger_error ($file.' (2)', E_USER_NOTICE);
                 if (file_exists($this->basePath.'/'.$file)) {
                     $r .= file_get_contents($this->basePath.DIRECTORY_SEPARATOR.$file).PHP_EOL.PHP_EOL;
@@ -634,10 +641,16 @@ class NicerAppWebOS {
                 && $this->nonEmptyStringField('dataID',$_GET)
             ) return $this->getContent__data_by_users ($_GET['username'], $_GET['url1'], $_GET['dataID']);
 
-            elseif ($this->nonEmptyStringField('app-wikipedia_org', $_GET))
-                return $this->getContent__view_wikipedia ($_GET['app-wikipedia_org']);
+            elseif ($this->nonEmptyStringField('app-wikipedia_org', $_GET)) {
+                global $naIsBot;
+                if (!$naIsBot)
+                    return $this->getContent__view_wikipedia ($_GET['app-wikipedia_org']);
+                else {
+                    $msg = $fncn.' : 404 Permission denied; You are a BOT! :-p';
+                    return $this->getContent__standardErrorMessage($msg);
+                }
 
-            elseif ( $this->nonEmptyStringField('viewID',$_GET) )
+            } elseif ( $this->nonEmptyStringField('viewID',$_GET) )
                 return $this->getContent__view ($_GET['viewID']); // this handles the front page of a website too.
 
             elseif ( $this->nonEmptyStringField('seoValue',$_GET) )

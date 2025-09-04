@@ -51,9 +51,9 @@
         
         if ($iid=='pageSettings__pageSettings_siteBackgroundTree_tree') {
             if ($dialogID!=='siteBackground') {
-                $onclick = 'onclick="window.top.na.sitePopups.pageSettings.setBackground(\''.$dialogID.'\', \''.$fileURL.'\');"';
+                $onclick = 'onclick="na.sitePopups.pageSettings.setBackground(\''.$dialogID.'\', \''.$fileURL.'\');"';
             } else {
-                $onclick = 'onclick="window.top.na.s.c.setBackground(\''.$fileURL.'\');"';
+                $onclick = 'onclick="na.s.c.setBackground(\''.$fileURL.'\');"';
             }
         } else {
             $onclick = '';

@@ -242,7 +242,39 @@
                     "apps" => [
                         'musicPlayer' => [
                             'set' => 'Arabic_Tropical_Electronic_Downtempo',
-                            'SEO_value' => [ 'music_Arabic', 'music2023--categoryName-Arabic' ]
+                            'SEO_value' => [ 'music-arabic', 'music-Arabic' ]
+                        ]
+                     ]
+                ]
+            ]
+        ],
+
+        "music_index__Creedence" => [
+            'apps-current' => [
+                'NicerApp-WebOS__pageSettings' => [
+                    "misc" => [
+                       'folder' => '/NicerAppWebOS/apps/NicerAppWebOS/applications/2D'
+                    ],
+                    "apps" => [
+                        'musicPlayer' => [
+                            'set' => 'Creedence_Clearwater_Revival',
+                            'SEO_value' => [ 'music-Creedence-Clearwater-Revival', 'music-creedence-clearwater-revival' ]
+                        ]
+                     ]
+                ]
+            ]
+        ],
+
+        "music_index__Early_21st_Century" => [
+            'apps-current' => [
+                'NicerApp-WebOS__pageSettings' => [
+                    "misc" => [
+                       'folder' => '/NicerAppWebOS/apps/NicerAppWebOS/applications/2D'
+                    ],
+                    "apps" => [
+                        'musicPlayer' => [
+                            'set' => 'Early_21st_Century',
+                            'SEO_value' => [ 'music-Early-21st-Century', 'music-early-21st-century' ]
                         ]
                      ]
                 ]

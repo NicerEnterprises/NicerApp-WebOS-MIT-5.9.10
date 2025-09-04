@@ -15,8 +15,20 @@
     <p>
     Take a video or (tiled) background of any resolution, and project information onto that using any weblanguage you want.<br/>
     Written in a style simple enough for children to learn from.<br/>
-    Opensourced under an enterprise-commercial MIT-license <a href="https://github.com/NicerEnterprises/NicerApp-WebOS" class="naExternalLink nomod noPushState" target="ghMain">here</a>.
+    Opensourced under an enterprise-commercial perpetually free-usage MIT-license every December 1st <a href="https://github.com/NicerEnterprises/NicerApp-WebOS-MIT" class="naExternalLink nomod noPushState" target="ghMain">here</a> and <a href="https://github.com/NicerEnterprises/NicerApp-WebOS-MIT-5.10.0" class="naExternalLink nomod noPushState" target="ghMainMotherload">here</a>.<br/>
+    This is v5.9 of this software, <a class="nomod noPushState" href="https://owl.nicer.app" target="newNA">version 5.10 can be found here</a>.
     </p>
+
+    <p>
+    Business plan (taking up to Dec 1st 2035):
+    <ol>
+      <li><p>Fix the <a target="naBugs-desktop-js" class="nomod noPushState" href="https://github.com/NicerEnterprises/NicerApp-WebOS-MIT-5.10.0/blob/96f1b56ca30f75152e95b5cc3e069452e8c65a41/logic.vividUserInterface/v6.y.z/2D/desktop.js#L154">bugs</a> (F12!) in <a href="https://owl.nicer.app" target="owl-root" class="nomod noPushState">version 5.10.0-beta2</a>.</p></li>
+      <li><p>Move /news to https://said.by</p></li>
+      <li><p>In addition to <a href="https://owl.nicer.app/me" target="owl-me" class="nomod noPushState">blogging</a> and news, make social media and forum features available on https://said.by</p></li>
+      <li><p>Make webshops possible on https://said.by</p></li>
+    </ol>
+    </p>
+
 
     <h2 class="contentSectionTitle1"><span class="contentSectionTitle1_span">Available Apps</span></h2>
 
@@ -62,6 +74,7 @@
     <a href="<?php echo $naURLs['tasks'];?>" class="contentSectionTitle3_a"><h3 class="contentSectionTitle3"><span class="contentSectionTitle3_span">Tasks</span></h3></a>
     -->
 <?php } ?>
+
 
 
 

@@ -2,7 +2,7 @@ var NicerApp_WebOS = nicerapp = na = {};
 na.site = {
     about : {
         firstCreated : '10 January 2002',
-        copyright : '<table style="height:100%;"><tr><td>Copyright (C) 2002-2023 by <a href="mailto:rene.veerman.netherlands@gmail.com" class ="contentSectionTitle3_a"><span class="contentSectionTitle3_span">Rene A.J.M. Veerman</span></a></td><td style="width:40px;"><div class="vividButton" theme="dark" style="position:relative;color:white;height:20px;width:40px;" onclick="na.site.dismissCopyrightMessage();">Ok</div></td></table>',
+        copyright : '<table style="height:100%;"><tr><td><a href="https://github.com/NicerEnterprises/NicerApp-WebOS-MIT-5.10.0" target="_new" class="nomod noPushState">Opensourced</a> <a href="https://github.com/NicerEnterprises/NicerApp-WebOS-MIT" target="_new" class="nomod noPushState contentSectionTitle1_a"><span class="contentSectionTitle1_span">here</span></a>, Copyright (C) 2002-2025 by <a href="mailto:rene.veerman.netherlands@gmail.com" class ="contentSectionTitle3_a"><span class="contentSectionTitle3_span">Rene A.J.M. Veerman</span></a></td><td style="width:40px;"><div class="vividButton" theme="dark" style="position:relative;color:white;height:20px;width:40px;" onclick="na.site.dismissCopyrightMessage();">Ok</div></td></table>',
         easterEggs : {
             '2023-12(Dec)-13(Tue) 11:34CET (Amsterdam.NL\'s timezone)' : '<p>at a certain point in a soul\'s career,<br/>that soul (learns to) trancend(s) judgement of IQ and EQ of others.<br/>this is usually only once enough kung-fu has been practiced though.<br/><a class="noPushState nomod" href="https://youtube.com/@cheetahKungFu" target="ckf">https://youtube.com/@cheetahKungFu</a></p>'
         }
@@ -80,7 +80,7 @@ na.site = {
             $.cookie('agreedToPolicies')!=='true'
             ? '<table style=""><tr><td><a href="/" style="padding:0;text-shadow:0px 0px 5px rgba(0,0,0,0.8);">'+na.site.globals.domain+'</a> only uses cookies for remembering user settings.</td>'
                 + '<td style="width:66px;"><div class="vividButton" theme="dark" style="position:relative;color:white;width:40px;height:20px;" onclick="na.site.dismissCookieWarning();">Ok</div></td></table>'
-            : '<table style="height:100%;"><tr><td>Opensourced <a href="https://github.com/NicerEnterprises/NicerApp-WebOS" target="_new" class="nomod noPushState contentSectionTitle1_a"><span class="contentSectionTitle1_span">here</span></a>, Copyright (C) 2002-2023 by <a href="mailto:rene.veerman.netherlands@gmail.com" class ="contentSectionTitle3_a"><span class="contentSectionTitle3_span">Rene A.J.M. Veerman</span></a></td><td style="width:40px;"><div class="vividButton" theme="dark" style="position:relative;color:white;height:20px;width:40px;" onclick="na.site.dismissCopyrightMessage();">Ok</div></td></table>'
+            : '<table style="height:100%;"><tr><td><a href="https://github.com/NicerEnterprises/NicerApp-WebOS-MIT-5.10.0" target="_new" class="nomod noPushState">Opensourced</a> <a href="https://github.com/NicerEnterprises/NicerApp-WebOS-MIT" target="_new" class="nomod noPushState contentSectionTitle1_a"><span class="contentSectionTitle1_span">here</span></a>, Copyright (C) 2002-2025 by <a href="mailto:rene.veerman.netherlands@gmail.com" class ="contentSectionTitle3_a"><span class="contentSectionTitle3_span">Rene A.J.M. Veerman</span></a></td><td style="width:40px;"><div class="vividButton" theme="dark" style="position:relative;color:white;height:20px;width:40px;" onclick="na.site.dismissCopyrightMessage();">Ok</div></td></table>'
         );
 
 
@@ -462,7 +462,7 @@ na.site = {
                             }
                         );
 
-                        na.site.loadTheme(na.site.loadTheme_initializeExtras, undefined, false, false, na.site.globals.onloadSpecificityName);
+                        //PROBABLY GOOD CODE : na.site.loadTheme(na.site.loadTheme_initializeExtras, undefined, false, false, na.site.globals.onloadSpecificityName);
 
                         na.site.settings.current.startupErrorsOccurred = 'maybe';
                         //na.site.seeIfAnyStartupErrorsOccurred();
@@ -489,11 +489,13 @@ na.site = {
                         }
                     );
 
+                    /* PROBABLY GOOD CODE :
                     na.site.loadTheme(function() {
                         setTimeout (function() {
                             na.site.globals.themes[na.site.globals.themeName] = na.site.loadTheme_fetchDialogs();
                         }, 500);
                     }, undefined, false, false, na.site.globals.onloadSpecificityName);
+                    */
 
                     na.site.settings.current.startupErrorsOccurred = 'maybe';
                     //na.site.seeIfAnyStartupErrorsOccurred();
@@ -1323,12 +1325,13 @@ na.site = {
 
         
    // debugger;
-        if (!url.match(/\/view\//) && url.indexOf('/')===0) {
+        if (!url.match(/\/view-content\//) && url.indexOf('/')===0) {
             History.pushState (null, '', document.location.origin+url);
         } else if (url.indexOf('/')===-1) {
-            History.pushState (null, '', document.location.origin+'/view/'+url);
+            History.pushState (null, '', document.location.origin+'/view-content/'+url);
         } else debugger;
         
+        event.preventDefault();
     },
     
 	stateChange : function(){ 

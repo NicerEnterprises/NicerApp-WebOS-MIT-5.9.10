@@ -146,8 +146,8 @@ NicerApp WCS (Website Control System) from Nicer Enterprises
                 '/var/www/'.$naWebOS->domain.'/NicerAppWebOS/siteLogs/'
                 .$date.'-'.$appName.'-'.$naIP.($naBot?'-BOT':'').'.txt';
         } else {
-            $_SESSION['na_error_log_filepath_html'] = null;
-            $_SESSION['na_error_log_filepath_txt'] = null;
+            unset ($_SESSION['na_error_log_filepath_html']);
+            unset ($_SESSION['na_error_log_filepath_txt']);
         }
 
         $_SESSION['dbgNum'] = 0;
@@ -319,6 +319,7 @@ NicerApp WCS (Website Control System) from Nicer Enterprises
         "headers" => $headers_list,
     );
 
+    /*
     # -- Create a CURL handle containing your API Key and the data to send
     $ch = curl_init();
     curl_setopt($ch,CURLOPT_URL, "https://api.whatismybrowser.com/api/v3/detect");
@@ -426,6 +427,7 @@ NicerApp WCS (Website Control System) from Nicer Enterprises
     ];
     global $naLog;
     $naLog->add ( [ $err ] );
+    */
     //trigger_error ($msg, E_USER_NOTICE);
     //echo '<pre>'; var_dump ($_SERVER); die();
 

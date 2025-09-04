@@ -109,7 +109,10 @@ via the URL https://tinyurl.com/NicerAppWebOS-bgs-favs-3
 # serving the site from an encrypted setup using HTTPS:// (SSL)
 	
 > sudo apt install nginx letsencrypt certbot
-	
+>
+> openssl dhparam -out /etc/nginx/dhparams.pem 4096
+>
+
 https://nginx.com is a gateway server, which you can put in front of your webserver software and database servers.
 We need it to serve database connections over SSL connections, and to be able to serve multiple domain names (nicer.app, zoned.at, said.by, etc) from just one outgoing aka public IP address.
 
