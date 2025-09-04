@@ -132,13 +132,13 @@ $(document).ready(function() {
         {$div_siteComments}
     </div>
 
-<!--
+
     <div id="siteToolbarTop" class="vdToolbar vividDialog">
     <div class="vividDialogContent vividScrollpane">
         {$div_siteToolbarTop}
     </div>
     </div>
--->
+
     <div id="siteToolbarLeft" class="vdToolbar vividDialog">
     <div class="vividDialogContent vividScrollpane">
         {$div_siteToolbarLeft}

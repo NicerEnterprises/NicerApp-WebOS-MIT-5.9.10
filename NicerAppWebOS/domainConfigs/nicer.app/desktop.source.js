@@ -770,19 +770,12 @@ na.desktop = {
                     : [ '#btnOptions', '#siteMenu', '#btnLoginLogout', '#btnChangeBackground' ];
 
         c.order.push ('#siteStatusbar');
-        c.order.push ('#siteToolbarThemeEditor');
-        c.order.push ('#siteToolbarLeft');
-        c.order.push ('#siteToolbarRight');
-        c.order.push ('#siteToolbarTop');
-        c.order.push ('#siteErrors');
-        /*
+        if (visibleDivs.includes('#siteToolbarTop')) c.order.push('#siteToolbarTop');
+        if (visibleDivs.includes('#siteToolbarThemeEditor')) c.order.push ('#siteToolbarThemeEditor');
         if (visibleDivs.includes('#siteToolbarLeft')) c.order.push('#siteToolbarLeft');
         if (visibleDivs.includes('#siteToolbarRight')) c.order.push('#siteToolbarRight');
-        if (visibleDivs.includes('#siteToolbarTop')) c.order.push('#siteToolbarTop');
-        c.order.push ('#siteVideo');
-        c.order.push ('#siteVideoSearch');
-        */
-        c.order.push ('#siteComments');
+        if (visibleDivs.includes('#siteErrors')) c.order.push('#siteErrors');
+        if (visibleDivs.includes('#siteComments')) c.order.push ('#siteComments');
         c.order.push ('#siteContent');
         
         if (c['#siteContent']) {

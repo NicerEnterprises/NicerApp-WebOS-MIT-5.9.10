@@ -2,14 +2,6 @@
     global $naWebOS;
     require_once ($naWebOS->basePath.'/NicerAppWebOS/domainConfigs/'.$naWebOS->domain.'/pageHeader.php');
 ?>
-    <script type="text/javascript">
-        delete na.site.settings.current.app;
-        na.d.s.visibleDivs = arrayRemove (na.d.s.visibleDivs, '#siteToolbarLeft');
-        na.d.s.visibleDivs = arrayRemove (na.d.s.visibleDivs, '#siteToolbarRight');
-        na.d.s.visibleDivs = arrayRemove (na.d.s.visibleDivs, '#siteToolbarTop');
-        na.desktop.resize();
-    </script>
-
     <p>
     Take a video or (tiled) background of any resolution, and project information onto that using any weblanguage you want.<br/>
     Written in a style simple enough for children to learn from.<br/>

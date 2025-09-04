@@ -29,12 +29,6 @@ na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/Nic
                         });
 
                         $('#document_headers').detach().appendTo('body').css({display:'block',opacity:0.0001,zIndex:-1});
-                        if ($(window).width() < 400) {
-                            na.cms.settings.current.activeDialog = '#siteContent';
-                            na.desktop.settings.visibleDivs.remove('#siteToolbarLeft');
-                            na.desktop.settings.visibleDivs.push('#siteContent');
-                            na.desktop.resize();
-                        };
                         /*
                         na.m.waitForCondition ('na.cms.settings.loadedIn[\'#siteContent\'].onload(settings) : tinymce started?', function() {
                             return $('#tinymce_ifr')[0];
@@ -410,17 +404,6 @@ na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/Nic
             }
         };
         $.ajax(ac);
-        na.desktop.settings.visibleDivs.push ('#siteToolbarLeft');
-
-         //setTimeout(function() {
-        na.desktop.resize(na.cms.onresize);
-            na.site.settings.current.loadingApps = false;
-            na.site.settings.current.startingApps = false;
-        //na.cms.onresize();
-        //}, 1500);
-
-        //$(window).resize(na.cms.onresize)
-        //debugger;
     },
 
     onchange_selectedNode : function (settings, data,rec, callback) {

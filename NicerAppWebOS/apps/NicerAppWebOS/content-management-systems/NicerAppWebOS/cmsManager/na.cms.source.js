@@ -29,22 +29,7 @@ na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/Nic
                         });
 
                         $('#document_headers').detach().appendTo('body').css({display:'block',opacity:0.0001,zIndex:-1});
-                        if ($(window).width() < 400) {
-                            na.cms.settings.current.activeDialog = '#siteContent';
-                            na.desktop.settings.visibleDivs =
-                            arrayRemove(na.desktop.settings.visibleDivs, '#siteToolbarLeft');
-                            na.desktop.settings.visibleDivs =
-                            arrayRemove(na.desktop.settings.visibleDivs, '#siteContent');
-                            na.desktop.settings.visibleDivs.push('#siteContent');
-                            na.desktop.resize();
-                        } else {
-                            na.desktop.settings.visibleDivs = arrayRemove(na.desktop.settings.visibleDivs, '#siteToolbarLeft');
-                            na.desktop.settings.visibleDivs =
-                            arrayRemove(na.desktop.settings.visibleDivs, '#siteContent');
-                            na.desktop.settings.visibleDivs.push('#siteToolbarLeft');
-                            na.desktop.settings.visibleDivs.push('#siteContent');
-                            na.desktop.resize();
-                        };
+
                         na.m.waitForCondition ('na.cms.settings.loadedIn[\'#siteContent\'].onload(settings) : tinymce started?', function() {
                             return $('#tinymce_ifr')[0];
                         }, function() {
@@ -126,7 +111,7 @@ na.apps.loaded['/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/Nic
                     na.site.fail (fncn+' : AJAX decode error in data returned for url='+url1+', error='+error.message+', in data='+data, xhr);
                     return false;
                 }
-debugger;
+
                 na.cms.settings.current.db = dat;
                 $.jstree.defaults.core.error = function (a,b,c,d) {
                     //debugger;
@@ -250,20 +235,6 @@ debugger;
                                 || rec.type=='naMediaAlbum'
                             )
                         ) {
-                            if ($(window).width() < 400) {
-                                na.cms.settings.current.activeDialog = '#siteContent';
-                                arrayRemove(na.desktop.settings.visibleDivs, '#siteToolbarLeft');
-                                arrayRemove(na.desktop.settings.visibleDivs, '#siteContent');
-                                na.desktop.settings.visibleDivs.push('#siteContent');
-                                na.desktop.resize();
-                            } else {
-                                na.cms.settings.current.activeDialog = '#siteContent';
-                                arrayRemove(na.desktop.settings.visibleDivs, '#siteToolbarLeft');
-                                arrayRemove(na.desktop.settings.visibleDivs, '#siteContent');
-                                na.desktop.settings.visibleDivs.push('#siteToolbarLeft');
-                                na.desktop.settings.visibleDivs.push('#siteContent');
-                                na.desktop.resize();
-                            };
                         }
 
                         na.site.settings.buttons['#btnAddUser'].disable();
@@ -348,17 +319,9 @@ debugger;
             }
         };
         $.ajax(ac);
-        na.desktop.settings.visibleDivs.push ('#siteToolbarLeft');
 
-         //setTimeout(function() {
-        na.desktop.resize(na.cms.onresize);
-            na.site.settings.current.loadingApps = false;
-            na.site.settings.current.startingApps = false;
-        //na.cms.onresize();
-        //}, 1500);
-
-        //$(window).resize(na.cms.onresize)
-        //debugger;
+        na.site.settings.current.loadingApps = false;
+        na.site.settings.current.startingApps = false;
     },
 
     onchange_selectedNode : function (settings, data,rec, callback) {
@@ -860,10 +823,6 @@ debugger;
     },
 
     onclick_btnTree : function (event) {
-        na.cms.settings.current.activeDialog = '#siteToolbarLeft';
-        na.d.s.visibleDivs.remove('#siteContent');
-        na.d.s.visibleDivs.push('#siteToolbarLeft');
-        na.desktop.resize();
     },
 
     onclick_editHeaders : function (event) {
