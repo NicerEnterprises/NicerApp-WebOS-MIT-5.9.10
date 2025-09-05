@@ -15,6 +15,11 @@
     });
 </script>
 <div style="background:rgba(0,0,50,0.007)">
+    <style>
+    body {
+        background : url(/NicerAppWebOS/siteMedia/backgrounds/tiled/grey/background.jpg);
+    }
+    </style>
     <link type="text/css" rel="StyleSheet" href="NicerEnterprises--company--base.css?c=NOW">
     <link type="text/css" rel="StyleSheet" href="NicerEnterprises--company--moods-print.css?c=NOW">
 

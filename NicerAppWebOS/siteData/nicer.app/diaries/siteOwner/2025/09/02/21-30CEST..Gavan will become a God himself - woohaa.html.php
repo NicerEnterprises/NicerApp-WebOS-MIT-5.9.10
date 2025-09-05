@@ -24,7 +24,7 @@
             <div class="naDiaryDaySegment">
             <ol>
                 <li>Continue to stay well liked by most women, children, and men, in any locality i find myself in at any time, now or in the future.</li>
-                <li><p style="background:rgba(50,50,255,0.7);">Become *100%* of a dateable, dating or married lone wolf, yet sociable in business circles. Online, and in the real world eventually too, when I've pulled in some new savings money again.</li>
+                <li>Become *100%* of a dateable, dating or married lone wolf, yet sociable in business circles.<br/>Online, and in the real world eventually too, when I've pulled in some new savings money again.</li>
                 <li>To be healthy from a business, personal and lover perspective at all times.</li>
                 <li>To continue to practice and promote the 'use of minimal force whenever possible' in all forms of combat.</li>
                 <li>To continue to be a spiritually aware atheist that appreciates Catholic and Indian Divine art, to the point of dressing up my home with primarily *that*.</li>
