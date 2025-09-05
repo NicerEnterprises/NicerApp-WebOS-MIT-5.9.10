@@ -1,11 +1,11 @@
 <?php
+    require_once (dirname(__FILE__).'/../../NicerAppWebOS/boot.php');
     global $naWebOS;
-    require_once ($naWebOS->basePath.'/NicerAppWebOS/domainConfigs/'.$naWebOS->domain.'/pageHeader.php');
+    global $naDate;
     require_once ($naWebOS->basePath.'/NicerAppWebOS/logic.business/class.NicerAppWebOS.diaries.php');
     $diaries = new naDiaries();
 ?>
 <script type="text/javascript" src="/NicerAppWebOS/3rd-party/jQuery/jquery-3.7.0.min.js?c=20250817_120652"></script>
-<script type="text/javascript" src="/NicerAppWebOS/3rd-party/jQuery/cookie/jquery.cookie.js?c=20250817_120652"></script>
 <script type="text/javascript">
     $(document).ready(function() {
         $('.naDiaryDayHeader').on('click', evt, function () {
@@ -15,15 +15,12 @@
     });
 </script>
 <div style="background:rgba(0,0,50,0.007)">
-    <style>
-        p {
-            display : block;
-        }
-    </style>
-    <link type="text/css" rel="StyleSheet" href="/NicerAppWebOS/documentation/NicerEnterprises--company--base.css?c=NOW">
-    <link type="text/css" rel="StyleSheet" href="/NicerAppWebOS/documentation/NicerEnterprises--company--moods-screen.css?c=NOW">
+    <link type="text/css" rel="StyleSheet" href="NicerEnterprises--company--base.css?c=NOW">
+    <link type="text/css" rel="StyleSheet" href="NicerEnterprises--company--moods-print.css?c=NOW">
 
-    <h1 class="contentSectionTitle2"><span class="contentSectionTitle2_span">Nicer Enterprises - company overview</span> (<a href="https://nicer.app/NicerAppWebOS/documentation/NicerEnterprises--company-print.php" class="nomod noPushState" target="naCompanyDiary">print</a>)</h1>
+
+    <h1 class="contentSectionTitle2"><span class="contentSectionTitle2_span">Nicer Enterprises - company overview</span></h1><p>Date : <?php echo $naDate;?></p>
+
 
     <div class="naDiaryWebPage">
         <div>
@@ -46,5 +43,8 @@
         </p>
     </div>
 
-    <?php echo $diaries->getDiary('siteOwner');?>
+
+    <?php
+        echo $diaries->getDiary('siteOwner');
+    ?>
 </div>

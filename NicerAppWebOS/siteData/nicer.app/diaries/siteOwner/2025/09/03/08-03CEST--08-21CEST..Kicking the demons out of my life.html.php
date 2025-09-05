@@ -1,5 +1,5 @@
-        <div class="naDiaryEntry" style="background:rgba(253,0,0,0.47);">
-        <span class="naDiaryEntryHeader">2025-09-03(Wednesday) 08:03CEST - 2025-09-03(Wednesday) 08:21CEST</span><br/>
+        <div class="naDiaryEntry naDiaryMoodAnger">
+        <span class="naDiaryEntryHeader">2025-09-03(Wednesday) 08:03CEST - 08:21CEST</span><br/>
         <br/>
         gavan to The Devil and all demons : our 'friendship' is over as of right the frigging fuck now.<br/>
         i am done with you.<br/>

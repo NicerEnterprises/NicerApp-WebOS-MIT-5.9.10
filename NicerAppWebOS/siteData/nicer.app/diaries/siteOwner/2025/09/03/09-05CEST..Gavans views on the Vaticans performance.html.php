@@ -1,4 +1,4 @@
-        <div class="naDiaryEntry" style="background:rgba(255, 0, 255,0.35);">
+        <div class="naDiaryEntry naDiaryMoodDivinicus">
         <span class="naDiaryEntryHeader">2025-09-03(Wednesday) +-09:05CEST</span><br/>
         <br/>
         Gavan, chief web developer of the Sol solar system's homeworld Earth, to world : I have always been very happy with the performance of the Vatican and all Christian Churches, but I did find their slow startup to police paedophiles and child abusers in their own ranks very distasteful and embarassing and awful and despicable. Sorry, Vatican.<br/>
