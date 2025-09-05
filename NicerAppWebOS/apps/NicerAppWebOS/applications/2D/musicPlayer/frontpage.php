@@ -97,5 +97,9 @@
         <br/><br/>
         <a class="contentSectionTitle3_a naVividTextCSS" href="<?php echo $naURLs['music_index__Beautiful_Chill_Mixes']?>"><span class="contentSectionTitle3_span">Beautiful Chill Mixes</span></a>
         </p>
+        <p>
+        I claim the 'Fair Use' rights over these music files :<br/>
+        <a class="nomod noPushState" target="naLegal-music1" href="/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/musicPlayer/Screenshot_20250622_015900.png"><img style="width:500px" src="/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/musicPlayer/Screenshot_20250622_015900.png"/></a>
+        </p>
     </div>
     </div>

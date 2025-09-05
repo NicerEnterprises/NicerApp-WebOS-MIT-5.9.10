@@ -10,7 +10,7 @@
     </p>
 
     <p>
-    Business plan (taking up to Dec 1st 2035):
+    Business plan (taking up to Dec 1st 2030):
     <ol>
       <li><p>Fix the <a target="naBugs-desktop-js" class="nomod noPushState" href="https://github.com/NicerEnterprises/NicerApp-WebOS-MIT-5.10.0/blob/96f1b56ca30f75152e95b5cc3e069452e8c65a41/logic.vividUserInterface/v6.y.z/2D/desktop.js#L154">bugs</a> (F12!) in <a href="https://owl.nicer.app" target="owl-root" class="nomod noPushState">version 5.10.0-beta2</a>.</p></li>
       <li><p>Move /news to https://said.by</p></li>

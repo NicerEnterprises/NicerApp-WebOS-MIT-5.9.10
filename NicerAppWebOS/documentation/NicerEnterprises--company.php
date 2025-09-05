@@ -8,10 +8,18 @@
 <script type="text/javascript" src="/NicerAppWebOS/3rd-party/jQuery/cookie/jquery.cookie.js?c=20250817_120652"></script>
 <script type="text/javascript">
     $(document).ready(function() {
-        $('.naDiaryDayHeader').on('click', evt, function () {
-           if ($(evt.currentTarget).is('shown')) $(evt.currentTarget).hide(); else $(evt.currentTarget).show();
-        });
-        $('.naDiaryDaySegmentHeader').removeClass('todoList');
+        setTimeout(function(){
+            $('.naDiaryDayHeader').on('click', function () {
+                if ($(this).is('shown'))
+                    $(this).removeClass('shown');
+                    $(this).hide();
+                else
+                    $(this).addClass('shown');
+                    $(this).show();
+
+            });
+            $('.naDiaryDaySegmentHeader, .naDiaryDayHeader').css({cursor:'hand'}).removeClass('todoList');
+        },1000);
     });
 </script>
 <div style="background:rgba(0,0,50,0.007)">
@@ -29,15 +37,8 @@
         <div>
             <p>
             <a href="https://nicer.app" target="naHP">https://nicer.app</a>, <a href="https://said.by" target="sbHP">https://said.by</a>, <a href="https://zoned.at" target="zAt">https://zoned.at</a>, <a href="https://github.com/NicerEnterprises" target="githubNicerEnterprises">https://github.com/NicerEnterprises</a>, in addition to ALL of the content listed on and/or hosted by the cloudhosting service companies, online forums and social media accounts that I use (or have ever used), are ENTIRELY
-            Copyrighted (C) and Owned by <a href="mailto:rene.veerman.netherlands@gmail.com" target="_new" class="nomod noPushState">Rene A.J.M. Veerman &lt;rene.veerman.netherlands@gmail.com&gt;</a>.<br/>
+            Copyrighted (C) and Owned by <a href="mailto:rene.veerman.netherlands@gmail.com" target="_new" class="nomod noPushState">Rene Veerman &lt;rene.veerman.netherlands@gmail.com&gt;</a>.<br/>
             </p>
-            <!--
-            <p><a href="https://drive.google.com/drive/u/1/folders/1p_ouHCyVMW1IadAX-vBKasQVP01M91GD" class="nomod noPushState" target="naWeOS--fb-dot-com">I'm also 'DJ FireSnake'.</a>.</p>
-            <p><a href="https://facebook.com/rene.veerman.90" class="nomod noPushState" target="naWeOS--fb-dot-com">https://facebook.com/rene.veerman.90</a>.</p>
-            <p><a href="https://www.facebook.com/gavanHoverswell" class="nomod noPushState" target="naWeOS--fb-dot-com">https://facebook.com/gavanHoverswell</a>.</p>
-            <p><a href="https://x.com/ReneVeerman1977" class="nomod noPushState" target="naWebOS--x-dot-com">https://x.com/ReneVeerman1977</a>.</p>
-            <p><a href="https://youtube.com/@Rene-AJM-Veerman" class="nomod noPushState" target="naWebOS--youtube-dot-com">https://youtube.com/@Rene-AJM-Veerman</a>.</p>
-            -->
         </div>
 
         <p>

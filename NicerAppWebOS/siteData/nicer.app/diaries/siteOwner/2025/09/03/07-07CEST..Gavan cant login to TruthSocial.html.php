@@ -1,5 +1,5 @@
         <div class="naDiaryEntry naDiaryMoodShit">
-        <span class="naDiaryEntryHeader">2025-09-03(Wednesday) 07:07CEST</span><br/>
+        <h2 class="naDiaryEntryHeader">2025-09-03(Wednesday) 07:07CEST</h2><br/>
         <br/>
         Gavan to <a href="https://whitehouse.gov" class="nomod noPushState" target="wh-gov">WhiteHouse.gov</a> &amp; Trump family : <a href="https://truthsocial.com" class="nomod noPushState" target="ts-com">TruthSocial.com</a> is refusing to let me create an account there, AFTER i get telepathically invited to do so, just now.<br/>
         That's a knock out attempt straight to my nose, and i don't appreciate it ;)<br/>

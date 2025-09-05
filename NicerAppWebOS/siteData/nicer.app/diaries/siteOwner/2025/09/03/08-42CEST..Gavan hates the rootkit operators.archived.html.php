@@ -1,5 +1,5 @@
-        <div class="naDiaryEntry" style="background:rgba(0, 0, 52,0.35);">
-        <span class="naDiaryEntryHeader">2025-09-03(Wednesday) 08:42CEST</span><br/>
+        <div class="naDiaryEntry naDiaryMoodAnger">
+        <h2 class="naDiaryEntryHeader">2025-09-03(Wednesday) 08:42CEST</h2><br/>
         <br/>
         [gavan tries to install Quake 3 on his linux, a well-supported game, and got ZIP, nada, nothing done (again!)]<br/>
         gavan to hi-team.cia.gov : I HATE YOU. aivd.nl : you too.<br/>
