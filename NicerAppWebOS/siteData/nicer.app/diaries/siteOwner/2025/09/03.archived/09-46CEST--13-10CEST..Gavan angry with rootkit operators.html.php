@@ -3,7 +3,7 @@
         <br/>
         To: aivd.nl and mivd.nl and politie.nl and cia.gov and cyber-teams.nsa.gov<br/>
         From: Gavan P.U.R.A.D. Hoverswell [rene.veerman.netherlands@gmail.com]<br/>
-        Subject: your behavior has become unacceptable ever since I got busted for an enthusiastic, unwittingly-meglanomaniac email that i sent to hfh@hfh.org back in the day, about how nobody could stop my rise to becoming what I've recently coined The World President function of Humanity.<br/>
+        Subject: your behavior has become unacceptable ever since I got busted for an enthusiastic, unwittingly-meglanomaniac email that i sent to hfh@hfh.org back in the day, about how nobody could stop my rise to becoming what I've recently coined The World President function of Humanity; a fallacy of course, but one I should have received therapy for, not demonization and life-draining drugs disguised and advertised as "medicines" (anti-psychotics).<br/>
         <br/>
         First you transfer me to the CIA, to let me be lured into a false friendship, then you all try to cut me from behind over 10K times.<br/>
         Need i go on?<br/>

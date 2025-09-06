@@ -6,22 +6,6 @@
 ?>
 <script type="text/javascript" src="/NicerAppWebOS/3rd-party/jQuery/jquery-3.7.0.min.js?c=20250817_120652"></script>
 <script type="text/javascript" src="/NicerAppWebOS/3rd-party/jQuery/cookie/jquery.cookie.js?c=20250817_120652"></script>
-<script type="text/javascript">
-    $(document).ready(function() {
-        setTimeout(function(){
-            $('.naDiaryDayHeader').on('click', function () {
-                if ($(this).is('shown'))
-                    $(this).removeClass('shown');
-                    $(this).hide();
-                else
-                    $(this).addClass('shown');
-                    $(this).show();
-
-            });
-            $('.naDiaryDaySegmentHeader, .naDiaryDayHeader').css({cursor:'hand'}).removeClass('todoList');
-        },1000);
-    });
-</script>
 <div style="background:rgba(0,0,50,0.007)">
     <style>
         p {
@@ -31,7 +15,7 @@
     <link type="text/css" rel="StyleSheet" href="/NicerAppWebOS/documentation/NicerEnterprises--company--base.css?c=NOW">
     <link type="text/css" rel="StyleSheet" href="/NicerAppWebOS/documentation/NicerEnterprises--company--moods-screen.css?c=NOW">
 
-    <h1 class="contentSectionTitle2"><span class="contentSectionTitle2_span">Nicer Enterprises - company overview</span> (<a href="https://nicer.app/NicerAppWebOS/documentation/NicerEnterprises--company-print.php" class="nomod noPushState" target="naCompanyDiary">print</a>)</h1>
+    <h1 class="contentSectionTitle2"><span class="contentSectionTitle2_span">Nicer Enterprises - company overview</span></h1>
 
     <div class="naDiaryWebPage">
         <div>
@@ -49,3 +33,51 @@
 
     <?php echo $diaries->getDiary('siteOwner');?>
 </div>
+<script type="text/javascript">
+    $('.naDiaryDaySegmentHeader').each(function(idx,el){
+        var fp = $('.naFilePath',$(el).parent()).html();
+        $(el).attr('title', fp);
+    });
+    $('.naDiaryEntryHeader').each(function(idx,el){
+        var fp = $('.naFilePath',$(el).parent()).html();
+        $(el).attr('title', fp);
+    });
+    $('.naDiaryDayHeader')
+        .on('click', function (evt) {
+            var pn = $(evt.currentTarget).next()[0];
+            debugger;
+            while ($(pn).is('.naDiaryEntry,.naDiaryDay,.naDiaryDaySegment')) {
+                if ($(evt.currentTarget).is('.shown')) {
+                    $('.naFilePath,ol,ul,.naDiaryEntry,.naDiaryDay,.naDiaryDaySegment',pn).add(pn).hide('slow');
+                } else {
+                    $('.naFilePath,ol,ul,.naDiaryEntry,.naDiaryDay,.naDiaryDaySegment',pn).add(pn).show('slow');
+                }
+                pn = $(pn).next()[0];
+            }
+                if ($(evt.currentTarget).is('.shown')) {
+                    $(evt.currentTarget).removeClass('shown');
+                } else {
+                    $(evt.currentTarget).addClass('shown');
+                }
+        });
+    $('.naDiaryDaySegmentHeader')
+        .on('click', function (evt) {
+            var pn = $(evt.currentTarget).next()[0];
+            debugger;
+            while ($(pn).is('.naDiaryEntry,.naDiaryDay,.naDiaryDaySegment')) {
+                if ($(evt.currentTarget).is('.shown')) {
+                    $('.naFilePath,ol,ul,.naDiaryEntry,.naDiaryDay,.naDiaryDaySegment',pn).add(pn).hide('slow');
+                } else {
+                    $('.naFilePath,ol,ul,.naDiaryEntry,.naDiaryDay,.naDiaryDaySegment',pn).add(pn).show('slow');
+                }
+                pn = $(pn).next()[0];
+            }
+                if ($(evt.currentTarget).is('.shown')) {
+                    $(evt.currentTarget).removeClass('shown');
+                } else {
+                    $(evt.currentTarget).addClass('shown');
+                }
+        });
+    $('.naDiaryDaySegmentHeader, .naDiaryDayHeader').css({cursor:'hand'}).removeClass('todoList').removeClass('active').addClass('shown');
+    $('.naDiaryDaySegment, .naDiaryEntry').hide();
+</script>

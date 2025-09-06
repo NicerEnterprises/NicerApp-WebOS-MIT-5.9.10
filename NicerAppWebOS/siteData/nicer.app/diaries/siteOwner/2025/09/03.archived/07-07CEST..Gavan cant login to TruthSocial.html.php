@@ -5,7 +5,7 @@
         That's a knock out attempt straight to my nose, and i don't appreciate it ;)<br/>
         All i was gonna do is create a symbolic foothold account and self-introducing message; an ad for nicer.app/news<br/>
         To aivd.nl, den haag en politie.nl : i recommend we keep our friendship for and to the US alive and vibrant for at least a little while longer.<br/>
-        i will continue to use usmessageboard.com; not the cesspool X, nor truthsocial<br/>
+        i will continue to use usmessageboard.com; and X.com, just not truthsocial.com - which is their loss.<br/>
         My own ability to be friends with Americans is not fully destroyed yet, and can probably be restored to full health - by me and me alone.<br/>
         And the planned feature set for my said.by social media and forum features,<br/>
         will blow all social media companies world wide right out of the markets.<br/>

@@ -6,61 +6,6 @@
     $diaries = new naDiaries();
 ?>
 <script type="text/javascript" src="/NicerAppWebOS/3rd-party/jQuery/jquery-3.7.0.min.js?c=20250817_120652"></script>
-<script type="text/javascript">
-    $(document).ready(function() {
-        setTimeout(function(){
-            $(
-                '.naFilePath,ol,ul,.naDiaryEntry',
-                $('.naDiaryEntry, .naDiaryDaySegment, .naDiaryDay')
-            ).hide();
-            $('.naDiaryDaySegmentHeader').each(function(idx,el){
-                var fp = $('.naFilePath',$(el).parent()).html();
-                $(el).attr('title', fp);
-            });
-            $('.naDiaryEntryHeader').each(function(idx,el){
-                var fp = $('.naFilePath',$(el).parent()).html();
-                $(el).attr('title', fp);
-            });
-            $('.naDiaryDayHeader')
-                //.addClass('shown').hide()
-                .on('click', function (evt) {
-                    var pn = $(evt.currentTarget).parent();
-                    if ($(evt.currentTarget).is('.shown')) {
-                        $(evt.currentTarget).removeClass('shown');
-                        $(
-                            '.naFilePath,ol,ul,.naDiaryDay,.naDiaryDaySegmentHeader,.naDiaryEntryHeader,.naDiaryEntry',
-                            pn
-                        ).hide('slow');
-                    } else {
-                        $(evt.currentTarget).addClass('shown');
-                        debugger;
-                        $(
-                            '.naFilePath,ol,ul,.naDiaryDay,.naDiaryDaySegmentHeader,.naDiaryEntryHeader,.naDiaryEntry',
-                            pn
-                        ).show('slow');
-                    }
-                });
-            $('.naDiaryDaySegmentHeader')
-                //.addClass('shown').hide()
-                .on('click', function (evt) {
-                    var pn = $(evt.currentTarget).parent();
-                    if ($(evt.currentTarget).is('.shown')) {
-                        $(evt.currentTarget).removeClass('shown');
-                        $(
-                            '.naFilePath,ol,ul',pn
-                        ).hide('slow');
-                    } else {
-                        $(evt.currentTarget).addClass('shown');
-                        debugger;
-                        $(
-                            '.naFilePath,ol,ul',pn
-                        ).show('slow');
-                    }
-                });
-            $('.naDiaryDaySegmentHeader, .naDiaryDayHeader').css({cursor:'hand'}).removeClass('todoList');
-        },1000);
-    });
-</script>
 <div style="background:rgba(0,0,50,0.007)">
     <style>
     body {
@@ -83,13 +28,48 @@
         </div>
 
         <p>
-        Should I unexpectedly die for some strange reason, for instance by long standing disputes suddenly becoming lethal in some way, I want my belongings donated first to my parents, and second to the Amsterdam.NL stedelijk museum, who may do with it all as they please, but who are requested to keep copies of https://nicer.app plus https://said.by up and running at all times.<br/>
+        Should I unexpectedly die for some strange reason, for instance by long standing "dissident" (assertive peace activist who is NOT without the ability to look at his own ranks with criticism!) disputes suddenly becoming lethal in some way, I want my belongings donated first to my parents, and second to the Amsterdam.NL stedelijk museum, who may do with it all as they please, but who are requested to keep copies of https://nicer.app plus https://said.by up and running at all times.<br/>
         My accountant's details are well engraved in medical law at https://mentrum.nl<br/>
         </p>
     </div>
-
 
     <?php
         echo $diaries->getDiary('siteOwner');
     ?>
 </div>
+<script type="text/javascript">
+    $('.naDiaryDaySegmentHeader').each(function(idx,el){
+        var fp = $('.naFilePath',$(el).parent()).html();
+        $(el).attr('title', fp);
+    });
+    $('.naDiaryEntryHeader').each(function(idx,el){
+        var fp = $('.naFilePath',$(el).parent()).html();
+        $(el).attr('title', fp);
+    });
+    $('.naDiaryDayHeader')
+        .on('click', function (evt) {
+            var pn = $(evt.currentTarget).next()[0];
+            debugger;
+            if ($(evt.currentTarget).is('.shown')) {
+                $(evt.currentTarget).removeClass('shown');
+                $('.naFilePath,ol,ul,.naDiaryEntry,.naDiaryDay,.naDiaryDaySegment',pn).add(pn).hide('slow');
+            } else {
+                $(evt.currentTarget).addClass('shown');
+                $('.naFilePath,ol,ul,.naDiaryEntry,.naDiaryDay,.naDiaryDaySegment',pn).add(pn).show('slow');
+            }
+        });
+    $('.naDiaryDaySegmentHeader')
+        .on('click', function (evt) {
+            var pn = $(evt.currentTarget).next()[0];
+            debugger;
+            if ($(evt.currentTarget).is('.shown')) {
+                $(evt.currentTarget).removeClass('shown');
+                $('.naFilePath,ol,ul,.naDiaryEntry,.naDiaryDay,.naDiaryDaySegment',pn).add(pn).hide('slow');
+            } else {
+                $(evt.currentTarget).addClass('shown');
+                $('.naFilePath,ol,ul,.naDiaryEntry,.naDiaryDay,.naDiaryDaySegment',pn).add(pn).show('slow');
+            }
+        });
+    $('.naDiaryDaySegmentHeader, .naDiaryDayHeader').css({cursor:'hand'}).removeClass('todoList').removeClass('active');
+    $('.naDiaryDaySegment, .naDiaryEntry').hide();
+</script>
